@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WeHelp × Califórnia Fitness — 15 dias grátis exclusivos</title>
+<meta name="description" content="A plataforma de NPS líder no setor fitness. Antecipe cancelamentos, entenda seus alunos e reduza o churn. 15 dias grátis exclusivos para participantes da palestra." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --brand-50:  #eef5ff;
+    --brand-100: #d9e9ff;
+    --brand-200: #bcd5ff;
+    --brand-300: #8eb9ff;
+    --brand-400: #5990ff;
+    --brand-500: #3366ff;
+    --brand-600: #1a44f5;
+    --brand-700: #1330d4;
+
+    --ink-900: #0f1729;
+    --ink-800: #1e293b;
+    --ink-700: #334155;
+    --ink-600: #475569;
+    --ink-500: #64748b;
+    --ink-400: #94a3b8;
+    --ink-200: #e2e8f0;
+    --ink-100: #f1f5f9;
+    --ink-50:  #f8fafc;
+
+    --green-500: #22c55e;
+    --green-50:  #ecfdf5;
+    --amber-500: #f59e0b;
+    --red-500:   #ef4444;
+    --red-50:    #fef2f2;
+
+    --lavender: #eef2ff;
+    --lavender-2: #f5f7ff;
+
+    --shadow-card: 0 1px 3px rgba(15,23,41,.06), 0 1px 2px rgba(15,23,41,.04);
+    --shadow-soft: 0 10px 30px -10px rgba(15,23,41,.12);
+    --shadow-float: 0 20px 50px -12px rgba(15,23,41,.18);
+    --shadow-brand: 0 14px 30px -10px rgba(51,102,255,.45);
+
+    --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 22px; --r-full: 999px;
+
+    --font-head: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: #fff;
+    color: var(--ink-800);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { text-decoration: none; color: inherit; }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  h1,h2,h3,h4 { font-family: var(--font-head); color: var(--ink-900); letter-spacing: -.02em; }
+
+  /* ---------- BUTTONS ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    font-family: var(--font-body); font-weight: 600; cursor: pointer; white-space: nowrap;
+    border: 1.5px solid transparent; border-radius: var(--r-full);
+    transition: all .2s cubic-bezier(.16,1,.3,1);
+  }
+  .btn-brand { background: var(--brand-500); color: #fff; }
+  .btn-brand:hover { background: var(--brand-600); transform: translateY(-2px); box-shadow: var(--shadow-brand); }
+
+  /* ---- CTA chamativo: shine + pulse ---- */
+  .btn-cta { position: relative; overflow: hidden; isolation: isolate; }
+  .btn-cta::before {
+    content: ''; position: absolute; top: 0; left: -120%; width: 80%; height: 100%; z-index: 1;
+    background: linear-gradient(100deg, transparent 20%, rgba(255,255,255,.55) 50%, transparent 80%);
+    transform: skewX(-18deg);
+    animation: shine 3.2s ease-in-out infinite;
+  }
+  @keyframes shine { 0% { left: -120%; } 55%,100% { left: 160%; } }
+  .btn-cta.pulse { animation: ctaPulse 2.4s ease-in-out infinite; }
+  @keyframes ctaPulse {
+    0%,100% { box-shadow: 0 10px 24px -8px rgba(51,102,255,.5), 0 0 0 0 rgba(51,102,255,.45); }
+    50%     { box-shadow: 0 14px 30px -8px rgba(51,102,255,.6), 0 0 0 12px rgba(51,102,255,0); }
+  }
+  .btn-cta.pulse:hover { animation-play-state: paused; }
+  /* shine mais sutil para o botão claro dentro do card de oferta */
+  .btn-cta.on-blue::before { background: linear-gradient(100deg, transparent 20%, rgba(51,102,255,.30) 50%, transparent 80%); }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-cta::before, .btn-cta.pulse { animation: none; }
+  }
+  .btn-outline { background: #fff; color: var(--brand-600); border-color: var(--brand-200); }
+  .btn-outline:hover { border-color: var(--brand-500); background: var(--brand-50); }
+  .btn-wa { background: #25D366; color: #fff; }
+  .btn-wa:hover { background: #1ebe5a; transform: translateY(-2px); box-shadow: 0 14px 30px -10px rgba(37,211,102,.5); }
+  .btn-sm { height: 42px; padding: 0 22px; font-size: .9375rem; }
+  .btn-md { height: 50px; padding: 0 28px; font-size: 1rem; }
+  .btn-lg { height: 58px; padding: 0 36px; font-size: 1.0625rem; }
+
+  /* ---------- PILL ---------- */
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    padding: 7px 15px; border-radius: var(--r-full);
+    background: var(--brand-50); color: var(--brand-700); border: 1px solid var(--brand-200);
+  }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--brand-500); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ---------- NAV ---------- */
+  .nav { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--ink-100); }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+  .brand { display: inline-flex; align-items: center; }
+  .brand-logo { height: 42px; width: auto; display: block; }
+
+  /* ---------- HERO (centralizado, imagem embaixo) ---------- */
+  .hero { background: linear-gradient(180deg, var(--lavender) 0%, #fff 100%); padding: 64px 0 72px; position: relative; overflow: hidden; }
+  .hero-center { text-align: center; max-width: 860px; margin: 0 auto; }
+  .hero h1 { font-size: clamp(1.9rem, 3.6vw, 3rem); font-weight: 800; line-height: 1.16; margin: 22px auto 20px; max-width: 18ch; }
+  .hero h1 br { display: block; }
+  .hero h1 em { font-style: normal; color: var(--brand-500); }
+  .hero-sub { font-size: 1.1875rem; color: var(--ink-600); line-height: 1.6; max-width: 620px; margin: 0 auto 30px; }
+  .hero-sub strong { color: var(--ink-900); font-weight: 600; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: center; }
+  .hero-note { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap; justify-content: center; }
+  .hero-note span { display: flex; align-items: center; gap: 7px; font-size: .875rem; color: var(--ink-500); font-weight: 500; }
+  .ck { color: var(--green-500); flex-shrink: 0; }
+
+  /* hero visual grande embaixo */
+  .hero-visual { margin: 52px auto 0; max-width: 980px; position: relative; }
+  .hero-img { width: 100%; height: auto; filter: drop-shadow(0 30px 60px rgba(15,23,41,.18)); }
+  .hero-fallback {
+    width: 100%; aspect-ratio: 1.9/1; border-radius: var(--r-xl);
+    background: linear-gradient(150deg, var(--brand-500), var(--brand-700));
+    position: relative; box-shadow: var(--shadow-float); overflow: hidden;
+  }
+  .hero-badge {
+    position: absolute; z-index: 4; background: #fff; border-radius: var(--r-md);
+    box-shadow: var(--shadow-float); padding: 12px 16px; display: flex; flex-direction: column; gap: 2px;
+    animation: floaty 5s ease-in-out infinite;
+  }
+  @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .hb-row { display: flex; align-items: center; gap: 14px; }
+  .hb-name { font-size: .8125rem; font-weight: 700; }
+  .hb-count { font-size: .6875rem; color: var(--ink-400); }
+  .hb-val { font-family: var(--font-head); font-weight: 800; font-size: 1.375rem; margin-left: auto; color: var(--ink-900); }
+  .hb-prom { top: 14%; left: 6%; animation-delay: .2s; }
+  .hb-nps  { bottom: 12%; right: 6%; align-items: center; text-align: center; padding: 16px 20px; animation-delay: .9s; }
+  .hb-nps-lab { font-size: .625rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-400); }
+  .hb-nps-val { font-family: var(--font-head); font-weight: 800; font-size: 1.75rem; color: var(--ink-900); line-height: 1; }
+
+  /* ---------- LOGOS MARQUEE ---------- */
+  .logos { padding: 40px 0; border-bottom: 1px solid var(--ink-100); overflow: hidden; }
+  .logos-lab { text-align: center; font-size: .8125rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-400); margin-bottom: 26px; }
+  .marquee { position: relative; width: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .marquee-track { display: flex; align-items: center; gap: 64px; width: max-content; animation: marquee 28s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  .marquee-track img { height: 40px; width: auto; opacity: 1; transition: opacity .2s, filter .2s; filter: saturate(0); flex-shrink: 0; }
+  .marquee-track img:hover { filter: saturate(1); }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; justify-content: center; flex-wrap: wrap; } }
+
+  /* ---------- SECTION ---------- */
+  section.sec { padding: 92px 0; position: relative; }
+  /* divisória minimalista visível entre dobras */
+  .sec + .sec::before,
+  .sec + .logos::before,
+  .logos + .sec::before,
+  .sec + .final::before,
+  .final + .closing::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: min(1140px, calc(100% - 48px)); height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ink-200) 18%, var(--ink-200) 82%, transparent);
+  }
+  .sec-lav { background: var(--lavender-2); }
+  .tag { font-size: .8125rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--brand-500); margin-bottom: 14px; display: block; }
+  .h2 { font-size: clamp(1.85rem, 3.3vw, 2.55rem); font-weight: 800; line-height: 1.14; }
+  .h2 em { font-style: normal; color: var(--brand-500); }
+  .lead { font-size: 1.125rem; color: var(--ink-600); line-height: 1.65; margin-top: 18px; }
+  .center { text-align: center; }
+  .center .lead { max-width: 660px; margin-left: auto; margin-right: auto; }
+
+  /* ---------- PAIN ---------- */
+  .pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .pain-copy p { font-size: 1.125rem; line-height: 1.7; color: var(--ink-600); margin-top: 18px; }
+  .pain-copy p:first-of-type { margin-top: 26px; }
+  .punch { font-family: var(--font-head); font-weight: 700; font-size: 1.3125rem; line-height: 1.4; color: var(--ink-900); margin-top: 26px !important; }
+  .punch em { font-style: normal; color: var(--red-500); }
+
+  .feed-stack { display: flex; flex-direction: column; gap: 14px; }
+  .feed { background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 18px 20px; box-shadow: var(--shadow-card); display: flex; gap: 14px; align-items: flex-start; }
+  .feed.det { border-left: 4px solid var(--red-500); }
+  .feed.pas { border-left: 4px solid var(--amber-500); }
+  .feed.pro { border-left: 4px solid var(--green-500); }
+  .fav { width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-head); font-size: .9375rem; }
+  .fav-r { background: var(--red-50); color: #b91c1c; }
+  .fav-a { background: #fffbeb; color: #b45309; }
+  .fav-g { background: var(--green-50); color: #15803d; }
+  .feed-b { flex: 1; }
+  .feed-n { font-weight: 700; font-size: .9375rem; color: var(--ink-900); }
+  .feed-m { font-size: .75rem; color: var(--ink-400); margin-bottom: 6px; }
+  .feed-t { font-size: .9375rem; color: var(--ink-600); line-height: 1.45; }
+  .feed-tag { display: inline-block; margin-top: 8px; font-size: .6875rem; font-weight: 600; padding: 3px 10px; border-radius: var(--r-full); }
+  .tg-r { background: var(--red-50); color: #b91c1c; }
+  .tg-a { background: #fffbeb; color: #b45309; }
+  .tg-g { background: var(--green-50); color: #15803d; }
+  .score { margin-left: auto; font-family: var(--font-head); font-weight: 800; font-size: 1.5rem; }
+  .s-r { color: var(--red-500); } .s-a { color: var(--amber-500); } .s-g { color: var(--green-500); }
+
+  /* ---------- BENEFITS ---------- */
+  .ben-head { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: end; margin-bottom: 52px; }
+  .ben-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .ben { background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-xl); padding: 30px 26px; transition: all .25s cubic-bezier(.16,1,.3,1); }
+  .ben:hover { transform: translateY(-5px); box-shadow: var(--shadow-soft); border-color: var(--brand-200); }
+  .ben-ic { width: 50px; height: 50px; border-radius: var(--r-md); background: var(--brand-50); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+  .ben.feat .ben-ic { background: var(--brand-500); }
+  .ben.feat .ben-ic svg { stroke: #fff; }
+  .ben h3 { font-size: 1.1875rem; font-weight: 700; line-height: 1.3; margin-bottom: 11px; }
+  .ben p { font-size: .9688rem; color: var(--ink-500); line-height: 1.6; }
+  .ben p strong { color: var(--ink-700); font-weight: 600; }
+
+  /* ---------- CHANNELS ---------- */
+  .chan-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 52px; }
+  .chan { text-align: center; padding: 28px 20px; border-radius: var(--r-lg); transition: all .25s; }
+  .chan:hover { background: #fff; box-shadow: var(--shadow-card); transform: translateY(-3px); }
+  .chan-ic { width: 56px; height: 56px; border-radius: var(--r-md); background: var(--brand-50); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .chan h4 { font-size: 1.0625rem; font-weight: 600; margin-bottom: 8px; }
+  .chan p { font-size: .875rem; color: var(--ink-500); line-height: 1.55; }
+
+  /* ---------- PRICING / OFFER HIGHLIGHT ---------- */
+  .offer-card {
+    background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
+    border-radius: var(--r-xl); padding: 52px 48px; position: relative; overflow: hidden;
+    box-shadow: var(--shadow-float); color: #fff; text-align: center;
+  }
+  .offer-card::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 50% 80% at 80% 20%, rgba(89,144,255,.5), transparent 60%); pointer-events:none; }
+  .offer-in { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+  .offer-card h2 { color: #fff; font-size: clamp(1.6rem,3vw,2.25rem); font-weight: 800; line-height: 1.18; }
+  .offer-card .lead { color: rgba(255,255,255,.88); margin-bottom: 28px; }
+  .offer-price { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin: 6px 0 4px; }
+  .offer-num { font-family: var(--font-head); font-weight: 800; font-size: 4rem; line-height: 1; }
+  .offer-unit { font-size: 1.25rem; font-weight: 600; opacity: .9; }
+  .offer-sub2 { font-size: .9375rem; opacity: .8; margin-bottom: 28px; }
+  .offer-cta { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+
+  /* ---------- PROOF ---------- */
+  .stats { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin: 44px 0 54px; }
+  .stat { text-align: center; }
+  .stat-v { font-family: var(--font-head); font-weight: 800; font-size: 2.75rem; color: var(--ink-900); line-height: 1; }
+  .stat-v em { font-style: normal; color: var(--brand-500); }
+  .stat-l { font-size: .875rem; color: var(--ink-500); margin-top: 8px; }
+  .tgrid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+  .tc { background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 26px 24px; transition: all .25s; }
+  .tc:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+  .stars { color: var(--amber-500); font-size: .9375rem; letter-spacing: 2px; margin-bottom: 14px; }
+  .tc p { font-size: .9375rem; color: var(--ink-600); line-height: 1.6; margin-bottom: 20px; }
+  .tp { display: flex; align-items: center; gap: 12px; }
+  .tp .av { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-400), var(--brand-600)); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-weight: 700; font-size: .9375rem; flex-shrink: 0; }
+  .tn { font-weight: 700; font-size: .9375rem; color: var(--ink-900); }
+  .tr { font-size: .8125rem; color: var(--ink-500); }
+
+  /* ---------- OBJECTION + FAQ ---------- */
+  .obj-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .obj-copy p { font-size: 1.0625rem; color: var(--ink-600); line-height: 1.7; margin-top: 18px; }
+  .obj-copy p strong { color: var(--ink-900); font-weight: 600; }
+  .yes { font-family: var(--font-head); font-weight: 800; font-size: 1.5rem; color: var(--green-500); }
+  .faq { display: flex; flex-direction: column; gap: 12px; }
+  .fq { background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-md); overflow: hidden; transition: border-color .2s; }
+  .fq:hover { border-color: var(--brand-200); }
+  .fq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 19px 22px; cursor: pointer; font-family: var(--font-head); font-weight: 600; font-size: 1.0625rem; color: var(--ink-900); list-style: none; }
+  .fq summary::-webkit-details-marker { display: none; }
+  .fq-ic { width: 22px; height: 22px; flex-shrink: 0; color: var(--brand-500); transition: transform .2s; }
+  details[open] .fq-ic { transform: rotate(45deg); }
+  .fq-a { padding: 0 22px 20px; font-size: .9688rem; color: var(--ink-500); line-height: 1.6; }
+
+  /* ---------- FINAL ---------- */
+  .final { background: var(--lavender-2); }
+  .final-in { text-align: center; max-width: 720px; margin: 0 auto; }
+  .final h2 { font-size: clamp(1.9rem,3.6vw,2.75rem); font-weight: 800; line-height: 1.14; margin: 22px 0 18px; }
+  .final h2 em { font-style: normal; color: var(--brand-500); }
+  .final .lead { margin: 0 auto 34px; }
+  .wa-line { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+  .wa-line span { color: var(--ink-500); font-size: 1rem; }
+  .divider { display: flex; align-items: center; gap: 16px; max-width: 420px; margin: 36px auto 0; color: var(--ink-400); font-size: .875rem; }
+  .divider::before, .divider::after { content:''; flex:1; height:1px; background: var(--ink-200); }
+
+  /* ---------- CLOSING ---------- */
+  .closing { text-align: center; padding: 70px 0; }
+  .closing h3 { font-size: clamp(1.5rem,3vw,2.25rem); font-weight: 800; line-height: 1.2; }
+  .closing h3 em { font-style: normal; color: var(--brand-500); }
+  .closing p { font-size: 1.0625rem; color: var(--ink-500); margin: 18px auto 0; max-width: 560px; line-height: 1.6; }
+
+  /* ---------- FOOTER ---------- */
+  footer { background: var(--ink-900); padding: 48px 0 36px; }
+  .foot { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .foot-brand { font-family: var(--font-head); font-weight: 800; font-size: 1.25rem; color: #fff; }
+  .foot-brand span { color: var(--brand-400); }
+  .foot-ev { font-size: .8125rem; color: var(--ink-400); margin-top: 6px; }
+  .foot-ev strong { color: var(--ink-200); }
+  .foot-legal { font-size: .8125rem; color: var(--ink-500); max-width: 480px; line-height: 1.5; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 920px) {
+    .hero-grid, .pain-grid, .ben-head, .obj-grid { grid-template-columns: 1fr; gap: 40px; }
+    .ben-grid, .tgrid { grid-template-columns: 1fr 1fr; }
+    .chan-grid { grid-template-columns: 1fr 1fr; }
+    .hero-visual { max-width: 460px; margin: 0 auto; }
+    .stats { gap: 36px; }
+  }
+  @media (max-width: 560px) {
+    section.sec { padding: 60px 0; }
+    .hero { padding: 44px 0 56px; }
+    .ben-grid, .tgrid, .chan-grid { grid-template-columns: 1fr; }
+    .hero-cta { flex-direction: column; align-items: stretch; }
+    .btn-lg { width: 100%; }
+    .stats { flex-direction: column; gap: 26px; }
+    .offer-card { padding: 40px 26px; }
+    .brand-logo { height: 38px; }
+    .marquee-track { gap: 40px; }
+    .marquee-track img { height: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="container nav-in">
+    <a href="#" class="brand" aria-label="WeHelp">
+      <img class="brand-logo" src="assets/wehelp-logo.png" alt="WeHelp" />
+    </a>
+    <a href="https://app.wehelpsoftware.com/pt-BR/auth/register?utm_source=evento&utm_medium=qr_code&utm_campaign=carlinhos_california" class="btn btn-brand btn-sm js-register">Quero 15 dias grátis</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-center">
+      <span class="pill"><span class="dot"></span>Oferta exclusiva da palestra</span>
+      <h1>Você entendeu o poder do NPS.<br><em>Agora coloque ele pra rodar na sua academia.</em></h1>
+      <p class="hero-sub">A mesma plataforma que <strong>Bluefit, Panobianco e Bodytech</strong> usam para reter alunos e parar de perder cliente sem saber o porquê — liberada com <strong>15 dias grátis</strong> só para quem está aqui hoje.</p>
+      <div class="hero-cta">
+        <a href="https://app.wehelpsoftware.com/pt-BR/auth/register?utm_source=evento&utm_medium=qr_code&utm_campaign=carlinhos_california" class="btn btn-brand btn-lg btn-cta pulse js-register">Ativar meus 15 dias grátis →</a>
+      </div>
+      <div class="hero-note">
+        <span><svg class="ck" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Sem cartão de crédito</span>
+        <span><svg class="ck" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Acesso completo</span>
+        <span><svg class="ck" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Cancele quando quiser</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Mockup oficial do site WeHelp, carregado direto da URL.
+           Se não carregar (offline), aparece o fallback abaixo. -->
+      <img class="hero-img" id="heroImg"
+           src="https://www.wehelpsoftware.com/_next/static/media/dashboard-home.0gmlcdk_l~0r9.svg"
+           alt="Dashboard de NPS da WeHelp"
+           onerror="document.getElementById('heroImg').style.display='none';document.getElementById('heroFb').style.display='block';" />
+
+      <!-- Fallback visual caso o mockup oficial não carregue -->
+      <div class="hero-fallback" id="heroFb" style="display:none">
+        <div class="hero-badge hb-prom">
+          <div class="hb-row">
+            <div><div class="hb-name" style="color:var(--green-500)">Promotores</div><div class="hb-count">5.835</div></div>
+            <div class="hb-val">94%</div>
+          </div>
+        </div>
+        <div class="hero-badge hb-nps">
+          <svg width="88" height="56" viewBox="0 0 100 64"><path d="M8 58 A42 42 0 0 1 92 58" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="9" stroke-linecap="round"/><path d="M8 58 A42 42 0 0 1 92 58" fill="none" stroke="url(#g)" stroke-width="9" stroke-linecap="round" stroke-dasharray="118 132"/><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ef4444"/><stop offset=".5" stop-color="#f59e0b"/><stop offset="1" stop-color="#22c55e"/></linearGradient></defs></svg>
+          <div class="hb-nps-lab">NPS</div><div class="hb-nps-val">+74,9</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LOGOS -->
+<section class="logos">
+  <div class="container">
+    <p class="logos-lab">Quem leva a experiência do aluno a sério já está com a gente</p>
+  </div>
+  <div class="marquee">
+    <div class="marquee-track">
+      <!-- set 1 -->
+      <img src="assets/bluefit.png" alt="Bluefit" />
+      <img src="assets/panobianco.png" alt="Panobianco" />
+      <img src="assets/bodytech.png" alt="Bodytech" />
+      <img src="assets/bioritmo.png" alt="Bioritmo" />
+      <img src="assets/evo.png" alt="ABC Evo" />
+      <!-- set 2 (duplicado para loop contínuo) -->
+      <img src="assets/bluefit.png" alt="Bluefit" aria-hidden="true" />
+      <img src="assets/panobianco.png" alt="Panobianco" aria-hidden="true" />
+      <img src="assets/bodytech.png" alt="Bodytech" aria-hidden="true" />
+      <img src="assets/bioritmo.png" alt="Bioritmo" aria-hidden="true" />
+      <img src="assets/evo.png" alt="ABC Evo" aria-hidden="true" />
+    </div>
+  </div>
+</section>
+
+<!-- PAIN -->
+<section class="sec">
+  <div class="container pain-grid">
+    <div class="pain-copy">
+      <span class="tag">O problema real</span>
+      <h2 class="h2">Seu aluno não avisa que vai sair. Ele só <em>para de aparecer.</em></h2>
+      <p>A maioria das academias só descobre que o aluno está insatisfeito quando ele já não renova. A essa altura, é tarde.</p>
+      <p>A insatisfação raramente vem escrita. Ela nasce de pequenos atritos: a recepção, o equipamento quebrado, a aula lotada, o professor que trocou. O aluno sente, mas não fala. E quando fala, já decidiu cancelar.</p>
+      <p class="punch">O problema nunca foi a insatisfação. O problema é <em>não conseguir enxergá-la a tempo de agir.</em></p>
+    </div>
+    <div class="feed-stack">
+      <div class="feed det">
+        <div class="fav fav-r">JR</div>
+        <div class="feed-b">
+          <div class="feed-n">Juliana R.</div>
+          <div class="feed-m">há 2 dias · Unidade Centro</div>
+          <div class="feed-t">"As aulas da manhã estão sempre lotadas, não consigo usar os aparelhos que preciso."</div>
+          <span class="feed-tag tg-r">Detrator · Estrutura</span>
+        </div>
+        <div class="score s-r">3</div>
+      </div>
+      <div class="feed pas">
+        <div class="fav fav-a">MS</div>
+        <div class="feed-b">
+          <div class="feed-n">Marcos S.</div>
+          <div class="feed-m">há 4 dias · Unidade Sul</div>
+          <div class="feed-t">"Gosto da academia, mas o atendimento na recepção podia ser mais rápido."</div>
+          <span class="feed-tag tg-a">Passivo · Atendimento</span>
+        </div>
+        <div class="score s-a">7</div>
+      </div>
+      <div class="feed pro">
+        <div class="fav fav-g">CF</div>
+        <div class="feed-b">
+          <div class="feed-n">Carla F.</div>
+          <div class="feed-m">há 5 dias · Unidade Centro</div>
+          <div class="feed-t">"Equipe nota mil! Os professores realmente acompanham a evolução."</div>
+          <span class="feed-tag tg-g">Promotor · Equipe</span>
+        </div>
+        <div class="score s-g">10</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="sec sec-lav">
+  <div class="container">
+    <div class="ben-head">
+      <div>
+        <span class="tag">A virada de jogo</span>
+        <h2 class="h2">Com o NPS do jeito certo, você age <em>antes</em> do cancelamento — não depois.</h2>
+      </div>
+      <p class="lead">A WeHelp transforma a nota do aluno em ação concreta. Você passa a enxergar o que estava invisível e a agir no momento que ainda dá tempo.</p>
+    </div>
+    <div class="ben-grid">
+      <div class="ben feat">
+        <div class="ben-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.9"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div>
+        <h3>Antecipe cancelamentos</h3>
+        <p>Identifique alunos insatisfeitos enquanto ainda dá tempo de reverter. Pesquisas mostram que <strong>até 40% dos detratores saem em 90 dias</strong> — a WeHelp te avisa antes.</p>
+      </div>
+      <div class="ben">
+        <div class="ben-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.9"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <h3>Saiba o que incomoda</h3>
+        <p>Não é só a nota. O aluno te conta o porquê, e você descobre <strong>quais pontos da jornada</strong> derrubam a experiência: atendimento, estrutura, aulas, horário.</p>
+      </div>
+      <div class="ben">
+        <div class="ben-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.9"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg></div>
+        <h3>Feche o ciclo com o detrator</h3>
+        <p>Responda o aluno insatisfeito de forma automática ou manual, resolva o problema e <strong>transforme detrator em promotor.</strong></p>
+      </div>
+      <div class="ben">
+        <div class="ben-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.9"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h3>Reter custa menos que captar</h3>
+        <p>Cada aluno que fica é um custo de aquisição que você não paga de novo. <strong>Fidelizar é sempre mais barato</strong> que vender pra alguém novo.</p>
+      </div>
+      <div class="ben">
+        <div class="ben-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.9"><path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/></svg></div>
+        <h3>Decida com dado, não achismo</h3>
+        <p>Dashboards em tempo real e <strong>relatórios segmentados</strong> por unidade, turno, professor ou plano. Pare de operar no escuro.</p>
+      </div>
+      <div class="ben">
+        <div class="ben-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.9"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <h3>Motive sua equipe</h3>
+        <p>Com o <strong>Dashboard TV</strong>, coloque o NPS em tempo real na tela da academia. A meta vira visível e o time corre atrás dela.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHANNELS -->
+<section class="sec">
+  <div class="container center">
+    <span class="tag">Como chega até o aluno</span>
+    <h2 class="h2">Pesquisa onde o seu aluno estiver.</h2>
+    <p class="lead">Multicanal de verdade. Você dispara a pesquisa pelo canal que faz sentido pra cada unidade — e acompanha tudo num só lugar.</p>
+    <div class="chan-grid">
+      <div class="chan">
+        <div class="chan-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div>
+        <h4>Email & SMS</h4>
+        <p>Dispare para sua base de alunos com automação de envios diários.</p>
+      </div>
+      <div class="chan">
+        <div class="chan-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h7v7h-7z"/></svg></div>
+        <h4>Widget & QR Code</h4>
+        <p>Colete feedback na recepção, no app ou direto na catraca.</p>
+      </div>
+      <div class="chan">
+        <div class="chan-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+        <h4>Link & Redes</h4>
+        <p>Compartilhe a pesquisa em chats, redes sociais e pontos de venda.</p>
+      </div>
+      <div class="chan">
+        <div class="chan-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--brand-600)" stroke-width="1.8"><path d="M12 20h.01M2 8.82a15 15 0 0 1 20 0M5 12.86a10 10 0 0 1 14 0M8.5 16.43a5 5 0 0 1 7 0"/></svg></div>
+        <h4>Dashboard TV</h4>
+        <p>NPS em tempo real na televisão da academia, pra engajar o time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="sec sec-lav">
+  <div class="container center">
+    <span class="tag">Confiança comprovada</span>
+    <h2 class="h2">As maiores redes de academia do Brasil já confiam na WeHelp.</h2>
+    <div class="stats">
+      <div class="stat"><div class="stat-v"><em>+17</em> mi</div><div class="stat-l">de pesquisas enviadas</div></div>
+      <div class="stat"><div class="stat-v"><em>+1.000</em></div><div class="stat-l">empresas atendidas</div></div>
+      <div class="stat"><div class="stat-v"><em>1ª</em> semana</div><div class="stat-l">já com os primeiros insights</div></div>
+    </div>
+    <div class="tgrid">
+      <div class="tc">
+        <div class="stars">★★★★★</div>
+        <p>"Usamos o sistema NPS para entender melhor as necessidades dos clientes e os ajustes necessários."</p>
+        <div class="tp"><div class="av">AN</div><div><div class="tn">André</div><div class="tr">Sócio-Fundador · Panobianco</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="stars">★★★★★</div>
+        <p>"Sistema NPS fácil, intuitivo e confiável. Nos ajuda a monitorar a satisfação dos nossos clientes!"</p>
+        <div class="tp"><div class="av">EM</div><div><div class="tn">Emanuel Mota</div><div class="tr">Diretor · Bluefit</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="stars">★★★★★</div>
+        <p>"A ferramenta nos dá uma visão mais detalhada sobre os pontos de contato que interferem na nota do cliente."</p>
+        <div class="tp"><div class="av">DK</div><div><div class="tn">Daniele Kato</div><div class="tr">Gerente de Marketing · Bodytech</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="stars">★★★★★</div>
+        <p>"Ótima ferramenta, imprescindível para nortear as melhores decisões através do olhar do cliente."</p>
+        <div class="tp"><div class="av">CM</div><div><div class="tn">Cássio Mendes</div><div class="tr">Diretor · Espaço Fitness Aqua Club</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OBJECTION + FAQ -->
+<section class="sec">
+  <div class="container obj-grid">
+    <div class="obj-copy">
+      <span class="tag">Quebrando a dúvida</span>
+      <h2 class="h2">"Será que funciona pra <em>minha</em> realidade?"</h2>
+      <p><span class="yes">Funciona.</span></p>
+      <p>Pra academia de bairro, estúdio, rede com dezenas de unidades e tudo no meio do caminho. É <strong>simples de implementar, fácil de usar e totalmente automático.</strong></p>
+      <p>Você vê os primeiros insights já na primeira semana — e nossa equipe te ajuda a configurar a pesquisa do jeito certo. Aqui você não fica sozinho: <strong>somos um time, não só um software.</strong></p>
+    </div>
+    <div class="faq">
+      <details class="fq" open>
+        <summary>Preciso colocar cartão de crédito?<svg class="fq-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <div class="fq-a">Não. São 15 dias de acesso completo, sem cartão e sem compromisso.</div>
+      </details>
+      <details class="fq">
+        <summary>É difícil de configurar?<svg class="fq-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <div class="fq-a">Não. A gente te ajuda a montar sua primeira pesquisa e em poucos minutos ela já está rodando.</div>
+      </details>
+      <details class="fq">
+        <summary>Serve pra qualquer tamanho de academia?<svg class="fq-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <div class="fq-a">Sim. De estúdio independente a grandes redes com várias unidades — com relatórios segmentados por unidade.</div>
+      </details>
+      <details class="fq">
+        <summary>Posso cancelar quando quiser?<svg class="fq-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></summary>
+        <div class="fq-a">Sim, a qualquer momento, direto na plataforma. Sem burocracia.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER / FINAL CTA -->
+<section class="sec final" id="oferta">
+  <div class="container">
+    <div class="offer-card">
+      <div class="offer-in">
+        <span class="pill" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3)"><span class="dot" style="background:#fff"></span>Exclusivo da palestra</span>
+        <h2 style="margin-top:18px">Você saiu da palestra com a teoria. Saia daqui com a ferramenta rodando.</h2>
+        <div class="offer-price">
+          <span class="offer-num">15</span>
+          <span class="offer-unit">dias grátis</span>
+        </div>
+        <p class="offer-sub2">Acesso completo · Sem cartão · Liberado só para quem participou hoje</p>
+        <div class="offer-cta">
+          <a href="https://app.wehelpsoftware.com/pt-BR/auth/register?utm_source=evento&utm_medium=qr_code&utm_campaign=carlinhos_california" class="btn btn-lg btn-cta on-blue js-register" style="background:#fff;color:var(--brand-600)">Ativar meus 15 dias grátis →</a>
+        </div>
+        <div class="divider" style="color:rgba(255,255,255,.6);max-width:380px">ou fale direto com a gente</div>
+        <div class="wa-line">
+          <a href="https://wa.me/5521976787182?text=Oi!%20Vim%20da%20palestra%20e%20quero%20ativar%20os%2015%20dias%20gr%C3%A1tis%20da%20WeHelp" class="btn btn-wa btn-md" target="_blank" rel="noopener">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
+            WhatsApp (21) 97678-7182
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="container">
+    <h3>Sem <em>custo.</em> Sem <em>compromisso.</em> Só <em>clareza.</em></h3>
+    <p>Você não está se cadastrando para comprar nada. Está dando o primeiro passo para entender, com dados reais, o que leva seus alunos a cancelar — e como evitar isso.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container foot">
+    <div>
+      <div class="foot-brand">We<span>Help</span></div>
+      <div class="foot-ev">Oferta exclusiva para participantes da palestra · <strong>Califórnia Fitness</strong></div>
+    </div>
+    <a href="https://wa.me/5521976787182?text=Oi!%20Vim%20da%20palestra%20e%20quero%20ativar%20os%2015%20dias%20gr%C3%A1tis%20da%20WeHelp" class="btn btn-wa btn-sm" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.247-.694.247-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+      WhatsApp
+    </a>
+  </div>
+</footer>
+
+<!-- ===== Repasse de UTMs para a página de registro =====
+     Os botões já têm UTMs fixas (utm_source=evento etc.).
+     Se a LP for aberta com UTMs próprias na URL (ex: ?utm_source=instagram),
+     essas SOBREPÕEM as fixas nos links de registro. Sem UTMs na URL, mantém as fixas. -->
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var keep = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','fbclid','ref'];
+  var pass = new URLSearchParams();
+  keep.forEach(function (k) { var v = params.get(k); if (v) pass.set(k, v); });
+  if (!pass.toString()) return; // LP sem UTMs próprias -> mantém as UTMs fixas dos botões
+
+  document.querySelectorAll('a[href*="/auth/register"], a.js-register').forEach(function (a) {
+    try {
+      var url = new URL(a.getAttribute('href'), window.location.origin);
+      pass.forEach(function (val, key) { url.searchParams.set(key, val); }); // sobrepõe
+      a.setAttribute('href', url.toString());
+    } catch (e) {}
+  });
+})();
+</script>
+
+</body>
+</html>

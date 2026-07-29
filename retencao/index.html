@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Módulo de Retenção — WeHelp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #3B6FE8;
+      --blue-light: #EEF3FD;
+      --white: #ffffff;
+      --bg: #F4F6FA;
+      --bg-dot: #CBD5E1;
+      --border: #E2E8F0;
+      --text-primary: #1A1A2E;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --dark-bg: #0F1E45;
+      --green-bg: #F0FDF4;
+      --green-text: #16A34A;
+      --red-bg: #FEF2F2;
+      --red-text: #DC2626;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text-primary); }
+    .bg-light { background-color: var(--bg); background-image: radial-gradient(var(--bg-dot) 1px, transparent 1px); background-size: 24px 24px; }
+    .bg-dark { background-color: var(--dark-bg); background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 24px 24px; }
+
+    nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 14px 40px; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+
+    .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section-header { text-align: center; margin-bottom: 40px; }
+    .section-tag { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
+    .section-tag.dark { color: rgba(255,255,255,0.45); }
+    .section-tag.light { color: var(--text-muted); }
+    .section-title { font-size: 28px; font-weight: 800; line-height: 1.2; letter-spacing: -0.3px; }
+    .section-title.dark { color: #ffffff; }
+    .section-title.light { color: var(--text-primary); }
+    .section-title span.accent { color: #7AAEFF; }
+    .section-title span.blue { color: var(--blue); }
+
+    /* ═══ HERO COM VÍDEO ═══ */
+    .hero { padding: 56px 0 64px; text-align: center; }
+    .hero-inner { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+    .alert-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--green-bg); color: var(--green-text);
+      border: 1px solid #86EFAC;
+      font-size: 13px; font-weight: 500;
+      padding: 6px 14px; border-radius: 20px;
+      margin-bottom: 24px;
+      animation: pulse-badge 2s ease-in-out infinite;
+    }
+    @keyframes pulse-badge {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
+      50% { box-shadow: 0 0 0 7px rgba(22,163,74,0); }
+    }
+    .hero h1 { font-size: 38px; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 16px; }
+    .hero h1 span { color: var(--blue); }
+    .hero p { font-size: 17px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 36px; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .video-wrap {
+      max-width: 760px; margin: 0 auto;
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 16px 56px rgba(15,30,69,0.22), 0 4px 16px rgba(15,30,69,0.1);
+      border: 1px solid var(--border);
+      background: #000;
+    }
+
+    /* ═══ CTAs ═══ */
+    .ctas-section { padding: 64px 0 72px; }
+    .cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 860px; margin: 0 auto; }
+    .cta-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 14px; position: relative; transition: border-color 0.2s, box-shadow 0.2s; }
+    .cta-card:hover { border-color: #C7D7F7; box-shadow: 0 4px 20px rgba(59,111,232,0.08); }
+    .cta-card.featured { border: 2px solid var(--blue); }
+    .featured-pill { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--blue); color: var(--white); font-size: 11px; font-weight: 600; padding: 3px 14px; border-radius: 20px; white-space: nowrap; }
+    .card-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .card-icon.blue { background: var(--blue-light); color: var(--blue); }
+    .card-icon.green { background: var(--green-bg); color: var(--green-text); }
+    .card-icon svg { width: 22px; height: 22px; }
+    .card-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+    .card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; flex: 1; }
+    .card-bullets { display: flex; flex-direction: column; gap: 6px; }
+    .card-bullet { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .card-bullet svg { flex-shrink: 0; color: var(--blue); }
+    .btn { width: 100%; padding: 13px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; transition: opacity 0.15s, transform 0.1s; }
+    .btn:hover { opacity: 0.92; }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-secondary { background: var(--white); color: var(--text-primary); border: 1.5px solid var(--border); }
+    .btn-secondary:hover { border-color: #C7D7F7; background: var(--blue-light); color: var(--blue); }
+
+    /* ═══ VANTAGENS (DARK) ═══ */
+    .vantagens-section { padding: 72px 0; }
+    .vantagens { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .vantagem-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 10px; transition: background 0.2s, border-color 0.2s; }
+    .vantagem-card:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+    .vantagem-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; background: rgba(59,111,232,0.3); }
+    .vantagem-icon svg { color: #7AAEFF; width: 18px; height: 18px; }
+    .vantagem-title { font-size: 14px; font-weight: 700; color: #ffffff; line-height: 1.4; }
+    .vantagem-desc { font-size: 13px; color: rgba(255,255,255,0.58); line-height: 1.6; }
+
+    /* ═══ COMO FUNCIONA (LIGHT) ═══ */
+    .howto-section { padding: 72px 0 0; }
+    .how-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 28px; margin-bottom: 16px; max-width: 860px; margin-left: auto; margin-right: auto; }
+    .steps { display: flex; flex-direction: column; }
+    .step { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid #F1F5F9; align-items: flex-start; }
+    .step:last-child { border-bottom: none; padding-bottom: 0; }
+    .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--blue-light); color: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .step-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+    .step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+    .trial-banner { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-secondary); max-width: 860px; margin: 0 auto 12px; }
+    .trial-banner svg { color: var(--blue); flex-shrink: 0; }
+    .trial-banner strong { color: var(--text-primary); }
+    .footer-note { text-align: center; font-size: 12px; color: var(--text-muted); padding: 8px 0 60px; }
+
+    /* PAINEL */
+    .painel { display: none; padding: 0 0 60px; }
+    .painel.visible { display: block; }
+    .painel-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .painel-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .painel-header h2 { font-size: 15px; font-weight: 700; }
+    .painel-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--border); }
+    .stat { padding: 20px 24px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: var(--text-muted); }
+    .painel-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .painel-table th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); background: #F8FAFC; border-bottom: 1px solid var(--border); }
+    .painel-table td { padding: 12px 16px; border-bottom: 1px solid #F1F5F9; color: var(--text-secondary); }
+    .painel-table tr:last-child td { border-bottom: none; }
+    .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .tag-auto { background: var(--blue-light); color: var(--blue); }
+    .tag-agenda { background: var(--green-bg); color: var(--green-text); }
+    .tag-visita { background: #F1F5F9; color: var(--text-muted); }
+    .painel-empty { padding: 40px; text-align: center; font-size: 14px; color: var(--text-muted); }
+    .btn-clear { font-size: 12px; color: var(--red-text); background: none; border: none; cursor: pointer; font-family: 'Inter', sans-serif; padding: 4px 8px; border-radius: 4px; }
+    .btn-clear:hover { background: var(--red-bg); }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 27px; }
+      .hero { padding: 40px 0 48px; }
+      .cta-grid { grid-template-columns: 1fr; }
+      .vantagens { grid-template-columns: 1fr; }
+      .section-title { font-size: 22px; }
+      nav { padding: 14px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <img src="https://www.wehelpsoftware.com/_next/static/media/logo-company.0bjngsnxjjrn5.svg" alt="WeHelp" style="height: 28px; width: auto;" />
+    </div>
+  </nav>
+
+  <!-- ═══ SEÇÃO 1: HERO + VÍDEO (LIGHT) ═══ -->
+  <section class="bg-light">
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="alert-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Novidade exclusiva para clientes WeHelp
+        </div>
+        <h1>Recupere até <span>40% dos alunos em risco</span> antes que eles vão embora</h1>
+        <p>O Módulo de Retenção analisa o comportamento de cada aluno e aponta quem está com risco de cancelar — para você agir antes, não depois que já foi.</p>
+        <div class="video-wrap">
+          <div style="position:relative;padding-top:56.25%;"><iframe id="panda-a20e4d28-e1b8-48ac-9bcf-8b294add5f6f" src="https://player-vz-68bddeff-c61.tv.pandavideo.com/embed/?v=a20e4d28-e1b8-48ac-9bcf-8b294add5f6f" style="border:none;position:absolute;top:0;left:0;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture" allowfullscreen=true width="100%" height="100%" fetchpriority="high"></iframe></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SEÇÃO 2: CTAs (LIGHT, logo abaixo do vídeo) ═══ -->
+    <div class="ctas-section" style="padding-top: 0;">
+      <div class="inner">
+        <div class="section-header">
+          <div class="section-tag light">Como você quer ativar?</div>
+          <h2 class="section-title light">Escolha como <span class="blue">começar agora</span></h2>
+        </div>
+        <div class="cta-grid">
+          <div class="cta-card featured">
+            <div class="featured-pill">Mais rápido</div>
+            <div class="card-icon blue"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+            <div class="card-title">Ativar sozinho</div>
+            <p class="card-desc">Assista ao vídeo de 2 minutos e configure agora. Sem complicação.</p>
+            <div class="card-bullets">
+              <div class="card-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Leva menos de 2 minutos</div>
+              <div class="card-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>Faça no seu próprio ritmo</div>
+            </div>
+            <button class="btn btn-primary" onclick="registrarClique('autoativacao')"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>Ver o vídeo e ativar</button>
+          </div>
+          <div class="cta-card">
+            <div class="card-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="card-title">Ativar com a equipe</div>
+            <p class="card-desc">Agende 30 minutos com a gente. Configuramos tudo junto com você.</p>
+            <div class="card-bullets">
+              <div class="card-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Suporte dedicado</div>
+              <div class="card-bullet"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Sessão de 30 minutos</div>
+            </div>
+            <button class="btn btn-secondary" onclick="registrarClique('agendamento')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Agendar agora</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SEÇÃO 3: VANTAGENS (DARK) ═══ -->
+  <section class="bg-dark vantagens-section">
+    <div class="inner">
+      <div class="section-header">
+        <div class="section-tag dark">Por que ativar agora</div>
+        <h2 class="section-title dark">O que você ganha com o <span class="accent">Módulo de Retenção</span></h2>
+      </div>
+      <div class="vantagens">
+        <div class="vantagem-card"><div class="vantagem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="vantagem-title">Saiba quem vai sair antes que saia</div><div class="vantagem-desc">Identifique os alunos com maior risco de evasão com antecedência e mantenha sua base estável e lucrativa.</div></div>
+        <div class="vantagem-card"><div class="vantagem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="vantagem-title">Pare de adivinhar. Os dados mostram quem vai embora</div><div class="vantagem-desc">Análise preditiva que transforma o comportamento dos seus alunos em ações concretas de retenção.</div></div>
+        <div class="vantagem-card"><div class="vantagem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="vantagem-title">A janela para agir é pequena. O módulo te avisa na hora certa</div><div class="vantagem-desc">Receba alertas no momento ideal para abordar o aluno em risco — antes que a decisão de cancelar seja tomada.</div></div>
+        <div class="vantagem-card"><div class="vantagem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div class="vantagem-title">Aborde cada aluno em risco com o argumento certo</div><div class="vantagem-desc">Use o perfil completo — frequência, plano, histórico — para personalizar a abordagem e aumentar as chances de retenção.</div></div>
+        <div class="vantagem-card"><div class="vantagem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="vantagem-title">Retenha mais gastando menos — sem campanhas genéricas</div><div class="vantagem-desc">Foque energia e recursos nos alunos certos. Reduza custos e aumente a eficiência das ações de retenção.</div></div>
+        <div class="vantagem-card"><div class="vantagem-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="vantagem-title">Visibilidade total sobre quem fica e quem vai</div><div class="vantagem-desc">Tenha clareza sobre o futuro da sua base de alunos e tome decisões mais inteligentes para o negócio.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SEÇÃO 4: COMO FUNCIONA (LIGHT) ═══ -->
+  <section class="bg-light">
+    <div class="inner howto-section">
+      <div class="section-header">
+        <div class="section-tag light">Passo a passo</div>
+        <h2 class="section-title light">Como <span class="blue">funciona</span></h2>
+      </div>
+      <div class="how-card">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><div class="step-title">Ative o módulo</div><div class="step-desc">Sozinho com o vídeo ou com a nossa equipe. Leva menos de 2 minutos.</div></div></div>
+          <div class="step"><div class="step-num">2</div><div><div class="step-title">O modelo analisa sua academia</div><div class="step-desc">Aprende com o histórico dos seus alunos e calcula o score de risco de cada um — alto, médio ou baixo.</div></div></div>
+          <div class="step"><div class="step-num">3</div><div><div class="step-title">Você vê quem está em risco e age</div><div class="step-desc">Filtre por nível de risco, priorize os alunos certos e entre em contato antes do cancelamento acontecer.</div></div></div>
+        </div>
+      </div>
+      <div class="trial-banner">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span><strong>30 dias gratuitos</strong> a partir da ativação · Sem cartão de crédito · Cancele quando quiser</span>
+      </div>
+      <p class="footer-note">Você já é cliente WeHelp — seu acesso está pronto. É só ativar.</p>
+
+      <!-- PAINEL (acesse via ?painel=1) -->
+      <div class="painel" id="painel">
+        <div class="painel-card">
+          <div class="painel-header"><h2>Painel de rastreamento</h2><button class="btn-clear" onclick="limparDados()">Limpar dados</button></div>
+          <div class="painel-stats">
+            <div class="stat"><div class="stat-num" id="stat-visitas">0</div><div class="stat-label">Visitas únicas</div></div>
+            <div class="stat"><div class="stat-num" id="stat-auto">0</div><div class="stat-label">Ativar sozinho</div></div>
+            <div class="stat"><div class="stat-num" id="stat-agenda">0</div><div class="stat-label">Agendar com equipe</div></div>
+          </div>
+          <div id="painel-tabela"><div class="painel-empty">Nenhum dado registrado ainda.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const KEY_E='wehelp_beta_ev',KEY_V='wehelp_beta_v';
+    const getE=()=>{try{return JSON.parse(localStorage.getItem(KEY_E)||'[]');}catch{return[];}};
+    const getV=()=>{try{return JSON.parse(localStorage.getItem(KEY_V)||'[]');}catch{return[];}};
+    const saveE=d=>localStorage.setItem(KEY_E,JSON.stringify(d));
+    const saveV=d=>localStorage.setItem(KEY_V,JSON.stringify(d));
+    const fmt=iso=>{const d=new Date(iso);return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});};
+    const params=new URLSearchParams(window.location.search);
+    const userId=params.get('id')||'anônimo';
+    const isPainel=params.get('painel')==='1';
+    const getSessao=()=>{let s=sessionStorage.getItem('whs');if(!s){s=Math.random().toString(36).slice(2);sessionStorage.setItem('whs',s);}return s;};
+    function registrarVisita(){const v=getV();if(!v.some(x=>x.id===userId&&x.s===getSessao())){v.push({id:userId,s:getSessao(),ts:new Date().toISOString()});saveV(v);}}
+    function registrarClique(tipo){
+      const e=getE();e.push({id:userId,tipo,ts:new Date().toISOString()});saveE(e);
+      if(tipo==='autoativacao'){
+        window.location.href='https://lp-beta-ativacao.vercel.app/'+(userId!=='anônimo'?'?id='+encodeURIComponent(userId):'');
+      } else {
+        window.open('https://calendly.com/sessao_estrategica_wehelp/ativacao-do-modulo-de-retencao','_blank');
+      }
+    }
+    function renderPainel(){const e=getE(),v=getV();document.getElementById('stat-visitas').textContent=v.length;document.getElementById('stat-auto').textContent=e.filter(x=>x.tipo==='autoativacao').length;document.getElementById('stat-agenda').textContent=e.filter(x=>x.tipo==='agendamento').length;const t=document.getElementById('painel-tabela'),todos={};v.forEach(x=>{if(!todos[x.id])todos[x.id]={id:x.id,visita:x.ts,clique:null,tipo:null};});e.forEach(x=>{if(!todos[x.id])todos[x.id]={id:x.id,visita:null,clique:x.ts,tipo:x.tipo};else{todos[x.id].clique=x.ts;todos[x.id].tipo=x.tipo;}});const l=Object.values(todos).sort((a,b)=>new Date(b.visita||b.clique)-new Date(a.visita||a.clique));if(!l.length){t.innerHTML='<div class="painel-empty">Nenhum dado ainda.</div>';return;}let h='<table class="painel-table"><thead><tr><th>Contato</th><th>Visitou</th><th>Ação</th><th>Quando</th></tr></thead><tbody>';l.forEach(x=>{const tag=x.tipo?`<span class="tag ${x.tipo==='autoativacao'?'tag-auto':'tag-agenda'}">${x.tipo==='autoativacao'?'Ativar sozinho':'Agendamento'}</span>`:'<span class="tag tag-visita">Só visitou</span>';h+=`<tr><td><strong>${x.id}</strong></td><td>${x.visita?'✓':'—'}</td><td>${tag}</td><td>${fmt(x.clique||x.visita)}</td></tr>`;});h+='</tbody></table>';t.innerHTML=h;}
+    function limparDados(){if(confirm('Apagar todos os dados?')){localStorage.removeItem(KEY_E);localStorage.removeItem(KEY_V);renderPainel();}}
+    registrarVisita();
+    if(isPainel){document.getElementById('painel').classList.add('visible');renderPainel();}
+  </script>
+</body>
+</html>

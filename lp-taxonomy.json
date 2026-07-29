@@ -1,0 +1,63 @@
+{
+  "_readme": "Catálogo de LPs publicadas + convenção de slug. Adicione uma entrada aqui toda vez que criar/mudar uma LP. Baseado no lp-taxonomy.json da SouFit, adaptado pra WeHelp.",
+  "slug_pattern": "{segmento}-{tipo}-{versao}",
+  "segmentos": ["fitness", "saas", "saude", "hospitalar", "corporativo", "generico"],
+  "tipos_de_lp": {
+    "venda": "venda direta de plano/módulo",
+    "ativacao": "ativação de funcionalidade pra cliente já existente",
+    "captura": "captura de lead (ebook, webinar, diagnóstico)",
+    "parceria": "campanha com parceiro/afiliado/influenciador (ex: California Fitness)",
+    "webinario": "inscrição/entrega de webinar"
+  },
+  "funil": {
+    "topo": "não sabe que precisa de NPS — precisa de educação",
+    "meio": "sabe que precisa de pesquisa de satisfação — comparando metodologia",
+    "fundo": "sabe que quer NPS — comparando fornecedor, pronto pra oferta"
+  },
+  "landings": [
+    {
+      "slug": "retencao",
+      "path": "/retencao/",
+      "titulo": "Módulo de Retenção — WeHelp",
+      "segmento": "fitness",
+      "tipo": "venda",
+      "funil": "fundo",
+      "status": "publicada",
+      "origem": "migrada do repo antigo LP-Beta (2026-07-03)",
+      "notas": "Vende o módulo de retenção — recuperação de alunos em risco de cancelamento."
+    },
+    {
+      "slug": "ativacao",
+      "path": "/ativacao/",
+      "titulo": "Ativar Módulo de Retenção — WeHelp",
+      "segmento": "fitness",
+      "tipo": "ativacao",
+      "funil": "fundo",
+      "status": "publicada",
+      "origem": "migrada do repo antigo LP-Beta-ativacao (2026-07-03)",
+      "notas": "Fluxo de ativação do módulo pra quem já é cliente WeHelp."
+    },
+    {
+      "slug": "california",
+      "path": "/california/",
+      "titulo": "WeHelp × Califórnia Fitness — 15 dias grátis exclusivos",
+      "segmento": "fitness",
+      "tipo": "parceria",
+      "funil": "meio",
+      "status": "publicada",
+      "origem": "migrada do repo antigo lp-wehelp-california (2026-06-26)",
+      "notas": "Campanha de parceria com a rede Califórnia Fitness — teste grátis de 15 dias."
+    },
+    {
+      "slug": "webinario",
+      "path": "externo — repo lp-webinario, não migrado ainda pro monorepo",
+      "titulo": "WeHelp NPS — Academias & Estúdios",
+      "segmento": "fitness",
+      "tipo": "webinario",
+      "funil": "topo",
+      "status": "publicada (repo separado)",
+      "origem": "repo lp-webinario, tem api/lead.js (serverless) — avaliar migração futura",
+      "notas": "Fora do monorepo por enquanto — tem function serverless própria."
+    }
+  ]
+}
