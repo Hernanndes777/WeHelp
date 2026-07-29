@@ -1,6 +1,6 @@
 # WeHelp — Landing Pages
 
-Repositório único das landing pages de marketing da **WeHelp** (software de NPS/pesquisa de satisfação pra reduzir churn). Modelo replicado do repositório da SouFit (`00-base/` como biblioteca, LPs na raiz, deploy automático a cada push).
+Repositório único das landing pages de marketing da **WeHelp** — plataforma de Experiência do Cliente (CX) com 3 módulos: Pesquisa de Satisfação, Módulo de Retenção de Churn e Módulo de Ticket. Modelo replicado do repositório da SouFit (`00-base/` como biblioteca, LPs na raiz, deploy automático a cada push).
 
 > Apps e ferramentas (dashboard interno, calculadora de churn) **não** ficam aqui — moram nos próprios repositórios (`wehelp-dashboard`, `wehelp-churn-calculator`). Este repo é só landing page estática.
 
@@ -10,7 +10,7 @@ Repositório único das landing pages de marketing da **WeHelp** (software de NP
 
 | Pasta | O que tem | Vai pro site? |
 |---|---|---|
-| `00-base/` | Biblioteca — personas por segmento, jornada por funil, design system | ❌ Interna |
+| `00-base/` | Biblioteca — produtos/módulos, personas por segmento, jornada por funil, design system | ❌ Interna |
 | `retencao/`, `ativacao/`, `california/` | Landing pages publicadas | ✅ Sim |
 | `shared/` | Assets compartilhados entre LPs (logo etc) | ✅ Sim |
 | `lp-taxonomy.json` | Catálogo de LPs + convenção de nomenclatura | ❌ Interna (doc) |
@@ -20,6 +20,9 @@ Repositório único das landing pages de marketing da **WeHelp** (software de NP
 
 ### Vou criar uma LP nova
 → Vá direto pro [`PROCESSO.md`](PROCESSO.md).
+
+### Vou consultar o que cada módulo faz
+→ [`00-base/produtos/INDICE.md`](00-base/produtos/INDICE.md)
 
 ### Vou consultar persona / dor / objeção de algum segmento
 → [`00-base/personas/personas.md`](00-base/personas/personas.md) e [`00-base/personas/jornada.md`](00-base/personas/jornada.md)

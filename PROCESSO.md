@@ -9,6 +9,7 @@
 
 | O quê | Onde | Quando usar |
 |---|---|---|
+| Catálogo de produtos (o que cada módulo faz, features, copy validada) | `00-base/produtos/INDICE.md` | Etapa 1 (briefing) |
 | Personas por segmento (dor, como a WeHelp resolve, canais) | `00-base/personas/personas.md` | Etapa 1 (briefing) |
 | Jornada por funil (Topo/Meio/Fundo — o que a pessoa já sabe) | `00-base/personas/jornada.md` | Etapa 1 e 2 |
 | Catálogo de LPs já feitas + convenção de slug | `lp-taxonomy.json` | Antes de começar — checar se já tem parecida |
@@ -21,6 +22,7 @@
 ## Checklist
 
 ### 1. Briefing (10 min)
+- [ ] **Produto/módulo**: Pesquisa de Satisfação / Módulo de Retenção de Churn / Módulo de Ticket (ver `00-base/produtos/INDICE.md`)
 - [ ] **Segmento**: fitness / saas / saude / hospitalar / corporativo / genérico (ver `personas.md`)
 - [ ] **Tipo de LP**: venda / ativação / captura / parceria / webinário
 - [ ] **Estágio de funil**: topo / meio / fundo (ver `jornada.md` — define quanto precisa educar antes de vender)
