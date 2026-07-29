@@ -1,20 +1,15 @@
 # Módulo de Ticket
 
-> Status: existe, detalhamento **não confirmado** — você sinalizou que ainda precisa conferir. O que está abaixo é uma hipótese observada no site oficial, não uma confirmação.
+> Status: existe, é **diferente** do "Sistema de atendimento integrado" da Pesquisa de Satisfação (confirmado). Detalhamento ainda pendente.
 
-## O que é (hipótese — a confirmar)
+## O que é
 
-O site oficial (wehelpsoftware.com) tem uma seção chamada **"Sistema de atendimento integrado"**, com a descrição: *"Responda seus clientes e trate as demandas identificadas do WeHelp."*
+(a preencher — confirmado que não é a mesma coisa que a feature de atendimento já embutida na Pesquisa de Satisfação. Precisa de descrição própria.)
 
-Isso sugere que o Módulo de Ticket é (ou nasceu de) uma funcionalidade de **gestão de chamados/reclamações que se abrem automaticamente a partir de feedback negativo** coletado na Pesquisa de Satisfação — fechando o ciclo "ouvir → prever → agir" descrito em `00-base/produtos/INDICE.md`.
+## Pendências (preencher)
 
-**Não sei ainda se**:
-- é a mesma coisa que essa feature "Sistema de atendimento integrado" do produto principal, ou
-- é um módulo novo/separado, com mais funcionalidade do que só isso.
-
-## Pendências (preencher quando você confirmar)
-
-- [ ] O que o módulo faz de fato — é a mesma feature de atendimento do site, ou é algo novo?
+- [ ] O que o módulo faz de fato
+- [ ] Em que ele difere do "Sistema de atendimento integrado" da Pesquisa de Satisfação
 - [ ] Como se conecta com Pesquisa de Satisfação e Módulo de Retenção
 - [ ] Features principais
 - [ ] Segmento(s) onde já é usado

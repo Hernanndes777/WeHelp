@@ -21,18 +21,16 @@ Software de pesquisa de satisfação (NPS®) — "NPS® do jeito certo" é a tag
 - **Dashboard TV** — painel compartilhável em tempo real pra exibir os indicadores pro time (tela na parede tipo TV corporativa)
 - **Pesquisas personalizadas por unidade de negócio** — relevante pra franquias/redes com múltiplas unidades (academias, clínicas)
 - **Drill-down de motivo da nota** — "busque mais informações e razões do motivo da nota" — não é só o score, é o *porquê*
-- **Sistema de atendimento integrado** — "Responda seus clientes e trate as demandas identificadas do WeHelp" — **isso é provavelmente a semente do Módulo de Ticket**, hoje embutido na Pesquisa de Satisfação (ver `modulo-ticket.md`)
+- **Sistema de atendimento integrado** — "Responda seus clientes e trate as demandas identificadas do WeHelp" — feature própria da Pesquisa de Satisfação, **não é o Módulo de Ticket** (confirmado: são coisas diferentes, ver `modulo-ticket.md`)
 - **Integrações** — conecta com outros softwares de gestão do cliente (logos de integração aparecem no site, não deu pra identificar todos com certeza nos prints)
 
-## Preço (conforme site — confirmar antes de usar em LP nova)
+## Preço
 
-- **Trial**: 7 dias grátis, sem cartão de crédito
+- **Trial padrão**: 7 dias grátis, sem cartão de crédito. **Esse é o valor correto e oficial** — a WeHelp pode estender isso como voucher/benefício em campanhas específicas (ex: a LP `california/` oferece 15 dias grátis como benefício exclusivo da parceria — não é inconsistência, é oferta estendida de propósito. Ao criar LP de parceria/campanha, é válido negociar um trial maior que o padrão como diferencial da oferta).
 - **Startup**: US$ 19/mês — 100 pesquisas, 1 usuário
 - **Business**: US$ 49/mês — 300 pesquisas, 3 usuários
 
-> ⚠️ O site mostra os planos em **USD**, o que é estranho pra um produto claramente vendido no mercado brasileiro (público fitness/clínicas/PMEs BR). Pode ser conversão automática por geolocalização, ou pode ser um bug de exibição. **Confirmar o preço real em BRL antes de usar em qualquer LP nova.**
->
-> Também: a LP `california/` promete **15 dias grátis** enquanto o site oficial promete **7 dias grátis** — confirmar se é uma extensão de promoção específica da parceria ou inconsistência a corrigir.
+> Preço em **USD é intencional**, não é bug — confirmado. Usar USD como está em LPs novas.
 
 ## Prova social (números reais do site)
 
@@ -52,8 +50,5 @@ O site tem uma subpágina inteira educando sobre NPS (Promotores/Passivos/Detrat
 
 ## Pendências
 
-- [ ] Confirmar preço real em BRL (ou se USD está correto por algum motivo)
-- [ ] Resolver inconsistência 7 dias (site) vs 15 dias (LP california)
 - [ ] Lista completa de integrações (logos não ficaram legíveis nos prints)
 - [ ] Depoimentos completos (tem 8 no site, só dá pra ver foto+nome nos prints, não o texto)
-- [ ] Confirmar se "Sistema de atendimento integrado" é o mesmo Módulo de Ticket ou uma feature separada

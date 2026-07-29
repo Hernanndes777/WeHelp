@@ -27,7 +27,7 @@
 - [ ] **Tipo de LP**: venda / ativação / captura / parceria / webinário
 - [ ] **Estágio de funil**: topo / meio / fundo (ver `jornada.md` — define quanto precisa educar antes de vender)
 - [ ] **Tráfego de origem**: Meta Ads / orgânico / parceria/afiliado / e-mail / webinar
-- [ ] **Oferta fechada**: o que exatamente está sendo oferecido (teste grátis, demo, ativação, plano)
+- [ ] **Oferta fechada**: o que exatamente está sendo oferecido (teste grátis, demo, ativação, plano). Trial padrão é **7 dias grátis** — em LP de parceria/campanha específica é válido negociar um trial maior (ex: `california/` usa 15 dias) como diferencial da oferta, desde que combinado antes com quem aprova.
 - [ ] **Dor principal + objeção mais provável** (puxar de `jornada.md` pro segmento certo)
 - [ ] **Slug**: `{segmento}-{tipo}-{versão}` — ver `lp-taxonomy.json`
 
