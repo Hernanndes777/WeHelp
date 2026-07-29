@@ -24,6 +24,9 @@ Repositório único das landing pages de marketing da **WeHelp** — plataforma 
 ### Vou consultar o que cada módulo faz
 → [`00-base/produtos/INDICE.md`](00-base/produtos/INDICE.md)
 
+### Vou escrever copy educativa sobre NPS (LP de topo/meio de funil)
+→ [`00-base/metodologia-nps.md`](00-base/metodologia-nps.md)
+
 ### Vou consultar persona / dor / objeção de algum segmento
 → [`00-base/personas/personas.md`](00-base/personas/personas.md) e [`00-base/personas/jornada.md`](00-base/personas/jornada.md)
 
@@ -44,4 +47,4 @@ Cada pasta na raiz vira uma rota: `retencao/index.html` → `lp.wehelpsoftware.c
 
 ## Repositórios antigos (não apagar ainda)
 
-`LP-Beta`, `LP-Beta-ativacao` e `lp-wehelp-california` continuam existindo localmente e no GitHub. Depois que este repo novo (`wehelp-lp`) estiver publicado e validado em produção, eles podem ser arquivados. Não apague antes de confirmar que tudo migrou certo.
+`LP-Beta`, `LP-Beta-ativacao` e `lp-wehelp-california` continuam existindo localmente e no GitHub. Depois que este repo novo (`wehelp`) estiver publicado e validado em produção, eles podem ser arquivados. Não apague antes de confirmar que tudo migrou certo.

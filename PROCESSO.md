@@ -76,4 +76,4 @@ Igual na SouFit: **arquivo não commitado não existe no site.** A Vercel só pu
 
 ## Diferença importante em relação à SouFit
 
-A WeHelp publica via **Vercel (deploy automático por git push)**, não via VPS própria com rsync. Isso significa: **não precisa de workflow de GitHub Actions pra deploy** — a Vercel já faz isso sozinha a cada push na `main`. Só é preciso configurar isso uma vez no painel da Vercel (conectar o repo `wehelp-lp` e apontar o domínio `lp.wehelpsoftware.com`).
+A WeHelp publica via **Vercel (deploy automático por git push)**, não via VPS própria com rsync. Isso significa: **não precisa de workflow de GitHub Actions pra deploy** — a Vercel já faz isso sozinha a cada push na `main`. Só é preciso configurar isso uma vez no painel da Vercel (conectar o repo `wehelp` e apontar o domínio `lp.wehelpsoftware.com`).
