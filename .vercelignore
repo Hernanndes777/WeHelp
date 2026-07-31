@@ -1,0 +1,7 @@
+# Conteúdo interno — não deve ser publicado, mesmo sem estar linkado.
+# Equivalente aos --exclude do rsync na SouFit.
+00-base
+PROCESSO.md
+lp-taxonomy.json
+README.md
+.claude
