@@ -11,7 +11,8 @@ Repositório único das landing pages de marketing da **WeHelp** — plataforma 
 | Pasta | O que tem | Vai pro site? |
 |---|---|---|
 | `00-base/` | Biblioteca — produtos/módulos, personas por segmento, jornada por funil, design system | ❌ Interna |
-| `retencao/`, `ativacao/`, `california/` | Landing pages publicadas | ✅ Sim |
+| `retencao/`, `ativacao/`, `california/`, `webinario/`, `webinario-whatsapp/` | Landing pages publicadas | ✅ Sim |
+| `api/lead.js` | Function serverless — captura lead do `webinario/` (ActiveCampaign + Google Sheets + Meta CAPI) | ✅ Sim (executa server-side) |
 | `shared/` | Assets compartilhados entre LPs (logo etc) | ✅ Sim |
 | `lp-taxonomy.json` | Catálogo de LPs + convenção de nomenclatura | ❌ Interna (doc) |
 | `PROCESSO.md` | Checklist mestre pra criar LP nova | ❌ Interna (doc) |
@@ -44,7 +45,21 @@ Cada pasta na raiz vira uma rota: `retencao/index.html` → `lp.wehelpsoftware.c
 ## Histórico
 
 - **2026-07-29** — Repo criado consolidando 3 LPs que antes viviam em repositórios separados mas compartilhavam sem querer o mesmo remoto do GitHub (`lp-beta`), competindo pelo mesmo `index.html`. Migradas pra pastas próprias: `retencao/` (era `LP-Beta`), `ativacao/` (era `LP-Beta-ativacao`), `california/` (era `lp-wehelp-california`). Os repositórios antigos não foram apagados — ver seção "Repositórios antigos" abaixo.
+- **2026-07-31** — `lp.wehelpsoftware.com` conectado e validado em produção. Migradas mais 2 LPs: `webinario/` (era repo `lp-webinario`, tem lead capture via `api/lead.js`) e `webinario-whatsapp/` (era repo `LP-wb-redirect`, sem backend, só redireciona pro grupo do WhatsApp).
+
+## Env vars necessárias
+
+O `api/lead.js` (usado pela LP `webinario/`) precisa destas variáveis configuradas em **Settings → Environment Variables** no projeto Vercel deste repo — sem elas a captura de lead falha com erro 500:
+
+| Variável | Pra quê |
+|---|---|
+| `AC_URL` | URL da conta ActiveCampaign |
+| `AC_KEY` | API Key do ActiveCampaign |
+| `CAPI_ENDPOINT` | Endpoint da Meta Conversions API (direto ou via Stape) |
+| `META_ACCESS_TOKEN` | Token de acesso do Pixel (Events Manager → Configurações → Token da API) |
+
+Esses valores já existiam configurados no projeto Vercel antigo (`lp-webinario`) — copiar de lá, não são segredo novo.
 
 ## Repositórios antigos (não apagar ainda)
 
-`LP-Beta`, `LP-Beta-ativacao` e `lp-wehelp-california` continuam existindo localmente e no GitHub. Depois que este repo novo (`wehelp`) estiver publicado e validado em produção, eles podem ser arquivados. Não apague antes de confirmar que tudo migrou certo.
+`LP-Beta`, `LP-Beta-ativacao`, `lp-wehelp-california`, `LP-Webinario` e `LP-wb-redirect` continuam existindo localmente e no GitHub. Depois que este repo novo (`wehelp`) estiver publicado e validado em produção pras 5 LPs, eles podem ser arquivados. Não apague antes de confirmar que tudo migrou certo.

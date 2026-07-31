@@ -54,15 +54,27 @@
     },
     {
       "slug": "webinario",
-      "path": "externo — repo lp-webinario, não migrado ainda pro monorepo",
+      "path": "/webinario/",
       "titulo": "WeHelp NPS — Academias & Estúdios",
       "produto": "pesquisa-satisfacao",
       "segmento": "fitness",
       "tipo": "webinario",
       "funil": "topo",
-      "status": "publicada (repo separado)",
-      "origem": "repo lp-webinario, tem api/lead.js (serverless) — avaliar migração futura",
-      "notas": "Fora do monorepo por enquanto — tem function serverless própria."
+      "status": "publicada",
+      "origem": "migrada do repo antigo lp-webinario (2026-07-31)",
+      "notas": "Formulário de inscrição no webinário, com captura de lead via api/lead.js (ActiveCampaign + Google Sheets + Meta CAPI). Precisa das env vars AC_URL, AC_KEY, CAPI_ENDPOINT, META_ACCESS_TOKEN configuradas no projeto Vercel do wehelp."
+    },
+    {
+      "slug": "webinario-whatsapp",
+      "path": "/webinario-whatsapp/",
+      "titulo": "WeHelp NPS — sistema de 3 pilares (redireciona pro grupo do WhatsApp)",
+      "produto": "pesquisa-satisfacao",
+      "segmento": "fitness",
+      "tipo": "webinario",
+      "funil": "topo",
+      "status": "publicada",
+      "origem": "migrada do repo antigo LP-wb-redirect (2026-07-31)",
+      "notas": "Variante do convite pro webinário — sem formulário, botão dispara evento Lead no Pixel e redireciona direto pro grupo do WhatsApp. Sem backend."
     }
   ]
 }
