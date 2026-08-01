@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+<!-- End Google Tag Manager -->
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1106401696374974');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Transforme a experiência dos seus colaboradores com o eNPS.</title>
+<meta name="description" content="Descubra como melhorar o engajamento, reduzir a rotatividade de colaboradores e criar um ambiente de trabalho saudável e inspirador.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#0039ff;
+    --blue-dark:#0027c9;
+    --navy:#111119;
+    --text-body:#525b72;
+    --bg-lavender:#e9eff9;
+    --bg-box:#d7e0ef;
+    --green:#33c08d;
+    --navy-section-1:#171a4a;
+    --navy-section-2:#241f6e;
+    --radius-lg:24px;
+    --radius-md:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--text-body);
+    background:#fff;
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.font-heading{
+    font-family:'Baloo 2',sans-serif;
+    color:var(--navy);
+    font-weight:700;
+    line-height:1.15;
+  }
+  img{max-width:100%;display:block;}
+  a{text-decoration:none;color:inherit;}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+  .btn{
+    display:inline-block;
+    background:var(--blue);
+    color:#fff;
+    font-weight:600;
+    font-size:15px;
+    padding:14px 30px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .btn:hover{background:var(--blue-dark);transform:translateY(-1px);}
+  .btn-sub{
+    text-align:center;
+    font-size:13px;
+    color:var(--text-body);
+    margin-top:10px;
+  }
+  .cta-block{text-align:center;padding:56px 24px;}
+
+  /* HEADER */
+  header{
+    background:linear-gradient(180deg,#eef2fb 0%,#dbe4f5 100%);
+    padding:24px 0 0;
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    max-width:1200px;margin:0 auto;padding:0 24px;
+  }
+  .logo-group{display:flex;align-items:center;gap:10px;}
+  .logo-group img{height:26px;}
+  .logo-tagline{font-size:10px;line-height:1.2;color:#6b7280;border-left:1px solid #c9d2e3;padding-left:10px;}
+
+  /* HERO */
+  .hero{
+    display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+    max-width:1200px;margin:0 auto;padding:60px 24px 110px;
+  }
+  .hero h1{font-size:40px;margin-bottom:18px;}
+  .hero h1 span{color:var(--blue);}
+  .hero p{font-size:16px;max-width:440px;margin-bottom:26px;}
+  .hero-visual{position:relative;display:flex;justify-content:center;}
+  .hero-visual img.main{border-radius:50%;width:420px;max-width:100%;}
+  .float-card{
+    position:absolute;background:#fff;border-radius:14px;
+    box-shadow:0 12px 30px rgba(20,30,80,.15);
+    padding:12px 16px;font-size:12px;font-weight:600;color:var(--navy);
+  }
+  .float-card.satisfacao{top:8%;left:-6%;width:130px;}
+  .float-card.satisfacao .label{display:flex;align-items:center;justify-content:space-between;color:#8a92a6;font-weight:500;margin-bottom:4px;}
+  .float-card.enps{top:42%;right:-10%;width:110px;text-align:center;}
+  .float-card.enps .label{color:#8a92a6;font-weight:500;font-size:11px;}
+  .float-card.enps .score{font-size:20px;color:var(--navy);font-family:'Baloo 2';font-weight:700;}
+  .float-card.promotor{bottom:6%;left:2%;display:flex;align-items:center;gap:10px;width:auto;}
+  .promotor-num{background:var(--green);color:#fff;border-radius:8px;padding:6px 10px;font-family:'Baloo 2';font-weight:700;font-size:15px;}
+
+  /* LOGO STRIP */
+  .logo-strip{padding:20px 24px 50px;text-align:center;}
+  .logo-strip p{font-weight:600;color:var(--navy);margin-bottom:34px;font-size:15px;}
+  .logo-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:48px;margin-bottom:40px;}
+  .logo-row img{height:28px;filter:grayscale(100%);opacity:.75;}
+  .divider{border:none;border-top:1px solid #e5e9f2;max-width:1200px;margin:0 auto;}
+
+  /* TWO COL GENERIC */
+  .two-col{
+    display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;
+    max-width:1200px;margin:0 auto;padding:70px 24px;
+  }
+  .two-col.reverse{grid-template-columns:1fr 1fr;}
+  .two-col h2{font-size:26px;margin-bottom:16px;}
+  .two-col h3{font-size:19px;margin-bottom:10px;}
+  .two-col p{font-size:15px;margin-bottom:10px;}
+  .two-col .visual{position:relative;}
+
+  .section-heading{text-align:center;max-width:760px;margin:0 auto 10px;padding:0 24px;}
+  .section-heading h2{font-size:30px;margin-bottom:14px;}
+  .section-heading p{font-size:15px;color:var(--text-body);}
+
+  ul.bullets{list-style:none;margin:14px 0;}
+  ul.bullets li{position:relative;padding-left:20px;margin-bottom:8px;font-size:15px;}
+  ul.bullets li::before{content:"•";color:var(--blue);position:absolute;left:0;font-weight:700;}
+  ul.bullets strong{color:var(--navy);}
+
+  /* Benefits card */
+  .benefits-card{
+    background:var(--bg-lavender);
+    border-radius:var(--radius-md);
+    padding:32px;
+  }
+  .benefits-card h3{font-size:19px;margin-bottom:18px;}
+  .benefits-card .item{margin-bottom:16px;}
+  .benefits-card .item b{color:var(--navy);display:block;margin-bottom:2px;font-size:15px;}
+  .benefits-card .item span{font-size:14px;}
+
+  /* Resultados reais */
+  .resultados{
+    background:var(--bg-box);
+    padding:64px 24px;
+  }
+  .resultados .section-heading h2{font-size:28px;}
+  .cards-3{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    max-width:1000px;margin:44px auto 0;
+  }
+  .card{
+    background:#fff;border-radius:14px;padding:30px 26px;
+    box-shadow:0 10px 24px rgba(20,30,80,.06);
+  }
+  .card .icon{
+    width:44px;height:44px;border-radius:50%;
+    background:#e3edff;display:flex;align-items:center;justify-content:center;
+    margin-bottom:16px;font-size:20px;
+  }
+  .card h3{font-size:16px;margin-bottom:8px;}
+  .card p{font-size:14px;}
+
+  /* Testimonials */
+  .testimonials{padding:70px 24px;text-align:center;}
+  .testimonials h2{font-size:28px;margin-bottom:44px;}
+  .t-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:22px;
+    max-width:1180px;margin:0 auto;
+  }
+  .t-card{
+    border:1px solid #e7eaf2;border-radius:14px;overflow:hidden;text-align:left;
+  }
+  .t-card img{width:100%;aspect-ratio:1/0.85;object-fit:cover;filter:grayscale(100%);}
+  .t-body{padding:18px;}
+  .t-body p.quote{font-size:13px;color:var(--text-body);margin-bottom:14px;min-height:80px;}
+  .t-body .name{font-size:13px;font-weight:700;color:var(--blue);}
+  .t-body .role{font-size:12px;color:#8a92a6;}
+
+  /* Video Section */
+  .video-section{
+    background:radial-gradient(circle at 30% 20%, var(--navy-section-2), var(--navy-section-1) 60%);
+    padding:80px 24px;text-align:center;color:#fff;
+  }
+  .video-section h2{color:#fff;font-size:30px;margin-bottom:12px;}
+  .video-section h2 span{color:#5b8dff;}
+  .video-section p.sub{color:#c7cdec;margin-bottom:36px;font-size:15px;}
+  .video-frame{
+    max-width:760px;margin:0 auto;border-radius:18px;overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,10,.4);
+    aspect-ratio:16/9;background:#000;position:relative;
+  }
+  .video-frame iframe{width:100%;height:100%;border:0;display:block;}
+  .video-section .btn{margin-top:40px;}
+
+  /* Form section */
+  .form-section{background:var(--bg-box);padding:80px 24px;}
+  .form-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;
+    max-width:1100px;margin:0 auto;
+  }
+  .form-grid h2{font-size:30px;margin-bottom:14px;}
+  .form-grid > div:first-child p{font-size:15px;max-width:420px;}
+  .form-grid .visual img{border-radius:50%;}
+  form.card{padding:32px;border-radius:16px;background:#fff;box-shadow:0 20px 50px rgba(20,30,80,.08);}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:6px;}
+  .field input{
+    width:100%;padding:12px 14px;border:1px solid #d7dceb;border-radius:8px;
+    font-family:'Inter',sans-serif;font-size:14px;
+  }
+  .field input:focus{outline:2px solid var(--blue);border-color:transparent;}
+  .captcha{
+    display:flex;align-items:center;gap:10px;border:1px solid #d7dceb;border-radius:8px;
+    padding:10px 14px;font-size:13px;color:#6b7280;margin-bottom:20px;
+  }
+  form.card .btn{width:100%;text-align:center;}
+
+  /* Footer */
+  footer{padding:50px 24px 30px;text-align:center;}
+  footer .logo-group{justify-content:center;margin-bottom:20px;}
+  .footer-links{display:flex;justify-content:center;gap:28px;font-size:13px;color:var(--text-body);margin-bottom:22px;flex-wrap:wrap;}
+  .footer-social{display:flex;justify-content:center;gap:16px;margin-bottom:28px;}
+  .footer-social a{
+    width:34px;height:34px;border-radius:50%;background:#f1f3f9;
+    display:flex;align-items:center;justify-content:center;color:var(--navy);
+  }
+  .footer-trademark{font-size:11px;color:#9aa1b2;max-width:800px;margin:0 auto;border-top:1px solid #eee;padding-top:20px;}
+
+  @media (max-width:900px){
+    .hero,.two-col,.form-grid{grid-template-columns:1fr;}
+    .hero{padding-top:36px;}
+    .cards-3{grid-template-columns:1fr;}
+    .t-grid{grid-template-columns:repeat(2,1fr);}
+    .hero-visual{order:-1;margin-bottom:20px;}
+    .two-col .visual{order:-1;}
+  }
+  @media (max-width:560px){
+    .t-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:30px;}
+    .logo-row{gap:26px;}
+  }
+</style>
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<header>
+  <div class="nav">
+    <a href="#" class="logo-group">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/67a275d4e964a46ccc0283c3_WeHelp-logo.svg" alt="Logo Wehelp">
+      <span class="logo-tagline">NPS® do<br>jeito certo</span>
+    </a>
+    <a href="#Form" class="btn" style="padding:11px 22px;font-size:14px;">Cadastre-se</a>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h1>Transforme a experiência dos seus <span>colaboradores</span> com o eNPS.</h1>
+      <p>Descubra como melhorar o engajamento, reduzir a rotatividade de colaboradores e criar um ambiente de trabalho saudável e inspirador.</p>
+      <a href="https://wa.me/5521974712313" class="btn">Fale com nossos especialistas</a>
+      <p class="btn-sub" style="text-align:left;">Não perca tempo!</p>
+    </div>
+    <div class="hero-visual">
+      <img class="main" src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/67867533fa474fa0ab4a09ed_colaborador.png" alt="Colaborador com Wigets">
+      <div class="float-card satisfacao">
+        <div class="label">Satisfação <span>ⓘ</span></div>
+        <svg width="90" height="26" viewBox="0 0 90 26" fill="none"><polyline points="0,22 12,16 24,19 36,10 48,13 60,5 72,9 90,2" stroke="#33c08d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="float-card enps">
+        <div class="label">eNPS</div>
+        <div class="score">+74,9</div>
+      </div>
+      <div class="float-card promotor">
+        <span class="promotor-num">10</span>
+        <span>Promotor<br><span style="font-weight:400;color:#8a92a6;">Ótimo ambiente de trabalho</span></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="logo-strip">
+  <p>Grandes empresas utilizam NPS® para medir e gerir a experiência!</p>
+  <div class="logo-row">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/672cf0e82cba6e234fea67f2_logo-selfit.avif" alt="Academia SelFit">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/672cf20226dd238cf3fb91cb_BioRitimo.avif" alt="Academia Bioritmo">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/672cf0e8074d3eba4d0bc7f4_logo-oral-unic.avif" alt="Oral Unic">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/672cf202159da413230a3308_Beto%20Carreiro.avif" alt="Beto Carreiro World">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/672cf0e8b4e4c55bf866679d_logo-cinesystem.avif" alt="Cinesystem">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/672cf0e844983f3193ea87d8_logo-cellep.avif" alt="Cellep">
+  </div>
+  <hr class="divider">
+</section>
+
+<section class="two-col">
+  <div>
+    <h2>A WeHelp</h2>
+    <p>Somos a WeHelp, uma plataforma dedicada a transformar a maneira como as empresas ouvem e engajam seus colaboradores. Nosso foco é ajudar líderes a tomarem decisões estratégicas, baseadas em dados reais, para criar ambientes de trabalho mais saudáveis, produtivos e alinhados aos valores corporativos.</p>
+  </div>
+  <div class="visual">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6787cf81690d383e98d7c4fc_Dashboard-wehelp.png" alt="Dashboard WeHelp">
+  </div>
+</section>
+
+<section class="section-heading">
+  <h2>Aumente o engajamento e a produtividade da sua equipe com as estratégias de eNPS</h2>
+  <p>Empresas de sucesso começam de dentro para fora: Priorize o bem-estar da sua equipe e transforme desafios em oportunidades de crescimento.</p>
+</section>
+
+<section class="two-col">
+  <div class="visual">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/67867b294fe491a4ba874dbe_Group%2017716.png" alt="Lider comemorando resultados">
+  </div>
+  <div>
+    <h3 style="font-size:24px;">Seus colaboradores estão engajados?</h3>
+    <p>Estudos mostram que colaboradores engajados são:</p>
+    <ul class="bullets">
+      <li><strong>21% mais produtivos</strong> em suas atividades;</li>
+      <li><strong>59% menos propensos</strong> a deixar a empresa, reduzindo custos com a rotatividade de colaboradores</li>
+    </ul>
+    <p>Sem ferramentas claras como o eNPS®, muitas empresas não conseguem identificar gargalos que prejudicam a retenção de talentos, comprometem a cultura organizacional e dificultam a construção de equipes de alta performance.</p>
+  </div>
+</section>
+
+<section class="section-heading" style="max-width:900px;">
+  <h2>Transforme a experiência dos seus colaboradores com o eNPS®.</h2>
+</section>
+
+<section class="two-col">
+  <div class="benefits-card">
+    <h3>Benefícios detalhados:</h3>
+    <div class="item">
+      <b>Retenção de talentos:</b>
+      <span>Reduza a rotatividade identificando e resolvendo insatisfações antes que elas impactem seus colaboradores.</span>
+    </div>
+    <div class="item">
+      <b>Engajamento:</b>
+      <span>Melhore a produtividade ao criar uma conexão mais forte entre sua equipe e a missão da empresa.</span>
+    </div>
+    <div class="item">
+      <b>Cultura organizacional:</b>
+      <span>Construa um ambiente saudável e colaborativo, onde todos se sintam valorizados e motivados.</span>
+    </div>
+  </div>
+  <div class="visual">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/678688098c88629f6d65630d_Group%2017718.png" alt="Lider dando feedback positivo pra colaborador">
+  </div>
+</section>
+
+<div class="cta-block">
+  <a href="#Form" class="btn">Experimente 7 dias grátis</a>
+  <p class="btn-sub">Não é necessário Cartão de Crédito</p>
+</div>
+
+<section class="resultados">
+  <div class="section-heading">
+    <h2>Resultados reais.</h2>
+    <p>Descubra como melhorar o engajamento, reduzir a rotatividade de colaboradores e criar um ambiente de trabalho saudável e inspirador.</p>
+  </div>
+  <div class="cards-3">
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0039ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 17v-3M12 17v-5M15 17v-2"/></svg></div>
+      <h3>Análises detalhadas:</h3>
+      <p>Relatórios que ajudam a identificar tendências e ações prioritárias.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0039ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="9" height="7"/><circle cx="18" cy="18" r="3.2"/><path d="M20.3 20.3 22 22"/></svg></div>
+      <h3>Coleta automatizada:</h3>
+      <p>Pesquisas simples e rápidas para medir a satisfação de sua equipe em tempo real.</p>
+    </div>
+    <div class="card">
+      <div class="icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0039ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="8" r="3"/><path d="M2 21v-1a5 5 0 0 1 5-5"/><rect x="12" y="4" width="10" height="7" rx="1"/><path d="M15 15h6M18 12v3M20 20l2-2-2-2"/></svg></div>
+      <h3>Engajamento contínuo:</h3>
+      <p>Ferramentas para engajar colaboradores e promover melhorias com base nos resultados obtidos.</p>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials">
+  <h2>Olha o que estão falando sobre nós</h2>
+  <div class="t-grid">
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d75354afc50eb6d0b922_andre-panobianco_1.avif" alt="Clientes satisfeitos">
+      <div class="t-body">
+        <p class="quote">"Usamos o sistema NPS para entender melhor as necessidades dos clientes e os ajustes necessários."</p>
+        <div class="name">André</div>
+        <div class="role">CEO - Panobianco Academia</div>
+      </div>
+    </div>
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d753e38f89fc68c41832_cassio-mendes_1.avif" alt="Cliente">
+      <div class="t-body">
+        <p class="quote">"Ótima ferramenta, imprescindível para nortear as melhores decisões, entender as necessidades através do olhar do cliente."</p>
+        <div class="name">Cássio Mendes</div>
+        <div class="role">Diretor | Espaço Fitness Aqua Club</div>
+      </div>
+    </div>
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d7537f6c5cb9da4f8df1_ac8e5e6cc6f81b0b58181c316b6ae170_daniele-kato_1.webp" alt="Cliente">
+      <div class="t-body">
+        <p class="quote">"A ferramenta nos proporciona uma visão mais detalhada sobre os pontos de contato que interferem nanota do cliente."</p>
+        <div class="name">Daniele Kato</div>
+        <div class="role">Gerente de Marketing | Bodytech</div>
+      </div>
+    </div>
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d753a18a19a433ffdfca_dilson-mendes_1.avif" alt="Cliente">
+      <div class="t-body">
+        <p class="quote">"As facilidades de integrar, configurar e colocar em uso são grandes diferenciais do sistema NPS da WeHelp."</p>
+        <div class="name">Dilson Mendes</div>
+        <div class="role">VP de Tecnologia | ABC Evo</div>
+      </div>
+    </div>
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d753c088ae4dc27ff42f_emanuel-mota_1.avif" alt="Cliente">
+      <div class="t-body">
+        <p class="quote">"Sistema NPS fácil, intuitivo e confiável. Nos ajuda a monitorar a satisfação dos nossos clientes!"</p>
+        <div class="name">Emanuel Mota</div>
+        <div class="role">Diretor | Bluefit</div>
+      </div>
+    </div>
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d7531d0e9ee3c55420b0_viviane-regado_1.avif" alt="Cliente">
+      <div class="t-body">
+        <p class="quote">"A Wehelp não é apenas uma ferramenta tecnológica, mas sim um verdadeiro parceiro no sucesso acadêmico. Estamos muito gratos por contar com uma plataforma tão completa e um suporte tão dedicado."</p>
+        <div class="name">Viviane Regado</div>
+        <div class="role">Gerente de Operações | Cellep</div>
+      </div>
+    </div>
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d7531d0e9ee3c55420bd_vini-dias_1.avif" alt="Cliente">
+      <div class="t-body">
+        <p class="quote">"Para fazer uma excelente gestão de um negócio é imprescindível ter dados que a WeHelp me traz de forma intuitiva e detalhada para entender um dos itens mais importantes: a experiência do cliente."</p>
+        <div class="name">Vini Dias</div>
+        <div class="role">Consultor | CXFit</div>
+      </div>
+    </div>
+    <div class="t-card">
+      <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6723d753829a518cf1a21f08_marcio-pereira_1.avif" alt="Satisfied customers">
+      <div class="t-body">
+        <p class="quote">"Estamos extremamente satisfeitos com a WEHELP como plataforma de NPS para medirmos o grau de satisfação de nossos clientes, um dos pilares da nossa empresa."</p>
+        <div class="name">Marcio Pereira</div>
+        <div class="role">Diretor de Operações | Oral Unic</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-block">
+  <a href="#Form" class="btn">Experimente 7 dias grátis</a>
+  <p class="btn-sub">Não é necessário Cartão de Crédito</p>
+</div>
+
+<section class="video-section">
+  <h2>Veja como funciona na <span>prática!</span></h2>
+  <p class="sub">Assista ao nosso especialista, Rogério Aranda, explicando o eNPS:</p>
+  <div class="video-frame">
+    <iframe src="https://www.youtube.com/embed/vs-2IIVmDck?rel=0&amp;controls=1&amp;autoplay=0&amp;mute=0&amp;start=0" title="eNPS - A principal métrica para medir a experiência dos seus colaboradores" allowfullscreen></iframe>
+  </div>
+  <a href="#Form" class="btn">Experimente 7 dias grátis</a>
+  <p class="btn-sub" style="color:#c7cdec;">Não é necessário Cartão de Crédito</p>
+</section>
+
+<section class="form-section" id="Form">
+  <div class="form-grid">
+    <div>
+      <div style="margin-bottom:24px;">
+        <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/67a257d6f22082e94c1cfa8d_equipe%20-wehelp.png" alt="Equipe Wehelp" style="border-radius:50%;max-width:340px;">
+      </div>
+    </div>
+    <div>
+      <h2>Não deixe a experiência dos seus colaboradores de lado.</h2>
+      <p style="margin-bottom:26px;">Descubra como o eNPS pode ser a solução que você procura para engajar de vez sua equipe!</p>
+      <form class="card" onsubmit="event.preventDefault(); alert('Formulário enviado!');">
+        <div class="field">
+          <label for="nome">Nome Completo*</label>
+          <input id="nome" type="text" placeholder="Nome" required>
+        </div>
+        <div class="field">
+          <label for="email">Email*</label>
+          <input id="email" type="email" placeholder="e-mail" required>
+        </div>
+        <div class="field">
+          <label for="telefone">Telefone*</label>
+          <input id="telefone" type="tel" placeholder="Número de telefone" required>
+        </div>
+        <div class="field">
+          <label for="empresa">Empresa*</label>
+          <input id="empresa" type="text" required>
+        </div>
+        <div class="captcha">
+          <input type="checkbox" required style="width:auto;">
+          <span>Não sou um robô</span>
+        </div>
+        <button type="submit" class="btn">Enviar!</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="https://www.wehelpsoftware.com/pt-BR" class="logo-group">
+    <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/6786c63c2de7d313dfe06cc5_logo.svg" alt="Logo Wehelp">
+    <span class="logo-tagline">NPS® do<br>jeito certo</span>
+  </a>
+  <div class="footer-links">
+    <a href="https://www.wehelpsoftware.com/pt-BR/termos-de-uso">Termo de uso</a>
+    <a href="https://www.wehelpsoftware.com/pt-BR/politica-de-privacidade">Política de privacidade</a>
+    <a href="https://www.wehelpsoftware.com/pt-BR/contato">Fale conosco</a>
+  </div>
+  <div class="footer-social">
+    <a href="https://www.linkedin.com/company/wehelpsoftware" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.1 1 2.48 1s2.5 1.12 2.5 2.5zM.5 8h4V23h-4V8zM8.5 8h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.9c0-1.65-.03-3.77-2.3-3.77-2.3 0-2.65 1.8-2.65 3.65V23h-4V8z"/></svg></a>
+    <a href="https://www.instagram.com/wehelp.br" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+    <a href="https://www.facebook.com/wehelp.br" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"/></svg></a>
+    <a href="https://www.youtube.com/@wehelpbr" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2s-.2-1.6-.9-2.3c-.9-.9-1.9-.9-2.3-1C17.3 2.6 12 2.6 12 2.6h0s-5.3 0-8.3.3c-.4 0-1.4.1-2.3 1-.7.7-.9 2.3-.9 2.3S.2 8.1.2 10v1.9c0 1.9.3 3.8.3 3.8s.2 1.6.9 2.3c.9.9 2.1.9 2.6 1 1.9.2 8 .3 8 .3s5.3 0 8.3-.3c.4 0 1.4-.1 2.3-1 .7-.7.9-2.3.9-2.3s.3-1.9.3-3.8V10c0-1.9-.3-3.8-.3-3.8zM9.7 14.6V7.7l6.5 3.5-6.5 3.4z"/></svg></a>
+  </div>
+  <p class="footer-trademark">Net Promoter, NPS, and the NPS-related emoticons are registered trademarks, and Net Promoter Score and Net Promoter System are service marks, of Bain &amp; Company, Inc., Satmetrix Systems, Inc. and Fred Reichheld.</p>
+</footer>
+
+</body>
+</html>

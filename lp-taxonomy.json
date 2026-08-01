@@ -75,6 +75,18 @@
       "status": "publicada",
       "origem": "migrada do repo antigo LP-wb-redirect (2026-07-31)",
       "notas": "Variante do convite pro webinário — sem formulário, botão dispara evento Lead no Pixel e redireciona direto pro grupo do WhatsApp. Sem backend."
+    },
+    {
+      "slug": "enps-evento",
+      "path": "/enps-evento/",
+      "titulo": "Transforme a experiência dos seus colaboradores com o eNPS.",
+      "produto": "pesquisa-satisfacao",
+      "segmento": "corporativo",
+      "tipo": "venda",
+      "funil": "meio",
+      "status": "publicada (só visual — formulário ainda sem backend, sem tráfego programado)",
+      "origem": "página nova, criada 2026-08-01",
+      "notas": "LP do eNPS (pesquisa de satisfação de colaboradores) pra evento. Formulário hoje só mostra alert() — decisão de conectar em ActiveCampanha/Sheets/CAPI ficou em aberto. Tem Meta Pixel + GTM instalados."
     }
   ]
 }
