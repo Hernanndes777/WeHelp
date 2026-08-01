@@ -107,18 +107,6 @@ src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/></
   .hero p{font-size:16px;max-width:440px;margin-bottom:26px;}
   .hero-visual{position:relative;display:flex;justify-content:center;}
   .hero-visual img.main{border-radius:50%;width:420px;max-width:100%;}
-  .float-card{
-    position:absolute;background:#fff;border-radius:14px;
-    box-shadow:0 12px 30px rgba(20,30,80,.15);
-    padding:12px 16px;font-size:12px;font-weight:600;color:var(--navy);
-  }
-  .float-card.satisfacao{top:8%;left:-6%;width:130px;}
-  .float-card.satisfacao .label{display:flex;align-items:center;justify-content:space-between;color:#8a92a6;font-weight:500;margin-bottom:4px;}
-  .float-card.enps{top:42%;right:-10%;width:110px;text-align:center;}
-  .float-card.enps .label{color:#8a92a6;font-weight:500;font-size:11px;}
-  .float-card.enps .score{font-size:20px;color:var(--navy);font-family:'Baloo 2';font-weight:700;}
-  .float-card.promotor{bottom:6%;left:2%;display:flex;align-items:center;gap:10px;width:auto;}
-  .promotor-num{background:var(--green);color:#fff;border-radius:8px;padding:6px 10px;font-family:'Baloo 2';font-weight:700;font-size:15px;}
 
   /* LOGO STRIP */
   .logo-strip{padding:20px 24px 50px;text-align:center;}
@@ -283,19 +271,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="btn-sub" style="text-align:left;">Não perca tempo!</p>
     </div>
     <div class="hero-visual">
-      <img class="main" src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/67867533fa474fa0ab4a09ed_colaborador.png" alt="Colaborador com Wigets">
-      <div class="float-card satisfacao">
-        <div class="label">Satisfação <span>ⓘ</span></div>
-        <svg width="90" height="26" viewBox="0 0 90 26" fill="none"><polyline points="0,22 12,16 24,19 36,10 48,13 60,5 72,9 90,2" stroke="#33c08d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="float-card enps">
-        <div class="label">eNPS</div>
-        <div class="score">+74,9</div>
-      </div>
-      <div class="float-card promotor">
-        <span class="promotor-num">10</span>
-        <span>Promotor<br><span style="font-weight:400;color:#8a92a6;">Ótimo ambiente de trabalho</span></span>
-      </div>
+      <img class="main" src="/enps-evento/assets/colaborador.png" alt="Colaborador usando o app WeHelp — Satisfação, eNPS +74,9, Promotor">
+      <!-- Os cards (Satisfação, eNPS, Promotor) já vêm desenhados dentro dessa imagem —
+           não recriar como floating divs aqui, senão duplica tudo. -->
     </div>
   </div>
 </header>
@@ -486,7 +464,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="form-grid">
     <div>
       <div style="margin-bottom:24px;">
-        <img src="https://cdn.prod.website-files.com/672240352e865b3990c296b4/67a257d6f22082e94c1cfa8d_equipe%20-wehelp.png" alt="Equipe Wehelp" style="border-radius:50%;max-width:340px;">
+        <img src="/enps-evento/assets/equipe-wehelp.png" alt="Equipe Wehelp" style="border-radius:50%;max-width:340px;">
       </div>
     </div>
     <div>
