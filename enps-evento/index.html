@@ -106,13 +106,16 @@ src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/></
   .hero h1 span{color:var(--blue);}
   .hero p{font-size:16px;max-width:440px;margin-bottom:26px;}
   .hero-visual{position:relative;display:flex;justify-content:center;}
-  .hero-visual img.main{border-radius:50%;width:420px;max-width:100%;}
+  .hero-visual img.main{width:504px;max-width:100%;}
 
   /* LOGO STRIP */
-  .logo-strip{padding:20px 24px 50px;text-align:center;}
-  .logo-strip p{font-weight:600;color:var(--navy);margin-bottom:34px;font-size:15px;}
-  .logo-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:48px;margin-bottom:40px;}
-  .logo-row img{height:28px;filter:grayscale(100%);opacity:.75;}
+  .logo-strip{padding:20px 0 50px;text-align:center;}
+  .logo-strip p{font-weight:600;color:var(--navy);margin-bottom:34px;font-size:15px;padding:0 24px;}
+  .logo-marquee{overflow:hidden;width:100%;margin-bottom:40px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
+  .logo-track{display:flex;align-items:center;gap:64px;width:max-content;animation:logo-scroll 22s linear infinite;}
+  .logo-marquee:hover .logo-track{animation-play-state:paused;}
+  .logo-track img{height:70px;filter:grayscale(100%);opacity:.75;flex-shrink:0;}
+  @keyframes logo-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
   .divider{border:none;border-top:1px solid #e5e9f2;max-width:1200px;margin:0 auto;}
 
   /* TWO COL GENERIC */
@@ -280,13 +283,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <section class="logo-strip">
   <p>Grandes empresas utilizam NPS® para medir e gerir a experiência!</p>
-  <div class="logo-row">
-    <img src="/enps-evento/assets/logo-selfit.avif" alt="Academia SelFit">
-    <img src="/enps-evento/assets/logo-bioritmo.avif" alt="Academia Bioritmo">
-    <img src="/enps-evento/assets/logo-oral-unic.avif" alt="Oral Unic">
-    <img src="/enps-evento/assets/logo-beto-carreiro.avif" alt="Beto Carreiro World">
-    <img src="/enps-evento/assets/logo-cinesystem.avif" alt="Cinesystem">
-    <img src="/enps-evento/assets/logo-cellep.avif" alt="Cellep">
+  <div class="logo-marquee">
+    <div class="logo-track">
+      <img src="/enps-evento/assets/logo-selfit.avif" alt="Academia SelFit">
+      <img src="/enps-evento/assets/logo-bioritmo.avif" alt="Academia Bioritmo">
+      <img src="/enps-evento/assets/logo-oral-unic.avif" alt="Oral Unic">
+      <img src="/enps-evento/assets/logo-beto-carreiro.avif" alt="Beto Carreiro World">
+      <img src="/enps-evento/assets/logo-cinesystem.avif" alt="Cinesystem">
+      <img src="/enps-evento/assets/logo-cellep.avif" alt="Cellep">
+      <img src="/enps-evento/assets/logo-selfit.avif" alt="" aria-hidden="true">
+      <img src="/enps-evento/assets/logo-bioritmo.avif" alt="" aria-hidden="true">
+      <img src="/enps-evento/assets/logo-oral-unic.avif" alt="" aria-hidden="true">
+      <img src="/enps-evento/assets/logo-beto-carreiro.avif" alt="" aria-hidden="true">
+      <img src="/enps-evento/assets/logo-cinesystem.avif" alt="" aria-hidden="true">
+      <img src="/enps-evento/assets/logo-cellep.avif" alt="" aria-hidden="true">
+    </div>
   </div>
   <hr class="divider">
 </section>
@@ -464,7 +475,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="form-grid">
     <div>
       <div style="margin-bottom:24px;">
-        <img src="/enps-evento/assets/equipe-wehelp.png" alt="Equipe Wehelp" style="border-radius:50%;max-width:340px;">
+        <img src="/enps-evento/assets/equipe-wehelp.png" alt="Equipe Wehelp" style="border-radius:50%;max-width:510px;">
       </div>
     </div>
     <div>
