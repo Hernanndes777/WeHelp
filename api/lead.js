@@ -125,34 +125,36 @@ export default async function handler(req, res) {
       }),
     });
 
-    // 4. Envia para o Google Sheets — payload completo (modelo de captura pra
-    //    as próximas LPs: campos visíveis do form + todos os ocultos relevantes
-    //    pra dado/pixel/tag). Chaves nomeadas e ordenadas igual ao cabeçalho da
-    //    planilha, pra alinhar tanto com Apps Script por nome quanto posicional.
+    // 4. Envia para o Google Sheets — o Apps Script (doPost) escreve por POSIÇÃO
+    //    fixa, não por nome de chave, e ignora o cabeçalho da linha 1. As chaves
+    //    abaixo têm que bater com o que o script lê (data.nome, data.email...),
+    //    nessa ordem, senão vira coluna vazia. Ver 00-base/padrao-captura-lead.md.
     await fetch('https://script.google.com/macros/s/AKfycbxXpEdOaLR-Z8JOujEW5VGvFbxWHOg2vMkqeQXQAeqjViPJw_61XpLukGdnFzXd_Oym/exec', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        Nome: nome,
-        E_mail: contactEmail,   // [FIX] era "email" vazio — agora sempre tem o email gerado
-        WhatsApp: whatsapp,
-        Quantos_clientes_ativos_voce_tem_atualmente: clientes,
+        nome: nome,
+        email: contactEmail,   // [FIX] era "email" vazio — agora sempre tem o email gerado
+        whatsapp: whatsapp,
+        clientes: clientes,
+        utm_source: utm_source || '',
+        utm_medium: utm_medium || '',
+        utm_campaign: utm_campaign || '',
+        utm_content: utm_content || '',
+        utm_term: utm_term || '',
         fbclid: fbclid || '',
         gclid: gclid || '',
-        IP_do_usuario: clientIp,
-        Data_da_conversao: receivedAt,
-        Dispositivo: device,
-        Referral_Source: referral_source || '',
-        Pais_do_usuario: geoCountry,
-        Regiao_do_usuario: geoRegion,
-        Cidade_do_usuario: geoCity,
-        UTM_Source: utm_source || '',
-        UTM_Medium: utm_medium || '',
-        UTM_Campaign: utm_campaign || '',
-        UTM_Id: utm_id || '',
-        UTM_Term: utm_term || '',
-        UTM_Content: utm_content || '',
-        URL: url || '',
+        // [DATA] campos novos — só populam depois que o Apps Script for
+        // atualizado (ver instrução separada). Até lá o script ignora essas
+        // chaves silenciosamente, sem quebrar nada.
+        utm_id: utm_id || '',
+        ip: clientIp,
+        dispositivo: device,
+        pais: geoCountry,
+        regiao: geoRegion,
+        cidade: geoCity,
+        referral_source: referral_source || '',
+        url: url || '',
       }),
     }).catch(() => {}); // não trava se o Sheets falhar
 
