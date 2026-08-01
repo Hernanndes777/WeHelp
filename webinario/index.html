@@ -1239,6 +1239,11 @@
         utm_campaign: params.get('utm_campaign') || '',
         utm_content: params.get('utm_content') || '',
         utm_term: params.get('utm_term') || '',
+        utm_id: params.get('utm_id') || '',       // [DATA] modelo de captura completa
+        fbclid: params.get('fbclid') || '',       // [DATA] clique do anúncio Meta
+        gclid: params.get('gclid') || '',         // [DATA] clique do anúncio Google
+        referral_source: document.referrer || '', // [DATA] de onde a pessoa veio
+        url: location.href,                       // [DATA] URL completa com querystring
         event_id: eventId,             // [NEW] para deduplicação browser ↔ CAPI
         fbc: getCookie('_fbc'),        // [NEW] Meta click cookie — melhora matching
         fbp: getCookie('_fbp'),        // [NEW] Meta browser cookie — melhora matching

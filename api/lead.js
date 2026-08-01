@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
   // [NEW] CAPI config — adicione estas variáveis no painel da Vercel:
   // CAPI_ENDPOINT = URL do endpoint Meta CAPI direto ou Stape
-  //   Direto Meta: https://graph.facebook.com/v19.0/1106401696374974/events
+  //   Direto Meta: https://graph.facebook.com/v26.0/1106401696374974/events (confira a versão atual em developers.facebook.com/docs/graph-api/changelog)
   //   Via Stape:   https://capig.stape.pm/SEU_CONTAINER_ID/events (verifique no painel do Stape)
   // META_ACCESS_TOKEN = token de acesso do pixel (Events Manager > Configurações > Token da API)
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
@@ -37,13 +37,36 @@ export default async function handler(req, res) {
   try {
     const {
       nome, email, whatsapp, clientes,
-      utm_source, utm_medium, utm_campaign, utm_content, utm_term,
+      utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
+      fbclid, gclid, referral_source, url,   // [DATA] modelo de captura completa
       event_id, fbc, fbp, test_event_code,  // [NEW] campos do pixel
     } = req.body;
 
     if (!whatsapp) {
       return res.status(400).json({ error: 'WhatsApp obrigatório' });
     }
+
+    // [DATA] Dados capturados no servidor — não dependem do que o navegador manda,
+    // então funcionam mesmo se o JS do cliente falhar em algo.
+    const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
+                     || req.socket?.remoteAddress || '';
+    const userAgent = req.headers['user-agent'] || '';
+    const device = /Mobile|Android|iPhone|iPad/i.test(userAgent) ? 'Mobile' : 'Desktop';
+
+    // A Vercel já resolve geolocalização por IP nos headers da Edge Network —
+    // não precisa de nenhum serviço externo pra isso.
+    const geoCountry = req.headers['x-vercel-ip-country'] || '';
+    const geoRegion = req.headers['x-vercel-ip-country-region'] || '';
+    const geoCity = req.headers['x-vercel-ip-city']
+      ? decodeURIComponent(req.headers['x-vercel-ip-city'])
+      : '';
+
+    const receivedAt = new Date().toISOString();
+
+    // Se o cookie _fbc não existir (ex: primeira visita bloqueou cookie) mas
+    // veio fbclid na URL, reconstrói o _fbc no formato que a Meta exige —
+    // evita perder o matching do clique só por causa disso.
+    const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
 
     const headers = {
       'Api-Token': AC_KEY,
@@ -102,20 +125,34 @@ export default async function handler(req, res) {
       }),
     });
 
-    // 4. Envia para o Google Sheets
+    // 4. Envia para o Google Sheets — payload completo (modelo de captura pra
+    //    as próximas LPs: campos visíveis do form + todos os ocultos relevantes
+    //    pra dado/pixel/tag). Chaves nomeadas e ordenadas igual ao cabeçalho da
+    //    planilha, pra alinhar tanto com Apps Script por nome quanto posicional.
     await fetch('https://script.google.com/macros/s/AKfycbxXpEdOaLR-Z8JOujEW5VGvFbxWHOg2vMkqeQXQAeqjViPJw_61XpLukGdnFzXd_Oym/exec', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        nome: nome,
-        email: contactEmail,   // [FIX] era "email" vazio — agora sempre tem o email gerado
-        whatsapp: whatsapp,
-        clientes: clientes,
-        utm_source: utm_source,
-        utm_medium: utm_medium,
-        utm_campaign: utm_campaign,
-        utm_content: utm_content || '',
-        utm_term: utm_term || '',
+        Nome: nome,
+        E_mail: contactEmail,   // [FIX] era "email" vazio — agora sempre tem o email gerado
+        WhatsApp: whatsapp,
+        Quantos_clientes_ativos_voce_tem_atualmente: clientes,
+        fbclid: fbclid || '',
+        gclid: gclid || '',
+        IP_do_usuario: clientIp,
+        Data_da_conversao: receivedAt,
+        Dispositivo: device,
+        Referral_Source: referral_source || '',
+        Pais_do_usuario: geoCountry,
+        Regiao_do_usuario: geoRegion,
+        Cidade_do_usuario: geoCity,
+        UTM_Source: utm_source || '',
+        UTM_Medium: utm_medium || '',
+        UTM_Campaign: utm_campaign || '',
+        UTM_Id: utm_id || '',
+        UTM_Term: utm_term || '',
+        UTM_Content: utm_content || '',
+        URL: url || '',
       }),
     }).catch(() => {}); // não trava se o Sheets falhar
 
@@ -124,10 +161,7 @@ export default async function handler(req, res) {
     // melhorando o EMQ (Event Match Quality) porque envia telefone e email hasheados.
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
-      const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
-                       || req.socket?.remoteAddress || '';
-      const userAgent = req.headers['user-agent'] || '';
-      const referer = req.headers['referer'] || '';
+      const referer = req.headers['referer'] || url || '';
 
       const capiPayload = {
         data: [{
@@ -144,7 +178,7 @@ export default async function handler(req, res) {
             client_ip_address: clientIp,
             client_user_agent: userAgent,
             // Cookies do pixel — aumentam significativamente o match quality
-            ...(fbc ? { fbc } : {}),
+            ...(resolvedFbc ? { fbc: resolvedFbc } : {}),
             ...(fbp ? { fbp } : {}),
           },
         }],

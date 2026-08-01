@@ -15,7 +15,8 @@
 | Catálogo de LPs já feitas + convenção de slug | `lp-taxonomy.json` | Antes de começar — checar se já tem parecida |
 | Design system (cor, logo, tom) | `00-base/design-system/design-system-wehelp.md` | Etapa 4 (build) — **ainda provisório, confirmar com marca oficial** |
 | Assets compartilhados (logo etc) | `shared/` | Etapa 4 (build) |
-| LPs já no ar (reaproveitar componentes) | `retencao/`, `ativacao/`, `california/` | Etapa 4 (build) |
+| LPs já no ar (reaproveitar componentes) | `retencao/`, `ativacao/`, `california/`, `webinario/`, `webinario-whatsapp/` | Etapa 4 (build) |
+| Padrão de captura de lead (campos ocultos: UTM, fbclid, IP, geo, device etc) | `00-base/padrao-captura-lead.md` | Etapa 5 — **obrigatório em toda LP com formulário** |
 
 ---
 
@@ -52,6 +53,7 @@
 - [ ] Criar pasta em `{slug}/` na raiz do repo
 - [ ] Mobile first
 - [ ] Reaproveitar componentes das LPs anteriores quando fizer sentido
+- [ ] **Se a LP tem formulário**: seguir o padrão completo de captura de `00-base/padrao-captura-lead.md` (UTMs, fbclid/gclid, IP, device, geo, referral, url — visíveis e ocultos). Copiar a estrutura de `webinario/index.html` + `api/lead.js` como referência.
 
 ### 6. QA antes do deploy
 - [ ] Teste em celular real
@@ -60,9 +62,24 @@
 - [ ] Favicon WeHelp no lugar
 
 ### 7. Deploy
-- [ ] `git add {slug}/ && git commit -m "feat: lp {slug}"`
+- [ ] `git add {slug}/ && git commit -m "/{slug} | {o que foi feito}"` — ver convenção de commit abaixo
 - [ ] `git push origin main` — a Vercel publica automaticamente (git integration, sem passo manual)
 - [ ] Confirmar URL no ar: `lp.wehelpsoftware.com/{slug}`
+
+#### Convenção de commit (obrigatória neste repo)
+
+Como todo deploy sai no mesmo projeto da Vercel (é um repo só pra todas as LPs), toda mensagem de commit deve deixar claro **qual página** mudou e **o que foi feito**, pro histórico de deploys ser legível:
+
+```
+/{caminho-da-lp} | {resumo da mudança}
+```
+
+Exemplos:
+- `/webinario | Ajuste CAPI`
+- `/retencao | Corrige headline da hero`
+- `/california | Atualiza prazo da oferta pra 10 dias`
+
+Se a mudança afeta mais de uma LP ou é algo estrutural do repo (não uma página específica), usa o nome da pasta/arquivo raiz no lugar do slug (ex: `/00-base | Atualiza dossiê do Módulo de Ticket`, `/api | Corrige captura de geo`).
 
 ### 8. Pós-deploy
 - [ ] Adicionar entrada em `lp-taxonomy.json` (campo `landings`)
