@@ -118,6 +118,7 @@ export default async function handler(req, res) {
     // fetch "fire-and-forget" (sem await) corria o risco de nunca terminar. Por
     // isso tudo aqui embaixo é aguardado com Promise.allSettled antes do retorno.
     const DEAL_OWNER_ID = '6';
+    let dealDebug = null;
     const dealPromise = fetch(`${AC_URL}/api/3/deals`, {
       method: 'POST',
       headers,
@@ -126,9 +127,9 @@ export default async function handler(req, res) {
           title: `Sessão Estratégica — ${Seu_Nome_Completo || 'Lead'}${Nome_da_sua_academia ? ' (' + Nome_da_sua_academia + ')' : ''}`,
           currency: 'usd',
           value: 0,
-          group: DEAL_PIPELINE_ID,
-          stage: DEAL_STAGE_ID,
-          contact: contactId,
+          group: String(DEAL_PIPELINE_ID),
+          stage: String(DEAL_STAGE_ID),
+          contact: String(contactId),
           owner: DEAL_OWNER_ID,
           fields: [
             { customFieldId: FIELD_ACADEMIA, fieldValue: Nome_da_sua_academia || '' },
@@ -139,8 +140,13 @@ export default async function handler(req, res) {
         },
       }),
     }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao criar deal:', await r.text());
-    }).catch((err) => console.error('Erro ao criar deal:', err));
+      const bodyText = await r.text();
+      dealDebug = { status: r.status, ok: r.ok, body: bodyText.slice(0, 500) };
+      if (!r.ok) console.error('Erro ao criar deal:', bodyText);
+    }).catch((err) => {
+      dealDebug = { error: String(err) };
+      console.error('Erro ao criar deal:', err);
+    });
 
     // 3. Envia pro Google Sheets — colunas na mesma ordem/nome da planilha
     //    "Agendamentos WB 05" (ver PDF de referência anexado pelo usuário em 2026-08-02).
@@ -216,7 +222,9 @@ export default async function handler(req, res) {
     // response sai, então sem esse await o deal/Sheets/CAPI corriam risco de nunca completar.
     await Promise.allSettled([dealPromise, sheetsPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, contactId });
+    // [DEBUG TEMPORÁRIO] expõe o resultado do Deal na própria response pra
+    // diagnosticar por que ele não estava caindo — remover depois de confirmado.
+    return res.status(200).json({ success: true, contactId, dealDebug });
 
   } catch (err) {
     console.error('Erro geral:', err);
