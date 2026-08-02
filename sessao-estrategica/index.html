@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sessão Estratégica — WeHelp</title>
+  <meta name="description" content="Fale com um especialista WeHelp e descubra como prever o cancelamento do seu aluno antes que ele aconteça." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; }
+
+    :root {
+      --blue:       #1B6EF3;
+      --blue-hover: #1457c8;
+      --blue-light: #e8f0ff;
+      --navy:       #0a1128;
+      --navy-2:     #0f1b3d;
+      --card:       #101c3f;
+      --border:     #1e3060;
+      --body:       #b0c4e8;
+      --muted:      #7286b3;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1100px 600px at 15% -10%, rgba(27,110,243,.25), transparent 60%),
+        radial-gradient(900px 500px at 100% 110%, rgba(27,110,243,.18), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    .brand__icon {
+      width: 36px; height: 36px;
+      background: var(--blue);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand__icon i { font-size: 20px; color: #fff; }
+    .brand span {
+      font-family: 'Figtree', sans-serif;
+      font-size: 21px; font-weight: 800; color: #fff;
+    }
+
+    /* ── WIZARD CARD ── */
+    .wizard {
+      width: 100%;
+      max-width: 460px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px 28px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    }
+
+    .wizard__progress {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+    .wizard__bar {
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .wizard__bar span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--blue);
+      transition: width .35s ease;
+    }
+    .wizard__bar.done span { width: 100%; }
+    .wizard__bar.active span { width: 100%; }
+
+    .step { display: none; animation: stepIn .35s ease; }
+    .step.active { display: block; }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .step__eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+    }
+    .step__title {
+      font-family: 'Figtree', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .step__subtitle {
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    .field { margin-bottom: 14px; }
+    .input, .select {
+      width: 100%;
+      background: #fff;
+      border: 1px solid transparent;
+      border-radius: 50px;
+      padding: 15px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: #0a1128;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .input:focus { border-color: var(--blue); }
+    .input::placeholder { color: #a0aec0; }
+    .input.invalid { border-color: #ef4444; }
+    .field-error {
+      font-size: 12px;
+      color: #fca5a5;
+      margin-top: 6px;
+      padding-left: 20px;
+      display: none;
+    }
+    .field-error.show { display: block; }
+
+    .phone-row { display: flex; gap: 8px; align-items: stretch; }
+    .ddi-select {
+      flex-shrink: 0;
+      background: #fff;
+      border: 1px solid transparent;
+      border-radius: 50px;
+      padding: 15px 30px 15px 14px;
+      font-size: 14px;
+      color: #0a1128;
+      font-weight: 500;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+    }
+    .phone-row .input { flex: 1; min-width: 0; }
+
+    /* ── Single-choice option cards ── */
+    .option-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 14px 18px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .option:hover { border-color: var(--blue-light); }
+    .option.selected { border-color: var(--blue); background: var(--blue-light); }
+    .option__dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid #cbd5e1;
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color .15s;
+    }
+    .option.selected .option__dot { border-color: var(--blue); }
+    .option.selected .option__dot::after {
+      content: '';
+      position: absolute;
+      inset: 3px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+    .option__label {
+      font-size: 14px;
+      color: #0a1128;
+      line-height: 1.4;
+    }
+
+    .wizard__nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 26px;
+    }
+    .btn {
+      flex: 1;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .2s, transform .2s, opacity .2s;
+    }
+    .btn i { font-size: 17px; }
+    .btn--prev {
+      flex: 0 0 auto;
+      width: 52px;
+      background: rgba(255,255,255,.06);
+      color: #fff;
+    }
+    .btn--prev:hover { background: rgba(255,255,255,.12); }
+    .btn--next {
+      background: var(--blue);
+      color: #fff;
+    }
+    .btn--next:hover { background: var(--blue-hover); transform: translateY(-1px); }
+    .btn--next:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+    .btn__spinner {
+      display: none;
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      justify-content: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 18px;
+    }
+
+    /* ── Final step ── */
+    .step--final { text-align: center; }
+    .step--final .step__icon {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .step--final .step__icon i { font-size: 30px; color: var(--blue); }
+    .step--final .step__title { font-size: 24px; }
+    .step--final .step__subtitle { margin-bottom: 28px; }
+    .btn--calendar {
+      width: 100%;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 17px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background .2s, transform .2s;
+    }
+    .btn--calendar:hover { background: var(--blue-hover); transform: translateY(-1px); }
+
+    @media (max-width: 480px) {
+      .wizard { padding: 28px 22px 24px; border-radius: 16px; }
+      .step__title { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="page">
+    <div class="brand">
+      <div class="brand__icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+      <span>WeHelp</span>
+    </div>
+
+    <form class="wizard" id="wizard" novalidate>
+      <div class="wizard__progress" id="progress"></div>
+
+      <!-- STEP 1 — Contato -->
+      <div class="step active" data-step="1">
+        <p class="step__eyebrow">Sessão estratégica</p>
+        <h1 class="step__title">Vamos entrar em contato em breve!</h1>
+        <p class="step__subtitle">Antes, pra te dar um atendimento mais direcionado, preencha essas últimas informações.</p>
+
+        <div class="field">
+          <input type="text" class="input" id="nome" placeholder="* Seu nome completo" required />
+        </div>
+        <div class="field">
+          <input type="email" class="input" id="email" placeholder="* E-mail profissional" required />
+        </div>
+        <div class="field">
+          <div class="phone-row">
+            <select class="ddi-select" id="ddiSelect" aria-label="Código do país">
+              <option value="+55" selected>🇧🇷 +55</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            <input type="tel" class="input" id="whatsapp" placeholder="* WhatsApp" required />
+          </div>
+          <p class="field-error" id="phoneError">Digite um número válido com DDD</p>
+        </div>
+      </div>
+
+      <!-- STEP 2 — Academia -->
+      <div class="step" data-step="2">
+        <p class="step__eyebrow">Sessão estratégica</p>
+        <h1 class="step__title">Qual o nome da sua academia?</h1>
+        <p class="step__subtitle">Assim já chegamos na conversa sabendo quem você é.</p>
+        <div class="field">
+          <input type="text" class="input" id="academia" placeholder="* Nome da academia" required />
+        </div>
+      </div>
+
+      <!-- STEP 3 — Clientes ativos -->
+      <div class="step" data-step="3">
+        <p class="step__eyebrow">Sessão estratégica</p>
+        <h1 class="step__title">Quantos clientes ativos você tem atualmente?</h1>
+        <div class="option-list" data-field="clientes" data-required="true">
+          <label class="option"><span class="option__dot"></span><span class="option__label">Até 150 clientes</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">De 151 a 300 clientes</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">De 301 a 500 clientes</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">De 501 a 1000 clientes</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">Acima de 1000 clientes</span></label>
+        </div>
+      </div>
+
+      <!-- STEP 4 — Desafio financeiro -->
+      <div class="step" data-step="4">
+        <p class="step__eyebrow">Sessão estratégica</p>
+        <h1 class="step__title">Qual é o seu maior desafio financeiro ou de gestão hoje?</h1>
+        <div class="option-list" data-field="desafio" data-required="true">
+          <label class="option"><span class="option__dot"></span><span class="option__label">Muitos alunos cancelando em silêncio e eu não sei o motivo real.</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">Bato a meta de vendas, mas a academia não cresce porque a retenção é baixa.</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">Quero medir a satisfação e o NPS, mas não sei como automatizar isso.</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">Minha equipe tem opiniões divergentes sobre o que o aluno realmente quer.</span></label>
+        </div>
+      </div>
+
+      <!-- STEP 5 — Sistema de gestão -->
+      <div class="step" data-step="5">
+        <p class="step__eyebrow">Sessão estratégica</p>
+        <h1 class="step__title">Qual sistema de gestão você utiliza na sua academia atualmente?</h1>
+        <div class="option-list" data-field="sistema" data-required="true">
+          <label class="option"><span class="option__dot"></span><span class="option__label">Pacto</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">Evo</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">Tecnofit</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">CloudGym</span></label>
+          <label class="option"><span class="option__dot"></span><span class="option__label">Outro sistema / Nenhum</span></label>
+        </div>
+      </div>
+
+      <div class="wizard__nav" id="nav">
+        <button type="button" class="btn btn--prev" id="btnPrev" aria-label="Voltar" style="display:none;">
+          <i class="ti ti-arrow-left" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn--next" id="btnNext">
+          <span id="btnNextText">Continuar</span>
+          <span class="btn__spinner" id="btnSpinner"></span>
+        </button>
+      </div>
+
+      <p class="hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão protegidos. Sem spam, garantido.</p>
+    </form>
+
+    <!-- STEP FINAL — fora do form, mostrado depois do envio -->
+    <div class="wizard step--final" id="finalStep" style="display:none;">
+      <div class="step__icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
+      <h1 class="step__title">Prontinho! Agora vamos agendar sua sessão.</h1>
+      <p class="step__subtitle">Escolha o melhor dia e horário pra conversar com um especialista WeHelp.</p>
+      <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0zlcWkqfzcp8oIwEBUkRdX3lH2t5QZw1rpMf8gV8G1rqxH2cKEtNLOaJvFjpYsinsPWyqR3FBQ" target="_blank" rel="noopener" class="btn--calendar" id="calendarLink">
+        <i class="ti ti-calendar" aria-hidden="true"></i>
+        Ver horários disponíveis
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const TOTAL_STEPS = 5;
+    const PIXEL_ID = '1106401696374974';
+    const params = new URLSearchParams(location.search);
+    const testEventCode = params.get('fbtest') || null;
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+    function getEventId() {
+      let id = sessionStorage.getItem('lead_event_id');
+      if (!id) {
+        id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('lead_event_id', id);
+      }
+      return id;
+    }
+    function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    function isValidPhone(phone, ddi) {
+      const digits = phone.replace(/\D/g, '');
+      if (ddi === '+55') return digits.length === 10 || digits.length === 11;
+      return digits.length >= 6;
+    }
+
+    // ── Progress bar ──
+    const progressEl = document.getElementById('progress');
+    for (let i = 1; i <= TOTAL_STEPS; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'wizard__bar';
+      bar.dataset.bar = i;
+      bar.innerHTML = '<span></span>';
+      progressEl.appendChild(bar);
+    }
+    function updateProgress(step) {
+      document.querySelectorAll('.wizard__bar').forEach(bar => {
+        const idx = Number(bar.dataset.bar);
+        bar.classList.toggle('done', idx < step);
+        bar.classList.toggle('active', idx === step);
+      });
+    }
+
+    // ── Option-card selection ──
+    document.querySelectorAll('.option-list').forEach(list => {
+      list.addEventListener('click', (e) => {
+        const opt = e.target.closest('.option');
+        if (!opt) return;
+        list.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        list.dataset.value = opt.querySelector('.option__label').textContent;
+        validateStep(currentStep);
+      });
+    });
+
+    // ── Step navigation ──
+    let currentStep = 1;
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnNextText = document.getElementById('btnNextText');
+    const btnSpinner = document.getElementById('btnSpinner');
+
+    function showStep(step) {
+      document.querySelectorAll('.step[data-step]').forEach(s => {
+        s.classList.toggle('active', Number(s.dataset.step) === step);
+      });
+      btnPrev.style.display = step === 1 ? 'none' : 'flex';
+      btnNextText.textContent = step === TOTAL_STEPS ? 'Enviar' : 'Continuar';
+      updateProgress(step);
+      validateStep(step);
+    }
+
+    function validateStep(step) {
+      let valid = true;
+      if (step === 1) {
+        const nome = document.getElementById('nome').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const whatsapp = document.getElementById('whatsapp').value.trim();
+        const ddi = document.getElementById('ddiSelect').value;
+        valid = !!nome && isValidEmail(email) && isValidPhone(whatsapp, ddi);
+      } else if (step === 2) {
+        valid = !!document.getElementById('academia').value.trim();
+      } else {
+        const map = { 3: 'clientes', 4: 'desafio', 5: 'sistema' };
+        const list = document.querySelector('.option-list[data-field="' + map[step] + '"]');
+        valid = !!(list && list.dataset.value);
+      }
+      btnNext.disabled = !valid;
+      return valid;
+    }
+
+    ['nome', 'email', 'whatsapp'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => validateStep(currentStep));
+    });
+    document.getElementById('academia').addEventListener('input', () => validateStep(currentStep));
+    document.getElementById('ddiSelect').addEventListener('change', () => validateStep(currentStep));
+
+    document.getElementById('whatsapp').addEventListener('blur', () => {
+      const el = document.getElementById('whatsapp');
+      const ddi = document.getElementById('ddiSelect').value;
+      const valid = !el.value || isValidPhone(el.value, ddi);
+      el.classList.toggle('invalid', !valid);
+      document.getElementById('phoneError').classList.toggle('show', !valid);
+    });
+
+    btnPrev.addEventListener('click', () => {
+      if (currentStep > 1) { currentStep--; showStep(currentStep); }
+    });
+
+    btnNext.addEventListener('click', async () => {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < TOTAL_STEPS) {
+        currentStep++;
+        showStep(currentStep);
+        return;
+      }
+      await submitLead();
+    });
+
+    async function submitLead() {
+      btnNext.disabled = true;
+      btnNextText.textContent = 'ENVIANDO...';
+      btnSpinner.style.display = 'block';
+
+      const ddi = document.getElementById('ddiSelect').value;
+      const whatsappDigits = ddi + document.getElementById('whatsapp').value.trim().replace(/\D/g, '');
+      const email = document.getElementById('email').value.trim();
+      const eventId = getEventId();
+
+      const data = {
+        Seu_Nome_Completo: document.getElementById('nome').value.trim(),
+        E_mail_Profissional: email,
+        WhatsApp: whatsappDigits,
+        Nome_da_sua_academia: document.getElementById('academia').value.trim(),
+        Quantos_clientes_ativos_voce_tem_atualmente: document.querySelector('.option-list[data-field="clientes"]').dataset.value || '',
+        Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje: document.querySelector('.option-list[data-field="desafio"]').dataset.value || '',
+        Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente: document.querySelector('.option-list[data-field="sistema"]').dataset.value || '',
+        UTM_Source: params.get('utm_source') || '',
+        UTM_Medium: params.get('utm_medium') || '',
+        UTM_Campaign: params.get('utm_campaign') || '',
+        UTM_Content: params.get('utm_content') || '',
+        UTM_Term: params.get('utm_term') || '',
+        UTM_Id: params.get('utm_id') || '',
+        fbclid: params.get('fbclid') || '',
+        gclid: params.get('gclid') || '',
+        Referral_Source: document.referrer || '',
+        URL: location.href,
+        event_id: eventId,
+        fbc: getCookie('_fbc'),
+        fbp: getCookie('_fbp'),
+        test_event_code: testEventCode || '',
+      };
+
+      // Mostra a etapa final imediatamente — não trava o usuário esperando o backend
+      document.getElementById('wizard').style.display = 'none';
+      document.getElementById('finalStep').style.display = 'block';
+
+      if (typeof fbq === 'function') {
+        const phoneDigits = whatsappDigits.replace(/\D/g, '');
+        fbq('init', PIXEL_ID, { em: email, ph: phoneDigits });
+        const pixelExtras = { eventID: eventId };
+        if (testEventCode) pixelExtras.test_event_code = testEventCode;
+        fbq('track', 'Lead', {}, pixelExtras);
+      }
+
+      fetch('/api/lead-sessao-estrategica', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).catch(() => {});
+    }
+
+    showStep(currentStep);
+  </script>
+</body>
+</html>

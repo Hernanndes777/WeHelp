@@ -87,6 +87,18 @@
       "status": "publicada (só visual — formulário ainda sem backend, sem tráfego programado)",
       "origem": "página nova, criada 2026-08-01",
       "notas": "LP do eNPS (pesquisa de satisfação de colaboradores) pra evento. Formulário hoje só mostra alert() — decisão de conectar em ActiveCampanha/Sheets/CAPI ficou em aberto. Tem Meta Pixel + GTM instalados."
+    },
+    {
+      "slug": "sessao-estrategica",
+      "path": "/sessao-estrategica/",
+      "titulo": "Sessão Estratégica — WeHelp",
+      "produto": "modulo-retencao-churn",
+      "segmento": "fitness",
+      "tipo": "captura",
+      "funil": "fundo",
+      "status": "publicada (backend pendente — falta URL do Apps Script no Sheets, ver notas)",
+      "origem": "página nova, migrada do GreatPages (mkt.wehelpsoftware.com/vamos-entrar-em-contato-em-breve), criada 2026-08-02",
+      "notas": "Fluxo multi-step (uma pergunta por tela) que substitui o formulário único do GreatPages, terminando no mesmo agendamento via Google Calendar. Captura via api/lead-sessao-estrategica.js: cria/atualiza contato no ActiveCampaign + cria Deal no pipeline 'Webinário' (id 19), etapa 'LEADS APLICAÇÃO WEBNÁRIO' (id 172), usando os custom fields já existentes 39/35/36/37. Precisa das env vars AC_URL, AC_KEY, CAPI_ENDPOINT, META_ACCESS_TOKEN (já configuradas p/ webinario/) + SHEETS_SESSAO_ESTRATEGICA_URL (nova — pendente, depende do Apps Script em 00-base/apps-script-sessao-estrategica.gs ser implantado na planilha 'Agendamentos WB 05'). Deal é criado sem 'owner' (pipeline tem autoassign desligado) — se a API recusar por falta de dono, definir um AC user ID padrão em api/lead-sessao-estrategica.js."
     }
   ]
 }
