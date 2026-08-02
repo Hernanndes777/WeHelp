@@ -109,7 +109,20 @@ export default async function handler(req, res) {
 
     const contactId = syncData.contact.id;
 
-    // 2. Cria o Deal no pipeline "Webinário", etapa "LEADS APLICAÇÃO WEBNÁRIO"
+    // 2. Aplica a tag "WB Aplicação 05" (id 79) — identifica leads dessa LP
+    // especificamente, mesmo padrão das tags "WB Aplicação"/"WB Aplicação 02".
+    const TAG_WB_APLICACAO_05 = 79;
+    const tagPromise = fetch(`${AC_URL}/api/3/contactTags`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        contactTag: { contact: String(contactId), tag: String(TAG_WB_APLICACAO_05) },
+      }),
+    }).then(async (r) => {
+      if (!r.ok) console.error('Erro ao aplicar tag:', await r.text());
+    }).catch((err) => console.error('Erro ao aplicar tag:', err));
+
+    // 3. Cria o Deal no pipeline "Webinário", etapa "LEADS APLICAÇÃO WEBNÁRIO"
     // owner "6" = mesmo dono usado nos 3 deals que já existem hoje nessa etapa exata
     // (conferido direto na conta em 2026-08-02). Ajuste aqui se o responsável mudar.
     //
@@ -146,7 +159,7 @@ export default async function handler(req, res) {
       if (!r.ok) console.error('Erro ao criar deal:', await r.text());
     }).catch((err) => console.error('Erro ao criar deal:', err));
 
-    // 3. Envia pro Google Sheets — colunas na mesma ordem/nome da planilha
+    // 4. Envia pro Google Sheets — colunas na mesma ordem/nome da planilha
     //    "Agendamentos WB 05" (ver PDF de referência anexado pelo usuário em 2026-08-02).
     const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
         method: 'POST',
@@ -182,7 +195,7 @@ export default async function handler(req, res) {
         }),
       }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
 
-    // 4. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
+    // 5. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -218,7 +231,7 @@ export default async function handler(req, res) {
 
     // Espera as três chamadas em paralelo — a Vercel encerra a function assim que a
     // response sai, então sem esse await o deal/Sheets/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([dealPromise, sheetsPromise, capiPromise]);
+    await Promise.allSettled([tagPromise, dealPromise, sheetsPromise, capiPromise]);
 
     return res.status(200).json({ success: true, contactId });
 
