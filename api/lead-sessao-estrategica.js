@@ -148,6 +148,7 @@ export default async function handler(req, res) {
 
     // 3. Envia pro Google Sheets — colunas na mesma ordem/nome da planilha
     //    "Agendamentos WB 05" (ver PDF de referência anexado pelo usuário em 2026-08-02).
+    let sheetsDebug = { urlConfigured: !!SHEETS_URL, urlLength: SHEETS_URL ? SHEETS_URL.length : 0 };
     const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -180,7 +181,13 @@ export default async function handler(req, res) {
           UTM_Content: UTM_Content || '',
           Politicas_de_privacidade: 'Aceito ao enviar o formulário',
         }),
-      }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
+      }).then(async (r) => {
+        const bodyText = await r.text();
+        sheetsDebug = { ...sheetsDebug, status: r.status, ok: r.ok, body: bodyText.slice(0, 300) };
+      }).catch((err) => {
+        sheetsDebug = { ...sheetsDebug, error: String(err) };
+        console.error('Erro ao enviar pro Sheets:', err);
+      }) : Promise.resolve();
 
     // 4. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
     let capiPromise = Promise.resolve();
@@ -220,7 +227,8 @@ export default async function handler(req, res) {
     // response sai, então sem esse await o deal/Sheets/CAPI corriam risco de nunca completar.
     await Promise.allSettled([dealPromise, sheetsPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, contactId });
+    // [DEBUG TEMPORÁRIO] ver por que o Sheets não está recebendo — remover depois.
+    return res.status(200).json({ success: true, contactId, sheetsDebug });
 
   } catch (err) {
     console.error('Erro geral:', err);
