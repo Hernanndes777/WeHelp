@@ -96,9 +96,21 @@
       "segmento": "fitness",
       "tipo": "captura",
       "funil": "fundo",
-      "status": "publicada (backend pendente — falta URL do Apps Script no Sheets, ver notas)",
+      "status": "publicada — backend 100% funcional e testado em produção (2026-08-02)",
       "origem": "página nova, migrada do GreatPages (mkt.wehelpsoftware.com/vamos-entrar-em-contato-em-breve), criada 2026-08-02",
-      "notas": "Fluxo multi-step (uma pergunta por tela) que substitui o formulário único do GreatPages, terminando no mesmo agendamento via Google Calendar. Captura via api/lead-sessao-estrategica.js: cria/atualiza contato no ActiveCampaign + cria Deal no pipeline 'Webinário' (id 19), etapa 'LEADS APLICAÇÃO WEBNÁRIO' (id 172), usando os custom fields já existentes 39/35/36/37. Precisa das env vars AC_URL, AC_KEY, CAPI_ENDPOINT, META_ACCESS_TOKEN (já configuradas p/ webinario/) + SHEETS_SESSAO_ESTRATEGICA_URL (nova — pendente, depende do Apps Script em 00-base/apps-script-sessao-estrategica.gs ser implantado na planilha 'Agendamentos WB 05'). Deal é criado sem 'owner' (pipeline tem autoassign desligado) — se a API recusar por falta de dono, definir um AC user ID padrão em api/lead-sessao-estrategica.js."
+      "notas": "Fluxo multi-step (uma pergunta por tela) que substitui o formulário único do GreatPages, terminando no mesmo agendamento via Google Calendar. Captura via api/lead-sessao-estrategica.js: cria/atualiza contato no ActiveCampaign + cria Deal no pipeline 'Webinário' (id 19), etapa 'LEADS APLICAÇÃO WEBNÁRIO' (id 172, owner id 6) + tag 'WB Aplicação 05' (id 79), usando os custom fields já existentes 39/35/36/37, e envia pro Sheets via SHEETS_SESSAO_ESTRATEGICA_URL. Confirmado ponta a ponta em produção."
+    },
+    {
+      "slug": "acessar-sala",
+      "path": "/acessar-sala/",
+      "titulo": "ENTRAR AGORA! — redirect pro Google Meet",
+      "produto": "pesquisa-satisfacao",
+      "segmento": "fitness",
+      "tipo": "captura",
+      "funil": "fundo",
+      "status": "publicada (só o slug — MEET_URL é placeholder, ver notas)",
+      "origem": "página nova, criada 2026-08-02",
+      "notas": "Página de redirect puro (sem formulário) pra colar no grupo de WhatsApp do webinário na hora do 'ao vivo' — ver [[project-wehelp-funil-webinario]]. Meta tags og:title/og:description fixas em 'ENTRAR AGORA!' / 'Google Meet Ao Vivo!' pra gerar o card de preview certo no WhatsApp. Redireciona via JS depois de ~600ms (tempo pro Pixel disparar 'WebinarJoinClick'), com botão manual de fallback. [PENDENTE] a constante MEET_URL em acessar-sala/index.html está com placeholder — trocar pelo link real do Google Meet e dar push antes de disparar no grupo. O slug é fixo e reaproveitável toda semana, só o valor de MEET_URL muda a cada ciclo."
     }
   ]
 }
