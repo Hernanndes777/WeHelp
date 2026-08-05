@@ -24,6 +24,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -160,7 +161,7 @@
       border-radius: 50px;
       padding: 15px 22px;
       font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
+      font-size: 16px;
       color: var(--text);
       outline: none;
       transition: border-color .2s;
@@ -184,7 +185,7 @@
       border: 1px solid var(--border);
       border-radius: 50px;
       padding: 15px 30px 15px 14px;
-      font-size: 14px;
+      font-size: 16px;
       color: var(--text);
       font-weight: 500;
       cursor: pointer;
@@ -294,12 +295,7 @@
     }
 
     /* ── Final step ── */
-    .step--final {
-      text-align: center;
-      max-width: 720px;
-      padding-left: 16px;
-      padding-right: 16px;
-    }
+    .step--final { text-align: center; }
     .step--final .step__icon {
       width: 60px; height: 60px;
       border-radius: 50%;
@@ -310,7 +306,6 @@
     .step--final .step__icon i { font-size: 30px; color: var(--blue); }
     .step--final .step__title { font-size: 24px; }
     .step--final .step__subtitle { margin-bottom: 28px; }
-    #calendlyWidget { width: 100%; transition: height .25s ease; }
     .btn--calendar {
       width: 100%;
       background: var(--blue);
@@ -332,12 +327,8 @@
     .btn--calendar:hover { background: var(--blue-hover); transform: translateY(-1px); }
 
     @media (max-width: 480px) {
-      .page { padding: 28px 8px; }
       .wizard { padding: 28px 22px 24px; border-radius: 16px; }
       .step__title { font-size: 19px; }
-      .step--final { padding-left: 4px; padding-right: 4px; }
-      .step--final .step__title,
-      .step--final .step__subtitle { padding: 0 16px; }
     }
   </style>
 </head>
@@ -375,7 +366,7 @@
               <option value="+351">🇵🇹 +351</option>
               <option value="+1">🇺🇸 +1</option>
             </select>
-            <input type="tel" class="input" id="whatsapp" placeholder="* WhatsApp" required />
+            <input type="tel" class="input" id="whatsapp" placeholder="* WhatsApp" maxlength="15" required />
           </div>
           <p class="field-error" id="phoneError">Digite um número válido com DDD</p>
         </div>
@@ -447,7 +438,10 @@
       <div class="step__icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
       <h1 class="step__title">Prontinho! Agora vamos agendar sua sessão.</h1>
       <p class="step__subtitle">Escolha o melhor dia e horário pra conversar com um especialista WeHelp.</p>
-      <div id="calendlyWidget" style="min-width:280px;height:630px;"></div>
+      <button type="button" class="btn--calendar" id="btnOpenCalendly">
+        <i class="ti ti-calendar" aria-hidden="true"></i>
+        Ver horários disponíveis
+      </button>
     </div>
   </div>
 
@@ -460,15 +454,10 @@
     const params = new URLSearchParams(location.search);
     const testEventCode = params.get('fbtest') || null;
 
-    // Calendly não tem altura fixa de conteúdo — ele avisa a altura real via
-    // postMessage, e a gente ajusta o container pra não sobrar nem faltar espaço.
-    window.addEventListener('message', (e) => {
-      if (e.origin !== 'https://calendly.com') return;
-      if (e.data.event === 'calendly.page_height') {
-        const widget = document.getElementById('calendlyWidget');
-        if (widget) widget.style.height = e.data.payload.height + 'px';
-      }
-    });
+    // Guarda os dados do lead pra pré-preencher o Calendly quando o botão
+    // "Ver horários disponíveis" for clicado (popup, não embutido — o widget
+    // inline dava zoom e prendia o scroll dentro dele no mobile).
+    let calendlyPrefill = null;
 
     function getCookie(name) {
       const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
@@ -560,6 +549,17 @@
     document.getElementById('academia').addEventListener('input', () => validateStep(currentStep));
     document.getElementById('ddiSelect').addEventListener('change', () => validateStep(currentStep));
 
+    document.getElementById('whatsapp').addEventListener('input', (e) => {
+      // Trava em dígitos + limita ao tamanho máximo válido pro DDI selecionado,
+      // pra não deixar digitar um número absurdamente maior que o real. Roda
+      // depois valida de novo, porque isso muda o valor por baixo do listener
+      // genérico que já rodou com o valor ainda não filtrado.
+      const ddi = document.getElementById('ddiSelect').value;
+      const maxDigits = ddi === '+55' ? 11 : 14;
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, maxDigits);
+      validateStep(currentStep);
+    });
+
     document.getElementById('whatsapp').addEventListener('blur', () => {
       const el = document.getElementById('whatsapp');
       const ddi = document.getElementById('ddiSelect').value;
@@ -620,23 +620,16 @@
       document.getElementById('wizard').style.display = 'none';
       document.getElementById('finalStep').style.display = 'block';
 
-      // Calendly embutido, já com nome/e-mail/telefone/empresa pré-preenchidos —
-      // evento "Apresentação" do Daniel (a1=Telefone, a2=Empresa, nessa ordem,
-      // diferente do evento "Ativação" que usava Academia/WhatsApp).
-      if (typeof Calendly !== 'undefined') {
-        Calendly.initInlineWidget({
-          url: 'https://calendly.com/wehelp-software/apresentacao?primary_color=1B6EF3&hide_gdpr_banner=1',
-          parentElement: document.getElementById('calendlyWidget'),
-          prefill: {
-            name: data.Seu_Nome_Completo,
-            email: data.E_mail_Profissional,
-            customAnswers: {
-              a1: data.WhatsApp,
-              a2: data.Nome_da_sua_academia,
-            },
-          },
-        });
-      }
+      // Guarda o prefill pro popup do Calendly (evento "Apresentação" do Daniel —
+      // a1=Telefone, a2=Empresa, nessa ordem, diferente do evento "Ativação").
+      calendlyPrefill = {
+        name: data.Seu_Nome_Completo,
+        email: data.E_mail_Profissional,
+        customAnswers: {
+          a1: data.WhatsApp,
+          a2: data.Nome_da_sua_academia,
+        },
+      };
 
       if (typeof fbq === 'function') {
         const phoneDigits = whatsappDigits.replace(/\D/g, '');
@@ -652,6 +645,17 @@
         body: JSON.stringify(data),
       }).catch(() => {});
     }
+
+    document.getElementById('btnOpenCalendly').addEventListener('click', () => {
+      if (typeof Calendly === 'undefined') {
+        window.open('https://calendly.com/wehelp-software/apresentacao', '_blank');
+        return;
+      }
+      Calendly.initPopupWidget({
+        url: 'https://calendly.com/wehelp-software/apresentacao?primary_color=1B6EF3&hide_gdpr_banner=1',
+        prefill: calendlyPrefill || {},
+      });
+    });
 
     showStep(currentStep);
   </script>
