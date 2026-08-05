@@ -30,8 +30,8 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--navy);
-      color: #fff;
+      background: var(--bg);
+      color: var(--text);
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
@@ -42,12 +42,12 @@
       --blue:       #1B6EF3;
       --blue-hover: #1457c8;
       --blue-light: #e8f0ff;
-      --navy:       #0a1128;
-      --navy-2:     #0f1b3d;
-      --card:       #101c3f;
-      --border:     #1e3060;
-      --body:       #b0c4e8;
-      --muted:      #7286b3;
+      --bg:         #f4f6fb;
+      --card:       #ffffff;
+      --border:     #e2e8f0;
+      --text:       #0a1128;
+      --body:       #4a5568;
+      --muted:      #94a3b8;
     }
 
     body::before {
@@ -55,8 +55,8 @@
       position: fixed;
       inset: 0;
       background:
-        radial-gradient(1100px 600px at 15% -10%, rgba(27,110,243,.25), transparent 60%),
-        radial-gradient(900px 500px at 100% 110%, rgba(27,110,243,.18), transparent 60%);
+        radial-gradient(1100px 600px at 15% -10%, rgba(27,110,243,.14), transparent 60%),
+        radial-gradient(900px 500px at 100% 110%, rgba(27,110,243,.10), transparent 60%);
       pointer-events: none;
       z-index: 0;
     }
@@ -79,16 +79,14 @@
       gap: 10px;
       margin-bottom: 36px;
     }
-    .brand__icon {
-      width: 36px; height: 36px;
-      background: var(--blue);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
+    .brand__logo {
+      height: 32px;
+      width: auto;
+      display: block;
     }
-    .brand__icon i { font-size: 20px; color: #fff; }
     .brand span {
       font-family: 'Figtree', sans-serif;
-      font-size: 21px; font-weight: 800; color: #fff;
+      font-size: 21px; font-weight: 800; color: var(--text);
     }
 
     /* ── WIZARD CARD ── */
@@ -99,7 +97,7 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 36px 32px 28px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      box-shadow: 0 20px 60px rgba(10,17,40,.08);
     }
 
     .wizard__progress {
@@ -143,7 +141,7 @@
       font-family: 'Figtree', sans-serif;
       font-size: 22px;
       font-weight: 800;
-      color: #fff;
+      color: var(--text);
       line-height: 1.3;
       margin-bottom: 8px;
     }
@@ -157,13 +155,13 @@
     .field { margin-bottom: 14px; }
     .input, .select {
       width: 100%;
-      background: #fff;
-      border: 1px solid transparent;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 50px;
       padding: 15px 22px;
       font-family: 'DM Sans', sans-serif;
       font-size: 14px;
-      color: #0a1128;
+      color: var(--text);
       outline: none;
       transition: border-color .2s;
     }
@@ -172,7 +170,7 @@
     .input.invalid { border-color: #ef4444; }
     .field-error {
       font-size: 12px;
-      color: #fca5a5;
+      color: #dc2626;
       margin-top: 6px;
       padding-left: 20px;
       display: none;
@@ -182,12 +180,12 @@
     .phone-row { display: flex; gap: 8px; align-items: stretch; }
     .ddi-select {
       flex-shrink: 0;
-      background: #fff;
-      border: 1px solid transparent;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 50px;
       padding: 15px 30px 15px 14px;
       font-size: 14px;
-      color: #0a1128;
+      color: var(--text);
       font-weight: 500;
       cursor: pointer;
       outline: none;
@@ -209,8 +207,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #fff;
-      border: 2px solid transparent;
+      background: var(--bg);
+      border: 2px solid var(--border);
       border-radius: 14px;
       padding: 14px 18px;
       cursor: pointer;
@@ -236,7 +234,7 @@
     }
     .option__label {
       font-size: 14px;
-      color: #0a1128;
+      color: var(--text);
       line-height: 1.4;
     }
 
@@ -265,10 +263,10 @@
     .btn--prev {
       flex: 0 0 auto;
       width: 52px;
-      background: rgba(255,255,255,.06);
-      color: #fff;
+      background: rgba(10,17,40,.05);
+      color: var(--text);
     }
-    .btn--prev:hover { background: rgba(255,255,255,.12); }
+    .btn--prev:hover { background: rgba(10,17,40,.09); }
     .btn--next {
       background: var(--blue);
       color: #fff;
@@ -341,7 +339,7 @@
 
   <div class="page">
     <div class="brand">
-      <div class="brand__icon"><i class="ti ti-users" aria-hidden="true"></i></div>
+      <img src="../shared/logo-wehelp.png" alt="WeHelp" class="brand__logo" />
       <span>WeHelp</span>
     </div>
 
