@@ -294,7 +294,7 @@
     }
 
     /* ── Final step ── */
-    .step--final { text-align: center; }
+    .step--final { text-align: center; max-width: 720px; }
     .step--final .step__icon {
       width: 60px; height: 60px;
       border-radius: 50%;
@@ -437,12 +437,12 @@
       <div class="step__icon"><i class="ti ti-calendar-check" aria-hidden="true"></i></div>
       <h1 class="step__title">Prontinho! Agora vamos agendar sua sessão.</h1>
       <p class="step__subtitle">Escolha o melhor dia e horário pra conversar com um especialista WeHelp.</p>
-      <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0zlcWkqfzcp8oIwEBUkRdX3lH2t5QZw1rpMf8gV8G1rqxH2cKEtNLOaJvFjpYsinsPWyqR3FBQ" target="_blank" rel="noopener" class="btn--calendar" id="calendarLink">
-        <i class="ti ti-calendar" aria-hidden="true"></i>
-        Ver horários disponíveis
-      </a>
+      <div id="calendlyWidget" style="min-width:280px;height:680px;"></div>
     </div>
   </div>
+
+  <!-- Calendly -->
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
   <script>
     const TOTAL_STEPS = 5;
@@ -599,6 +599,24 @@
       // Mostra a etapa final imediatamente — não trava o usuário esperando o backend
       document.getElementById('wizard').style.display = 'none';
       document.getElementById('finalStep').style.display = 'block';
+
+      // Calendly embutido, já com nome/e-mail/academia/whatsapp pré-preenchidos —
+      // evento "Ativação do Módulo de Retenção" (mesmo usado hoje, ver 00-base se
+      // decidirem separar um evento específico de diagnóstico depois).
+      if (typeof Calendly !== 'undefined') {
+        Calendly.initInlineWidget({
+          url: 'https://calendly.com/sessao_estrategica_wehelp/ativacao-do-modulo-de-retencao?primary_color=1B6EF3&hide_gdpr_banner=1',
+          parentElement: document.getElementById('calendlyWidget'),
+          prefill: {
+            name: data.Seu_Nome_Completo,
+            email: data.E_mail_Profissional,
+            customAnswers: {
+              a1: data.Nome_da_sua_academia,
+              a2: data.WhatsApp,
+            },
+          },
+        });
+      }
 
       if (typeof fbq === 'function') {
         const phoneDigits = whatsappDigits.replace(/\D/g, '');
