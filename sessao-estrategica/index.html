@@ -600,19 +600,19 @@
       document.getElementById('wizard').style.display = 'none';
       document.getElementById('finalStep').style.display = 'block';
 
-      // Calendly embutido, já com nome/e-mail/academia/whatsapp pré-preenchidos —
-      // evento "Ativação do Módulo de Retenção" (mesmo usado hoje, ver 00-base se
-      // decidirem separar um evento específico de diagnóstico depois).
+      // Calendly embutido, já com nome/e-mail/telefone/empresa pré-preenchidos —
+      // evento "Apresentação" do Daniel (a1=Telefone, a2=Empresa, nessa ordem,
+      // diferente do evento "Ativação" que usava Academia/WhatsApp).
       if (typeof Calendly !== 'undefined') {
         Calendly.initInlineWidget({
-          url: 'https://calendly.com/sessao_estrategica_wehelp/ativacao-do-modulo-de-retencao?primary_color=1B6EF3&hide_gdpr_banner=1',
+          url: 'https://calendly.com/wehelp-software/apresentacao?primary_color=1B6EF3&hide_gdpr_banner=1',
           parentElement: document.getElementById('calendlyWidget'),
           prefill: {
             name: data.Seu_Nome_Completo,
             email: data.E_mail_Profissional,
             customAnswers: {
-              a1: data.Nome_da_sua_academia,
-              a2: data.WhatsApp,
+              a1: data.WhatsApp,
+              a2: data.Nome_da_sua_academia,
             },
           },
         });
