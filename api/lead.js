@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   const AC_URL = process.env.AC_URL;
   const AC_KEY = process.env.AC_KEY;
   const LIST_ID = 20;           // Lista "Webinário"
-  const TAG_ID = 78;            // Tag "Webinário #005"
+  const TAG_ID = 80;            // Tag "Webinário #006"
   const FIELD_CLIENTES = 27;    // Campo "Quantos alunos ativos você tem atualmente?"
   const FIELD_UTM_SOURCE = 28;
   const FIELD_UTM_CAMPAIGN = 29;
