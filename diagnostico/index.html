@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>Gestão da Experiência do Cliente com Foco em Retenção — WeHelp</title>
+  <meta name="description" content="Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba o que seu cliente pensa em tempo real." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: #0a1128;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; }
+    ul { list-style: none; }
+
+    :root {
+      --blue:       #1B6EF3;
+      --blue-hover: #1457c8;
+      --blue-light: #e8f0ff;
+      --navy:       #0a1128;
+      --body:       #4a5568;
+      --border:     #e2e8f0;
+      --bg:         #f4f6fb;
+      --green:      #16a34a;
+    }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--blue); background: var(--blue-light);
+      padding: 7px 16px; border-radius: 50px;
+    }
+    .section-tag {
+      display: inline-block;
+      font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--blue); background: var(--blue-light);
+      padding: 6px 16px; border-radius: 4px; margin-bottom: 16px;
+    }
+    .section-head { text-align: center; max-width: 720px; margin: 0 auto 52px; }
+    .section-head h2 {
+      font-family: 'Figtree', sans-serif;
+      font-size: 32px; font-weight: 900; line-height: 1.25; letter-spacing: -.4px;
+      color: var(--navy);
+    }
+    .section-head p { font-size: 16px; color: var(--body); line-height: 1.7; margin-top: 14px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(180deg, #0a1128 0%, #0f1f4b 100%);
+      padding: 56px 0 72px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(900px 500px at 85% 0%, rgba(27,110,243,.35), transparent 60%);
+      pointer-events: none;
+    }
+    .hero__brand { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; position: relative; z-index: 1; }
+    .hero__brand img { height: 30px; }
+    .hero__brand span { font-family: 'Figtree', sans-serif; font-size: 19px; font-weight: 800; color: #fff; }
+
+    .hero__grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 56px;
+      align-items: start;
+      position: relative; z-index: 1;
+    }
+    .hero__headline {
+      font-family: 'Figtree', sans-serif;
+      font-size: 42px; font-weight: 900; line-height: 1.15; letter-spacing: -1px;
+      color: #fff; margin: 22px 0 20px;
+    }
+    .hero__sub { font-size: 16px; line-height: 1.75; color: #b0c4e8; max-width: 520px; }
+
+    .hero__proof {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.12);
+    }
+    .hero__proof li { text-align: left; }
+    .hero__proof .num {
+      font-family: 'Figtree', sans-serif; font-size: 24px; font-weight: 900; color: #fff; display: block;
+    }
+    .hero__proof .label { font-size: 12px; color: #8899bb; margin-top: 2px; }
+
+    /* ── FORM CARD ── */
+    .formcard {
+      background: #fff; border-radius: 20px; padding: 32px 30px 28px;
+      box-shadow: 0 30px 70px rgba(0,0,0,.35);
+    }
+    .formcard h3 {
+      font-family: 'Figtree', sans-serif; font-size: 20px; font-weight: 800; color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .formcard > p { font-size: 13.5px; color: var(--body); margin-bottom: 22px; }
+    .field { margin-bottom: 12px; }
+    .field label {
+      display: block; font-size: 12px; font-weight: 700; color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .input, select.input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 10px; padding: 13px 14px; font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px; color: var(--navy); outline: none; transition: border-color .2s;
+      appearance: none;
+    }
+    select.input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center;
+      padding-right: 34px;
+    }
+    .input:focus { border-color: var(--blue); }
+    .formcard__btn {
+      width: 100%; background: var(--blue); color: #fff; border: none;
+      border-radius: 10px; padding: 16px; font-size: 14px; font-weight: 700;
+      letter-spacing: .4px; margin-top: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background .2s, transform .2s;
+    }
+    .formcard__btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
+    .formcard__btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .formcard__hint {
+      display: flex; align-items: flex-start; gap: 6px;
+      font-size: 12px; color: #94a3b8; margin-top: 14px; line-height: 1.5;
+    }
+    .formcard__hint i { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+
+    /* ── LOGOS BAR ── */
+    .logosbar { background: var(--bg); padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .logosbar__inner { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; opacity: .55; }
+    .logosbar__inner span { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 15px; color: var(--navy); }
+
+    /* ── DOR SECTION ── */
+    .section { padding: 88px 0; }
+    .cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .paincard {
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 30px 26px; box-shadow: 0 2px 14px rgba(10,17,40,.04);
+    }
+    .paincard__num {
+      width: 40px; height: 40px; border-radius: 10px; background: #fef2f2; color: #dc2626;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 18px;
+    }
+    .paincard h3 { font-family: 'Figtree', sans-serif; font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 10px; line-height: 1.35; }
+    .paincard p { font-size: 14px; color: var(--body); line-height: 1.7; }
+
+    /* ── METODO SECTION ── */
+    .section--alt { background: var(--bg); }
+    .metodo { display: flex; flex-direction: column; gap: 22px; }
+    .metoblock {
+      background: #fff; border: 1px solid var(--border); border-radius: 18px;
+      padding: 34px 32px; display: grid; grid-template-columns: 64px 1fr; gap: 24px;
+    }
+    .metoblock__icon {
+      width: 56px; height: 56px; border-radius: 14px; background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .metoblock__icon i { font-size: 26px; color: var(--blue); }
+    .metoblock h3 { font-family: 'Figtree', sans-serif; font-size: 19px; font-weight: 800; color: var(--navy); margin-bottom: 14px; }
+    .metoblock ul { display: flex; flex-direction: column; gap: 12px; }
+    .metoblock li { font-size: 14.5px; color: var(--body); line-height: 1.65; padding-left: 22px; position: relative; }
+    .metoblock li::before {
+      content: '✓'; position: absolute; left: 0; top: 1px; color: var(--blue); font-weight: 700;
+    }
+    .metoblock li strong { color: var(--navy); }
+
+    /* ── SEGMENTOS ── */
+    .cards5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+    .segcard {
+      background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 24px 20px;
+    }
+    .segcard i { font-size: 24px; color: var(--blue); margin-bottom: 14px; display: block; }
+    .segcard h4 { font-family: 'Figtree', sans-serif; font-size: 14.5px; font-weight: 800; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
+    .segcard p { font-size: 12.5px; color: var(--body); line-height: 1.6; }
+
+    /* ── DEPOIMENTOS ── */
+    .testicard {
+      background: #fff; border: 1px solid var(--border); border-radius: 18px;
+      padding: 36px; max-width: 720px; margin: 0 auto 40px;
+      box-shadow: 0 2px 20px rgba(10,17,40,.05);
+    }
+    .testicard p { font-size: 17px; color: var(--navy); line-height: 1.7; font-style: italic; margin-bottom: 20px; }
+    .testicard__author { display: flex; align-items: center; gap: 12px; }
+    .testicard__avatar {
+      width: 42px; height: 42px; border-radius: 50%; background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Figtree', sans-serif; font-weight: 800; color: var(--blue);
+    }
+    .testicard__author strong { font-size: 14px; color: var(--navy); display: block; }
+    .testicard__author span { font-size: 12.5px; color: var(--body); }
+
+    .badge {
+      max-width: 560px; margin: 0 auto; text-align: center;
+      background: linear-gradient(135deg, #0a1128, #0f1f4b);
+      border-radius: 18px; padding: 32px; color: #fff;
+    }
+    .badge .icon { font-size: 34px; margin-bottom: 10px; }
+    .badge h4 { font-family: 'Figtree', sans-serif; font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+    .badge p { font-size: 13.5px; color: #b0c4e8; line-height: 1.6; }
+
+    /* ── CTA FINAL ── */
+    .ctafinal {
+      background: linear-gradient(135deg, #0a1128, #0f1f4b);
+      border-radius: 24px; padding: 56px 40px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .ctafinal::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(700px 400px at 50% 0%, rgba(27,110,243,.3), transparent 60%);
+    }
+    .ctafinal__inner { position: relative; z-index: 1; }
+    .ctafinal h2 { font-family: 'Figtree', sans-serif; font-size: 30px; font-weight: 900; color: #fff; max-width: 640px; margin: 0 auto 14px; line-height: 1.25; }
+    .ctafinal p { font-size: 15.5px; color: #b0c4e8; max-width: 560px; margin: 0 auto 30px; line-height: 1.7; }
+    .ctafinal__btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--blue); color: #fff; border: none;
+      padding: 18px 38px; border-radius: 50px; font-size: 14px; font-weight: 700;
+      letter-spacing: .5px; transition: background .2s, transform .2s;
+    }
+    .ctafinal__btn:hover { background: var(--blue-hover); transform: translateY(-2px); }
+
+    /* ── FAQ ── */
+    .faq { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .faqitem { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: #fff; }
+    .faqitem__q {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; background: none; border: none; text-align: left;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--navy);
+    }
+    .faqitem__q i { font-size: 18px; color: var(--blue); transition: transform .2s; flex-shrink: 0; margin-left: 12px; }
+    .faqitem.open .faqitem__q i { transform: rotate(180deg); }
+    .faqitem__a {
+      max-height: 0; overflow: hidden; transition: max-height .25s ease;
+      padding: 0 24px;
+    }
+    .faqitem.open .faqitem__a { max-height: 220px; padding: 0 24px 20px; }
+    .faqitem__a p { font-size: 14px; color: var(--body); line-height: 1.7; }
+
+    /* ── FOOTER ── */
+    .footer { padding: 32px 0; text-align: center; border-top: 1px solid var(--border); }
+    .footer p { font-size: 12px; color: #94a3b8; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      .hero__grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero__headline { font-size: 32px; }
+      .cards3 { grid-template-columns: 1fr; }
+      .cards5 { grid-template-columns: repeat(2, 1fr); }
+      .metoblock { grid-template-columns: 1fr; }
+      .section { padding: 64px 0; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 18px; }
+      .hero { padding: 36px 0 48px; }
+      .hero__headline { font-size: 26px; letter-spacing: -.4px; }
+      .hero__proof { grid-template-columns: 1fr; gap: 14px; }
+      .section-head h2 { font-size: 24px; }
+      .cards5 { grid-template-columns: 1fr; }
+      .formcard { padding: 26px 20px 22px; }
+      .ctafinal { padding: 40px 22px; }
+      .ctafinal h2 { font-size: 22px; }
+      .badge { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__brand">
+        <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+        <span>WeHelp</span>
+      </div>
+
+      <div class="hero__grid">
+        <div>
+          <span class="tag">Geração de Dados & Retenção B2B</span>
+          <h1 class="hero__headline">Pare de perder clientes para a concorrência sem nem saber o motivo.</h1>
+          <p class="hero__sub">Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba exatamente o que seu cliente pensa em tempo real — e resolva insatisfações antes que virem cancelamento ou avaliação negativa.</p>
+
+          <ul class="hero__proof">
+            <li><span class="num">+17,4 Mi</span><span class="label">pesquisas enviadas</span></li>
+            <li><span class="num">+2.653</span><span class="label">clientes satisfeitos</span></li>
+            <li><span class="num">+6.560</span><span class="label">usuários registrados</span></li>
+          </ul>
+        </div>
+
+        <div class="formcard">
+          <h3>Descubra como aplicar na sua empresa em 15 minutos</h3>
+          <p>Preencha os dados abaixo para falar com um consultor especialista.</p>
+
+          <form id="leadForm" novalidate>
+            <div class="field">
+              <label for="nome">Nome completo</label>
+              <input type="text" class="input" id="nome" placeholder="Digite seu nome completo" required />
+            </div>
+            <div class="field">
+              <label for="email">E-mail corporativo</label>
+              <input type="email" class="input" id="email" placeholder="seuemail@suaempresa.com.br" required />
+            </div>
+            <div class="field">
+              <label for="whatsapp">WhatsApp</label>
+              <input type="tel" class="input" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required />
+            </div>
+            <div class="field">
+              <label for="empresa">Nome da empresa</label>
+              <input type="text" class="input" id="empresa" placeholder="Nome da sua empresa" required />
+            </div>
+            <div class="field">
+              <label for="segmento">Qual é o seu segmento?</label>
+              <select class="input" id="segmento" required>
+                <option value="" disabled selected>Selecione</option>
+                <option>Academias & Fitness</option>
+                <option>Saúde & Clínicas</option>
+                <option>SaaS & Tecnologia</option>
+                <option>Serviços B2B</option>
+                <option>Varejo & Franquias</option>
+                <option>Outros</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="clientes">Quantos clientes ativos você atende hoje?</label>
+              <select class="input" id="clientes" required>
+                <option value="" disabled selected>Selecione</option>
+                <option>Até 150 clientes</option>
+                <option>151 a 300 clientes</option>
+                <option>301 a 1.000 clientes</option>
+                <option>Mais de 1.000 clientes</option>
+              </select>
+            </div>
+
+            <button type="submit" class="formcard__btn" id="submitBtn">
+              <span id="submitText">👉 Falar com um especialista</span>
+            </button>
+            <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um consultor entrará em contato em até 15 minutos em horário comercial.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGOS BAR -->
+  <div class="logosbar">
+    <div class="container logosbar__inner">
+      <span>Selfit</span><span>ABC Evo</span><span>Bodytech</span><span>Celfit</span><span>Pano Bianco</span>
+    </div>
+  </div>
+
+  <!-- DOR REAL -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">A dor real do seu negócio</span>
+        <h2>O cliente insatisfeito raramente reclama. Ele simplesmente não volta.</h2>
+      </div>
+      <div class="cards3">
+        <div class="paincard">
+          <div class="paincard__num">1</div>
+          <h3>A Armadilha do Google Forms e do Papel</h3>
+          <p>Formulários longos e fora de hora geram menos de 3% de resposta. Você toma decisões estratégicas no escuro, baseando-se apenas em opiniões da equipe, não em dados.</p>
+        </div>
+        <div class="paincard">
+          <div class="paincard__num">2</div>
+          <h3>Dados Mortos em Planilhas do Excel</h3>
+          <p>Analisar pesquisas semanas depois que foram preenchidas não salva clientes. Quando a insatisfação chega à diretoria, o contrato já foi cancelado ou o cliente já foi embora.</p>
+        </div>
+        <div class="paincard">
+          <div class="paincard__num">3</div>
+          <h3>Reclamações Públicas e Dano à Reputação</h3>
+          <p>Sem um canal direto e rápido para desabafar, o cliente insatisfeito expõe sua marca no Reclame Aqui, nas avaliações do Google ou diretamente para o mercado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MÉTODO WEHELP -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">O método WeHelp</span>
+        <h2>Saia do achismo. Escute seu cliente no canal certo e aja em tempo real.</h2>
+      </div>
+
+      <div class="metodo">
+        <div class="metoblock">
+          <div class="metoblock__icon"><i class="ti ti-broadcast" aria-hidden="true"></i></div>
+          <div>
+            <h3>1. Pesquisas no Momento Exato da Jornada</h3>
+            <ul>
+              <li><strong>WhatsApp Oficial & E-mail:</strong> envio de pesquisas curtas e inteligentes com resposta em 1 clique.</li>
+              <li><strong>QR Codes no Ponto de Contato:</strong> colete opiniões na recepção, vestiário, balcão ou mesas em segundos.</li>
+              <li><strong>Widget no Site ou Sistema:</strong> capture a percepção de uso direto na experiência digital.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="metoblock">
+          <div class="metoblock__icon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+          <div>
+            <h3>2. Dashboards em Tempo Real sem Complicação</h3>
+            <ul>
+              <li><strong>Painéis Prontos para Decisão:</strong> visualize índices gerais (NPS, CSAT), gráficos de tendência e motivos detalhados de cada nota.</li>
+              <li><strong>Dashboard TV:</strong> transmita os indicadores da experiência do cliente em tempo real nas telas da sua empresa, engajando toda a equipe.</li>
+              <li><strong>Comparativo entre Unidades:</strong> compare filiais, setores ou franquias em um único painel centralizado.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="metoblock">
+          <div class="metoblock__icon"><i class="ti ti-headset" aria-hidden="true"></i></div>
+          <div>
+            <h3>3. Central de Atendimento Integrada (Fechamento de Ciclo)</h3>
+            <ul>
+              <li><strong>Alertas Automáticos de Insatisfação:</strong> se um cliente atribui uma nota baixa, um chamado é aberto imediatamente na tela do seu time em formato Kanban.</li>
+              <li><strong>Tratativa Rápida no WhatsApp:</strong> aja no mesmo dia para entender o problema, resolver o atrito e transformar detratores em promotores da sua marca.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGMENTOS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Adaptado para o seu segmento</span>
+        <h2>Uma solução desenhada para a realidade do seu mercado</h2>
+      </div>
+      <div class="cards5">
+        <div class="segcard">
+          <i class="ti ti-briefcase" aria-hidden="true"></i>
+          <h4>Serviços B2B & Corporativo</h4>
+          <p>Padronize a entrega entre equipes, meça a lealdade dos seus contratos e evite cancelamentos.</p>
+        </div>
+        <div class="segcard">
+          <i class="ti ti-heart-rate-monitor" aria-hidden="true"></i>
+          <h4>Saúde & Clínicas</h4>
+          <p>Avalie o atendimento da recepção e a experiência pós-consulta, preservando a reputação da sua marca.</p>
+        </div>
+        <div class="segcard">
+          <i class="ti ti-code" aria-hidden="true"></i>
+          <h4>SaaS & Tecnologia</h4>
+          <p>Identifique pontos de atrito no produto, colete feedbacks contínuos e reduza a taxa de churn.</p>
+        </div>
+        <div class="segcard">
+          <i class="ti ti-barbell" aria-hidden="true"></i>
+          <h4>Fitness, Academias & Estúdios</h4>
+          <p>Acompanhe a percepção sobre aulas, professores e estrutura física, eliminando os motivos de evasão.</p>
+        </div>
+        <div class="segcard">
+          <i class="ti ti-building-store" aria-hidden="true"></i>
+          <h4>Varejo & Franquias</h4>
+          <p>Padronize a experiência entre lojas e unidades, identificando rápido onde o atendimento está falhando.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Prova social</span>
+        <h2>Quem substituiu o achismo por dados já colhe resultados no caixa</h2>
+      </div>
+
+      <div class="testicard">
+        <p>"Saímos de um cenário de opiniões divididas na equipe para uma gestão 100% guiada pela voz do cliente. Conseguimos responder atritos no mesmo dia e aumentamos nossa retenção significativamente."</p>
+        <div class="testicard__author">
+          <div class="testicard__avatar">FM</div>
+          <div>
+            <strong>Cliente WeHelp</strong>
+            <span>Gestão de Experiência do Cliente</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="badge">
+        <div class="icon">🏆</div>
+        <h4>Movimento de Excelência em Experiência do Cliente</h4>
+        <p>Sua empresa qualificada para os mais altos padrões de satisfação e retenção do mercado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="section">
+    <div class="container">
+      <div class="ctafinal">
+        <div class="ctafinal__inner">
+          <h2>Pronto para modernizar a gestão de satisfação da sua empresa?</h2>
+          <p>Converse em 15 minutos com um de nossos especialistas. Analisaremos sua operação atual e mostraremos como colocar sua estrutura de pesquisas para rodar em poucos dias.</p>
+          <a href="#leadForm" class="ctafinal__btn" id="ctaFinalBtn">
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+            Solicitar diagnóstico com especialista
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">Perguntas frequentes</span>
+        <h2>Ainda tem dúvidas?</h2>
+      </div>
+      <div class="faq" id="faq">
+        <div class="faqitem">
+          <button class="faqitem__q" type="button">
+            Quanto tempo leva para colocar as pesquisas no ar?
+            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="faqitem__a"><p>A plataforma é 100% na nuvem e pronta para uso. Com nossos modelos pré-configurados, sua primeira pesquisa pode ser enviada no mesmo dia.</p></div>
+        </div>
+        <div class="faqitem">
+          <button class="faqitem__q" type="button">
+            Posso personalizar os envios com a marca da minha empresa?
+            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="faqitem__a"><p>Sim. Todos os e-mails, links e pesquisas recebem a sua identidade visual, logo e cores corporativas.</p></div>
+        </div>
+        <div class="faqitem">
+          <button class="faqitem__q" type="button">
+            Quais metodologias de pesquisa a plataforma suporta?
+            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="faqitem__a"><p>Você pode aplicar NPS® (Net Promoter Score), eNPS (pesquisa interna com colaboradores) ou criar questionários personalizados para o seu contexto.</p></div>
+        </div>
+        <div class="faqitem">
+          <button class="faqitem__q" type="button">
+            A plataforma se integra ao meu CRM ou sistema de gestão?
+            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="faqitem__a"><p>Sim, possuímos integrações e suporte via API e Webhooks para automatizar o envio de pesquisas após eventos da sua operação. Fale com um especialista para confirmar a integração com o seu sistema específico.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container"><p>© 2026 WeHelp · Todos os direitos reservados</p></div>
+  </footer>
+
+  <script>
+    // ── FAQ accordion ──
+    document.querySelectorAll('.faqitem__q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.faqitem').classList.toggle('open');
+      });
+    });
+
+    // ── Lead form ──
+    const PIXEL_ID = '1106401696374974';
+    const params = new URLSearchParams(location.search);
+    const testEventCode = params.get('fbtest') || null;
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+    function getEventId() {
+      let id = sessionStorage.getItem('lead_event_id');
+      if (!id) {
+        id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('lead_event_id', id);
+      }
+      return id;
+    }
+
+    document.getElementById('whatsapp').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 11);
+    });
+
+    const form = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nome = form.nome.value.trim();
+      const email = form.email.value.trim();
+      const whatsapp = form.whatsapp.value.trim();
+      const empresa = form.empresa.value.trim();
+      const segmento = form.segmento.value;
+      const clientes = form.clientes.value;
+
+      if (!nome || !email || whatsapp.length < 10 || !empresa || !segmento || !clientes) {
+        alert('Preencha todos os campos corretamente antes de continuar.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Enviando...';
+
+      const eventId = getEventId();
+      const data = {
+        Nome_Completo: nome,
+        E_mail_Corporativo: email,
+        WhatsApp: '+55' + whatsapp,
+        Nome_da_Empresa: empresa,
+        Segmento: segmento,
+        Quantos_clientes_ativos: clientes,
+        utm_source: params.get('utm_source') || '',
+        utm_medium: params.get('utm_medium') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        utm_term: params.get('utm_term') || '',
+        utm_id: params.get('utm_id') || '',
+        fbclid: params.get('fbclid') || '',
+        gclid: params.get('gclid') || '',
+        referral_source: document.referrer || '',
+        url: location.href,
+        event_id: eventId,
+        fbc: getCookie('_fbc'),
+        fbp: getCookie('_fbp'),
+        test_event_code: testEventCode || '',
+      };
+
+      if (typeof fbq === 'function') {
+        fbq('init', PIXEL_ID, { em: email, ph: '55' + whatsapp });
+        const pixelExtras = { eventID: eventId };
+        if (testEventCode) pixelExtras.test_event_code = testEventCode;
+        fbq('track', 'Lead', {}, pixelExtras);
+      }
+
+      fetch('/api/lead-diagnostico', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).catch(() => {});
+
+      window.location.href = '/diagnostico/obrigado';
+    });
+  </script>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+</body>
+</html>
