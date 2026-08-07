@@ -23,7 +23,7 @@
   <meta name="description" content="Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba o que seu cliente pensa em tempo real." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
 
   <style>
@@ -32,310 +32,285 @@
     body {
       font-family: 'DM Sans', sans-serif;
       background: #fff;
-      color: #14192b;
+      color: #1a2036;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
     a { text-decoration: none; color: inherit; }
     button { font-family: inherit; cursor: pointer; }
     ul { list-style: none; }
-    ::selection { background: #f2b134; color: #14192b; }
 
     :root {
-      --ink:        #0a0e1f;
-      --ink-2:      #101632;
       --blue:       #1B6EF3;
       --blue-hover: #1457c8;
-      --blue-tint:  #eef4ff;
-      --amber:      #f2b134;
-      --paper:      #fdfcfa;
-      --line:       #e7e5e0;
-      --body:       #565b6b;
-      --navy:       #14192b;
-      --serif: 'Fraunces', serif;
-      --mono: 'DM Mono', monospace;
-    }
-
-    /* grain texture, reused across dark sections */
-    .grain { position: relative; }
-    .grain::after {
-      content: '';
-      position: absolute; inset: 0; pointer-events: none; z-index: 2;
-      opacity: .35; mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      --blue-tint:  #eaf1ff;
+      --navy:       #1a2036;
+      --body:       #5b6178;
+      --line:       #e7ebf3;
+      --bg:         #f6f8fd;
+      --amber:      #ffb020;
+      --disp: 'Sora', sans-serif;
     }
 
     .container { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
     .eyebrow {
-      font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--blue);
     }
+    .eyebrow::before { content: ''; width: 16px; height: 2px; border-radius: 2px; background: var(--amber); }
 
-    [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    [data-reveal] { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
 
     /* ══════════ HERO ══════════ */
     .hero {
-      background: var(--ink);
-      padding: 44px 0 0;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
+      padding: 40px 0 0;
+      background: linear-gradient(180deg, #eef4ff 0%, #f8fafe 55%, #fff 100%);
     }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
+    .hero__mesh {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(1000px 620px at 88% -8%, rgba(27,110,243,.4), transparent 60%),
-        radial-gradient(700px 500px at 8% 30%, rgba(242,177,52,.10), transparent 55%),
-        linear-gradient(180deg, #0a0e1f 0%, #0d1330 60%, #0a0e1f 100%);
-      z-index: 0;
+        radial-gradient(620px 460px at 82% -6%, rgba(27,110,243,.55), transparent 60%),
+        radial-gradient(500px 400px at 100% 30%, rgba(122,90,248,.28), transparent 60%),
+        radial-gradient(460px 360px at -4% 55%, rgba(255,176,32,.20), transparent 60%);
+      filter: blur(6px);
     }
     .hero__topline {
       position: relative; z-index: 1;
       display: flex; align-items: center; justify-content: space-between;
-      padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08);
+      padding-bottom: 28px;
     }
-    .hero__brand { display: flex; align-items: center; gap: 10px; }
+    .hero__brand { display: flex; align-items: center; gap: 9px; }
     .hero__brand img { height: 26px; }
-    .hero__brand span { font-family: var(--serif); font-size: 18px; font-weight: 600; color: #fff; }
-    .hero__topline .eyebrow { color: rgba(255,255,255,.5); }
+    .hero__brand span { font-family: var(--disp); font-size: 17px; font-weight: 800; color: var(--navy); }
 
     .hero__grid {
       position: relative; z-index: 1;
-      display: grid; grid-template-columns: 1.15fr .85fr;
-      gap: 60px; align-items: start;
-      padding: 56px 0 130px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px; align-items: center;
+      padding: 30px 0 64px;
     }
     .hero__headline {
-      font-family: var(--serif); font-weight: 600; font-style: normal;
-      font-size: clamp(34px, 4.2vw, 54px); line-height: 1.08; letter-spacing: -.01em;
-      color: #fff; margin: 26px 0 24px; max-width: 640px;
+      font-family: var(--disp); font-weight: 800;
+      font-size: clamp(30px, 3.6vw, 44px); line-height: 1.14; letter-spacing: -.02em;
+      color: var(--navy); margin: 18px 0 20px; max-width: 560px;
     }
-    .hero__headline em {
-      font-style: italic; font-weight: 500; color: var(--amber);
+    .hero__headline mark {
+      background: linear-gradient(180deg, transparent 62%, rgba(27,110,243,.22) 62%);
+      color: var(--blue);
     }
-    .hero__sub {
-      font-size: 16.5px; line-height: 1.75; color: rgba(255,255,255,.65);
-      max-width: 480px; padding-left: 20px; border-left: 2px solid rgba(242,177,52,.5);
-    }
-    .hero__stats {
-      display: flex; gap: 40px; margin-top: 52px; flex-wrap: wrap;
-    }
-    .hero__stats div strong {
-      display: block; font-family: var(--serif); font-size: 30px; font-weight: 600; color: #fff;
-    }
-    .hero__stats div span { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.45); letter-spacing: .04em; }
+    .hero__sub { font-size: 16px; line-height: 1.7; color: var(--body); max-width: 480px; }
 
-    /* form card — overlaps hero/next section boundary */
+    .hero__stats { display: flex; gap: 34px; margin-top: 36px; flex-wrap: wrap; }
+    .hero__stats div strong { display: block; font-family: var(--disp); font-size: 25px; font-weight: 800; color: var(--navy); }
+    .hero__stats div span { font-size: 11.5px; color: var(--body); font-weight: 600; }
+
+    .hero__visual { position: relative; }
+    .hero__visual img {
+      width: 100%; max-width: 480px; display: block; margin-left: auto;
+      filter: drop-shadow(0 30px 60px rgba(27,25,80,.18));
+    }
+
+    /* form card sits below hero, overlaps up */
+    .formwrap { position: relative; z-index: 2; margin-top: -46px; }
     .formcard {
-      background: var(--paper); border-radius: 4px; padding: 38px 34px 32px;
-      box-shadow: 0 40px 90px rgba(0,0,0,.4);
-      margin-top: 8px;
-      position: relative;
+      background: #fff; border-radius: 22px; padding: 34px 32px 28px;
+      box-shadow: 0 24px 60px rgba(20,25,60,.14); border: 1px solid var(--line);
     }
-    .formcard::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--blue), var(--amber));
-    }
-    .formcard h3 {
-      font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--navy);
-      margin-bottom: 6px; line-height: 1.3;
-    }
-    .formcard > p { font-size: 13.5px; color: var(--body); margin-bottom: 24px; }
-    .field { margin-bottom: 13px; }
+    .formcard h3 { font-family: var(--disp); font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+    .formcard > p { font-size: 13.5px; color: var(--body); margin-bottom: 22px; }
+    .formgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 16px; }
     .field label {
-      display: block; font-family: var(--mono); font-size: 10.5px; font-weight: 500; color: var(--navy);
-      letter-spacing: .04em; text-transform: uppercase; margin-bottom: 7px;
+      display: block; font-size: 11.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px;
     }
     .input, select.input {
-      width: 100%; background: #fff; border: 1px solid var(--line);
-      border-radius: 3px; padding: 13px 14px; font-family: 'DM Sans', sans-serif;
+      width: 100%; background: var(--bg); border: 1.5px solid var(--line);
+      border-radius: 12px; padding: 13px 14px; font-family: 'DM Sans', sans-serif;
       font-size: 14.5px; color: var(--navy); outline: none; transition: border-color .2s;
       appearance: none;
     }
     select.input {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23565b6b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 14px center;
-      padding-right: 34px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%235b6178' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px;
     }
     .input:focus { border-color: var(--blue); }
     .formcard__btn {
-      width: 100%; background: var(--navy); color: #fff; border: none;
-      border-radius: 3px; padding: 16px; font-size: 13px; font-weight: 700;
-      letter-spacing: .06em; text-transform: uppercase; margin-top: 12px;
+      width: 100%; background: var(--blue); color: #fff; border: none;
+      border-radius: 50px; padding: 16px; font-size: 14px; font-weight: 700;
+      margin-top: 16px;
       display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: background .2s, transform .2s;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 10px 26px rgba(27,110,243,.35);
     }
-    .formcard__btn:hover { background: var(--blue); transform: translateY(-1px); }
+    .formcard__btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
     .formcard__btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
     .formcard__hint {
       display: flex; align-items: flex-start; gap: 6px;
-      font-size: 11.5px; color: #94a3b8; margin-top: 15px; line-height: 1.5;
+      font-size: 12px; color: #94a3b8; margin-top: 14px; line-height: 1.5;
     }
-    .formcard__hint i { font-size: 13px; margin-top: 1px; flex-shrink: 0; }
+    .formcard__hint i { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+
+    /* ══════════ LOGOS ══════════ */
+    .logos { padding: 60px 0 20px; }
+    .logos p { text-align: center; font-size: 12.5px; font-weight: 700; color: var(--body); letter-spacing: .02em; margin-bottom: 30px; }
+    .logos__row { display: flex; align-items: center; justify-content: center; gap: 52px; flex-wrap: wrap; }
+    .logos__row img { height: 26px; width: auto; opacity: .82; }
 
     /* ══════════ SECTION SHELL ══════════ */
-    .section { padding: 108px 0; }
-    .section-head { max-width: 640px; margin-bottom: 64px; }
+    .section { padding: 100px 0; }
+    .section-head { max-width: 620px; margin-bottom: 56px; }
     .section-head h2 {
-      font-family: var(--serif); font-size: clamp(26px, 3vw, 38px); font-weight: 600; line-height: 1.2;
+      font-family: var(--disp); font-size: clamp(24px, 2.8vw, 34px); font-weight: 800; line-height: 1.22;
       letter-spacing: -.01em; color: var(--navy); margin-top: 14px;
     }
-    .section-head .eyebrow { color: var(--blue); }
 
-    /* ══════════ DOR — layout assimétrico ══════════ */
-    .paingrid {
-      display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: start;
+    /* ══════════ DOR ══════════ */
+    .paingrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .paincard {
+      background: var(--bg); border-radius: 20px; padding: 30px 26px;
+      border: 1px solid var(--line);
     }
-    .pain__stat {
-      font-family: var(--serif); font-size: 96px; font-weight: 600; line-height: .85; color: var(--navy);
+    .paincard__num {
+      width: 42px; height: 42px; border-radius: 12px; background: #fff; color: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--disp); font-weight: 800; font-size: 16px; margin-bottom: 18px;
+      box-shadow: 0 4px 12px rgba(20,25,60,.06);
     }
-    .pain__stat span { display: block; font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--body); letter-spacing: .03em; margin-top: 16px; text-transform: none; }
-    .painlist { display: flex; flex-direction: column; }
-    .painitem {
-      display: grid; grid-template-columns: 52px 1fr; gap: 20px;
-      padding: 28px 0; border-top: 1px solid var(--line);
-    }
-    .painitem:last-child { border-bottom: 1px solid var(--line); }
-    .painitem__num { font-family: var(--mono); font-size: 13px; color: var(--blue); padding-top: 4px; }
-    .painitem h3 { font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
-    .painitem p { font-size: 14.5px; color: var(--body); line-height: 1.7; max-width: 480px; }
+    .paincard h3 { font-family: var(--disp); font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.35; }
+    .paincard p { font-size: 14px; color: var(--body); line-height: 1.7; }
 
-    /* ══════════ MÉTODO — blocos alternados ══════════ */
-    .section--dark { background: var(--ink); }
-    .section--dark .section-head h2 { color: #fff; }
-    .section--dark .section-head .eyebrow { color: var(--amber); }
-
+    /* ══════════ MÉTODO — alternado com screenshots reais ══════════ */
     .metorow {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
-      padding: 56px 0; border-top: 1px solid rgba(255,255,255,.08);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+      padding: 60px 0;
     }
-    .metorow:first-of-type { border-top: none; }
     .metorow--rev .metorow__visual { order: 2; }
-    .metorow__label { font-family: var(--mono); font-size: 11px; color: var(--amber); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px; }
-    .metorow h3 { font-family: var(--serif); font-size: 25px; font-weight: 600; color: #fff; margin-bottom: 18px; line-height: 1.3; }
-    .metorow ul { display: flex; flex-direction: column; gap: 13px; }
-    .metorow li { font-size: 14.5px; color: rgba(255,255,255,.62); line-height: 1.65; padding-left: 22px; position: relative; }
-    .metorow li::before { content: '—'; position: absolute; left: 0; color: var(--blue); }
-    .metorow li strong { color: #fff; font-weight: 600; }
-
-    /* abstract visual — CSS-drawn, no fake icons */
-    .metorow__visual {
-      aspect-ratio: 4/3; border-radius: 6px; position: relative; overflow: hidden;
-      background: linear-gradient(155deg, #141b3d, #0d1330);
-      border: 1px solid rgba(255,255,255,.08);
+    .metorow__label {
+      display: inline-block; font-size: 11.5px; font-weight: 800; color: var(--blue);
+      background: var(--blue-tint); padding: 5px 12px; border-radius: 50px; margin-bottom: 16px;
     }
-    .viz-bars { position: absolute; inset: 24px; display: flex; align-items: flex-end; gap: 10px; }
-    .viz-bars i { flex: 1; background: linear-gradient(180deg, var(--blue), rgba(27,110,243,.15)); border-radius: 3px 3px 0 0; }
-    .viz-kanban { position: absolute; inset: 22px; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-    .viz-kanban div { background: rgba(255,255,255,.06); border-radius: 4px; border: 1px solid rgba(255,255,255,.08); padding: 10px; }
-    .viz-kanban div span { display: block; height: 6px; border-radius: 2px; background: rgba(255,255,255,.18); margin-bottom: 8px; }
-    .viz-kanban div span:nth-child(2) { width: 70%; }
-    .viz-kanban .hot span { background: var(--amber); }
-    .viz-chat { position: absolute; inset: 22px; display: flex; flex-direction: column; gap: 10px; justify-content: flex-end; }
-    .viz-chat .bub { max-width: 78%; padding: 10px 14px; border-radius: 12px; font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.75); background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.08); }
-    .viz-chat .bub--out { align-self: flex-end; background: var(--blue); color: #fff; border: none; }
-
-    /* ══════════ SEGMENTOS — lista editorial ══════════ */
-    .segrow {
-      display: grid; grid-template-columns: 220px 1fr; gap: 32px;
-      padding: 30px 0; border-top: 1px solid var(--line); align-items: baseline;
+    .metorow h3 { font-family: var(--disp); font-size: 23px; font-weight: 800; color: var(--navy); margin-bottom: 16px; line-height: 1.3; }
+    .metorow ul { display: flex; flex-direction: column; gap: 12px; }
+    .metorow li { font-size: 14.5px; color: var(--body); line-height: 1.65; padding-left: 26px; position: relative; }
+    .metorow li::before {
+      content: '\ea5e'; font-family: 'tabler-icons' !important; position: absolute; left: 0; top: 1px; color: var(--blue); font-size: 15px;
     }
-    .segrow:last-child { border-bottom: 1px solid var(--line); }
-    .segrow h4 { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--navy); }
-    .segrow p { font-size: 14.5px; color: var(--body); line-height: 1.7; max-width: 560px; }
+    .metorow li strong { color: var(--navy); font-weight: 700; }
+    .metorow__visual img {
+      width: 100%; border-radius: 20px;
+      box-shadow: 0 24px 50px rgba(20,25,60,.14);
+    }
 
-    /* ══════════ DEPOIMENTO — pull quote ══════════ */
-    .section--quote { background: var(--blue-tint); }
-    .quoteblock { max-width: 780px; position: relative; }
-    .quoteblock .mark { font-family: var(--serif); font-size: 96px; line-height: 1; color: var(--blue); opacity: .3; }
+    /* ══════════ SEGMENTOS ══════════ */
+    .seggrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .segcard {
+      background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 26px 22px;
+      transition: border-color .2s, transform .2s;
+    }
+    .segcard:hover { border-color: var(--blue); transform: translateY(-3px); }
+    .segcard i { font-size: 24px; color: var(--blue); margin-bottom: 14px; display: block; }
+    .segcard h4 { font-family: var(--disp); font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .segcard p { font-size: 13px; color: var(--body); line-height: 1.6; }
+
+    /* ══════════ DEPOIMENTO ══════════ */
+    .section--quote { background: var(--bg); }
+    .quotewrap { display: grid; grid-template-columns: auto 1fr; gap: 32px; align-items: flex-start; }
+    .quotewrap .mark {
+      width: 56px; height: 56px; border-radius: 16px; background: var(--blue);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      font-family: var(--disp); font-size: 30px; color: #fff; font-weight: 800;
+    }
     .quoteblock p {
-      font-family: var(--serif); font-size: clamp(21px, 2.4vw, 30px); font-weight: 500; font-style: italic;
-      color: var(--navy); line-height: 1.5; margin: -18px 0 26px;
+      font-family: var(--disp); font-size: clamp(19px, 2.1vw, 25px); font-weight: 600;
+      color: var(--navy); line-height: 1.5; margin-bottom: 18px; max-width: 700px;
     }
-    .quoteblock cite {
-      display: flex; align-items: center; gap: 12px; font-style: normal;
-      font-family: var(--mono); font-size: 12px; color: var(--body); letter-spacing: .02em;
-    }
-    .quoteblock cite::before { content: ''; width: 28px; height: 1px; background: var(--blue); }
+    .quoteblock cite { font-style: normal; font-size: 13px; color: var(--body); font-weight: 600; }
 
     .badge {
-      margin-top: 56px; display: flex; align-items: center; gap: 22px;
-      padding: 26px 30px; background: #fff; border: 1px solid var(--line); border-radius: 4px; max-width: 620px;
+      margin-top: 44px; display: flex; align-items: center; gap: 20px;
+      padding: 24px 28px; background: #fff; border: 1px solid var(--line); border-radius: 18px; max-width: 620px;
     }
     .badge .rosette {
-      width: 52px; height: 52px; flex-shrink: 0; border-radius: 50%;
-      background: conic-gradient(from 0deg, var(--amber), var(--blue), var(--amber));
-      display: flex; align-items: center; justify-content: center;
+      width: 50px; height: 50px; flex-shrink: 0; border-radius: 50%;
+      background: linear-gradient(135deg, var(--amber), var(--blue));
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
     }
-    .badge .rosette i { width: 42px; height: 42px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--amber); font-style: normal; }
-    .badge h4 { font-family: var(--serif); font-size: 15.5px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
-    .badge p { font-size: 12.5px; color: var(--body); line-height: 1.55; }
+    .badge h4 { font-family: var(--disp); font-size: 14.5px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+    .badge p { font-size: 12.5px; color: var(--body); line-height: 1.5; }
 
     /* ══════════ CTA FINAL ══════════ */
     .ctafinal {
-      background: var(--ink); border-radius: 4px; padding: 76px 48px; text-align: left;
-      position: relative; overflow: hidden;
+      border-radius: 28px; padding: 64px 48px; text-align: center; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #1B6EF3, #4f8cf7 55%, #7a5af8);
     }
     .ctafinal::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(800px 420px at 15% 0%, rgba(27,110,243,.35), transparent 60%);
+      background: radial-gradient(600px 340px at 15% 0%, rgba(255,255,255,.25), transparent 60%);
     }
-    .ctafinal__inner { position: relative; z-index: 1; max-width: 640px; }
-    .ctafinal .eyebrow { color: var(--amber); }
-    .ctafinal h2 { font-family: var(--serif); font-size: clamp(28px, 3.2vw, 40px); font-weight: 600; color: #fff; margin: 16px 0 16px; line-height: 1.2; }
-    .ctafinal p { font-size: 15.5px; color: rgba(255,255,255,.6); margin-bottom: 34px; line-height: 1.7; }
+    .ctafinal__inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+    .ctafinal .eyebrow { color: #fff; justify-content: center; }
+    .ctafinal .eyebrow::before { background: #fff; }
+    .ctafinal h2 { font-family: var(--disp); font-size: clamp(26px, 3vw, 36px); font-weight: 800; color: #fff; margin: 14px 0 16px; line-height: 1.25; }
+    .ctafinal p { font-size: 15px; color: rgba(255,255,255,.85); margin-bottom: 30px; line-height: 1.7; }
     .ctafinal__btn {
       display: inline-flex; align-items: center; gap: 10px;
-      background: #fff; color: var(--navy); border: none;
-      padding: 17px 32px; border-radius: 3px; font-size: 13px; font-weight: 700;
-      letter-spacing: .05em; text-transform: uppercase; transition: background .2s, transform .2s;
+      background: #fff; color: var(--blue); border: none;
+      padding: 17px 34px; border-radius: 50px; font-size: 14px; font-weight: 800;
+      transition: transform .2s, box-shadow .2s;
     }
-    .ctafinal__btn:hover { background: var(--amber); transform: translateY(-2px); }
+    .ctafinal__btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,.2); }
 
     /* ══════════ FAQ ══════════ */
-    .faq { max-width: 760px; }
-    .faqitem { border-top: 1px solid var(--line); }
-    .faq .faqitem:last-child { border-bottom: 1px solid var(--line); }
+    .faq { max-width: 740px; }
+    .faqitem { border-bottom: 1px solid var(--line); }
     .faqitem__q {
       width: 100%; display: flex; align-items: center; justify-content: space-between;
-      padding: 26px 0; background: none; border: none; text-align: left;
-      font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--navy);
+      padding: 24px 0; background: none; border: none; text-align: left;
+      font-family: var(--disp); font-size: 16px; font-weight: 700; color: var(--navy);
     }
-    .faqitem__q .sign { font-family: var(--mono); font-size: 20px; color: var(--blue); flex-shrink: 0; margin-left: 20px; transition: transform .2s; }
-    .faqitem.open .faqitem__q .sign { transform: rotate(45deg); }
+    .faqitem__q .sign {
+      width: 30px; height: 30px; border-radius: 50%; background: var(--blue-tint); color: var(--blue);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 16px;
+      font-size: 16px; transition: transform .2s, background .2s;
+    }
+    .faqitem.open .faqitem__q .sign { transform: rotate(45deg); background: var(--blue); color: #fff; }
     .faqitem__a { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
-    .faqitem.open .faqitem__a { max-height: 220px; padding-bottom: 24px; }
-    .faqitem__a p { font-size: 14.5px; color: var(--body); line-height: 1.75; max-width: 620px; }
+    .faqitem.open .faqitem__a { max-height: 220px; padding-bottom: 22px; }
+    .faqitem__a p { font-size: 14.5px; color: var(--body); line-height: 1.75; max-width: 600px; }
 
     /* ══════════ FOOTER ══════════ */
-    .footer { padding: 40px 0; border-top: 1px solid var(--line); }
-    .footer .container { display: flex; justify-content: space-between; align-items: center; }
-    .footer p { font-family: var(--mono); font-size: 11px; color: #94a3b8; }
+    .footer { padding: 36px 0; border-top: 1px solid var(--line); }
+    .footer .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .footer p { font-size: 12px; color: #94a3b8; }
 
     /* ══════════ RESPONSIVE ══════════ */
     @media (max-width: 960px) {
-      .hero__grid { grid-template-columns: 1fr; gap: 44px; padding-bottom: 90px; }
-      .paingrid { grid-template-columns: 1fr; gap: 36px; }
-      .pain__stat { font-size: 64px; }
+      .hero__grid { grid-template-columns: 1fr; gap: 36px; padding-bottom: 40px; }
+      .hero__visual img { max-width: 380px; margin: 0 auto; }
+      .formwrap { margin-top: 0; }
+      .paingrid { grid-template-columns: 1fr; }
       .metorow, .metorow--rev .metorow__visual { grid-template-columns: 1fr; order: initial; }
-      .metorow { gap: 28px; padding: 40px 0; }
+      .metorow { gap: 26px; padding: 36px 0; }
       .metorow__visual { order: -1; }
-      .segrow { grid-template-columns: 1fr; gap: 8px; }
-      .section { padding: 76px 0; }
+      .seggrid { grid-template-columns: 1fr 1fr; }
+      .quotewrap { grid-template-columns: 1fr; }
+      .section { padding: 68px 0; }
+      .logos__row { gap: 30px; }
     }
     @media (max-width: 600px) {
       .container { padding: 0 20px; }
-      .hero { padding-top: 30px; }
-      .hero__topline { padding-bottom: 28px; }
-      .hero__sub { padding-left: 14px; }
-      .hero__stats { gap: 26px; }
-      .hero__stats div strong { font-size: 24px; }
-      .formcard { padding: 28px 22px 24px; }
-      .section-head { margin-bottom: 40px; }
-      .painitem { grid-template-columns: 1fr; gap: 8px; }
-      .ctafinal { padding: 48px 26px; }
+      .hero { padding-top: 26px; }
+      .formgrid { grid-template-columns: 1fr; }
+      .formcard { padding: 26px 22px 22px; }
+      .hero__stats { gap: 22px; }
+      .section-head { margin-bottom: 36px; }
+      .seggrid { grid-template-columns: 1fr; }
+      .ctafinal { padding: 44px 24px; }
       .badge { flex-direction: column; align-items: flex-start; }
-      .footer .container { flex-direction: column; gap: 10px; text-align: center; }
+      .logos__row { gap: 22px; }
+      .logos__row img { height: 20px; }
     }
   </style>
 </head>
@@ -346,7 +321,8 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- HERO -->
-  <section class="hero grain">
+  <section class="hero">
+    <div class="hero__mesh"></div>
     <div class="container">
       <div class="hero__topline">
         <div class="hero__brand">
@@ -358,28 +334,38 @@
 
       <div class="hero__grid">
         <div>
-          <h1 class="hero__headline">Pare de perder clientes para a concorrência <em>sem nem saber o motivo.</em></h1>
+          <h1 class="hero__headline">Pare de perder clientes para a concorrência <mark>sem nem saber o motivo.</mark></h1>
           <p class="hero__sub">Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba exatamente o que seu cliente pensa em tempo real — e resolva insatisfações antes que virem cancelamento.</p>
 
           <div class="hero__stats">
-            <div><strong>17,4 Mi</strong><span>PESQUISAS ENVIADAS</span></div>
-            <div><strong>2.653</strong><span>CLIENTES SATISFEITOS</span></div>
-            <div><strong>6.560</strong><span>USUÁRIOS REGISTRADOS</span></div>
+            <div><strong>17,4 Mi</strong><span>pesquisas enviadas</span></div>
+            <div><strong>2.653</strong><span>clientes satisfeitos</span></div>
+            <div><strong>6.560</strong><span>usuários registrados</span></div>
           </div>
         </div>
 
-        <div class="formcard">
-          <h3>Descubra como aplicar na sua empresa em 15 minutos</h3>
-          <p>Preencha os dados abaixo para falar com um consultor especialista.</p>
+        <div class="hero__visual">
+          <img src="../shared/diagnostico/dashboard-home.svg" alt="Dashboard de NPS e satisfação WeHelp" />
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <form id="leadForm" novalidate>
+  <div class="formwrap">
+    <div class="container">
+      <div class="formcard">
+        <h3>Descubra como aplicar na sua empresa em 15 minutos</h3>
+        <p>Preencha os dados abaixo para falar com um consultor especialista.</p>
+
+        <form id="leadForm" novalidate>
+          <div class="formgrid">
             <div class="field">
               <label for="nome">Nome completo</label>
-              <input type="text" class="input" id="nome" placeholder="Digite seu nome completo" required />
+              <input type="text" class="input" id="nome" placeholder="Seu nome completo" required />
             </div>
             <div class="field">
               <label for="email">E-mail corporativo</label>
-              <input type="email" class="input" id="email" placeholder="seuemail@suaempresa.com.br" required />
+              <input type="email" class="input" id="email" placeholder="voce@suaempresa.com.br" required />
             </div>
             <div class="field">
               <label for="whatsapp">WhatsApp</label>
@@ -390,7 +376,7 @@
               <input type="text" class="input" id="empresa" placeholder="Nome da sua empresa" required />
             </div>
             <div class="field">
-              <label for="segmento">Qual é o seu segmento?</label>
+              <label for="segmento">Segmento</label>
               <select class="input" id="segmento" required>
                 <option value="" disabled selected>Selecione</option>
                 <option>Academias & Fitness</option>
@@ -402,7 +388,7 @@
               </select>
             </div>
             <div class="field">
-              <label for="clientes">Quantos clientes ativos você atende hoje?</label>
+              <label for="clientes">Clientes ativos hoje</label>
               <select class="input" id="clientes" required>
                 <option value="" disabled selected>Selecione</option>
                 <option>Até 150 clientes</option>
@@ -411,19 +397,35 @@
                 <option>Mais de 1.000 clientes</option>
               </select>
             </div>
+          </div>
 
-            <button type="submit" class="formcard__btn" id="submitBtn">
-              <span id="submitText">Falar com um especialista</span>
-            </button>
-            <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um consultor entrará em contato em até 15 minutos em horário comercial.</p>
-          </form>
-        </div>
+          <button type="submit" class="formcard__btn" id="submitBtn">
+            <span id="submitText">Falar com um especialista</span>
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </button>
+          <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um consultor entrará em contato em até 15 minutos em horário comercial.</p>
+        </form>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- LOGOS -->
+  <div class="logos" data-reveal>
+    <div class="container">
+      <p>EMPRESAS QUE JÁ CONFIAM NA WEHELP</p>
+      <div class="logos__row">
+        <img src="../shared/diagnostico/logo-selfit.webp" alt="Selfit" />
+        <img src="../shared/diagnostico/logo-bioritmo.webp" alt="Bioritmo" />
+        <img src="../shared/diagnostico/logo-cinesystem.webp" alt="Cinesystem" />
+        <img src="../shared/diagnostico/logo-beto-carreiro.webp" alt="Beto Carrero World" />
+        <img src="../shared/diagnostico/logo-oral-unic.webp" alt="OralUnic" />
+        <img src="../shared/diagnostico/logo-cellep.webp" alt="Cellep" />
+      </div>
+    </div>
+  </div>
 
   <!-- DOR REAL -->
-  <section class="section" id="dor" data-reveal>
+  <section class="section" data-reveal>
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">A dor real do seu negócio</span>
@@ -431,37 +433,27 @@
       </div>
 
       <div class="paingrid">
-        <div class="pain__stat">&lt;3%<span>é a taxa de resposta média de um formulário genérico de pesquisa enviado fora de hora.</span></div>
-
-        <div class="painlist">
-          <div class="painitem">
-            <span class="painitem__num">01</span>
-            <div>
-              <h3>A armadilha do Google Forms e do papel</h3>
-              <p>Formulários longos e fora de hora geram pouquíssima resposta. Você toma decisões estratégicas no escuro, baseando-se apenas em opiniões da equipe, não em dados.</p>
-            </div>
-          </div>
-          <div class="painitem">
-            <span class="painitem__num">02</span>
-            <div>
-              <h3>Dados mortos em planilhas do Excel</h3>
-              <p>Analisar pesquisas semanas depois que foram preenchidas não salva clientes. Quando a insatisfação chega à diretoria, o contrato já foi cancelado ou o cliente já foi embora.</p>
-            </div>
-          </div>
-          <div class="painitem">
-            <span class="painitem__num">03</span>
-            <div>
-              <h3>Reclamações públicas e dano à reputação</h3>
-              <p>Sem um canal direto e rápido para desabafar, o cliente insatisfeito expõe sua marca no Reclame Aqui, nas avaliações do Google ou diretamente para o mercado.</p>
-            </div>
-          </div>
+        <div class="paincard">
+          <div class="paincard__num">01</div>
+          <h3>A armadilha do Google Forms e do papel</h3>
+          <p>Formulários longos e fora de hora geram pouquíssima resposta. Você toma decisões estratégicas no escuro, baseando-se apenas em opiniões da equipe.</p>
+        </div>
+        <div class="paincard">
+          <div class="paincard__num">02</div>
+          <h3>Dados mortos em planilhas do Excel</h3>
+          <p>Analisar pesquisas semanas depois não salva clientes. Quando a insatisfação chega à diretoria, o contrato já foi cancelado.</p>
+        </div>
+        <div class="paincard">
+          <div class="paincard__num">03</div>
+          <h3>Reclamações públicas e dano à reputação</h3>
+          <p>Sem canal direto pra desabafar, o cliente insatisfeito expõe sua marca no Reclame Aqui ou nas avaliações do Google.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- MÉTODO -->
-  <section class="section section--dark grain" data-reveal>
+  <section class="section" data-reveal style="background:var(--bg)">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">O método WeHelp</span>
@@ -470,56 +462,45 @@
 
       <div class="metorow">
         <div>
-          <p class="metorow__label">01 — Disparo multi-canal</p>
+          <span class="metorow__label">Disparo multi-canal</span>
           <h3>Pesquisas no momento exato da jornada</h3>
           <ul>
-            <li><strong>WhatsApp Oficial & E-mail:</strong> envio de pesquisas curtas e inteligentes com resposta em 1 clique.</li>
-            <li><strong>QR Codes no ponto de contato:</strong> colete opiniões na recepção, vestiário, balcão ou mesas em segundos.</li>
+            <li><strong>WhatsApp Oficial & E-mail:</strong> pesquisas curtas e inteligentes com resposta em 1 clique.</li>
+            <li><strong>QR Codes no ponto de contato:</strong> colete opiniões na recepção, vestiário ou balcão em segundos.</li>
             <li><strong>Widget no site ou sistema:</strong> capture a percepção de uso direto na experiência digital.</li>
           </ul>
         </div>
         <div class="metorow__visual">
-          <div class="viz-bars">
-            <i style="height:35%"></i><i style="height:60%"></i><i style="height:42%"></i>
-            <i style="height:78%"></i><i style="height:50%"></i><i style="height:90%"></i>
-            <i style="height:66%"></i>
-          </div>
+          <img src="../shared/diagnostico/pesquisa-nps.webp" alt="Pesquisa de NPS WeHelp" />
         </div>
       </div>
 
       <div class="metorow metorow--rev">
         <div>
-          <p class="metorow__label">02 — Visibilidade operacional</p>
+          <span class="metorow__label">Visibilidade operacional</span>
           <h3>Dashboards em tempo real sem complicação</h3>
           <ul>
-            <li><strong>Painéis prontos para decisão:</strong> visualize índices gerais, gráficos de tendência e motivos detalhados de cada nota.</li>
-            <li><strong>Dashboard TV:</strong> transmita os indicadores da experiência do cliente em tempo real nas telas da sua empresa.</li>
-            <li><strong>Comparativo entre unidades:</strong> compare filiais, setores ou franquias em um único painel centralizado.</li>
+            <li><strong>Painéis prontos para decisão:</strong> índices gerais, gráficos de tendência e motivos de cada nota.</li>
+            <li><strong>Dashboard TV:</strong> transmita os indicadores em tempo real nas telas da sua empresa.</li>
+            <li><strong>Comparativo entre unidades:</strong> compare filiais, setores ou franquias num painel só.</li>
           </ul>
         </div>
         <div class="metorow__visual">
-          <div class="viz-kanban">
-            <div><span></span><span></span><span style="width:40%"></span></div>
-            <div class="hot"><span></span><span></span><span style="width:55%"></span></div>
-            <div><span></span><span style="width:60%"></span></div>
-          </div>
+          <img src="../shared/diagnostico/dashboard-nps.webp" alt="Dashboard de indicadores WeHelp" />
         </div>
       </div>
 
       <div class="metorow">
         <div>
-          <p class="metorow__label">03 — Fechamento de ciclo</p>
+          <span class="metorow__label">Fechamento de ciclo</span>
           <h3>Central de atendimento integrada</h3>
           <ul>
-            <li><strong>Alertas automáticos de insatisfação:</strong> se um cliente atribui uma nota baixa, um chamado é aberto imediatamente na tela do seu time em formato Kanban.</li>
-            <li><strong>Tratativa rápida no WhatsApp:</strong> aja no mesmo dia para resolver o atrito e transformar detratores em promotores da sua marca.</li>
+            <li><strong>Alertas automáticos de insatisfação:</strong> nota baixa abre um chamado na hora, em formato Kanban.</li>
+            <li><strong>Tratativa rápida no WhatsApp:</strong> resolva o atrito no mesmo dia e converta detratores em promotores.</li>
           </ul>
         </div>
         <div class="metorow__visual">
-          <div class="viz-chat">
-            <div class="bub">Nota 3 na recepção hoje às 14h32</div>
-            <div class="bub bub--out">Vi aqui, vamos resolver ainda hoje 👍</div>
-          </div>
+          <img src="../shared/diagnostico/atendimento-ticket.webp" alt="Central de atendimento WeHelp" />
         </div>
       </div>
     </div>
@@ -532,27 +513,36 @@
         <span class="eyebrow">Adaptado para o seu segmento</span>
         <h2>Uma solução desenhada para a realidade do seu mercado</h2>
       </div>
-
-      <div>
-        <div class="segrow">
+      <div class="seggrid">
+        <div class="segcard">
+          <i class="ti ti-briefcase" aria-hidden="true"></i>
           <h4>Serviços B2B & Corporativo</h4>
-          <p>Padronize a entrega entre equipes, meça a lealdade dos seus contratos e evite cancelamentos.</p>
+          <p>Padronize a entrega entre equipes e evite cancelamentos.</p>
         </div>
-        <div class="segrow">
+        <div class="segcard">
+          <i class="ti ti-heart-rate-monitor" aria-hidden="true"></i>
           <h4>Saúde & Clínicas</h4>
-          <p>Avalie o atendimento da recepção e a experiência pós-consulta, preservando a reputação da sua marca.</p>
+          <p>Avalie recepção e experiência pós-consulta, preservando a reputação.</p>
         </div>
-        <div class="segrow">
+        <div class="segcard">
+          <i class="ti ti-code" aria-hidden="true"></i>
           <h4>SaaS & Tecnologia</h4>
-          <p>Identifique pontos de atrito no produto, colete feedbacks contínuos e reduza a taxa de churn.</p>
+          <p>Identifique atrito no produto e reduza a taxa de churn.</p>
         </div>
-        <div class="segrow">
-          <h4>Fitness, Academias & Estúdios</h4>
-          <p>Acompanhe a percepção sobre aulas, professores e estrutura física, eliminando os motivos de evasão.</p>
+        <div class="segcard">
+          <i class="ti ti-barbell" aria-hidden="true"></i>
+          <h4>Fitness & Academias</h4>
+          <p>Acompanhe a percepção sobre aulas e estrutura, eliminando a evasão.</p>
         </div>
-        <div class="segrow">
+        <div class="segcard">
+          <i class="ti ti-building-store" aria-hidden="true"></i>
           <h4>Varejo & Franquias</h4>
-          <p>Padronize a experiência entre lojas e unidades, identificando rápido onde o atendimento está falhando.</p>
+          <p>Padronize a experiência entre lojas e unidades.</p>
+        </div>
+        <div class="segcard">
+          <i class="ti ti-sparkles" aria-hidden="true"></i>
+          <h4>Outros segmentos</h4>
+          <p>O processo é o mesmo — dado real do seu cliente, não achismo.</p>
         </div>
       </div>
     </div>
@@ -561,14 +551,16 @@
   <!-- PROVA SOCIAL -->
   <section class="section section--quote" data-reveal>
     <div class="container">
-      <div class="quoteblock">
-        <span class="mark">"</span>
-        <p>Saímos de um cenário de opiniões divididas na equipe para uma gestão guiada pela voz do cliente. Conseguimos responder atritos no mesmo dia e aumentamos nossa retenção significativamente.</p>
-        <cite>Cliente WeHelp — Gestão de Experiência do Cliente</cite>
+      <div class="quotewrap">
+        <div class="mark">"</div>
+        <div class="quoteblock">
+          <p>Saímos de um cenário de opiniões divididas na equipe para uma gestão guiada pela voz do cliente. Conseguimos responder atritos no mesmo dia e aumentamos nossa retenção significativamente.</p>
+          <cite>Cliente WeHelp — Gestão de Experiência do Cliente</cite>
+        </div>
       </div>
 
       <div class="badge">
-        <div class="rosette"><i>🏆</i></div>
+        <div class="rosette">🏆</div>
         <div>
           <h4>Movimento de Excelência em Experiência do Cliente</h4>
           <p>Sua empresa qualificada para os mais altos padrões de satisfação e retenção do mercado.</p>
@@ -580,13 +572,13 @@
   <!-- CTA FINAL -->
   <section class="section">
     <div class="container">
-      <div class="ctafinal grain">
+      <div class="ctafinal">
         <div class="ctafinal__inner">
           <span class="eyebrow">Vamos conversar</span>
           <h2>Pronto para modernizar a gestão de satisfação da sua empresa?</h2>
           <p>Converse em 15 minutos com um de nossos especialistas. Analisaremos sua operação atual e mostraremos como colocar sua estrutura de pesquisas para rodar em poucos dias.</p>
           <a href="#leadForm" class="ctafinal__btn" id="ctaFinalBtn">
-            Solicitar diagnóstico com especialista →
+            Solicitar diagnóstico <i class="ti ti-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -635,8 +627,8 @@
 
   <footer class="footer">
     <div class="container">
-      <p>© 2026 WEHELP — TODOS OS DIREITOS RESERVADOS</p>
-      <p>GESTÃO DA EXPERIÊNCIA DO CLIENTE COM FOCO EM RETENÇÃO</p>
+      <p>© 2026 WeHelp — Todos os direitos reservados</p>
+      <p>Gestão da experiência do cliente com foco em retenção</p>
     </div>
   </footer>
 
