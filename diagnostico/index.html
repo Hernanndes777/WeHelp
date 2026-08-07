@@ -23,7 +23,7 @@
   <meta name="description" content="Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba o que seu cliente pensa em tempo real." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,600&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
 
   <style>
@@ -32,265 +32,310 @@
     body {
       font-family: 'DM Sans', sans-serif;
       background: #fff;
-      color: #0a1128;
+      color: #14192b;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
     a { text-decoration: none; color: inherit; }
     button { font-family: inherit; cursor: pointer; }
     ul { list-style: none; }
+    ::selection { background: #f2b134; color: #14192b; }
 
     :root {
+      --ink:        #0a0e1f;
+      --ink-2:      #101632;
       --blue:       #1B6EF3;
       --blue-hover: #1457c8;
-      --blue-light: #e8f0ff;
-      --navy:       #0a1128;
-      --body:       #4a5568;
-      --border:     #e2e8f0;
-      --bg:         #f4f6fb;
-      --green:      #16a34a;
+      --blue-tint:  #eef4ff;
+      --amber:      #f2b134;
+      --paper:      #fdfcfa;
+      --line:       #e7e5e0;
+      --body:       #565b6b;
+      --navy:       #14192b;
+      --serif: 'Fraunces', serif;
+      --mono: 'DM Mono', monospace;
     }
 
-    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
-    .tag {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
-      color: var(--blue); background: var(--blue-light);
-      padding: 7px 16px; border-radius: 50px;
+    /* grain texture, reused across dark sections */
+    .grain { position: relative; }
+    .grain::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none; z-index: 2;
+      opacity: .35; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
-    .section-tag {
-      display: inline-block;
-      font-size: 10px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
-      color: var(--blue); background: var(--blue-light);
-      padding: 6px 16px; border-radius: 4px; margin-bottom: 16px;
-    }
-    .section-head { text-align: center; max-width: 720px; margin: 0 auto 52px; }
-    .section-head h2 {
-      font-family: 'Figtree', sans-serif;
-      font-size: 32px; font-weight: 900; line-height: 1.25; letter-spacing: -.4px;
-      color: var(--navy);
-    }
-    .section-head p { font-size: 16px; color: var(--body); line-height: 1.7; margin-top: 14px; }
 
-    /* ── HERO ── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+    .eyebrow {
+      font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    }
+
+    [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════ HERO ══════════ */
     .hero {
-      background: linear-gradient(180deg, #0a1128 0%, #0f1f4b 100%);
-      padding: 56px 0 72px;
+      background: var(--ink);
+      padding: 44px 0 0;
       position: relative;
       overflow: hidden;
     }
     .hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: radial-gradient(900px 500px at 85% 0%, rgba(27,110,243,.35), transparent 60%);
-      pointer-events: none;
+      background:
+        radial-gradient(1000px 620px at 88% -8%, rgba(27,110,243,.4), transparent 60%),
+        radial-gradient(700px 500px at 8% 30%, rgba(242,177,52,.10), transparent 55%),
+        linear-gradient(180deg, #0a0e1f 0%, #0d1330 60%, #0a0e1f 100%);
+      z-index: 0;
     }
-    .hero__brand { display: flex; align-items: center; gap: 10px; margin-bottom: 40px; position: relative; z-index: 1; }
-    .hero__brand img { height: 30px; }
-    .hero__brand span { font-family: 'Figtree', sans-serif; font-size: 19px; font-weight: 800; color: #fff; }
+    .hero__topline {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .hero__brand { display: flex; align-items: center; gap: 10px; }
+    .hero__brand img { height: 26px; }
+    .hero__brand span { font-family: var(--serif); font-size: 18px; font-weight: 600; color: #fff; }
+    .hero__topline .eyebrow { color: rgba(255,255,255,.5); }
 
     .hero__grid {
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 56px;
-      align-items: start;
       position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1.15fr .85fr;
+      gap: 60px; align-items: start;
+      padding: 56px 0 130px;
     }
     .hero__headline {
-      font-family: 'Figtree', sans-serif;
-      font-size: 42px; font-weight: 900; line-height: 1.15; letter-spacing: -1px;
-      color: #fff; margin: 22px 0 20px;
+      font-family: var(--serif); font-weight: 600; font-style: normal;
+      font-size: clamp(34px, 4.2vw, 54px); line-height: 1.08; letter-spacing: -.01em;
+      color: #fff; margin: 26px 0 24px; max-width: 640px;
     }
-    .hero__sub { font-size: 16px; line-height: 1.75; color: #b0c4e8; max-width: 520px; }
+    .hero__headline em {
+      font-style: italic; font-weight: 500; color: var(--amber);
+    }
+    .hero__sub {
+      font-size: 16.5px; line-height: 1.75; color: rgba(255,255,255,.65);
+      max-width: 480px; padding-left: 20px; border-left: 2px solid rgba(242,177,52,.5);
+    }
+    .hero__stats {
+      display: flex; gap: 40px; margin-top: 52px; flex-wrap: wrap;
+    }
+    .hero__stats div strong {
+      display: block; font-family: var(--serif); font-size: 30px; font-weight: 600; color: #fff;
+    }
+    .hero__stats div span { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.45); letter-spacing: .04em; }
 
-    .hero__proof {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-      margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.12);
-    }
-    .hero__proof li { text-align: left; }
-    .hero__proof .num {
-      font-family: 'Figtree', sans-serif; font-size: 24px; font-weight: 900; color: #fff; display: block;
-    }
-    .hero__proof .label { font-size: 12px; color: #8899bb; margin-top: 2px; }
-
-    /* ── FORM CARD ── */
+    /* form card — overlaps hero/next section boundary */
     .formcard {
-      background: #fff; border-radius: 20px; padding: 32px 30px 28px;
-      box-shadow: 0 30px 70px rgba(0,0,0,.35);
+      background: var(--paper); border-radius: 4px; padding: 38px 34px 32px;
+      box-shadow: 0 40px 90px rgba(0,0,0,.4);
+      margin-top: 8px;
+      position: relative;
+    }
+    .formcard::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--blue), var(--amber));
     }
     .formcard h3 {
-      font-family: 'Figtree', sans-serif; font-size: 20px; font-weight: 800; color: var(--navy);
-      margin-bottom: 6px;
+      font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--navy);
+      margin-bottom: 6px; line-height: 1.3;
     }
-    .formcard > p { font-size: 13.5px; color: var(--body); margin-bottom: 22px; }
-    .field { margin-bottom: 12px; }
+    .formcard > p { font-size: 13.5px; color: var(--body); margin-bottom: 24px; }
+    .field { margin-bottom: 13px; }
     .field label {
-      display: block; font-size: 12px; font-weight: 700; color: var(--navy);
-      margin-bottom: 6px;
+      display: block; font-family: var(--mono); font-size: 10.5px; font-weight: 500; color: var(--navy);
+      letter-spacing: .04em; text-transform: uppercase; margin-bottom: 7px;
     }
     .input, select.input {
-      width: 100%; background: var(--bg); border: 1px solid var(--border);
-      border-radius: 10px; padding: 13px 14px; font-family: 'DM Sans', sans-serif;
+      width: 100%; background: #fff; border: 1px solid var(--line);
+      border-radius: 3px; padding: 13px 14px; font-family: 'DM Sans', sans-serif;
       font-size: 14.5px; color: var(--navy); outline: none; transition: border-color .2s;
       appearance: none;
     }
     select.input {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23565b6b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
       background-repeat: no-repeat; background-position: right 14px center;
       padding-right: 34px;
     }
     .input:focus { border-color: var(--blue); }
     .formcard__btn {
-      width: 100%; background: var(--blue); color: #fff; border: none;
-      border-radius: 10px; padding: 16px; font-size: 14px; font-weight: 700;
-      letter-spacing: .4px; margin-top: 10px;
+      width: 100%; background: var(--navy); color: #fff; border: none;
+      border-radius: 3px; padding: 16px; font-size: 13px; font-weight: 700;
+      letter-spacing: .06em; text-transform: uppercase; margin-top: 12px;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: background .2s, transform .2s;
     }
-    .formcard__btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
+    .formcard__btn:hover { background: var(--blue); transform: translateY(-1px); }
     .formcard__btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
     .formcard__hint {
       display: flex; align-items: flex-start; gap: 6px;
-      font-size: 12px; color: #94a3b8; margin-top: 14px; line-height: 1.5;
+      font-size: 11.5px; color: #94a3b8; margin-top: 15px; line-height: 1.5;
     }
-    .formcard__hint i { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+    .formcard__hint i { font-size: 13px; margin-top: 1px; flex-shrink: 0; }
 
-    /* ── LOGOS BAR ── */
-    .logosbar { background: var(--bg); padding: 28px 0; border-bottom: 1px solid var(--border); }
-    .logosbar__inner { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; opacity: .55; }
-    .logosbar__inner span { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 15px; color: var(--navy); }
+    /* ══════════ SECTION SHELL ══════════ */
+    .section { padding: 108px 0; }
+    .section-head { max-width: 640px; margin-bottom: 64px; }
+    .section-head h2 {
+      font-family: var(--serif); font-size: clamp(26px, 3vw, 38px); font-weight: 600; line-height: 1.2;
+      letter-spacing: -.01em; color: var(--navy); margin-top: 14px;
+    }
+    .section-head .eyebrow { color: var(--blue); }
 
-    /* ── DOR SECTION ── */
-    .section { padding: 88px 0; }
-    .cards3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-    .paincard {
-      background: #fff; border: 1px solid var(--border); border-radius: 16px;
-      padding: 30px 26px; box-shadow: 0 2px 14px rgba(10,17,40,.04);
+    /* ══════════ DOR — layout assimétrico ══════════ */
+    .paingrid {
+      display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: start;
     }
-    .paincard__num {
-      width: 40px; height: 40px; border-radius: 10px; background: #fef2f2; color: #dc2626;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 18px;
+    .pain__stat {
+      font-family: var(--serif); font-size: 96px; font-weight: 600; line-height: .85; color: var(--navy);
     }
-    .paincard h3 { font-family: 'Figtree', sans-serif; font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 10px; line-height: 1.35; }
-    .paincard p { font-size: 14px; color: var(--body); line-height: 1.7; }
+    .pain__stat span { display: block; font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--body); letter-spacing: .03em; margin-top: 16px; text-transform: none; }
+    .painlist { display: flex; flex-direction: column; }
+    .painitem {
+      display: grid; grid-template-columns: 52px 1fr; gap: 20px;
+      padding: 28px 0; border-top: 1px solid var(--line);
+    }
+    .painitem:last-child { border-bottom: 1px solid var(--line); }
+    .painitem__num { font-family: var(--mono); font-size: 13px; color: var(--blue); padding-top: 4px; }
+    .painitem h3 { font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+    .painitem p { font-size: 14.5px; color: var(--body); line-height: 1.7; max-width: 480px; }
 
-    /* ── METODO SECTION ── */
-    .section--alt { background: var(--bg); }
-    .metodo { display: flex; flex-direction: column; gap: 22px; }
-    .metoblock {
-      background: #fff; border: 1px solid var(--border); border-radius: 18px;
-      padding: 34px 32px; display: grid; grid-template-columns: 64px 1fr; gap: 24px;
-    }
-    .metoblock__icon {
-      width: 56px; height: 56px; border-radius: 14px; background: var(--blue-light);
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .metoblock__icon i { font-size: 26px; color: var(--blue); }
-    .metoblock h3 { font-family: 'Figtree', sans-serif; font-size: 19px; font-weight: 800; color: var(--navy); margin-bottom: 14px; }
-    .metoblock ul { display: flex; flex-direction: column; gap: 12px; }
-    .metoblock li { font-size: 14.5px; color: var(--body); line-height: 1.65; padding-left: 22px; position: relative; }
-    .metoblock li::before {
-      content: '✓'; position: absolute; left: 0; top: 1px; color: var(--blue); font-weight: 700;
-    }
-    .metoblock li strong { color: var(--navy); }
+    /* ══════════ MÉTODO — blocos alternados ══════════ */
+    .section--dark { background: var(--ink); }
+    .section--dark .section-head h2 { color: #fff; }
+    .section--dark .section-head .eyebrow { color: var(--amber); }
 
-    /* ── SEGMENTOS ── */
-    .cards5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
-    .segcard {
-      background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 24px 20px;
+    .metorow {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+      padding: 56px 0; border-top: 1px solid rgba(255,255,255,.08);
     }
-    .segcard i { font-size: 24px; color: var(--blue); margin-bottom: 14px; display: block; }
-    .segcard h4 { font-family: 'Figtree', sans-serif; font-size: 14.5px; font-weight: 800; color: var(--navy); margin-bottom: 8px; line-height: 1.3; }
-    .segcard p { font-size: 12.5px; color: var(--body); line-height: 1.6; }
+    .metorow:first-of-type { border-top: none; }
+    .metorow--rev .metorow__visual { order: 2; }
+    .metorow__label { font-family: var(--mono); font-size: 11px; color: var(--amber); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px; }
+    .metorow h3 { font-family: var(--serif); font-size: 25px; font-weight: 600; color: #fff; margin-bottom: 18px; line-height: 1.3; }
+    .metorow ul { display: flex; flex-direction: column; gap: 13px; }
+    .metorow li { font-size: 14.5px; color: rgba(255,255,255,.62); line-height: 1.65; padding-left: 22px; position: relative; }
+    .metorow li::before { content: '—'; position: absolute; left: 0; color: var(--blue); }
+    .metorow li strong { color: #fff; font-weight: 600; }
 
-    /* ── DEPOIMENTOS ── */
-    .testicard {
-      background: #fff; border: 1px solid var(--border); border-radius: 18px;
-      padding: 36px; max-width: 720px; margin: 0 auto 40px;
-      box-shadow: 0 2px 20px rgba(10,17,40,.05);
+    /* abstract visual — CSS-drawn, no fake icons */
+    .metorow__visual {
+      aspect-ratio: 4/3; border-radius: 6px; position: relative; overflow: hidden;
+      background: linear-gradient(155deg, #141b3d, #0d1330);
+      border: 1px solid rgba(255,255,255,.08);
     }
-    .testicard p { font-size: 17px; color: var(--navy); line-height: 1.7; font-style: italic; margin-bottom: 20px; }
-    .testicard__author { display: flex; align-items: center; gap: 12px; }
-    .testicard__avatar {
-      width: 42px; height: 42px; border-radius: 50%; background: var(--blue-light);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Figtree', sans-serif; font-weight: 800; color: var(--blue);
+    .viz-bars { position: absolute; inset: 24px; display: flex; align-items: flex-end; gap: 10px; }
+    .viz-bars i { flex: 1; background: linear-gradient(180deg, var(--blue), rgba(27,110,243,.15)); border-radius: 3px 3px 0 0; }
+    .viz-kanban { position: absolute; inset: 22px; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .viz-kanban div { background: rgba(255,255,255,.06); border-radius: 4px; border: 1px solid rgba(255,255,255,.08); padding: 10px; }
+    .viz-kanban div span { display: block; height: 6px; border-radius: 2px; background: rgba(255,255,255,.18); margin-bottom: 8px; }
+    .viz-kanban div span:nth-child(2) { width: 70%; }
+    .viz-kanban .hot span { background: var(--amber); }
+    .viz-chat { position: absolute; inset: 22px; display: flex; flex-direction: column; gap: 10px; justify-content: flex-end; }
+    .viz-chat .bub { max-width: 78%; padding: 10px 14px; border-radius: 12px; font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.75); background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.08); }
+    .viz-chat .bub--out { align-self: flex-end; background: var(--blue); color: #fff; border: none; }
+
+    /* ══════════ SEGMENTOS — lista editorial ══════════ */
+    .segrow {
+      display: grid; grid-template-columns: 220px 1fr; gap: 32px;
+      padding: 30px 0; border-top: 1px solid var(--line); align-items: baseline;
     }
-    .testicard__author strong { font-size: 14px; color: var(--navy); display: block; }
-    .testicard__author span { font-size: 12.5px; color: var(--body); }
+    .segrow:last-child { border-bottom: 1px solid var(--line); }
+    .segrow h4 { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--navy); }
+    .segrow p { font-size: 14.5px; color: var(--body); line-height: 1.7; max-width: 560px; }
+
+    /* ══════════ DEPOIMENTO — pull quote ══════════ */
+    .section--quote { background: var(--blue-tint); }
+    .quoteblock { max-width: 780px; position: relative; }
+    .quoteblock .mark { font-family: var(--serif); font-size: 96px; line-height: 1; color: var(--blue); opacity: .3; }
+    .quoteblock p {
+      font-family: var(--serif); font-size: clamp(21px, 2.4vw, 30px); font-weight: 500; font-style: italic;
+      color: var(--navy); line-height: 1.5; margin: -18px 0 26px;
+    }
+    .quoteblock cite {
+      display: flex; align-items: center; gap: 12px; font-style: normal;
+      font-family: var(--mono); font-size: 12px; color: var(--body); letter-spacing: .02em;
+    }
+    .quoteblock cite::before { content: ''; width: 28px; height: 1px; background: var(--blue); }
 
     .badge {
-      max-width: 560px; margin: 0 auto; text-align: center;
-      background: linear-gradient(135deg, #0a1128, #0f1f4b);
-      border-radius: 18px; padding: 32px; color: #fff;
+      margin-top: 56px; display: flex; align-items: center; gap: 22px;
+      padding: 26px 30px; background: #fff; border: 1px solid var(--line); border-radius: 4px; max-width: 620px;
     }
-    .badge .icon { font-size: 34px; margin-bottom: 10px; }
-    .badge h4 { font-family: 'Figtree', sans-serif; font-size: 17px; font-weight: 800; margin-bottom: 8px; }
-    .badge p { font-size: 13.5px; color: #b0c4e8; line-height: 1.6; }
+    .badge .rosette {
+      width: 52px; height: 52px; flex-shrink: 0; border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--amber), var(--blue), var(--amber));
+      display: flex; align-items: center; justify-content: center;
+    }
+    .badge .rosette i { width: 42px; height: 42px; border-radius: 50%; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--amber); font-style: normal; }
+    .badge h4 { font-family: var(--serif); font-size: 15.5px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+    .badge p { font-size: 12.5px; color: var(--body); line-height: 1.55; }
 
-    /* ── CTA FINAL ── */
+    /* ══════════ CTA FINAL ══════════ */
     .ctafinal {
-      background: linear-gradient(135deg, #0a1128, #0f1f4b);
-      border-radius: 24px; padding: 56px 40px; text-align: center;
+      background: var(--ink); border-radius: 4px; padding: 76px 48px; text-align: left;
       position: relative; overflow: hidden;
     }
     .ctafinal::before {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(700px 400px at 50% 0%, rgba(27,110,243,.3), transparent 60%);
+      background: radial-gradient(800px 420px at 15% 0%, rgba(27,110,243,.35), transparent 60%);
     }
-    .ctafinal__inner { position: relative; z-index: 1; }
-    .ctafinal h2 { font-family: 'Figtree', sans-serif; font-size: 30px; font-weight: 900; color: #fff; max-width: 640px; margin: 0 auto 14px; line-height: 1.25; }
-    .ctafinal p { font-size: 15.5px; color: #b0c4e8; max-width: 560px; margin: 0 auto 30px; line-height: 1.7; }
+    .ctafinal__inner { position: relative; z-index: 1; max-width: 640px; }
+    .ctafinal .eyebrow { color: var(--amber); }
+    .ctafinal h2 { font-family: var(--serif); font-size: clamp(28px, 3.2vw, 40px); font-weight: 600; color: #fff; margin: 16px 0 16px; line-height: 1.2; }
+    .ctafinal p { font-size: 15.5px; color: rgba(255,255,255,.6); margin-bottom: 34px; line-height: 1.7; }
     .ctafinal__btn {
       display: inline-flex; align-items: center; gap: 10px;
-      background: var(--blue); color: #fff; border: none;
-      padding: 18px 38px; border-radius: 50px; font-size: 14px; font-weight: 700;
-      letter-spacing: .5px; transition: background .2s, transform .2s;
+      background: #fff; color: var(--navy); border: none;
+      padding: 17px 32px; border-radius: 3px; font-size: 13px; font-weight: 700;
+      letter-spacing: .05em; text-transform: uppercase; transition: background .2s, transform .2s;
     }
-    .ctafinal__btn:hover { background: var(--blue-hover); transform: translateY(-2px); }
+    .ctafinal__btn:hover { background: var(--amber); transform: translateY(-2px); }
 
-    /* ── FAQ ── */
-    .faq { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-    .faqitem { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: #fff; }
+    /* ══════════ FAQ ══════════ */
+    .faq { max-width: 760px; }
+    .faqitem { border-top: 1px solid var(--line); }
+    .faq .faqitem:last-child { border-bottom: 1px solid var(--line); }
     .faqitem__q {
       width: 100%; display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 24px; background: none; border: none; text-align: left;
-      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--navy);
+      padding: 26px 0; background: none; border: none; text-align: left;
+      font-family: var(--serif); font-size: 17px; font-weight: 500; color: var(--navy);
     }
-    .faqitem__q i { font-size: 18px; color: var(--blue); transition: transform .2s; flex-shrink: 0; margin-left: 12px; }
-    .faqitem.open .faqitem__q i { transform: rotate(180deg); }
-    .faqitem__a {
-      max-height: 0; overflow: hidden; transition: max-height .25s ease;
-      padding: 0 24px;
-    }
-    .faqitem.open .faqitem__a { max-height: 220px; padding: 0 24px 20px; }
-    .faqitem__a p { font-size: 14px; color: var(--body); line-height: 1.7; }
+    .faqitem__q .sign { font-family: var(--mono); font-size: 20px; color: var(--blue); flex-shrink: 0; margin-left: 20px; transition: transform .2s; }
+    .faqitem.open .faqitem__q .sign { transform: rotate(45deg); }
+    .faqitem__a { max-height: 0; overflow: hidden; transition: max-height .25s ease; }
+    .faqitem.open .faqitem__a { max-height: 220px; padding-bottom: 24px; }
+    .faqitem__a p { font-size: 14.5px; color: var(--body); line-height: 1.75; max-width: 620px; }
 
-    /* ── FOOTER ── */
-    .footer { padding: 32px 0; text-align: center; border-top: 1px solid var(--border); }
-    .footer p { font-size: 12px; color: #94a3b8; }
+    /* ══════════ FOOTER ══════════ */
+    .footer { padding: 40px 0; border-top: 1px solid var(--line); }
+    .footer .container { display: flex; justify-content: space-between; align-items: center; }
+    .footer p { font-family: var(--mono); font-size: 11px; color: #94a3b8; }
 
-    /* ── RESPONSIVE ── */
+    /* ══════════ RESPONSIVE ══════════ */
     @media (max-width: 960px) {
-      .hero__grid { grid-template-columns: 1fr; gap: 40px; }
-      .hero__headline { font-size: 32px; }
-      .cards3 { grid-template-columns: 1fr; }
-      .cards5 { grid-template-columns: repeat(2, 1fr); }
-      .metoblock { grid-template-columns: 1fr; }
-      .section { padding: 64px 0; }
+      .hero__grid { grid-template-columns: 1fr; gap: 44px; padding-bottom: 90px; }
+      .paingrid { grid-template-columns: 1fr; gap: 36px; }
+      .pain__stat { font-size: 64px; }
+      .metorow, .metorow--rev .metorow__visual { grid-template-columns: 1fr; order: initial; }
+      .metorow { gap: 28px; padding: 40px 0; }
+      .metorow__visual { order: -1; }
+      .segrow { grid-template-columns: 1fr; gap: 8px; }
+      .section { padding: 76px 0; }
     }
     @media (max-width: 600px) {
-      .container { padding: 0 18px; }
-      .hero { padding: 36px 0 48px; }
-      .hero__headline { font-size: 26px; letter-spacing: -.4px; }
-      .hero__proof { grid-template-columns: 1fr; gap: 14px; }
-      .section-head h2 { font-size: 24px; }
-      .cards5 { grid-template-columns: 1fr; }
-      .formcard { padding: 26px 20px 22px; }
-      .ctafinal { padding: 40px 22px; }
-      .ctafinal h2 { font-size: 22px; }
-      .badge { padding: 24px; }
+      .container { padding: 0 20px; }
+      .hero { padding-top: 30px; }
+      .hero__topline { padding-bottom: 28px; }
+      .hero__sub { padding-left: 14px; }
+      .hero__stats { gap: 26px; }
+      .hero__stats div strong { font-size: 24px; }
+      .formcard { padding: 28px 22px 24px; }
+      .section-head { margin-bottom: 40px; }
+      .painitem { grid-template-columns: 1fr; gap: 8px; }
+      .ctafinal { padding: 48px 26px; }
+      .badge { flex-direction: column; align-items: flex-start; }
+      .footer .container { flex-direction: column; gap: 10px; text-align: center; }
     }
   </style>
 </head>
@@ -301,24 +346,26 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero grain">
     <div class="container">
-      <div class="hero__brand">
-        <img src="../shared/logo-wehelp.png" alt="WeHelp" />
-        <span>WeHelp</span>
+      <div class="hero__topline">
+        <div class="hero__brand">
+          <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+          <span>WeHelp</span>
+        </div>
+        <span class="eyebrow">Geração de Dados & Retenção B2B</span>
       </div>
 
       <div class="hero__grid">
         <div>
-          <span class="tag">Geração de Dados & Retenção B2B</span>
-          <h1 class="hero__headline">Pare de perder clientes para a concorrência sem nem saber o motivo.</h1>
-          <p class="hero__sub">Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba exatamente o que seu cliente pensa em tempo real — e resolva insatisfações antes que virem cancelamento ou avaliação negativa.</p>
+          <h1 class="hero__headline">Pare de perder clientes para a concorrência <em>sem nem saber o motivo.</em></h1>
+          <p class="hero__sub">Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba exatamente o que seu cliente pensa em tempo real — e resolva insatisfações antes que virem cancelamento.</p>
 
-          <ul class="hero__proof">
-            <li><span class="num">+17,4 Mi</span><span class="label">pesquisas enviadas</span></li>
-            <li><span class="num">+2.653</span><span class="label">clientes satisfeitos</span></li>
-            <li><span class="num">+6.560</span><span class="label">usuários registrados</span></li>
-          </ul>
+          <div class="hero__stats">
+            <div><strong>17,4 Mi</strong><span>PESQUISAS ENVIADAS</span></div>
+            <div><strong>2.653</strong><span>CLIENTES SATISFEITOS</span></div>
+            <div><strong>6.560</strong><span>USUÁRIOS REGISTRADOS</span></div>
+          </div>
         </div>
 
         <div class="formcard">
@@ -366,7 +413,7 @@
             </div>
 
             <button type="submit" class="formcard__btn" id="submitBtn">
-              <span id="submitText">👉 Falar com um especialista</span>
+              <span id="submitText">Falar com um especialista</span>
             </button>
             <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um consultor entrará em contato em até 15 minutos em horário comercial.</p>
           </form>
@@ -375,81 +422,103 @@
     </div>
   </section>
 
-  <!-- LOGOS BAR -->
-  <div class="logosbar">
-    <div class="container logosbar__inner">
-      <span>Selfit</span><span>ABC Evo</span><span>Bodytech</span><span>Celfit</span><span>Pano Bianco</span>
-    </div>
-  </div>
-
   <!-- DOR REAL -->
-  <section class="section">
+  <section class="section" id="dor" data-reveal>
     <div class="container">
       <div class="section-head">
-        <span class="section-tag">A dor real do seu negócio</span>
+        <span class="eyebrow">A dor real do seu negócio</span>
         <h2>O cliente insatisfeito raramente reclama. Ele simplesmente não volta.</h2>
       </div>
-      <div class="cards3">
-        <div class="paincard">
-          <div class="paincard__num">1</div>
-          <h3>A Armadilha do Google Forms e do Papel</h3>
-          <p>Formulários longos e fora de hora geram menos de 3% de resposta. Você toma decisões estratégicas no escuro, baseando-se apenas em opiniões da equipe, não em dados.</p>
-        </div>
-        <div class="paincard">
-          <div class="paincard__num">2</div>
-          <h3>Dados Mortos em Planilhas do Excel</h3>
-          <p>Analisar pesquisas semanas depois que foram preenchidas não salva clientes. Quando a insatisfação chega à diretoria, o contrato já foi cancelado ou o cliente já foi embora.</p>
-        </div>
-        <div class="paincard">
-          <div class="paincard__num">3</div>
-          <h3>Reclamações Públicas e Dano à Reputação</h3>
-          <p>Sem um canal direto e rápido para desabafar, o cliente insatisfeito expõe sua marca no Reclame Aqui, nas avaliações do Google ou diretamente para o mercado.</p>
+
+      <div class="paingrid">
+        <div class="pain__stat">&lt;3%<span>é a taxa de resposta média de um formulário genérico de pesquisa enviado fora de hora.</span></div>
+
+        <div class="painlist">
+          <div class="painitem">
+            <span class="painitem__num">01</span>
+            <div>
+              <h3>A armadilha do Google Forms e do papel</h3>
+              <p>Formulários longos e fora de hora geram pouquíssima resposta. Você toma decisões estratégicas no escuro, baseando-se apenas em opiniões da equipe, não em dados.</p>
+            </div>
+          </div>
+          <div class="painitem">
+            <span class="painitem__num">02</span>
+            <div>
+              <h3>Dados mortos em planilhas do Excel</h3>
+              <p>Analisar pesquisas semanas depois que foram preenchidas não salva clientes. Quando a insatisfação chega à diretoria, o contrato já foi cancelado ou o cliente já foi embora.</p>
+            </div>
+          </div>
+          <div class="painitem">
+            <span class="painitem__num">03</span>
+            <div>
+              <h3>Reclamações públicas e dano à reputação</h3>
+              <p>Sem um canal direto e rápido para desabafar, o cliente insatisfeito expõe sua marca no Reclame Aqui, nas avaliações do Google ou diretamente para o mercado.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- MÉTODO WEHELP -->
-  <section class="section section--alt">
+  <!-- MÉTODO -->
+  <section class="section section--dark grain" data-reveal>
     <div class="container">
       <div class="section-head">
-        <span class="section-tag">O método WeHelp</span>
+        <span class="eyebrow">O método WeHelp</span>
         <h2>Saia do achismo. Escute seu cliente no canal certo e aja em tempo real.</h2>
       </div>
 
-      <div class="metodo">
-        <div class="metoblock">
-          <div class="metoblock__icon"><i class="ti ti-broadcast" aria-hidden="true"></i></div>
-          <div>
-            <h3>1. Pesquisas no Momento Exato da Jornada</h3>
-            <ul>
-              <li><strong>WhatsApp Oficial & E-mail:</strong> envio de pesquisas curtas e inteligentes com resposta em 1 clique.</li>
-              <li><strong>QR Codes no Ponto de Contato:</strong> colete opiniões na recepção, vestiário, balcão ou mesas em segundos.</li>
-              <li><strong>Widget no Site ou Sistema:</strong> capture a percepção de uso direto na experiência digital.</li>
-            </ul>
+      <div class="metorow">
+        <div>
+          <p class="metorow__label">01 — Disparo multi-canal</p>
+          <h3>Pesquisas no momento exato da jornada</h3>
+          <ul>
+            <li><strong>WhatsApp Oficial & E-mail:</strong> envio de pesquisas curtas e inteligentes com resposta em 1 clique.</li>
+            <li><strong>QR Codes no ponto de contato:</strong> colete opiniões na recepção, vestiário, balcão ou mesas em segundos.</li>
+            <li><strong>Widget no site ou sistema:</strong> capture a percepção de uso direto na experiência digital.</li>
+          </ul>
+        </div>
+        <div class="metorow__visual">
+          <div class="viz-bars">
+            <i style="height:35%"></i><i style="height:60%"></i><i style="height:42%"></i>
+            <i style="height:78%"></i><i style="height:50%"></i><i style="height:90%"></i>
+            <i style="height:66%"></i>
           </div>
         </div>
+      </div>
 
-        <div class="metoblock">
-          <div class="metoblock__icon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
-          <div>
-            <h3>2. Dashboards em Tempo Real sem Complicação</h3>
-            <ul>
-              <li><strong>Painéis Prontos para Decisão:</strong> visualize índices gerais (NPS, CSAT), gráficos de tendência e motivos detalhados de cada nota.</li>
-              <li><strong>Dashboard TV:</strong> transmita os indicadores da experiência do cliente em tempo real nas telas da sua empresa, engajando toda a equipe.</li>
-              <li><strong>Comparativo entre Unidades:</strong> compare filiais, setores ou franquias em um único painel centralizado.</li>
-            </ul>
+      <div class="metorow metorow--rev">
+        <div>
+          <p class="metorow__label">02 — Visibilidade operacional</p>
+          <h3>Dashboards em tempo real sem complicação</h3>
+          <ul>
+            <li><strong>Painéis prontos para decisão:</strong> visualize índices gerais, gráficos de tendência e motivos detalhados de cada nota.</li>
+            <li><strong>Dashboard TV:</strong> transmita os indicadores da experiência do cliente em tempo real nas telas da sua empresa.</li>
+            <li><strong>Comparativo entre unidades:</strong> compare filiais, setores ou franquias em um único painel centralizado.</li>
+          </ul>
+        </div>
+        <div class="metorow__visual">
+          <div class="viz-kanban">
+            <div><span></span><span></span><span style="width:40%"></span></div>
+            <div class="hot"><span></span><span></span><span style="width:55%"></span></div>
+            <div><span></span><span style="width:60%"></span></div>
           </div>
         </div>
+      </div>
 
-        <div class="metoblock">
-          <div class="metoblock__icon"><i class="ti ti-headset" aria-hidden="true"></i></div>
-          <div>
-            <h3>3. Central de Atendimento Integrada (Fechamento de Ciclo)</h3>
-            <ul>
-              <li><strong>Alertas Automáticos de Insatisfação:</strong> se um cliente atribui uma nota baixa, um chamado é aberto imediatamente na tela do seu time em formato Kanban.</li>
-              <li><strong>Tratativa Rápida no WhatsApp:</strong> aja no mesmo dia para entender o problema, resolver o atrito e transformar detratores em promotores da sua marca.</li>
-            </ul>
+      <div class="metorow">
+        <div>
+          <p class="metorow__label">03 — Fechamento de ciclo</p>
+          <h3>Central de atendimento integrada</h3>
+          <ul>
+            <li><strong>Alertas automáticos de insatisfação:</strong> se um cliente atribui uma nota baixa, um chamado é aberto imediatamente na tela do seu time em formato Kanban.</li>
+            <li><strong>Tratativa rápida no WhatsApp:</strong> aja no mesmo dia para resolver o atrito e transformar detratores em promotores da sua marca.</li>
+          </ul>
+        </div>
+        <div class="metorow__visual">
+          <div class="viz-chat">
+            <div class="bub">Nota 3 na recepção hoje às 14h32</div>
+            <div class="bub bub--out">Vi aqui, vamos resolver ainda hoje 👍</div>
           </div>
         </div>
       </div>
@@ -457,35 +526,31 @@
   </section>
 
   <!-- SEGMENTOS -->
-  <section class="section">
+  <section class="section" data-reveal>
     <div class="container">
       <div class="section-head">
-        <span class="section-tag">Adaptado para o seu segmento</span>
+        <span class="eyebrow">Adaptado para o seu segmento</span>
         <h2>Uma solução desenhada para a realidade do seu mercado</h2>
       </div>
-      <div class="cards5">
-        <div class="segcard">
-          <i class="ti ti-briefcase" aria-hidden="true"></i>
+
+      <div>
+        <div class="segrow">
           <h4>Serviços B2B & Corporativo</h4>
           <p>Padronize a entrega entre equipes, meça a lealdade dos seus contratos e evite cancelamentos.</p>
         </div>
-        <div class="segcard">
-          <i class="ti ti-heart-rate-monitor" aria-hidden="true"></i>
+        <div class="segrow">
           <h4>Saúde & Clínicas</h4>
           <p>Avalie o atendimento da recepção e a experiência pós-consulta, preservando a reputação da sua marca.</p>
         </div>
-        <div class="segcard">
-          <i class="ti ti-code" aria-hidden="true"></i>
+        <div class="segrow">
           <h4>SaaS & Tecnologia</h4>
           <p>Identifique pontos de atrito no produto, colete feedbacks contínuos e reduza a taxa de churn.</p>
         </div>
-        <div class="segcard">
-          <i class="ti ti-barbell" aria-hidden="true"></i>
+        <div class="segrow">
           <h4>Fitness, Academias & Estúdios</h4>
           <p>Acompanhe a percepção sobre aulas, professores e estrutura física, eliminando os motivos de evasão.</p>
         </div>
-        <div class="segcard">
-          <i class="ti ti-building-store" aria-hidden="true"></i>
+        <div class="segrow">
           <h4>Varejo & Franquias</h4>
           <p>Padronize a experiência entre lojas e unidades, identificando rápido onde o atendimento está falhando.</p>
         </div>
@@ -494,28 +559,20 @@
   </section>
 
   <!-- PROVA SOCIAL -->
-  <section class="section section--alt">
+  <section class="section section--quote" data-reveal>
     <div class="container">
-      <div class="section-head">
-        <span class="section-tag">Prova social</span>
-        <h2>Quem substituiu o achismo por dados já colhe resultados no caixa</h2>
-      </div>
-
-      <div class="testicard">
-        <p>"Saímos de um cenário de opiniões divididas na equipe para uma gestão 100% guiada pela voz do cliente. Conseguimos responder atritos no mesmo dia e aumentamos nossa retenção significativamente."</p>
-        <div class="testicard__author">
-          <div class="testicard__avatar">FM</div>
-          <div>
-            <strong>Cliente WeHelp</strong>
-            <span>Gestão de Experiência do Cliente</span>
-          </div>
-        </div>
+      <div class="quoteblock">
+        <span class="mark">"</span>
+        <p>Saímos de um cenário de opiniões divididas na equipe para uma gestão guiada pela voz do cliente. Conseguimos responder atritos no mesmo dia e aumentamos nossa retenção significativamente.</p>
+        <cite>Cliente WeHelp — Gestão de Experiência do Cliente</cite>
       </div>
 
       <div class="badge">
-        <div class="icon">🏆</div>
-        <h4>Movimento de Excelência em Experiência do Cliente</h4>
-        <p>Sua empresa qualificada para os mais altos padrões de satisfação e retenção do mercado.</p>
+        <div class="rosette"><i>🏆</i></div>
+        <div>
+          <h4>Movimento de Excelência em Experiência do Cliente</h4>
+          <p>Sua empresa qualificada para os mais altos padrões de satisfação e retenção do mercado.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -523,13 +580,13 @@
   <!-- CTA FINAL -->
   <section class="section">
     <div class="container">
-      <div class="ctafinal">
+      <div class="ctafinal grain">
         <div class="ctafinal__inner">
+          <span class="eyebrow">Vamos conversar</span>
           <h2>Pronto para modernizar a gestão de satisfação da sua empresa?</h2>
           <p>Converse em 15 minutos com um de nossos especialistas. Analisaremos sua operação atual e mostraremos como colocar sua estrutura de pesquisas para rodar em poucos dias.</p>
           <a href="#leadForm" class="ctafinal__btn" id="ctaFinalBtn">
-            <i class="ti ti-arrow-right" aria-hidden="true"></i>
-            Solicitar diagnóstico com especialista
+            Solicitar diagnóstico com especialista →
           </a>
         </div>
       </div>
@@ -537,38 +594,38 @@
   </section>
 
   <!-- FAQ -->
-  <section class="section">
+  <section class="section" data-reveal>
     <div class="container">
       <div class="section-head">
-        <span class="section-tag">Perguntas frequentes</span>
+        <span class="eyebrow">Perguntas frequentes</span>
         <h2>Ainda tem dúvidas?</h2>
       </div>
       <div class="faq" id="faq">
         <div class="faqitem">
           <button class="faqitem__q" type="button">
             Quanto tempo leva para colocar as pesquisas no ar?
-            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            <span class="sign">+</span>
           </button>
           <div class="faqitem__a"><p>A plataforma é 100% na nuvem e pronta para uso. Com nossos modelos pré-configurados, sua primeira pesquisa pode ser enviada no mesmo dia.</p></div>
         </div>
         <div class="faqitem">
           <button class="faqitem__q" type="button">
             Posso personalizar os envios com a marca da minha empresa?
-            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            <span class="sign">+</span>
           </button>
           <div class="faqitem__a"><p>Sim. Todos os e-mails, links e pesquisas recebem a sua identidade visual, logo e cores corporativas.</p></div>
         </div>
         <div class="faqitem">
           <button class="faqitem__q" type="button">
             Quais metodologias de pesquisa a plataforma suporta?
-            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            <span class="sign">+</span>
           </button>
           <div class="faqitem__a"><p>Você pode aplicar NPS® (Net Promoter Score), eNPS (pesquisa interna com colaboradores) ou criar questionários personalizados para o seu contexto.</p></div>
         </div>
         <div class="faqitem">
           <button class="faqitem__q" type="button">
             A plataforma se integra ao meu CRM ou sistema de gestão?
-            <i class="ti ti-chevron-down" aria-hidden="true"></i>
+            <span class="sign">+</span>
           </button>
           <div class="faqitem__a"><p>Sim, possuímos integrações e suporte via API e Webhooks para automatizar o envio de pesquisas após eventos da sua operação. Fale com um especialista para confirmar a integração com o seu sistema específico.</p></div>
         </div>
@@ -577,10 +634,24 @@
   </section>
 
   <footer class="footer">
-    <div class="container"><p>© 2026 WeHelp · Todos os direitos reservados</p></div>
+    <div class="container">
+      <p>© 2026 WEHELP — TODOS OS DIREITOS RESERVADOS</p>
+      <p>GESTÃO DA EXPERIÊNCIA DO CLIENTE COM FOCO EM RETENÇÃO</p>
+    </div>
   </footer>
 
   <script>
+    // ── Scroll reveal ──
+    const revealEls = document.querySelectorAll('[data-reveal]');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+      }, { threshold: .12 });
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('is-visible'));
+    }
+
     // ── FAQ accordion ──
     document.querySelectorAll('.faqitem__q').forEach(btn => {
       btn.addEventListener('click', () => {
