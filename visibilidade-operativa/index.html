@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>Aula ao Vivo — Visibilidade Operativa | WeHelp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f4f6fb;
+      color: #0a1128;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    :root {
+      --blue:       #1B6EF3;
+      --blue-hover: #1457c8;
+      --blue-light: #e8f0ff;
+      --navy:       #0a1128;
+      --body:       #4a5568;
+      --border:     #e2e8f0;
+      --white:      #ffffff;
+      --bg:         #f4f6fb;
+      --red:        #dc2626;
+      --red-light:  #fff3f3;
+    }
+
+    /* ── DOTTED BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, #c5d3e8 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: .45;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── TOP BAR TICKER ── */
+    .topbar {
+      position: relative; z-index: 10;
+      background: var(--blue);
+      height: 40px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .topbar__track { width: 100%; overflow: hidden; }
+    .topbar__inner {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: ticker 24s linear infinite;
+    }
+    .topbar:hover .topbar__inner { animation-play-state: paused; }
+    .topbar__item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      padding: 0 20px;
+    }
+    .topbar__dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-33.333%); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 1;
+      overflow: hidden;
+      min-height: 560px;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      padding: 80px 0 96px;
+    }
+    .hero__inner {
+      position: relative; z-index: 2;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 48px;
+      width: 100%;
+    }
+    .hero__left { max-width: 660px; }
+    .hero__alert {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--blue-light);
+      border: 1px solid #bcd6ff;
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp .6s ease .1s forwards;
+    }
+    .hero__alert i { font-size: 13px; }
+    .hero__headline {
+      font-family: 'Figtree', sans-serif;
+      font-size: 40px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -.8px;
+      color: var(--navy);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp .6s ease .22s forwards;
+    }
+    .hero__headline em { font-style: normal; color: var(--blue); }
+    .hero__sub {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--body);
+      margin-bottom: 32px;
+      max-width: 540px;
+      opacity: 0;
+      animation: fadeUp .6s ease .34s forwards;
+    }
+    .hero__sub strong { color: var(--navy); }
+    .hero__trust {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 36px;
+      padding: 16px 20px;
+      background: linear-gradient(90deg, #0f1f4b 0%, #1B6EF3 60%, rgba(27,110,243,0) 100%);
+      border-radius: 12px;
+      opacity: 0;
+      animation: fadeUp .6s ease .44s forwards;
+    }
+    .hero__trust li {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: 500;
+    }
+    .hero__trust li .trust-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .hero__trust li .trust-icon i { font-size: 18px; color: #fff; }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(27,110,243,0.5), 0 6px 24px rgba(27,110,243,0.3); }
+      60%  { box-shadow: 0 0 0 14px rgba(27,110,243,0), 0 6px 24px rgba(27,110,243,0.3); }
+      100% { box-shadow: 0 0 0 0 rgba(27,110,243,0),   0 6px 24px rgba(27,110,243,0.3); }
+    }
+    .hero__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--blue);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 17px 34px;
+      border-radius: 8px;
+      transition: background .2s, transform .2s;
+      opacity: 0;
+      animation: fadeUp .6s ease .54s forwards, pulse-ring 2s ease-out 1.2s infinite;
+    }
+    .hero__cta:hover {
+      background: var(--blue-hover);
+      transform: translateY(-2px);
+      animation-play-state: paused;
+      box-shadow: 0 12px 32px rgba(27,110,243,.4);
+    }
+    .hero__cta i { font-size: 17px; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      position: relative; z-index: 1;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, var(--blue) 20%, var(--blue) 80%, transparent 100%);
+      opacity: .35;
+    }
+
+    /* ── STATEMENT (big centered line) ── */
+    .statement {
+      position: relative; z-index: 1;
+      padding: 72px 48px;
+      text-align: center;
+    }
+    .statement__text {
+      font-family: 'Figtree', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.35;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .statement__text .muted { color: #a0aec0; }
+    .statement__text em {
+      font-style: normal;
+      color: var(--blue);
+      display: block;
+      margin-top: 6px;
+    }
+
+    /* ── THESIS ── */
+    .thesis {
+      position: relative; z-index: 1;
+      padding: 24px 48px 80px;
+      text-align: center;
+    }
+    .thesis__headline {
+      font-family: 'Figtree', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.3;
+      max-width: 620px;
+      margin: 0 auto 18px;
+    }
+    .thesis__body {
+      font-size: 16px;
+      color: var(--body);
+      line-height: 1.75;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .thesis__body strong { color: var(--navy); }
+
+    /* ── COMPARE ── */
+    .compare {
+      position: relative; z-index: 1;
+      padding: 0 48px 96px;
+    }
+    .compare__inner { max-width: 1000px; margin: 0 auto; }
+    .compare__top { text-align: center; margin-bottom: 40px; }
+    .tag {
+      display: inline-block;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--blue); background: var(--blue-light);
+      padding: 6px 16px; border-radius: 4px;
+      margin-bottom: 16px;
+    }
+    .compare__headline {
+      font-family: 'Figtree', sans-serif;
+      font-size: 26px; font-weight: 900;
+      color: var(--navy);
+    }
+    .compare__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .compare__col {
+      border-radius: 16px;
+      padding: 28px 26px;
+      border: 1px solid var(--border);
+    }
+    .compare__col--bad { background: var(--red-light); border-color: #fecaca; }
+    .compare__col--good { background: var(--white); border-color: var(--border); box-shadow: 0 2px 12px rgba(10,17,40,.05); }
+    .compare__col-title {
+      font-family: 'Figtree', sans-serif;
+      font-size: 13px; font-weight: 800;
+      letter-spacing: 1px; text-transform: uppercase;
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px;
+    }
+    .compare__col--bad .compare__col-title { color: var(--red); }
+    .compare__col--good .compare__col-title { color: var(--blue); }
+    .compare__list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .compare__list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 14.5px; line-height: 1.6; color: var(--body);
+    }
+    .compare__list li i { font-size: 17px; margin-top: 2px; flex-shrink: 0; }
+    .compare__col--bad .compare__list li i { color: var(--red); }
+    .compare__col--good .compare__list li i { color: var(--blue); }
+
+    /* ── DOBRA: O QUE VOU MOSTRAR ── */
+    .pilares {
+      position: relative; z-index: 1;
+      padding: 0 48px 96px;
+    }
+    .pilares__inner { max-width: 1120px; margin: 0 auto; }
+    .pilares__top { text-align: center; margin-bottom: 56px; }
+    .pilares__headline {
+      font-family: 'Figtree', sans-serif;
+      font-size: 30px; font-weight: 900;
+      color: var(--navy); line-height: 1.2;
+      letter-spacing: -.3px; margin-bottom: 12px;
+      max-width: 600px; margin-left: auto; margin-right: auto;
+    }
+    .pilares__sub { font-size: 15px; color: var(--body); line-height: 1.7; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 52px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(10,17,40,.05);
+      padding: 28px 22px;
+      display: flex; flex-direction: column; gap: 14px;
+      transition: transform .2s, box-shadow .2s;
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: var(--blue);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .25s ease;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(10,17,40,.10); }
+    .card:hover::before { transform: scaleX(1); }
+    .card__num {
+      font-size: 10px; font-weight: 800;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--blue); opacity: .4;
+    }
+    .card__icon {
+      width: 46px; height: 46px;
+      background: var(--blue-light);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card__icon i { font-size: 21px; color: var(--blue); }
+    .card__title {
+      font-family: 'Figtree', sans-serif;
+      font-size: 16px; font-weight: 800;
+      color: var(--navy); line-height: 1.3;
+    }
+    .card__body { font-size: 13.5px; color: var(--body); line-height: 1.7; flex: 1; }
+
+    .cta-block { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .cta-block__btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--blue); color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 1.2px; text-transform: uppercase;
+      padding: 19px 48px; border-radius: 8px;
+      transition: background .2s, transform .2s;
+      animation: pulse-ring 2s ease-out 1s infinite;
+    }
+    .cta-block__btn:hover {
+      background: var(--blue-hover);
+      transform: translateY(-2px);
+      animation-play-state: paused;
+      box-shadow: 0 14px 36px rgba(27,110,243,.35);
+    }
+    .cta-block__btn i { font-size: 18px; }
+    .trust { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: #a0aec0; font-weight: 500; }
+    .trust i { font-size: 14px; color: var(--blue); opacity: .7; }
+
+    /* ── CASE ── */
+    .case {
+      position: relative; z-index: 1;
+      padding: 0 48px 96px;
+      text-align: center;
+    }
+    .case__inner {
+      max-width: 700px; margin: 0 auto;
+      background: var(--navy);
+      border-radius: 20px;
+      padding: 48px 40px;
+    }
+    .case__tag {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: #8899bb; margin-bottom: 14px;
+    }
+    .case__headline {
+      font-family: 'Figtree', sans-serif;
+      font-size: 20px; font-weight: 800;
+      color: #fff; line-height: 1.4;
+      max-width: 480px; margin: 0 auto 32px;
+    }
+    .case__stats {
+      display: flex; align-items: center; justify-content: center;
+      gap: 22px; margin-bottom: 20px;
+    }
+    .case__stat-num {
+      font-family: 'Figtree', sans-serif;
+      font-size: 44px; font-weight: 900; color: #fff; line-height: 1;
+    }
+    .case__stat-num.dim { color: #5b6a94; font-size: 32px; }
+    .case__arrow { font-size: 22px; color: var(--blue); }
+    .case__stat-label {
+      font-size: 11px; color: #8899bb; letter-spacing: 1px;
+      text-transform: uppercase; margin-top: 6px;
+    }
+    .case__brand {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(27,110,243,0.15);
+      border: 1px solid rgba(27,110,243,0.3);
+      color: #cfe0ff;
+      font-size: 13px; font-weight: 700;
+      padding: 7px 16px; border-radius: 50px;
+    }
+
+    /* ── MENTOR ── */
+    .mentor {
+      position: relative; z-index: 1;
+      padding: 0 48px 96px;
+    }
+    .mentor__inner {
+      max-width: 900px; margin: 0 auto;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 40px;
+      align-items: center;
+      background: var(--white);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(10,17,40,.05);
+      padding: 40px;
+    }
+    .mentor__photo-frame {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: var(--bg);
+      border-radius: 50%;
+      border: 1px dashed #c5d3e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .mentor__photo-frame span.initials {
+      font-family: 'Figtree', sans-serif;
+      font-size: 36px; font-weight: 900; color: var(--blue);
+    }
+    .mentor__photo-frame span.label {
+      font-size: 9px; color: #a0aec0; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; text-align: center; padding: 0 12px;
+    }
+    /* para usar foto real:
+       <img src="rogerio-aranda.jpg" alt="Rogério Aranda" class="mentor__photo"> */
+    .mentor__photo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .mentor__tag {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--blue); background: var(--blue-light);
+      padding: 6px 16px; border-radius: 4px;
+      display: inline-block; margin-bottom: 14px;
+    }
+    .mentor__name {
+      font-family: 'Figtree', sans-serif;
+      font-size: 22px; font-weight: 900; color: var(--navy);
+    }
+    .mentor__role { font-size: 13px; color: var(--blue); font-weight: 700; margin-bottom: 14px; }
+    .mentor__bio { font-size: 14.5px; color: var(--body); line-height: 1.75; }
+
+    /* ── FOOTER ── */
+    .footer {
+      position: relative; z-index: 1;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      text-align: center;
+    }
+    .footer p { font-size: 12px; color: #a0aec0; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── RESPONSIVE 960px ── */
+    @media (max-width: 960px) {
+      .hero { min-height: auto; padding: 48px 0 56px; }
+      .hero__inner { padding: 0 32px; }
+      .hero__headline { font-size: 28px; }
+      .hero__left { max-width: 100%; }
+      .pilares { padding: 0 32px 64px; }
+      .cards { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .pilares__headline { font-size: 24px; }
+      .compare { padding: 0 32px 64px; }
+      .compare__grid { grid-template-columns: 1fr; }
+      .statement { padding: 56px 32px; }
+      .statement__text { font-size: 25px; }
+      .thesis { padding: 24px 32px 56px; }
+      .case { padding: 0 32px 64px; }
+      .mentor { padding: 0 32px 64px; }
+      .mentor__inner { grid-template-columns: 1fr; text-align: center; padding: 32px; }
+      .mentor__photo-frame { max-width: 160px; margin: 0 auto; }
+    }
+
+    /* ── RESPONSIVE 600px ── */
+    @media (max-width: 600px) {
+      .topbar { height: 36px; }
+      .topbar .topbar__item { font-size: 9px; letter-spacing: 1px; padding: 0 16px; gap: 7px; }
+      .topbar__dot { width: 5px; height: 5px; }
+      .hero { padding: 28px 0 36px; }
+      .hero__inner { padding: 0 20px; }
+      .hero__left { text-align: left; }
+      .hero__alert { margin-bottom: 16px; font-size: 10px; }
+      .hero__headline { font-size: 26px; letter-spacing: -.3px; margin-bottom: 14px; }
+      .hero__sub { font-size: 15px; line-height: 1.65; margin-bottom: 20px; }
+      .hero__trust { background: #0f1f4b; border: none; border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; gap: 8px; }
+      .hero__trust li { font-size: 13px; color: #fff; justify-content: flex-start; }
+      .hero__trust li .trust-icon { background: rgba(255,255,255,0.15); width: 32px; height: 32px; border-radius: 8px; }
+      .hero__trust li .trust-icon i { color: #fff; font-size: 15px; }
+      .hero__cta { display: flex; justify-content: center; width: 100%; padding: 16px 20px; font-size: 12px; border-radius: 8px; }
+      .divider { display: block; height: 3px; }
+      .statement__text { font-size: 21px; }
+      .thesis__headline { font-size: 21px; }
+      .compare__col { padding: 22px 18px; }
+      .pilares__top { margin-bottom: 28px; }
+      .pilares__headline { font-size: 22px; line-height: 1.2; }
+      .pilares__sub { font-size: 14px; }
+      .cards { grid-template-columns: 1fr; gap: 12px; }
+      .card { padding: 22px 18px; border-radius: 14px; }
+      .cta-block__btn { width: 100%; justify-content: center; padding: 17px 20px; font-size: 11px; letter-spacing: 1px; }
+      .trust { font-size: 11px; }
+      .case__inner { padding: 32px 24px; }
+      .case__stats { gap: 14px; }
+      .case__stat-num { font-size: 34px; }
+      .case__stat-num.dim { font-size: 24px; }
+      .footer { padding: 20px; }
+    }
+
+    /* ─── MODAL FORMULÁRIO ─── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10, 17, 40, 0.75);
+      backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 9999; padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: #0a1128;
+      border-radius: 20px;
+      border: 1px solid #1e3060;
+      padding: 36px 32px;
+      width: 100%; max-width: 440px;
+      position: relative; max-height: 92vh; overflow-y: auto;
+      animation: modalIn .3s ease;
+    }
+    @keyframes modalIn { from { opacity: 0; transform: translateY(20px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .modal__close {
+      position: absolute; top: 18px; right: 18px;
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.08);
+      border: none; border-radius: 8px;
+      color: #8899bb; font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .modal__close:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .modal__logo { display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 8px; }
+    .modal__logo-icon { width: 34px; height: 34px; background: var(--blue); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .modal__logo-icon i { font-size: 19px; color: #fff; }
+    .modal__logo span { font-family: 'Figtree', sans-serif; font-size: 19px; font-weight: 800; color: #fff; }
+    .modal__title { text-align: center; font-size: 15px; font-weight: 600; color: #b0c4e8; margin-bottom: 24px; }
+    .modal__field { margin-bottom: 14px; }
+    .modal__input, .modal__select {
+      width: 100%; background: #fff; border: 1px solid transparent;
+      border-radius: 50px; padding: 15px 22px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; color: #0a1128;
+      outline: none; transition: border-color .2s;
+    }
+    .modal__input:focus, .modal__select:focus { border-color: var(--blue); }
+    .modal__input::placeholder { color: #a0aec0; }
+    .modal__select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 20px center;
+      cursor: pointer; color: #a0aec0;
+    }
+    .modal__select.filled { color: #0a1128; }
+    .modal__phone-row { display: flex; gap: 8px; align-items: stretch; }
+    .modal__ddi-wrap { flex-shrink: 0; }
+    .modal__ddi-select {
+      height: 100%; background: #fff; border: 1px solid transparent;
+      border-radius: 50px; padding: 15px 14px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; color: #0a1128; font-weight: 500;
+      cursor: pointer; outline: none; appearance: none; transition: border-color .2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 30px;
+    }
+    .modal__ddi-select:focus { border-color: var(--blue); }
+    .modal__phone-row .modal__input { flex: 1; min-width: 0; }
+    .modal__field-error { font-size: 12px; color: #fca5a5; margin-top: 6px; padding-left: 20px; display: none; }
+    .modal__field-error.show { display: block; }
+    .modal__input.invalid, .modal__select.invalid { border-color: #ef4444; }
+    .modal__submit {
+      width: 100%; background: var(--blue); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; padding: 17px;
+      border: none; border-radius: 50px; cursor: pointer; margin-top: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: background .2s;
+    }
+    .modal__submit:hover { background: var(--blue-hover); }
+    .modal__submit:disabled { opacity: .6; cursor: not-allowed; }
+    .modal__spinner {
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .modal__redirect-info {
+      text-align: center; font-size: 13px; color: #b0c4e8; line-height: 1.5;
+      margin-top: 16px; padding: 12px 14px;
+      background: rgba(27,110,243,0.10); border: 1px solid rgba(27,110,243,0.22);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .modal__redirect-info i { font-size: 18px; color: #25D366; flex-shrink: 0; }
+    .modal__hint { text-align: center; font-size: 12px; color: #6a7fa5; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .modal__hint i { font-size: 13px; }
+    .modal__error {
+      background: rgba(220, 38, 38, 0.15); border: 1px solid rgba(220, 38, 38, 0.4);
+      color: #fca5a5; font-size: 13px; padding: 12px 16px; border-radius: 10px;
+      margin-bottom: 14px; display: none;
+    }
+    @media (max-width: 600px) { .modal { padding: 30px 22px; } }
+
+    /* ─── POPUP CONFIRMAÇÃO ─── */
+    .confirm-popup {
+      position: fixed; inset: 0;
+      background: rgba(10,17,40,0.85); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 99999; padding: 20px;
+    }
+    .confirm-popup.active { display: flex; }
+    .confirm-popup__box {
+      background: #fff; border-radius: 20px; padding: 40px 36px;
+      max-width: 400px; width: 100%; text-align: center; animation: modalIn .3s ease;
+    }
+    .confirm-popup__icon { font-size: 56px; margin-bottom: 16px; }
+    .confirm-popup__title { font-family: 'Figtree', sans-serif; font-size: 22px; font-weight: 900; color: #0a1128; margin-bottom: 10px; }
+    .confirm-popup__sub { font-size: 14px; color: #718096; line-height: 1.6; margin-bottom: 24px; }
+    .confirm-popup__sub span { font-weight: 700; color: #1B6EF3; }
+    .confirm-popup__btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #25D366; color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; padding: 16px 32px;
+      border-radius: 50px; text-decoration: none; transition: background .2s;
+    }
+    .confirm-popup__btn:hover { background: #1ebe5d; }
+    .confirm-popup__btn i { font-size: 18px; }
+    .confirm-popup__timer { font-size: 12px; color: #a0aec0; margin-top: 14px; }
+    @media (max-width: 600px) {
+      .confirm-popup__box { padding: 32px 24px; }
+      .confirm-popup__title { font-size: 20px; }
+    }
+  </style>
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- End Meta Pixel -->
+</head>
+<body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar__track">
+      <div class="topbar__inner">
+        <span class="topbar__item"><span class="topbar__dot"></span>EXCLUSIVO PARA DONOS DE ACADEMIAS E ESTÚDIOS</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>TERÇA-FEIRA ÀS 12H</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>MÉTODO VALIDADO</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>EXCLUSIVO PARA DONOS DE ACADEMIAS E ESTÚDIOS</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>TERÇA-FEIRA ÀS 12H</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>MÉTODO VALIDADO</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>EXCLUSIVO PARA DONOS DE ACADEMIAS E ESTÚDIOS</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>TERÇA-FEIRA ÀS 12H</span>
+        <span class="topbar__item"><span class="topbar__dot"></span>MÉTODO VALIDADO</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOBRA 1: HERO -->
+  <section class="hero">
+    <div class="hero__inner">
+      <div class="hero__left">
+        <div class="hero__alert">
+          <i class="ti ti-eye" aria-hidden="true"></i>
+          Aula ao vivo · Visibilidade Operativa
+        </div>
+
+        <h1 class="hero__headline">
+          Como estancar a perda de clientes e
+          <em>aumentar o caixa da sua academia</em> em 30 dias.
+        </h1>
+
+        <p class="hero__sub">
+          Por que sua academia não cresce mesmo batendo a meta de vendas?
+          Descubra a falha de atendimento que está expulsando seus clientes em
+          silêncio e como consertar isso <strong>sem baixar o seu preço.</strong>
+        </p>
+
+        <ul class="hero__trust">
+          <li>
+            <span class="trust-icon"><i class="ti ti-calendar-event" aria-hidden="true"></i></span>
+            11 de Agosto (Terça-feira), às 12h.
+          </li>
+          <li>
+            <span class="trust-icon"><i class="ti ti-users" aria-hidden="true"></i></span>
+            Encontro exclusivo · vagas limitadas
+          </li>
+        </ul>
+
+        <a href="https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88" target="_blank" rel="noopener" class="hero__cta" data-lead-btn>
+          ENTRAR NO GRUPO AGORA
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DOBRA 2: DOR -->
+  <section class="statement">
+    <p class="statement__text">
+      Você comemora quando bate a meta de vendas no fim do mês...
+      <em>mas o dinheiro não sobra?</em>
+    </p>
+  </section>
+
+  <!-- DOBRA 3: TESE -->
+  <section class="thesis">
+    <h2 class="thesis__headline">
+      A grande verdade do mercado fitness é uma só:
+      Você não pode gerenciar o que não consegue ver.
+    </h2>
+    <p class="thesis__body">
+      O seu problema hoje não está na concorrência. Está na falta de
+      <strong>"Visibilidade Operativa".</strong> O seu cliente vai embora em
+      silêncio simplesmente porque falta um processo contínuo de gestão para
+      enxergar a insatisfação a tempo.
+    </p>
+  </section>
+
+  <!-- DOBRA 4: COMPARATIVO -->
+  <section class="compare">
+    <div class="compare__inner">
+      <div class="compare__top">
+        <span class="tag">E com isso podemos concluir que</span>
+        <h2 class="compare__headline">Dois jeitos de gerenciar sua academia</h2>
+      </div>
+      <div class="compare__grid">
+        <div class="compare__col compare__col--bad">
+          <p class="compare__col-title"><i class="ti ti-x" aria-hidden="true"></i> O jeito tradicional</p>
+          <ul class="compare__list">
+            <li><i class="ti ti-x" aria-hidden="true"></i> Gasta rios de dinheiro em tráfego para atrair aluno novo.</li>
+            <li><i class="ti ti-x" aria-hidden="true"></i> O aluno vai embora em silêncio e a equipe nem percebe.</li>
+            <li><i class="ti ti-x" aria-hidden="true"></i> Acredita que a culpa do cancelamento é da academia low-cost da esquina.</li>
+            <li><i class="ti ti-x" aria-hidden="true"></i> Trata a retenção como uma ação isolada de fim de mês, e não como um processo constante.</li>
+          </ul>
+        </div>
+        <div class="compare__col compare__col--good">
+          <p class="compare__col-title"><i class="ti ti-eye" aria-hidden="true"></i> O método de Visibilidade Operativa</p>
+          <ul class="compare__list">
+            <li><i class="ti ti-check" aria-hidden="true"></i> O caixa aumenta rapidamente só retendo os alunos que já estão matriculados.</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Um sistema de escuta silenciosa avisa exatamente o que o cliente valoriza e onde a academia está falhando.</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> O gestor melhora a experiência do cliente e deixa a empresa muito mais lucrativa.</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Toma decisões estratégicas e muda processos baseado em dados reais de satisfação, não em "achismos" da recepção.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOBRA 5: O QUE VOU MOSTRAR -->
+  <section class="pilares" id="pilares">
+    <div class="pilares__inner">
+      <div class="pilares__top">
+        <span class="tag">Dia 11 de Agosto</span>
+        <h2 class="pilares__headline">Eu vou te mostrar ao vivo:</h2>
+        <p class="pilares__sub">O passo a passo prático de quem já aplica Visibilidade Operativa todos os dias</p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <p class="card__num">01</p>
+          <div class="card__icon"><i class="ti ti-search" aria-hidden="true"></i></div>
+          <p class="card__title">A Coleta Invisível.</p>
+          <p class="card__body">Como identificar os atritos na jornada do aluno e descobrir exatamente o que faz ele querer ficar por anos.</p>
+        </div>
+        <div class="card">
+          <p class="card__num">02</p>
+          <div class="card__icon"><i class="ti ti-report-money" aria-hidden="true"></i></div>
+          <p class="card__title">A Matemática do Caixa</p>
+          <p class="card__body">Entenda como pequenas melhorias na retenção geram um impacto gigantesco nas receitas do seu negócio.</p>
+        </div>
+        <div class="card">
+          <p class="card__num">03</p>
+          <div class="card__icon"><i class="ti ti-refresh" aria-hidden="true"></i></div>
+          <p class="card__title">O Fechamento de Ciclo</p>
+          <p class="card__body">O fluxo prático para analisar os dados coletados e agir rápido para resgatar o aluno antes que ele peça o cancelamento.</p>
+        </div>
+        <div class="card">
+          <p class="card__num">04</p>
+          <div class="card__icon"><i class="ti ti-crown" aria-hidden="true"></i></div>
+          <p class="card__title">O Nível do Gestor</p>
+          <p class="card__body">Nenhuma academia rende acima do nível do seu próprio gerente. Aprenda a liderar sua equipe com previsibilidade e lucro.</p>
+        </div>
+      </div>
+
+      <div class="cta-block">
+        <a href="https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88" target="_blank" rel="noopener" class="cta-block__btn" data-lead-btn>
+          ENTRAR NO GRUPO AGORA
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+        <p class="trust">
+          <i class="ti ti-lock" aria-hidden="true"></i>
+          Vagas limitadas · Acesso 100% gratuito
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOBRA 6: CASE -->
+  <section class="case">
+    <div class="case__inner">
+      <p class="case__tag">O mesmo ecossistema usado pelos gigantes do mercado</p>
+      <p class="case__headline">
+        Durante a aula, você vai entender como a rede aplicou essa exata
+        estratégia para diminuir a evasão de alunos.
+      </p>
+      <div class="case__stats">
+        <div>
+          <p class="case__stat-num dim">40</p>
+          <p class="case__stat-label">Unidades</p>
+        </div>
+        <i class="ti ti-arrow-right case__arrow" aria-hidden="true"></i>
+        <div>
+          <p class="case__stat-num">200+</p>
+          <p class="case__stat-label">Unidades</p>
+        </div>
+      </div>
+      <span class="case__brand"><i class="ti ti-building-store" aria-hidden="true"></i> Selfit</span>
+    </div>
+  </section>
+
+  <!-- DOBRA 7: MENTOR -->
+  <section class="mentor">
+    <div class="mentor__inner">
+      <div class="mentor__photo-frame">
+        <span class="initials">RA</span>
+        <span class="label">Foto Rogério Aranda</span>
+      </div>
+      <!-- para usar foto real:
+           <img src="rogerio-aranda.jpg" alt="Rogério Aranda" class="mentor__photo"> -->
+      <div>
+        <span class="mentor__tag">Quem vai ser o seu mentor?</span>
+        <p class="mentor__name">Rogério Aranda.</p>
+        <p class="mentor__role">CEO da WeHelp.</p>
+        <p class="mentor__bio">
+          Com mais de 17 anos vivendo a realidade e a gestão de experiência do
+          cliente no mercado fitness, construiu o ecossistema definitivo para
+          estancar o cancelamento de clientes. Hoje, guia centenas de academias
+          e estúdios da América Latina a transformarem dados em lucro e
+          previsibilidade.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOBRA 8: CTA FINAL -->
+  <section class="pilares" style="padding-bottom: 64px;">
+    <div class="pilares__inner">
+      <div class="cta-block">
+        <a href="https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88" target="_blank" rel="noopener" class="cta-block__btn" data-lead-btn>
+          ENTRAR NO GRUPO AGORA
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+        <p class="trust">
+          <i class="ti ti-lock" aria-hidden="true"></i>
+          Vagas limitadas · Acesso 100% gratuito
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 WeHelp · Todos os direitos reservados</p>
+  </footer>
+
+  <!-- MODAL DE INSCRIÇÃO -->
+  <div class="modal-overlay" id="leadModal">
+    <div class="modal">
+      <button class="modal__close" id="modalClose" aria-label="Fechar">✕</button>
+
+      <div class="modal__error" id="modalError"></div>
+
+      <form id="leadForm" novalidate>
+        <div class="modal__field">
+          <input type="text" name="nome" class="modal__input" placeholder="* Nome completo" required />
+        </div>
+        <div class="modal__field">
+          <div class="modal__phone-row">
+            <div class="modal__ddi-wrap">
+              <select class="modal__ddi-select" id="ddiSelect" aria-label="Código do país">
+                <option value="+55" data-flag="🇧🇷" selected>🇧🇷 +55</option>
+                <option value="+351" data-flag="🇵🇹">🇵🇹 +351</option>
+                <option value="+1" data-flag="🇺🇸">🇺🇸 +1</option>
+                <option value="+44" data-flag="🇬🇧">🇬🇧 +44</option>
+                <option value="+34" data-flag="🇪🇸">🇪🇸 +34</option>
+                <option value="+54" data-flag="🇦🇷">🇦🇷 +54</option>
+                <option value="+56" data-flag="🇨🇱">🇨🇱 +56</option>
+                <option value="+57" data-flag="🇨🇴">🇨🇴 +57</option>
+                <option value="+52" data-flag="🇲🇽">🇲🇽 +52</option>
+                <option value="+595" data-flag="🇵🇾">🇵🇾 +595</option>
+                <option value="+598" data-flag="🇺🇾">🇺🇾 +598</option>
+                <option value="+39" data-flag="🇮🇹">🇮🇹 +39</option>
+                <option value="+33" data-flag="🇫🇷">🇫🇷 +33</option>
+                <option value="+49" data-flag="🇩🇪">🇩🇪 +49</option>
+              </select>
+            </div>
+            <input type="tel" name="whatsapp" class="modal__input" placeholder="* WhatsApp" required />
+          </div>
+          <p class="modal__field-error" id="phoneError">Digite um número válido com DDD</p>
+        </div>
+        <div class="modal__field">
+          <select name="clientes" class="modal__select" id="clientesSelect" required>
+            <option value="" disabled selected>* Quantos alunos ativos você tem atualmente?</option>
+            <option value="Até 150 clientes">Até 150 clientes</option>
+            <option value="De 151 a 300 clientes">De 151 a 300 clientes</option>
+            <option value="De 301 a 500 clientes">De 301 a 500 clientes</option>
+            <option value="De 501 a 1000 clientes">De 501 a 1000 clientes</option>
+            <option value="Acima de 1000 clientes">Acima de 1000 clientes</option>
+          </select>
+        </div>
+
+        <button type="submit" class="modal__submit" id="modalSubmit">
+          <span id="submitText">GARANTIR MINHA VAGA</span>
+          <span class="modal__spinner" id="submitSpinner"></span>
+        </button>
+
+        <p class="modal__redirect-info">
+          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+          Ao confirmar, você será direcionado ao grupo de WhatsApp onde o evento vai acontecer.
+        </p>
+
+        <p class="modal__hint">
+          <i class="ti ti-lock" aria-hidden="true"></i>
+          Seus dados estão protegidos. Sem spam, garantido.
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- POPUP CONFIRMAÇÃO -->
+  <div class="confirm-popup" id="confirmPopup">
+    <div class="confirm-popup__box">
+      <div class="confirm-popup__icon">✅</div>
+      <h2 class="confirm-popup__title">Vaga garantida!</h2>
+      <p class="confirm-popup__sub">
+        Você será redirecionado para o grupo do WhatsApp em <span id="countdown">3</span> segundos...
+      </p>
+      <a href="#" class="confirm-popup__btn" id="confirmBtn">
+        <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+        Entrar no grupo agora
+      </a>
+      <p class="confirm-popup__timer">Redirecionamento automático em <span id="countdown2">3</span>s</p>
+    </div>
+  </div>
+
+  <script>
+    // ─── Config ───
+    const WHATSAPP_GROUP = 'https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88';
+    const PIXEL_ID = '1106401696374974';
+    const params = new URLSearchParams(location.search);
+    const click_id = params.get('click_id');
+    const slug = params.get('slug') || click_id?.slice(0,8);
+    const testEventCode = params.get('fbtest') || null;
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+
+    const modal = document.getElementById('leadModal');
+    const form = document.getElementById('leadForm');
+    const errorBox = document.getElementById('modalError');
+    const submitBtn = document.getElementById('modalSubmit');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const clientesSelect = document.getElementById('clientesSelect');
+    const ddiSelect = document.getElementById('ddiSelect');
+    const phoneError = document.getElementById('phoneError');
+
+    function getEventId() {
+      let id = sessionStorage.getItem('lead_event_id');
+      if (!id) {
+        id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('lead_event_id', id);
+      }
+      return id;
+    }
+
+    function isValidPhone(phone, ddi) {
+      const digits = phone.replace(/\D/g, '');
+      if (ddi === '+55') return digits.length === 10 || digits.length === 11;
+      return digits.length >= 6;
+    }
+
+    function showConfirmPopup() {
+      const popup = document.getElementById('confirmPopup');
+      const confirmBtn = document.getElementById('confirmBtn');
+      confirmBtn.href = WHATSAPP_GROUP;
+      popup.classList.add('active');
+
+      let secs = 3;
+      const c1 = document.getElementById('countdown');
+      const c2 = document.getElementById('countdown2');
+      const interval = setInterval(() => {
+        secs--;
+        if (c1) c1.textContent = secs;
+        if (c2) c2.textContent = secs;
+        if (secs <= 0) {
+          clearInterval(interval);
+          window.location.href = WHATSAPP_GROUP;
+        }
+      }, 1000);
+
+      confirmBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearInterval(interval);
+        window.location.href = WHATSAPP_GROUP;
+      });
+    }
+
+    document.querySelectorAll('a[data-lead-btn]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (typeof fbq === 'function') {
+          const extras = {};
+          if (testEventCode) extras.test_event_code = testEventCode;
+          fbq('trackCustom', 'SubscribedButtonClick', {}, extras);
+        }
+      });
+    });
+
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    clientesSelect.addEventListener('change', () => {
+      clientesSelect.classList.toggle('filled', !!clientesSelect.value);
+    });
+
+    form.whatsapp.addEventListener('blur', () => {
+      const valid = !form.whatsapp.value || isValidPhone(form.whatsapp.value, ddiSelect.value);
+      form.whatsapp.classList.toggle('invalid', !valid);
+      phoneError.classList.toggle('show', !valid);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.style.display = 'none';
+
+      const nome = form.nome.value.trim();
+      const phoneRaw = form.whatsapp.value.trim();
+      const ddi = ddiSelect.value;
+      const clientes = form.clientes.value;
+
+      let hasError = false;
+
+      if (!nome) {
+        form.nome.classList.add('invalid');
+        hasError = true;
+      } else {
+        form.nome.classList.remove('invalid');
+      }
+
+      if (!isValidPhone(phoneRaw, ddi)) {
+        form.whatsapp.classList.add('invalid');
+        phoneError.classList.add('show');
+        hasError = true;
+      } else {
+        form.whatsapp.classList.remove('invalid');
+        phoneError.classList.remove('show');
+      }
+
+      if (!clientes) {
+        clientesSelect.classList.add('invalid');
+        hasError = true;
+      } else {
+        clientesSelect.classList.remove('invalid');
+      }
+
+      if (hasError) return;
+
+      const phoneDigits = (ddi + phoneRaw.replace(/\D/g, '')).replace(/\D/g, '');
+      const generatedEmail = 'wp.' + phoneDigits + '@noemail.invalid';
+
+      const eventId = getEventId();
+
+      const data = {
+        nome: nome,
+        email: generatedEmail,
+        whatsapp: ddi + phoneRaw.replace(/\D/g, ''),
+        clientes: clientes,
+        utm_source: params.get('utm_source') || '',
+        utm_medium: params.get('utm_medium') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        utm_term: params.get('utm_term') || '',
+        utm_id: params.get('utm_id') || '',
+        fbclid: params.get('fbclid') || '',
+        gclid: params.get('gclid') || '',
+        referral_source: document.referrer || '',
+        url: location.href,
+        event_id: eventId,
+        fbc: getCookie('_fbc'),
+        fbp: getCookie('_fbp'),
+        test_event_code: testEventCode || '',
+      };
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'ENVIANDO...';
+      submitSpinner.style.display = 'block';
+
+      closeModal();
+      showConfirmPopup();
+
+      if (typeof fbq === 'function') {
+        fbq('init', PIXEL_ID, {
+          em: generatedEmail,
+          ph: phoneDigits,
+        });
+        const pixelExtras = { eventID: eventId };
+        if (testEventCode) pixelExtras.test_event_code = testEventCode;
+        fbq('track', 'Lead', {}, pixelExtras);
+      }
+
+      if (click_id) {
+        fetch('https://linktracker2-f3va.vercel.app/api/event', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ click_id, slug, event_type: 'whatsapp' })
+        }).catch(() => {});
+      }
+
+      fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).catch(() => {});
+    });
+  </script>
+
+</body>
+</html>

@@ -101,6 +101,18 @@
       "notas": "Fluxo multi-step (uma pergunta por tela) que substitui o formulário único do GreatPages, terminando no mesmo agendamento via Google Calendar. Captura via api/lead-sessao-estrategica.js: cria/atualiza contato no ActiveCampaign + cria Deal no pipeline 'Webinário' (id 19), etapa 'LEADS APLICAÇÃO WEBNÁRIO' (id 172, owner id 6) + tag 'WB Aplicação 05' (id 79), usando os custom fields já existentes 39/35/36/37, e envia pro Sheets via SHEETS_SESSAO_ESTRATEGICA_URL. Confirmado ponta a ponta em produção."
     },
     {
+      "slug": "visibilidade-operativa",
+      "path": "/visibilidade-operativa/",
+      "titulo": "Aula ao Vivo — Visibilidade Operativa | WeHelp",
+      "produto": "pesquisa-satisfacao",
+      "segmento": "fitness",
+      "tipo": "webinario",
+      "funil": "topo",
+      "status": "publicada — réplica do GreatPages, criada 2026-08-07",
+      "origem": "página nova, replicando mkt.wehelpsoftware.com/aula-ao-vivo-para-donos-de-academias-e-estudios (GreatPages)",
+      "notas": "Convite pro mesmo webinário de webinario/, mas com a copy mais recente 'Visibilidade Operativa' (jeito tradicional vs. método, 4 blocos do que será mostrado, case Selfit 40→200+, bio do Rogério). Reaproveita o mesmo modal/formulário e api/lead.js de webinario/ (nome + WhatsApp + quantos alunos), mesmo grupo de WhatsApp de destino. Não reaproveita o seletor de país (intl-tel-input) que a versão original do GreatPages tinha — decisão consciente pra manter o padrão já usado nas outras LPs."
+    },
+    {
       "slug": "acessar-sala",
       "path": "/acessar-sala/",
       "titulo": "ENTRAR AGORA! — redirect pro Google Meet",
