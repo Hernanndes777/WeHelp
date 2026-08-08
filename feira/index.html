@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>Calculadora de Churn — Quanto sua academia está perdendo? | WeHelp</title>
+  <meta name="description" content="Descubra em 30 segundos quanto sua academia perde por mês com cancelamentos e saiba como recuperar até 40% dos alunos em risco. Oferta exclusiva de feira: 15 dias grátis." />
+  <meta property="og:title" content="Calculadora de Churn — WeHelp" />
+  <meta property="og:description" content="Descubra quanto sua academia está perdendo com cancelamentos e recupere até 40% dos alunos em risco." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: #1a1a2e;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; }
+
+    :root {
+      --blue:       #1B6EF3;
+      --blue-hover: #1457c8;
+      --blue-light: #e8f0ff;
+      --navy:       #0a1128;
+      --navy2:      #101c42;
+      --body:       #4a5568;
+      --border:     #e2e8f0;
+      --bg:         #f4f6fb;
+      --white:      #ffffff;
+    }
+
+    .wrap { max-width: 480px; margin: 0 auto; }
+    .px { padding-left: 24px; padding-right: 24px; }
+
+    .disp { font-family: 'Figtree', sans-serif; }
+
+    /* ══════════ BLOCO 1 — HERO ══════════ */
+    .hero {
+      position: relative; overflow: hidden;
+      background: radial-gradient(500px 380px at 50% -10%, rgba(27,110,243,.45), transparent 65%), var(--navy);
+      padding: 40px 0 52px;
+      text-align: center;
+    }
+    .hero__brand { display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 36px; }
+    .hero__brand img { height: 28px; }
+    .hero__brand span { font-family: 'Figtree', sans-serif; font-size: 18px; font-weight: 800; color: #fff; }
+
+    .hero__headline {
+      font-family: 'Figtree', sans-serif; font-weight: 900;
+      font-size: 30px; line-height: 1.2; letter-spacing: -.4px;
+      color: #fff; margin-bottom: 18px;
+    }
+    .hero__sub {
+      font-size: 15.5px; line-height: 1.7; color: #b4c0e0;
+      max-width: 380px; margin: 0 auto 32px;
+    }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(27,110,243,.55), 0 8px 24px rgba(27,110,243,.35); }
+      60%  { box-shadow: 0 0 0 14px rgba(27,110,243,0), 0 8px 24px rgba(27,110,243,.35); }
+      100% { box-shadow: 0 0 0 0 rgba(27,110,243,0), 0 8px 24px rgba(27,110,243,.35); }
+    }
+    .btn-cta {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; background: var(--blue); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+      padding: 18px 24px; border-radius: 50px; border: none;
+      transition: background .2s, transform .2s;
+      animation: pulse-ring 2.2s ease-out 1s infinite;
+    }
+    .btn-cta:hover, .btn-cta:active { background: var(--blue-hover); transform: translateY(-1px); }
+    .btn-cta i { font-size: 18px; }
+    .btn-cta.small { animation: none; padding: 16px 22px; font-size: 14px; }
+
+    .hero__scroll {
+      margin-top: 26px; display: flex; justify-content: center;
+      color: #5b6a94; animation: bob 1.6s ease-in-out infinite;
+    }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+    /* ══════════ BLOCO 2 — CALCULADORA ══════════ */
+    .calc { background: var(--bg); padding: 52px 0; }
+    .section-head { text-align: center; margin-bottom: 28px; }
+    .section-head .tag {
+      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--blue); background: var(--blue-light);
+      padding: 6px 14px; border-radius: 50px; margin-bottom: 14px;
+    }
+    .section-head h2 {
+      font-family: 'Figtree', sans-serif; font-size: 23px; font-weight: 800;
+      color: var(--navy); line-height: 1.3; margin-bottom: 10px;
+    }
+    .section-head p { font-size: 14.5px; color: var(--body); line-height: 1.6; }
+
+    .calc__card {
+      background: #fff; border-radius: 20px; border: 1px solid var(--border);
+      padding: 26px 22px; box-shadow: 0 12px 32px rgba(10,17,40,.06);
+    }
+    .calc__field { margin-bottom: 16px; }
+    .calc__field label {
+      display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 7px;
+    }
+    .calc__field .input-wrap { position: relative; }
+    .calc__field .input-wrap i.prefix {
+      position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+      color: #94a3b8; font-size: 15px; font-style: normal; font-weight: 700;
+    }
+    .calc__input {
+      width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 14px 16px; font-family: 'DM Sans', sans-serif;
+      font-size: 16px; color: var(--navy); outline: none; transition: border-color .2s;
+      -moz-appearance: textfield;
+    }
+    .calc__input.has-prefix { padding-left: 38px; }
+    .calc__input::-webkit-outer-spin-button, .calc__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .calc__input:focus { border-color: var(--blue); }
+
+    .calc__result {
+      margin-top: 22px; padding: 20px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--navy), var(--navy2));
+      text-align: center;
+    }
+    .calc__result-label { font-size: 11.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #8899bb; margin-bottom: 6px; }
+    .calc__result-value {
+      font-family: 'Figtree', sans-serif; font-size: 34px; font-weight: 900; color: #fff;
+      line-height: 1.1; margin-bottom: 4px; word-break: break-word;
+    }
+    .calc__result-sub { font-size: 12.5px; color: #8899bb; margin-bottom: 16px; }
+    .calc__result-divider { height: 1px; background: rgba(255,255,255,.12); margin: 16px 0; }
+    .calc__recover {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: rgba(27,110,243,.18); border: 1px solid rgba(27,110,243,.35);
+      border-radius: 12px; padding: 12px 14px;
+    }
+    .calc__recover i { font-size: 20px; color: #6fa3ff; flex-shrink: 0; }
+    .calc__recover p { font-size: 13px; color: #cfe0ff; line-height: 1.5; text-align: left; }
+    .calc__recover strong { color: #fff; font-family: 'Figtree', sans-serif; }
+
+    .calc__cta { margin-top: 20px; }
+
+    /* ══════════ BLOCO 3 — SOLUÇÃO ══════════ */
+    .solucao { background: #fff; padding: 52px 0; }
+    .modlist { display: flex; flex-direction: column; gap: 16px; }
+    .moditem {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--bg); border-radius: 16px; padding: 20px;
+      border: 1px solid var(--border);
+    }
+    .moditem__icon {
+      width: 44px; height: 44px; border-radius: 12px; background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .moditem__icon i { font-size: 21px; color: var(--blue); }
+    .moditem h3 { font-family: 'Figtree', sans-serif; font-size: 15.5px; font-weight: 800; color: var(--navy); margin-bottom: 5px; }
+    .moditem p { font-size: 13.5px; color: var(--body); line-height: 1.6; }
+
+    /* ══════════ BLOCO 4 — PROVA SOCIAL ══════════ */
+    .prova { background: var(--bg); padding: 52px 0; text-align: center; }
+    .prova h2 {
+      font-family: 'Figtree', sans-serif; font-size: 21px; font-weight: 800;
+      color: var(--navy); line-height: 1.3; margin-bottom: 28px; max-width: 340px; margin-left: auto; margin-right: auto;
+    }
+    .prova__stats { display: flex; justify-content: center; gap: 36px; margin-bottom: 34px; }
+    .prova__stats div strong { display: block; font-family: 'Figtree', sans-serif; font-size: 26px; font-weight: 900; color: var(--blue); }
+    .prova__stats div span { font-size: 11.5px; color: var(--body); font-weight: 600; }
+    .prova__logos { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 24px 28px; }
+    .prova__logos img { height: 30px; width: auto; opacity: .8; }
+
+    /* ══════════ BLOCO 5 — OFERTA FINAL ══════════ */
+    .oferta {
+      background: linear-gradient(160deg, #1B6EF3 0%, #1550c9 100%);
+      padding: 56px 0; text-align: center;
+    }
+    .oferta__badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+      color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+      padding: 7px 16px; border-radius: 50px; margin-bottom: 18px;
+    }
+    .oferta h2 {
+      font-family: 'Figtree', sans-serif; font-size: 25px; font-weight: 900;
+      color: #fff; line-height: 1.25; margin-bottom: 14px;
+    }
+    .oferta__sub { font-size: 14.5px; color: #d9e6ff; line-height: 1.7; max-width: 380px; margin: 0 auto 30px; }
+
+    .offerform {
+      background: #fff; border-radius: 20px; padding: 26px 22px;
+      box-shadow: 0 20px 50px rgba(5,15,50,.25); text-align: left;
+    }
+    .offerform__field { margin-bottom: 14px; }
+    .offerform__field label { display: block; font-size: 12.5px; font-weight: 700; color: var(--navy); margin-bottom: 7px; }
+    .offerform__input {
+      width: 100%; background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 14px 16px; font-family: 'DM Sans', sans-serif;
+      font-size: 16px; color: var(--navy); outline: none; transition: border-color .2s;
+    }
+    .offerform__input:focus { border-color: var(--blue); }
+    .offerform__input.invalid { border-color: #ef4444; }
+    .offerform__hint { display: flex; align-items: flex-start; gap: 6px; font-size: 11.5px; color: #94a3b8; margin-top: 12px; line-height: 1.5; }
+    .offerform__hint i { font-size: 13px; margin-top: 1px; flex-shrink: 0; }
+    .offerform__error {
+      background: #fff3f3; border: 1px solid #fecaca; color: #b91c1c;
+      font-size: 12.5px; padding: 10px 14px; border-radius: 10px; margin-bottom: 14px; display: none;
+    }
+    .offerform__spinner {
+      width: 15px; height: 15px; border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .offersuccess { display: none; background: #fff; border-radius: 20px; padding: 34px 26px; text-align: center; }
+    .offersuccess__icon { font-size: 46px; margin-bottom: 14px; }
+    .offersuccess h3 { font-family: 'Figtree', sans-serif; font-size: 19px; font-weight: 800; color: var(--navy); margin-bottom: 10px; }
+    .offersuccess p { font-size: 14px; color: var(--body); line-height: 1.65; }
+    .offersuccess p strong { color: var(--blue); }
+
+    /* ══════════ FOOTER ══════════ */
+    .footer { padding: 26px 0; text-align: center; }
+    .footer p { font-size: 11.5px; color: #a0aec0; }
+
+    /* ══════════ DESKTOP (page stays phone-width, centered) ══════════ */
+    @media (min-width: 560px) {
+      body { background: var(--bg); }
+      .wrap { box-shadow: 0 0 60px rgba(10,17,40,.08); }
+      .hero, .calc, .solucao, .prova, .oferta, .footer { background-clip: padding-box; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <!-- BLOCO 1: HERO -->
+  <section class="hero">
+    <div class="wrap px">
+      <div class="hero__brand">
+        <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+        <span>WeHelp</span>
+      </div>
+      <h1 class="hero__headline">Pare de tentar adivinhar quem vai cancelar a matrícula.</h1>
+      <p class="hero__sub">Descubra o quanto sua academia está perdendo hoje e saiba como recuperar até 40% dos alunos em risco antes que eles vão embora.</p>
+      <a href="#calculadora" class="btn-cta">
+        Calcular meu prejuízo agora
+        <i class="ti ti-calculator" aria-hidden="true"></i>
+      </a>
+      <div class="hero__scroll"><i class="ti ti-chevron-down" aria-hidden="true" style="font-size:22px;"></i></div>
+    </div>
+  </section>
+
+  <!-- BLOCO 2: CALCULADORA -->
+  <section class="calc" id="calculadora">
+    <div class="wrap px">
+      <div class="section-head">
+        <h2>Quanto dinheiro você está deixando na mesa?</h2>
+        <p>Preencha os 3 campos abaixo e descubra o impacto financeiro da evasão na sua academia.</p>
+      </div>
+
+      <div class="calc__card">
+        <div class="calc__field">
+          <label for="calcAlunos">Quantos alunos ativos você tem hoje?</label>
+          <input type="number" inputmode="numeric" min="0" class="calc__input" id="calcAlunos" placeholder="Ex: 300" />
+        </div>
+        <div class="calc__field">
+          <label for="calcMensalidade">Qual o valor da sua mensalidade média?</label>
+          <div class="input-wrap">
+            <i class="prefix">R$</i>
+            <input type="number" inputmode="decimal" min="0" class="calc__input has-prefix" id="calcMensalidade" placeholder="Ex: 180" />
+          </div>
+        </div>
+        <div class="calc__field" style="margin-bottom:0">
+          <label for="calcCancelamentos">Quantos alunos cancelam por mês (em média)?</label>
+          <input type="number" inputmode="numeric" min="0" class="calc__input" id="calcCancelamentos" placeholder="Ex: 15" />
+        </div>
+
+        <div class="calc__result">
+          <p class="calc__result-label">Você está perdendo por mês</p>
+          <p class="calc__result-value" id="resultMensal">R$ 0</p>
+          <p class="calc__result-sub" id="resultAnual">Isso equivale a R$ 0 por ano</p>
+          <div class="calc__result-divider"></div>
+          <div class="calc__recover">
+            <i class="ti ti-shield-check" aria-hidden="true"></i>
+            <p>Com a WeHelp, você pode recuperar até 40% disso: <strong id="resultRecuperavel">R$ 0/mês</strong></p>
+          </div>
+        </div>
+
+        <div class="calc__cta">
+          <a href="#oferta" class="btn-cta small">
+            Quero estancar essa perda
+            <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCO 3: SOLUÇÃO -->
+  <section class="solucao">
+    <div class="wrap px">
+      <div class="section-head">
+        <h2>Três módulos. Um único objetivo: blindar o seu faturamento.</h2>
+      </div>
+      <div class="modlist">
+        <div class="moditem">
+          <div class="moditem__icon"><i class="ti ti-message-circle-2" aria-hidden="true"></i></div>
+          <div>
+            <h3>Pesquisa</h3>
+            <p>Escute seus alunos no momento certo e descubra o porquê de cada nota.</p>
+          </div>
+        </div>
+        <div class="moditem">
+          <div class="moditem__icon"><i class="ti ti-headset" aria-hidden="true"></i></div>
+          <div>
+            <h3>Atendimento</h3>
+            <p>Resolva problemas em tempo real com nosso painel centralizado, não espere a próxima pesquisa.</p>
+          </div>
+        </div>
+        <div class="moditem">
+          <div class="moditem__icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+          <div>
+            <h3>Retenção</h3>
+            <p>Nosso sistema identifica alunos com risco alto, médio e baixo de churn. Aja antes que seja tarde.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCO 4: PROVA SOCIAL -->
+  <section class="prova">
+    <div class="wrap px">
+      <h2>A escolha de quem domina a experiência do aluno.</h2>
+      <div class="prova__stats">
+        <div><strong>+17 Mi</strong><span>pesquisas enviadas</span></div>
+        <div><strong>2.653</strong><span>clientes satisfeitos</span></div>
+      </div>
+      <div class="prova__logos">
+        <img src="../shared/diagnostico/logo-selfit.webp" alt="Selfit" />
+        <img src="../shared/diagnostico/logo-bioritmo.webp" alt="Bioritmo" />
+        <img src="../shared/diagnostico/logo-cinesystem.webp" alt="Cinesystem" />
+        <img src="../shared/diagnostico/logo-beto-carreiro.webp" alt="Beto Carrero World" />
+        <img src="../shared/diagnostico/logo-oral-unic.webp" alt="OralUnic" />
+        <img src="../shared/diagnostico/logo-cellep.webp" alt="Cellep" />
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCO 5: OFERTA E CTA FINAL -->
+  <section class="oferta" id="oferta">
+    <div class="wrap px">
+      <span class="oferta__badge"><i class="ti ti-ticket" aria-hidden="true"></i> Condição exclusiva de feira</span>
+      <h2>15 dias de teste grátis!</h2>
+      <p class="oferta__sub">Quer ver nosso modelo preditivo funcionando na prática? Agende agora um bate-papo rápido no nosso estande com nossos especialistas e libere seu acesso premium de 15 dias, sem precisar cadastrar cartão de crédito.</p>
+
+      <form class="offerform" id="leadForm" novalidate>
+        <div class="offerform__error" id="formError">Preencha todos os campos corretamente.</div>
+        <div class="offerform__field">
+          <label for="nome">Nome completo</label>
+          <input type="text" class="offerform__input" id="nome" placeholder="Seu nome completo" required />
+        </div>
+        <div class="offerform__field">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" inputmode="numeric" class="offerform__input" id="whatsapp" placeholder="(00) 00000-0000" maxlength="11" required />
+        </div>
+        <div class="offerform__field" style="margin-bottom:0">
+          <label for="academia">Nome da academia</label>
+          <input type="text" class="offerform__input" id="academia" placeholder="Nome da sua academia" required />
+        </div>
+
+        <div class="calc__cta">
+          <button type="submit" class="btn-cta small" id="submitBtn">
+            <span id="submitText">Agendar minha consultoria gratuita</span>
+            <span class="offerform__spinner" id="submitSpinner"></span>
+          </button>
+        </div>
+        <p class="offerform__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um consultor vai te chamar aqui no estande.</p>
+      </form>
+
+      <div class="offersuccess" id="offerSuccess">
+        <div class="offersuccess__icon">✅</div>
+        <h3>Consultoria agendada!</h3>
+        <p>Recebemos seus dados, <strong id="successNome"></strong>. Fique à vontade — um dos nossos especialistas já foi avisado e vai até você no estande em instantes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2026 WeHelp · Todos os direitos reservados</p>
+  </footer>
+
+  <script>
+    // ── Calculadora de churn ──
+    const calcAlunos = document.getElementById('calcAlunos');
+    const calcMensalidade = document.getElementById('calcMensalidade');
+    const calcCancelamentos = document.getElementById('calcCancelamentos');
+    const resultMensal = document.getElementById('resultMensal');
+    const resultAnual = document.getElementById('resultAnual');
+    const resultRecuperavel = document.getElementById('resultRecuperavel');
+
+    const brl = (n) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+
+    function recalcChurn() {
+      const mensalidade = parseFloat(calcMensalidade.value) || 0;
+      const cancelamentos = parseFloat(calcCancelamentos.value) || 0;
+
+      const perdaMensal = mensalidade * cancelamentos;
+      const perdaAnual = perdaMensal * 12;
+      const recuperavel = perdaMensal * 0.4;
+
+      resultMensal.textContent = brl(perdaMensal);
+      resultAnual.textContent = 'Isso equivale a ' + brl(perdaAnual) + ' por ano';
+      resultRecuperavel.textContent = brl(recuperavel) + '/mês';
+    }
+    [calcAlunos, calcMensalidade, calcCancelamentos].forEach(el => el.addEventListener('input', recalcChurn));
+
+    // ── Formulário de lead ──
+    const PIXEL_ID = '1106401696374974';
+    const params = new URLSearchParams(location.search);
+    const testEventCode = params.get('fbtest') || null;
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+    function getEventId() {
+      let id = sessionStorage.getItem('lead_event_id');
+      if (!id) {
+        id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('lead_event_id', id);
+      }
+      return id;
+    }
+
+    const whatsappInput = document.getElementById('whatsapp');
+    whatsappInput.addEventListener('input', (e) => {
+      let digits = e.target.value.replace(/\D/g, '').slice(0, 11);
+      let formatted = digits;
+      if (digits.length > 2) formatted = '(' + digits.slice(0, 2) + ') ' + digits.slice(2);
+      if (digits.length > 7) formatted = '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 7) + '-' + digits.slice(7);
+      e.target.value = formatted;
+    });
+
+    const form = document.getElementById('leadForm');
+    const formError = document.getElementById('formError');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formError.style.display = 'none';
+
+      const nome = form.nome.value.trim();
+      const whatsappDigits = whatsappInput.value.replace(/\D/g, '');
+      const academia = form.academia.value.trim();
+
+      let hasError = false;
+      [form.nome, whatsappInput, form.academia].forEach(el => el.classList.remove('invalid'));
+
+      if (!nome) { form.nome.classList.add('invalid'); hasError = true; }
+      if (whatsappDigits.length < 10) { whatsappInput.classList.add('invalid'); hasError = true; }
+      if (!academia) { form.academia.classList.add('invalid'); hasError = true; }
+
+      if (hasError) {
+        formError.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Enviando...';
+      submitSpinner.style.display = 'inline-block';
+
+      const eventId = getEventId();
+      const data = {
+        Nome_Completo: nome,
+        WhatsApp: '+55' + whatsappDigits,
+        Nome_da_Academia: academia,
+        Alunos_ativos: calcAlunos.value || '',
+        Mensalidade_media: calcMensalidade.value || '',
+        Cancelamentos_mes: calcCancelamentos.value || '',
+        utm_source: params.get('utm_source') || '',
+        utm_medium: params.get('utm_medium') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        utm_term: params.get('utm_term') || '',
+        utm_id: params.get('utm_id') || '',
+        fbclid: params.get('fbclid') || '',
+        gclid: params.get('gclid') || '',
+        referral_source: document.referrer || '',
+        url: location.href,
+        event_id: eventId,
+        fbc: getCookie('_fbc'),
+        fbp: getCookie('_fbp'),
+        test_event_code: testEventCode || '',
+      };
+
+      if (typeof fbq === 'function') {
+        fbq('init', PIXEL_ID, { ph: '55' + whatsappDigits });
+        const pixelExtras = { eventID: eventId };
+        if (testEventCode) pixelExtras.test_event_code = testEventCode;
+        fbq('track', 'Lead', {}, pixelExtras);
+      }
+
+      fetch('/api/lead-feira', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).catch(() => {});
+
+      document.getElementById('successNome').textContent = nome.split(' ')[0];
+      form.style.display = 'none';
+      document.getElementById('offerSuccess').style.display = 'block';
+    });
+  </script>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+</body>
+</html>
