@@ -1,4 +1,4 @@
-// api/lead-feira.js — Função serverless (Vercel) da LP /feira
+// api/lead-fitness-brasil-2026.js — Função serverless (Vercel) da LP /fitness-brasil-2026
 // Formulário de agendamento no estande (folder sanfonado + QR Code).
 // Por decisão do usuário, esse funil NÃO cai no ActiveCampaign (lead
 // já é abordado ao vivo no estande) — só planilha do Google Sheets +
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   // [PENDENTE] URL do Apps Script (/exec) da planilha da Feira —
   // configurar como env var na Vercel assim que a planilha for criada.
-  const SHEETS_URL = process.env.SHEETS_FEIRA_URL;
+  const SHEETS_URL = process.env.SHEETS_FITNESS_BRASIL_2026_URL;
 
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
