@@ -332,7 +332,7 @@
     <div class="wrap px">
       <div class="section-head">
         <h2>Quanto dinheiro você está deixando na mesa?</h2>
-        <p>Preencha os 3 campos abaixo e descubra o impacto financeiro da evasão na sua academia.</p>
+        <p>Preencha os campos abaixo e descubra o impacto financeiro da evasão na sua academia — o mesmo cálculo que usamos no nosso relatório oficial.</p>
       </div>
 
       <div class="calc__card">
@@ -347,19 +347,23 @@
             <input type="number" inputmode="decimal" min="0" class="calc__input has-prefix" id="calcMensalidade" placeholder="Ex: 180" />
           </div>
         </div>
+        <div class="calc__field">
+          <label for="calcPermanencia">Tempo médio de permanência do aluno (meses)?</label>
+          <input type="number" inputmode="numeric" min="0" class="calc__input" id="calcPermanencia" placeholder="Ex: 10" />
+        </div>
         <div class="calc__field" style="margin-bottom:0">
           <label for="calcCancelamentos">Quantos alunos cancelam por mês (em média)?</label>
           <input type="number" inputmode="numeric" min="0" class="calc__input" id="calcCancelamentos" placeholder="Ex: 15" />
         </div>
 
         <div class="calc__result">
-          <p class="calc__result-label">Você está perdendo por mês</p>
-          <p class="calc__result-value" id="resultMensal">R$ 0</p>
-          <p class="calc__result-sub" id="resultAnual">Isso equivale a R$ 0 por ano</p>
+          <p class="calc__result-label">Você está perdendo por ano</p>
+          <p class="calc__result-value" id="resultAnual">R$ 0</p>
+          <p class="calc__result-sub" id="resultMensal">Isso equivale a R$ 0 por mês · taxa de churn de 0%</p>
           <div class="calc__result-divider"></div>
           <div class="calc__recover">
             <i class="ti ti-shield-check" aria-hidden="true"></i>
-            <p>Com a WeHelp, você pode recuperar até 40% disso: <strong id="resultRecuperavel">R$ 0/mês</strong></p>
+            <p>Com a WeHelp, você pode recuperar até 40% disso: <strong id="resultRecuperavel">R$ 0/ano</strong></p>
           </div>
         </div>
 
@@ -470,28 +474,38 @@
 
   <script>
     // ── Calculadora de churn ──
+    // Mesma fórmula do app oficial da Calculadora de Churn (client/src/components/ChurnCalculator.tsx):
+    // valorPorAluno = mensalidade × tempo médio de permanência (LTV do aluno)
+    // prejuízo anual = (cancelamentos/mês × 12) × valorPorAluno
     const calcAlunos = document.getElementById('calcAlunos');
     const calcMensalidade = document.getElementById('calcMensalidade');
+    const calcPermanencia = document.getElementById('calcPermanencia');
     const calcCancelamentos = document.getElementById('calcCancelamentos');
-    const resultMensal = document.getElementById('resultMensal');
     const resultAnual = document.getElementById('resultAnual');
+    const resultMensal = document.getElementById('resultMensal');
     const resultRecuperavel = document.getElementById('resultRecuperavel');
 
     const brl = (n) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+    const pct = (n) => n.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
 
     function recalcChurn() {
+      const total = parseFloat(calcAlunos.value) || 0;
       const mensalidade = parseFloat(calcMensalidade.value) || 0;
+      const permanencia = parseFloat(calcPermanencia.value) || 0;
       const cancelamentos = parseFloat(calcCancelamentos.value) || 0;
 
-      const perdaMensal = mensalidade * cancelamentos;
-      const perdaAnual = perdaMensal * 12;
-      const recuperavel = perdaMensal * 0.4;
+      const churnRate = total > 0 ? (cancelamentos / total) * 100 : 0;
+      const valorPorAluno = mensalidade * permanencia;
+      const cancelamentosAno = cancelamentos * 12;
+      const perdaAnual = cancelamentosAno * valorPorAluno;
+      const perdaMensal = perdaAnual / 12;
+      const recuperavel = perdaAnual * 0.4;
 
-      resultMensal.textContent = brl(perdaMensal);
-      resultAnual.textContent = 'Isso equivale a ' + brl(perdaAnual) + ' por ano';
-      resultRecuperavel.textContent = brl(recuperavel) + '/mês';
+      resultAnual.textContent = brl(perdaAnual);
+      resultMensal.textContent = 'Isso equivale a ' + brl(perdaMensal) + ' por mês · taxa de churn de ' + pct(churnRate);
+      resultRecuperavel.textContent = brl(recuperavel) + '/ano';
     }
-    [calcAlunos, calcMensalidade, calcCancelamentos].forEach(el => el.addEventListener('input', recalcChurn));
+    [calcAlunos, calcMensalidade, calcPermanencia, calcCancelamentos].forEach(el => el.addEventListener('input', recalcChurn));
 
     // ── Formulário de lead ──
     const PIXEL_ID = '1106401696374974';
@@ -557,6 +571,7 @@
         Nome_da_Academia: academia,
         Alunos_ativos: calcAlunos.value || '',
         Mensalidade_media: calcMensalidade.value || '',
+        Permanencia_media_meses: calcPermanencia.value || '',
         Cancelamentos_mes: calcCancelamentos.value || '',
         utm_source: params.get('utm_source') || '',
         utm_medium: params.get('utm_medium') || '',

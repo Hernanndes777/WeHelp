@@ -25,7 +25,7 @@ export default async function handler(req, res) {
   try {
     const {
       Nome_Completo, WhatsApp, Nome_da_Academia,
-      Alunos_ativos, Mensalidade_media, Cancelamentos_mes,
+      Alunos_ativos, Mensalidade_media, Permanencia_media_meses, Cancelamentos_mes,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
       fbclid, gclid, referral_source, url: pageUrl,
       event_id, fbc, fbp, test_event_code,
@@ -61,6 +61,7 @@ export default async function handler(req, res) {
           Nome_da_Academia: Nome_da_Academia || '',
           Alunos_ativos: Alunos_ativos || '',
           Mensalidade_media: Mensalidade_media || '',
+          Permanencia_media_meses: Permanencia_media_meses || '',
           Cancelamentos_mes: Cancelamentos_mes || '',
           fbclid: fbclid || '',
           gclid: gclid || '',
