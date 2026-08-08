@@ -242,11 +242,65 @@
     .footer { padding: 26px 0; text-align: center; }
     .footer p { font-size: 11.5px; color: #a0aec0; }
 
-    /* ══════════ DESKTOP (page stays phone-width, centered) ══════════ */
-    @media (min-width: 560px) {
+    /* ══════════ TABLET / SMALL DESKTOP ══════════ */
+    @media (min-width: 640px) {
+      .wrap { max-width: 600px; }
+      .px { padding-left: 40px; padding-right: 40px; }
+
+      .hero { padding: 64px 0 76px; }
+      .hero__brand { margin-bottom: 44px; }
+      .hero__brand img { height: 32px; }
+      .hero__brand span { font-size: 20px; }
+      .hero__headline { font-size: 40px; }
+      .hero__sub { font-size: 17.5px; max-width: 460px; }
+      .btn-cta { font-size: 16px; padding: 19px 28px; }
+
+      .calc, .solucao, .prova { padding: 72px 0; }
+      .section-head { margin-bottom: 34px; }
+      .section-head h2 { font-size: 28px; }
+      .section-head p { font-size: 15.5px; }
+      .calc__card { padding: 36px 34px; }
+      .calc__input { font-size: 16.5px; padding: 15px 18px; }
+      .calc__result { padding: 28px; }
+      .calc__result-value { font-size: 42px; }
+      .calc__result-sub { font-size: 13.5px; }
+      .calc__recover p { font-size: 14px; }
+
+      .modlist { gap: 20px; }
+      .moditem { padding: 26px; gap: 20px; }
+      .moditem__icon { width: 52px; height: 52px; border-radius: 14px; }
+      .moditem__icon i { font-size: 24px; }
+      .moditem h3 { font-size: 17px; }
+      .moditem p { font-size: 14.5px; }
+
+      .prova h2 { font-size: 25px; max-width: 420px; }
+      .prova__stats { gap: 52px; margin-bottom: 40px; }
+      .prova__stats div strong { font-size: 32px; }
+      .prova__stats div span { font-size: 12.5px; }
+      .prova__logos { gap: 30px 36px; }
+      .prova__logos img { height: 36px; }
+
+      .oferta { padding: 72px 0; }
+      .oferta h2 { font-size: 31px; }
+      .oferta__sub { font-size: 15.5px; max-width: 440px; }
+      .offerform { padding: 34px 32px; }
+      .offerform__input { font-size: 16.5px; padding: 15px 18px; }
+
+      .footer { padding: 32px 0; }
+      .footer p { font-size: 12.5px; }
+    }
+
+    /* ══════════ DESKTOP ══════════ */
+    @media (min-width: 1000px) {
       body { background: var(--bg); }
-      .wrap { box-shadow: 0 0 60px rgba(10,17,40,.08); }
-      .hero, .calc, .solucao, .prova, .oferta, .footer { background-clip: padding-box; }
+      .wrap { max-width: 680px; }
+
+      .hero__headline { font-size: 46px; }
+      .hero__sub { font-size: 18px; max-width: 500px; }
+      .section-head h2 { font-size: 31px; }
+      .calc__result-value { font-size: 46px; }
+      .oferta h2 { font-size: 34px; }
+      .prova h2 { font-size: 27px; max-width: 460px; }
     }
   </style>
 </head>
