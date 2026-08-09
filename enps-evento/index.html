@@ -280,7 +280,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div>
       <h1>Transforme a experiência dos seus <span>colaboradores</span> com o eNPS.</h1>
       <p>Descubra como melhorar o engajamento, reduzir a rotatividade de colaboradores e criar um ambiente de trabalho saudável e inspirador.</p>
-      <a href="https://wa.me/5521974712313" class="btn">Fale com nossos especialistas</a>
+      <a href="https://wa.me/5521976787182?text=Opa%20vim%20pelo%20evento%20da%20Conarh%202026%20e%20quero%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20a%20sua%20plataforma!" class="btn" target="_blank" rel="noopener">Fale com nossos especialistas</a>
       <p class="btn-sub" style="text-align:left;">Não perca tempo!</p>
     </div>
     <div class="hero-visual">
@@ -497,7 +497,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div>
       <h2>Não deixe a experiência dos seus colaboradores de lado.</h2>
       <p style="margin-bottom:26px;">Descubra como o eNPS pode ser a solução que você procura para engajar de vez sua equipe!</p>
-      <form class="card" onsubmit="event.preventDefault(); alert('Formulário enviado!');">
+      <form class="card" id="leadForm" novalidate>
         <div class="field">
           <label for="nome">Nome Completo*</label>
           <input id="nome" type="text" placeholder="Nome" required>
@@ -518,7 +518,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <input type="checkbox" required style="width:auto;">
           <span>Não sou um robô</span>
         </div>
-        <button type="submit" class="btn">Enviar!</button>
+        <button type="submit" class="btn" id="submitBtn">
+          <span id="submitText">Enviar!</span>
+        </button>
       </form>
     </div>
   </div>
@@ -541,6 +543,90 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
   <p class="footer-trademark">Net Promoter, NPS, and the NPS-related emoticons are registered trademarks, and Net Promoter Score and Net Promoter System are service marks, of Bain &amp; Company, Inc., Satmetrix Systems, Inc. and Fred Reichheld.</p>
 </footer>
+
+<script>
+  // ── Lead form — evento Conarh 2026 ──
+  const WHATSAPP_NUMBER = '5521976787182';
+  const WHATSAPP_MESSAGE = 'Opa vim pelo evento da Conarh 2026 e quero saber mais informações sobre a sua plataforma!';
+  const PIXEL_ID = '1106401696374974';
+  const params = new URLSearchParams(location.search);
+  const testEventCode = params.get('fbtest') || null;
+
+  function getCookie(name) {
+    const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function getEventId() {
+    let id = sessionStorage.getItem('lead_event_id');
+    if (!id) {
+      id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+      sessionStorage.setItem('lead_event_id', id);
+    }
+    return id;
+  }
+
+  const form = document.getElementById('leadForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const submitText = document.getElementById('submitText');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+    const telefone = form.telefone.value.trim();
+    const empresa = form.empresa.value.trim();
+
+    if (!nome || !email || !telefone || !empresa) {
+      alert('Preencha todos os campos antes de continuar.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitText.textContent = 'Enviando...';
+
+    const eventId = getEventId();
+    const data = {
+      Nome_Completo: nome,
+      Email: email,
+      Telefone: telefone,
+      Empresa: empresa,
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || '',
+      utm_content: params.get('utm_content') || '',
+      utm_term: params.get('utm_term') || '',
+      utm_id: params.get('utm_id') || '',
+      fbclid: params.get('fbclid') || '',
+      gclid: params.get('gclid') || '',
+      referral_source: document.referrer || '',
+      url: location.href,
+      event_id: eventId,
+      fbc: getCookie('_fbc'),
+      fbp: getCookie('_fbp'),
+      test_event_code: testEventCode || '',
+    };
+
+    if (typeof fbq === 'function') {
+      fbq('init', PIXEL_ID, { em: email, ph: telefone.replace(/\D/g, '') });
+      const pixelExtras = { eventID: eventId };
+      if (testEventCode) pixelExtras.test_event_code = testEventCode;
+      fbq('track', 'Lead', {}, pixelExtras);
+    }
+
+    try {
+      await fetch('/api/lead-enps-evento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    } catch (err) {
+      console.error('Erro ao enviar lead:', err);
+    }
+
+    window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  });
+</script>
 
 </body>
 </html>
