@@ -28,7 +28,8 @@ export default async function handler(req, res) {
   const DEAL_OWNER_ID = '6';     // Mesmo owner padrão usado nos outros deals dessa etapa
   const FIELD_EMPRESA = 6;       // "Empresa" (já existia)
   const FIELD_SEGMENTO = 46;     // "Segmento (Diagnóstico B2B)" — criado pra essa LP
-  const FIELD_CLIENTES = 47;     // "Quantos clientes ativos você atende hoje? (Diagnóstico B2B)" — criado pra essa LP
+  // FIELD_CLIENTES (47) removido do formulário em 2026-08-11 pra reduzir
+  // atrito — campo continua existindo no AC, só não é mais preenchido por aqui.
   const FIELD_UTM_SOURCE = 28;
   const FIELD_UTM_CAMPAIGN = 29;
   const FIELD_UTM_MEDIUM = 30;
@@ -47,7 +48,7 @@ export default async function handler(req, res) {
   try {
     const {
       Nome_Completo, E_mail_Corporativo, WhatsApp,
-      Nome_da_Empresa, Segmento, Quantos_clientes_ativos,
+      Nome_da_Empresa, Segmento,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
       fbclid, gclid, referral_source, url: pageUrl,
       event_id, fbc, fbp, test_event_code,
@@ -83,7 +84,6 @@ export default async function handler(req, res) {
     const fieldValues = [];
     if (Nome_da_Empresa) fieldValues.push({ field: String(FIELD_EMPRESA), value: Nome_da_Empresa });
     if (Segmento) fieldValues.push({ field: String(FIELD_SEGMENTO), value: Segmento });
-    if (Quantos_clientes_ativos) fieldValues.push({ field: String(FIELD_CLIENTES), value: Quantos_clientes_ativos });
     if (utm_source) fieldValues.push({ field: String(FIELD_UTM_SOURCE), value: utm_source });
     if (utm_medium) fieldValues.push({ field: String(FIELD_UTM_MEDIUM), value: utm_medium });
     if (utm_campaign) fieldValues.push({ field: String(FIELD_UTM_CAMPAIGN), value: utm_campaign });
@@ -126,7 +126,6 @@ export default async function handler(req, res) {
           fields: [
             { customFieldId: FIELD_EMPRESA, fieldValue: Nome_da_Empresa || '' },
             { customFieldId: FIELD_SEGMENTO, fieldValue: Segmento || '' },
-            { customFieldId: FIELD_CLIENTES, fieldValue: Quantos_clientes_ativos || '' },
           ],
         },
       }),
@@ -145,7 +144,6 @@ export default async function handler(req, res) {
           WhatsApp: WhatsApp,
           Nome_da_Empresa: Nome_da_Empresa || '',
           Segmento: Segmento || '',
-          Quantos_clientes_ativos: Quantos_clientes_ativos || '',
           fbclid: fbclid || '',
           gclid: gclid || '',
           IP_do_usuario: clientIp,

@@ -75,7 +75,7 @@
     /* ══════════ HERO ══════════ */
     .hero {
       position: relative; overflow: hidden;
-      padding: 40px 0 0;
+      padding: 40px 0 72px;
       background: radial-gradient(700px 480px at 50% -10%, rgba(27,110,243,.45), transparent 65%), var(--navy);
     }
     .hero__topline {
@@ -87,52 +87,32 @@
     .hero__brand img { height: 26px; }
     .hero__brand span { font-family: var(--disp); font-size: 17px; font-weight: 800; color: #fff; }
 
-    .hero__intro {
+    .hero__grid {
       position: relative; z-index: 1;
-      text-align: center; max-width: 720px; margin: 0 auto;
-      padding: 10px 0 44px;
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center;
     }
     .hero__headline {
       font-family: var(--disp); font-weight: 900;
-      font-size: clamp(32px, 4.4vw, 52px); line-height: 1.12; letter-spacing: -.02em;
+      font-size: clamp(32px, 3.4vw, 46px); line-height: 1.14; letter-spacing: -.02em;
       color: #fff; margin: 0 0 20px;
     }
     .hero__headline mark {
       background: none;
       color: #6fa3ff;
     }
-    .hero__sub { font-size: 17px; line-height: 1.7; color: #b4c0e0; max-width: 560px; margin: 0 auto; }
+    .hero__sub { font-size: 16.5px; line-height: 1.7; color: #b4c0e0; max-width: 480px; }
 
-    .hero__stats { display: flex; gap: 40px; margin-top: 32px; justify-content: center; flex-wrap: wrap; }
-    .hero__stats div strong { display: block; font-family: var(--disp); font-size: 27px; font-weight: 900; color: #fff; }
-    .hero__stats div span { font-size: 11.5px; color: #8899bb; font-weight: 600; }
+    .hero__stats { display: flex; gap: 36px; margin-top: 32px; flex-wrap: wrap; }
+    .hero__stats div strong { display: block; font-family: var(--disp); font-size: 25px; font-weight: 900; color: #fff; }
+    .hero__stats div span { font-size: 11px; color: #8899bb; font-weight: 600; }
 
-    .hero__visual {
-      position: relative; z-index: 1;
-      max-width: 980px; margin: 0 auto 70px; padding: 0 6px;
-      border-radius: 22px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-    }
-    .hero__visual-frame {
-      display: flex; align-items: center; gap: 6px; padding: 14px 10px 12px 18px;
-    }
-    .hero__visual-frame span {
-      width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.16);
-    }
-    .hero__visual img {
-      width: 100%; display: block;
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 30px 70px rgba(0,0,10,.4);
-    }
-
-    /* form card sits below hero, overlaps up */
-    .formwrap { position: relative; z-index: 2; margin-top: -46px; }
     .formcard {
       background: #fff; border-radius: 22px; padding: 34px 32px 28px;
-      box-shadow: 0 24px 60px rgba(20,25,60,.14); border: 1px solid var(--line);
+      box-shadow: 0 30px 70px rgba(0,0,10,.35); border: 1px solid var(--line);
     }
     .formcard h3 { font-family: var(--disp); font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
     .formcard > p { font-size: 13.5px; color: var(--body); margin-bottom: 22px; }
-    .formgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 16px; }
+    .formgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 16px; }
     .field label {
       display: block; font-size: 11.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px;
     }
@@ -314,9 +294,8 @@
 
     /* ══════════ RESPONSIVE ══════════ */
     @media (max-width: 960px) {
-      .hero__visual { margin-bottom: 46px; }
-      .formwrap { margin-top: 0; }
-      .formgrid { grid-template-columns: 1fr 1fr; }
+      .hero__grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero__sub { max-width: none; }
       .paingrid { grid-template-columns: 1fr; }
       .metorow, .metorow--rev .metorow__visual { grid-template-columns: 1fr; order: initial; }
       .metorow { gap: 26px; padding: 36px 0; }
@@ -338,6 +317,25 @@
       .badge { flex-direction: column; align-items: flex-start; }
       .logos__row { gap: 26px; }
       .logos__row img { height: 30px; }
+      .footer { padding-bottom: 96px; }
+    }
+
+    /* ══════════ STICKY CTA (mobile) ══════════ */
+    .sticky-cta { display: none; }
+    @media (max-width: 640px) {
+      .sticky-cta {
+        display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        background: #fff; border-top: 1px solid var(--line);
+        box-shadow: 0 -10px 26px rgba(10,17,40,.14);
+        transition: transform .3s ease;
+      }
+      .sticky-cta.is-hidden { transform: translateY(110%); }
+      .sticky-cta a {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        background: var(--blue); color: #fff; font-family: 'DM Sans', sans-serif;
+        font-weight: 800; font-size: 14.5px; padding: 15px; border-radius: 50px;
+      }
     }
   </style>
 </head>
@@ -345,6 +343,13 @@
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <!-- STICKY CTA (mobile) -->
+  <div class="sticky-cta" id="stickyCta">
+    <a href="#leadForm">
+      Solicitar Demonstração <i class="ti ti-arrow-right" aria-hidden="true"></i>
+    </a>
+  </div>
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- HERO -->
@@ -357,83 +362,66 @@
         </div>
       </div>
 
-      <div class="hero__intro">
-        <h1 class="hero__headline">Pare de perder clientes para a concorrência <mark>sem nem saber o motivo.</mark></h1>
-        <p class="hero__sub">Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba exatamente o que seu cliente pensa em tempo real — e resolva insatisfações antes que virem cancelamento.</p>
+      <div class="hero__grid">
+        <div class="hero__left">
+          <h1 class="hero__headline">Pare de perder clientes para a concorrência <mark>sem nem saber o motivo.</mark></h1>
+          <p class="hero__sub">Substitua formulários ignorados e planilhas cegas por pesquisas automatizadas via WhatsApp, QR Code e E-mail. Saiba exatamente o que seu cliente pensa em tempo real — e resolva insatisfações antes que virem cancelamento.</p>
 
-        <div class="hero__stats">
-          <div><strong>17,4 Mi</strong><span>pesquisas enviadas</span></div>
-          <div><strong>2.653</strong><span>clientes satisfeitos</span></div>
-          <div><strong>6.560</strong><span>usuários registrados</span></div>
+          <div class="hero__stats">
+            <div><strong>17,4 Mi</strong><span>pesquisas enviadas</span></div>
+            <div><strong>2.653</strong><span>clientes satisfeitos</span></div>
+            <div><strong>6.560</strong><span>usuários registrados</span></div>
+          </div>
         </div>
-      </div>
 
-      <div class="hero__visual">
-        <div class="hero__visual-frame">
-          <span></span><span></span><span></span>
+        <div class="hero__right">
+          <div class="formcard">
+            <h3>Descubra como aplicar na sua empresa em 15 minutos</h3>
+            <p>Preencha os dados abaixo para falar com um consultor especialista.</p>
+
+            <form id="leadForm" novalidate>
+              <div class="formgrid">
+                <div class="field">
+                  <label for="nome">Nome completo</label>
+                  <input type="text" class="input" id="nome" placeholder="Seu nome completo" required />
+                </div>
+                <div class="field">
+                  <label for="email">E-mail corporativo</label>
+                  <input type="email" class="input" id="email" placeholder="voce@suaempresa.com.br" required />
+                </div>
+                <div class="field">
+                  <label for="whatsapp">WhatsApp</label>
+                  <input type="tel" class="input" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required />
+                </div>
+                <div class="field">
+                  <label for="empresa">Nome da empresa</label>
+                  <input type="text" class="input" id="empresa" placeholder="Nome da sua empresa" required />
+                </div>
+                <div class="field" style="grid-column: 1 / -1">
+                  <label for="segmento">Segmento</label>
+                  <select class="input" id="segmento" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option>Academias & Fitness</option>
+                    <option>Saúde & Clínicas</option>
+                    <option>SaaS & Tecnologia</option>
+                    <option>Serviços B2B</option>
+                    <option>Varejo & Franquias</option>
+                    <option>Outros</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="formcard__btn" id="submitBtn">
+                <span id="submitText">Quero solicitar demonstração</span>
+                <i class="ti ti-arrow-right" aria-hidden="true"></i>
+              </button>
+              <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um consultor entrará em contato em até 15 minutos em horário comercial.</p>
+            </form>
+          </div>
         </div>
-        <img src="../shared/diagnostico/dashboard-home.svg" alt="Dashboard de NPS e satisfação WeHelp" />
       </div>
     </div>
   </section>
-
-  <div class="formwrap">
-    <div class="container">
-      <div class="formcard">
-        <h3>Descubra como aplicar na sua empresa em 15 minutos</h3>
-        <p>Preencha os dados abaixo para falar com um consultor especialista.</p>
-
-        <form id="leadForm" novalidate>
-          <div class="formgrid">
-            <div class="field">
-              <label for="nome">Nome completo</label>
-              <input type="text" class="input" id="nome" placeholder="Seu nome completo" required />
-            </div>
-            <div class="field">
-              <label for="email">E-mail corporativo</label>
-              <input type="email" class="input" id="email" placeholder="voce@suaempresa.com.br" required />
-            </div>
-            <div class="field">
-              <label for="whatsapp">WhatsApp</label>
-              <input type="tel" class="input" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required />
-            </div>
-            <div class="field">
-              <label for="empresa">Nome da empresa</label>
-              <input type="text" class="input" id="empresa" placeholder="Nome da sua empresa" required />
-            </div>
-            <div class="field">
-              <label for="segmento">Segmento</label>
-              <select class="input" id="segmento" required>
-                <option value="" disabled selected>Selecione</option>
-                <option>Academias & Fitness</option>
-                <option>Saúde & Clínicas</option>
-                <option>SaaS & Tecnologia</option>
-                <option>Serviços B2B</option>
-                <option>Varejo & Franquias</option>
-                <option>Outros</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="clientes">Clientes ativos hoje</label>
-              <select class="input" id="clientes" required>
-                <option value="" disabled selected>Selecione</option>
-                <option>Até 150 clientes</option>
-                <option>151 a 300 clientes</option>
-                <option>301 a 1.000 clientes</option>
-                <option>Mais de 1.000 clientes</option>
-              </select>
-            </div>
-          </div>
-
-          <button type="submit" class="formcard__btn" id="submitBtn">
-            <span id="submitText">Falar com um especialista</span>
-            <i class="ti ti-arrow-right" aria-hidden="true"></i>
-          </button>
-          <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um consultor entrará em contato em até 15 minutos em horário comercial.</p>
-        </form>
-      </div>
-    </div>
-  </div>
 
   <!-- LOGOS -->
   <div class="logos" data-reveal>
@@ -618,7 +606,7 @@
           <h2>Pronto para modernizar a gestão de satisfação da sua empresa?</h2>
           <p>Converse em 15 minutos com um de nossos especialistas. Analisaremos sua operação atual e mostraremos como colocar sua estrutura de pesquisas para rodar em poucos dias.</p>
           <a href="#leadForm" class="ctafinal__btn" id="ctaFinalBtn">
-            Solicitar diagnóstico <i class="ti ti-arrow-right" aria-hidden="true"></i>
+            Quero conhecer a WeHelp <i class="ti ti-arrow-right" aria-hidden="true"></i>
           </a>
         </div>
       </div>
@@ -684,6 +672,16 @@
       revealEls.forEach(el => el.classList.add('is-visible'));
     }
 
+    // ── Sticky CTA (mobile) — esconde quando o formulário já está visível ──
+    const stickyCta = document.getElementById('stickyCta');
+    const formCardEl = document.querySelector('.formcard');
+    if (stickyCta && formCardEl && 'IntersectionObserver' in window) {
+      const stickyIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => stickyCta.classList.toggle('is-hidden', e.isIntersecting));
+      }, { threshold: .15 });
+      stickyIo.observe(formCardEl);
+    }
+
     // ── FAQ accordion ──
     document.querySelectorAll('.faqitem__q').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -725,9 +723,8 @@
       const whatsapp = form.whatsapp.value.trim();
       const empresa = form.empresa.value.trim();
       const segmento = form.segmento.value;
-      const clientes = form.clientes.value;
 
-      if (!nome || !email || whatsapp.length < 10 || !empresa || !segmento || !clientes) {
+      if (!nome || !email || whatsapp.length < 10 || !empresa || !segmento) {
         alert('Preencha todos os campos corretamente antes de continuar.');
         return;
       }
@@ -742,7 +739,6 @@
         WhatsApp: '+55' + whatsapp,
         Nome_da_Empresa: empresa,
         Segmento: segmento,
-        Quantos_clientes_ativos: clientes,
         utm_source: params.get('utm_source') || '',
         utm_medium: params.get('utm_medium') || '',
         utm_campaign: params.get('utm_campaign') || '',
