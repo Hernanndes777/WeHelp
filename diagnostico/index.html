@@ -768,13 +768,15 @@
         body: JSON.stringify(data),
       }).catch(() => {});
 
-      // GA4 + push pro dataLayer — GTM escuta o evento "generate_lead" pra disparar
-      // a tag de conversão do Google Ads (AW-388747722 + label configurados no GTM).
+      // GA4 — "create_lead_success" é o evento que a conversão do Google Ads
+      // "Create Lead Success" já importa direto da propriedade GA4 "WeHelp G4"
+      // (conferido nas Configurações da conversão, 2026-08-11) — não precisa de
+      // tag/label separada do Google Ads, só disparar esse evento com esse nome.
       if (typeof gtag === 'function') {
-        gtag('event', 'generate_lead', { event_id: eventId });
+        gtag('event', 'create_lead_success', { event_id: eventId });
       }
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'generate_lead', event_id: eventId });
+      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
 
       window.location.href = '/diagnostico/obrigado';
     });
