@@ -22,6 +22,7 @@ export default async function handler(req, res) {
   // IDs confirmados direto na conta DataCrazy em 2026-08-11
   const PIPELINE_STAGE_ID = 'e9ae521e-13c6-4a68-a0f8-ef7447c8d7dc'; // Pipeline "Leads" > etapa "Novos Leads"
   const TAG_SITE = '91ed2d79-6bf8-4744-8a9a-127850f7f00f';         // Tag "Site"
+  const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';     // Caroline Bonini — atendente padrão dos leads do /diagnostico
   const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa"
   const FIELD_AREA_ATUACAO = '91af21ad-faeb-44a5-bc2f-af9a3100bbcd'; // "Área de atuação" — usado pro Segmento do form
   const FIELD_UTM_SOURCE = '897593b4-a00c-475d-b3a2-b8457498c7ba';
@@ -78,6 +79,7 @@ export default async function handler(req, res) {
         company: Nome_da_Empresa || '',
         source: 'Diagnóstico B2B (Site)',
         tags: [{ id: TAG_SITE }],
+        attendant: { id: ATTENDANT_ID },
       }),
     });
 
