@@ -1,12 +1,9 @@
 // api/lead-diagnostico.js — Função serverless (Vercel) da LP /diagnostico
-// Contato + Deal no ActiveCampaign (pipeline "LEADS", etapa "REALIZAR CONTATO")
-// + linha na planilha do Diagnóstico B2B + evento Lead no Meta CAPI.
-// Segue o padrão de 00-base/padrao-captura-lead.md — mesma estrutura de
-// api/lead-sessao-estrategica.js, já com as correções aprendidas nele:
-// - await em tudo (deal/sheets/capi) antes do retorno, senão a Vercel
-//   congela a function e as chamadas fire-and-forget nunca terminam.
-// - group/stage/contact do Deal como STRING, não número — a API do
-//   ActiveCampaign rejeita silenciosamente se for número puro no JSON.
+// Leads caem no DataCrazy (substituiu o ActiveCampaign nessa LP, decisão do
+// usuário em 2026-08-11): cria o lead no pipeline "Leads", etapa "Novos Leads",
+// com a tag "Site" + campos de UTM já existentes no DataCrazy. Mantém o evento
+// Lead no Meta CAPI (independente de qual CRM guarda o registro).
+// Segue o padrão de 00-base/padrao-captura-lead.md.
 
 import { createHash } from 'crypto';
 const sha256 = (v) => createHash('sha256').update(String(v).toLowerCase().trim()).digest('hex');
@@ -19,30 +16,25 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const AC_URL = process.env.AC_URL;
-  const AC_KEY = process.env.AC_KEY;
+  const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
+  const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
 
-  // IDs confirmados direto na conta ActiveCampaign em 2026-08-07
-  const DEAL_PIPELINE_ID = 4;    // Pipeline "LEADS" (pipeline geral, já usado por outros formulários do site)
-  const DEAL_STAGE_ID = 21;      // Etapa "REALIZAR CONTATO"
-  const DEAL_OWNER_ID = '6';     // Mesmo owner padrão usado nos outros deals dessa etapa
-  const FIELD_EMPRESA = 6;       // "Empresa" (já existia)
-  const FIELD_SEGMENTO = 46;     // "Segmento (Diagnóstico B2B)" — criado pra essa LP
-  // FIELD_CLIENTES (47) removido do formulário em 2026-08-11 pra reduzir
-  // atrito — campo continua existindo no AC, só não é mais preenchido por aqui.
-  const FIELD_UTM_SOURCE = 28;
-  const FIELD_UTM_CAMPAIGN = 29;
-  const FIELD_UTM_MEDIUM = 30;
-
-  // [PENDENTE] URL do Apps Script (/exec) da planilha do Diagnóstico B2B —
-  // configurar como env var na Vercel assim que a planilha for criada.
-  const SHEETS_URL = process.env.SHEETS_DIAGNOSTICO_URL;
+  // IDs confirmados direto na conta DataCrazy em 2026-08-11
+  const PIPELINE_STAGE_ID = 'e9ae521e-13c6-4a68-a0f8-ef7447c8d7dc'; // Pipeline "Leads" > etapa "Novos Leads"
+  const TAG_SITE = '91ed2d79-6bf8-4744-8a9a-127850f7f00f';         // Tag "Site"
+  const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa"
+  const FIELD_AREA_ATUACAO = '91af21ad-faeb-44a5-bc2f-af9a3100bbcd'; // "Área de atuação" — usado pro Segmento do form
+  const FIELD_UTM_SOURCE = '897593b4-a00c-475d-b3a2-b8457498c7ba';
+  const FIELD_UTM_CAMPAIGN = 'ba9b9dd4-c977-4b03-b72d-7bdf432a8994';
+  const FIELD_UTM_MEDIUM = '3b60437b-315a-40c5-b192-77fee043c59c';
+  const FIELD_UTM_CONTENT = 'd07ef2d1-a9fb-45a8-b8d1-2e5a4641531c';
+  const FIELD_UTM_TERM = '8f5317cb-daad-487a-bfcb-53844c314227';
 
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 
-  if (!AC_URL || !AC_KEY) {
-    return res.status(500).json({ error: 'Configuração ausente no servidor' });
+  if (!DATACRAZY_API_KEY) {
+    return res.status(500).json({ error: 'Configuração ausente no servidor (DATACRAZY_API_KEY)' });
   }
 
   try {
@@ -61,109 +53,61 @@ export default async function handler(req, res) {
     const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
                      || req.socket?.remoteAddress || '';
     const userAgent = req.headers['user-agent'] || '';
-    const device = /Mobile|Android|iPhone|iPad/i.test(userAgent) ? 'Mobile' : 'Desktop';
-
-    const geoCountry = req.headers['x-vercel-ip-country'] || '';
-    const geoRegion = req.headers['x-vercel-ip-country-region'] || '';
-    const geoCity = req.headers['x-vercel-ip-city']
-      ? decodeURIComponent(req.headers['x-vercel-ip-city'])
-      : '';
-
-    const receivedAt = new Date().toISOString();
     const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
-
-    const headers = {
-      'Api-Token': AC_KEY,
-      'Content-Type': 'application/json',
-    };
-
     const phoneDigits = WhatsApp.replace(/\D/g, '');
     const contactEmail = E_mail_Corporativo || `wp.${phoneDigits}@noemail.invalid`;
 
-    // 1. Cria ou atualiza o contato, já com os campos personalizados desse formulário
-    const fieldValues = [];
-    if (Nome_da_Empresa) fieldValues.push({ field: String(FIELD_EMPRESA), value: Nome_da_Empresa });
-    if (Segmento) fieldValues.push({ field: String(FIELD_SEGMENTO), value: Segmento });
-    if (utm_source) fieldValues.push({ field: String(FIELD_UTM_SOURCE), value: utm_source });
-    if (utm_medium) fieldValues.push({ field: String(FIELD_UTM_MEDIUM), value: utm_medium });
-    if (utm_campaign) fieldValues.push({ field: String(FIELD_UTM_CAMPAIGN), value: utm_campaign });
+    const dcHeaders = {
+      'Authorization': `Bearer ${DATACRAZY_API_KEY}`,
+      'Content-Type': 'application/json',
+    };
 
-    const syncRes = await fetch(`${AC_URL}/api/3/contact/sync`, {
+    // 1. Cria o lead no DataCrazy já com tag, empresa, segmento (→ Área de atuação) e UTMs
+    const additionalFields = [];
+    if (Nome_da_Empresa) additionalFields.push({ id: FIELD_EMPRESA, value: Nome_da_Empresa });
+    if (Segmento) additionalFields.push({ id: FIELD_AREA_ATUACAO, value: Segmento });
+    if (utm_source) additionalFields.push({ id: FIELD_UTM_SOURCE, value: utm_source });
+    if (utm_campaign) additionalFields.push({ id: FIELD_UTM_CAMPAIGN, value: utm_campaign });
+    if (utm_medium) additionalFields.push({ id: FIELD_UTM_MEDIUM, value: utm_medium });
+    if (utm_content) additionalFields.push({ id: FIELD_UTM_CONTENT, value: utm_content });
+    if (utm_term) additionalFields.push({ id: FIELD_UTM_TERM, value: utm_term });
+
+    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads/additional-fields`, {
       method: 'POST',
-      headers,
+      headers: dcHeaders,
       body: JSON.stringify({
-        contact: {
-          email: contactEmail,
-          firstName: Nome_Completo || '',
-          phone: WhatsApp,
-          fieldValues,
-        },
+        name: Nome_Completo || 'Lead sem nome',
+        email: contactEmail,
+        phone: WhatsApp,
+        company: Nome_da_Empresa || '',
+        source: 'Diagnóstico B2B (Site)',
+        tags: [{ id: TAG_SITE }],
+        additionalFields,
       }),
     });
 
-    const syncData = await syncRes.json();
+    const leadData = await leadRes.json();
 
-    if (!syncRes.ok || !syncData.contact) {
-      console.error('Erro sync:', syncData);
-      return res.status(502).json({ error: 'Falha ao criar contato', details: syncData });
+    if (!leadRes.ok || !leadData.id) {
+      console.error('Erro ao criar lead no DataCrazy:', leadData);
+      return res.status(502).json({ error: 'Falha ao criar lead', details: leadData });
     }
 
-    const contactId = syncData.contact.id;
+    const leadId = leadData.id;
 
-    // 2. Cria o Deal no pipeline "LEADS", etapa "REALIZAR CONTATO"
-    const dealPromise = fetch(`${AC_URL}/api/3/deals`, {
+    // 2. Cria o negócio no pipeline "Leads", etapa "Novos Leads"
+    const businessPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
       method: 'POST',
-      headers,
+      headers: dcHeaders,
       body: JSON.stringify({
-        deal: {
-          title: `Diagnóstico B2B — ${Nome_Completo || 'Lead'}${Nome_da_Empresa ? ' (' + Nome_da_Empresa + ')' : ''}`,
-          currency: 'usd',
-          value: 0,
-          group: String(DEAL_PIPELINE_ID),
-          stage: String(DEAL_STAGE_ID),
-          contact: String(contactId),
-          owner: DEAL_OWNER_ID,
-          fields: [
-            { customFieldId: FIELD_EMPRESA, fieldValue: Nome_da_Empresa || '' },
-            { customFieldId: FIELD_SEGMENTO, fieldValue: Segmento || '' },
-          ],
-        },
+        leadId,
+        stageId: PIPELINE_STAGE_ID,
       }),
     }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao criar deal:', await r.text());
-    }).catch((err) => console.error('Erro ao criar deal:', err));
+      if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
 
-    // 3. Envia pro Google Sheets (planilha ainda pendente de criação)
-    const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          received_at: receivedAt,
-          Nome_Completo: Nome_Completo || '',
-          E_mail_Corporativo: contactEmail,
-          WhatsApp: WhatsApp,
-          Nome_da_Empresa: Nome_da_Empresa || '',
-          Segmento: Segmento || '',
-          fbclid: fbclid || '',
-          gclid: gclid || '',
-          IP_do_usuario: clientIp,
-          Data_da_conversao: receivedAt,
-          Dispositivo: device,
-          Referral_Source: referral_source || '',
-          Pais_do_usuario: geoCountry,
-          Regiao_do_usuario: geoRegion,
-          Cidade_do_usuario: geoCity,
-          UTM_Source: utm_source || '',
-          UTM_Medium: utm_medium || '',
-          URL: pageUrl || '',
-          UTM_Campaign: utm_campaign || '',
-          UTM_Id: utm_id || '',
-          UTM_Term: utm_term || '',
-          UTM_Content: utm_content || '',
-        }),
-      }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
-
-    // 4. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
+    // 3. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -197,11 +141,11 @@ export default async function handler(req, res) {
       }).catch((err) => console.error('CAPI error:', err));
     }
 
-    // Espera as três chamadas em paralelo — a Vercel encerra a function assim que a
-    // response sai, então sem esse await o deal/Sheets/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([dealPromise, sheetsPromise, capiPromise]);
+    // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
+    // response sai, então sem esse await o negócio/CAPI corriam risco de nunca completar.
+    await Promise.allSettled([businessPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, contactId });
+    return res.status(200).json({ success: true, leadId });
 
   } catch (err) {
     console.error('Erro geral:', err);
