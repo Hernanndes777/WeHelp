@@ -62,17 +62,13 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json',
     };
 
-    // 1. Cria o lead no DataCrazy já com tag, empresa, segmento (→ Área de atuação) e UTMs
-    const additionalFields = [];
-    if (Nome_da_Empresa) additionalFields.push({ id: FIELD_EMPRESA, value: Nome_da_Empresa });
-    if (Segmento) additionalFields.push({ id: FIELD_AREA_ATUACAO, value: Segmento });
-    if (utm_source) additionalFields.push({ id: FIELD_UTM_SOURCE, value: utm_source });
-    if (utm_campaign) additionalFields.push({ id: FIELD_UTM_CAMPAIGN, value: utm_campaign });
-    if (utm_medium) additionalFields.push({ id: FIELD_UTM_MEDIUM, value: utm_medium });
-    if (utm_content) additionalFields.push({ id: FIELD_UTM_CONTENT, value: utm_content });
-    if (utm_term) additionalFields.push({ id: FIELD_UTM_TERM, value: utm_term });
-
-    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads/additional-fields`, {
+    // 1. Cria o lead no DataCrazy (nome/email/telefone/empresa/tag)
+    // [BUG DataCrazy] POST /leads/additional-fields (o endpoint "tudo em um"
+    // documentado) retorna 500 (Prisma validation error) quando combinado com
+    // additionalFields — confirmado em teste isolado em 2026-08-11. Contornado
+    // criando o lead primeiro e aplicando os additionalFields num PATCH
+    // separado logo em seguida, que funciona normalmente.
+    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
       method: 'POST',
       headers: dcHeaders,
       body: JSON.stringify({
@@ -82,7 +78,6 @@ export default async function handler(req, res) {
         company: Nome_da_Empresa || '',
         source: 'Diagnóstico B2B (Site)',
         tags: [{ id: TAG_SITE }],
-        additionalFields,
       }),
     });
 
@@ -95,7 +90,25 @@ export default async function handler(req, res) {
 
     const leadId = leadData.id;
 
-    // 2. Cria o negócio no pipeline "Leads", etapa "Novos Leads"
+    // 2. Aplica os campos adicionais (empresa, segmento → Área de atuação, UTMs) via PATCH
+    const additionalFields = [];
+    if (Nome_da_Empresa) additionalFields.push({ id: FIELD_EMPRESA, value: Nome_da_Empresa });
+    if (Segmento) additionalFields.push({ id: FIELD_AREA_ATUACAO, value: Segmento });
+    if (utm_source) additionalFields.push({ id: FIELD_UTM_SOURCE, value: utm_source });
+    if (utm_campaign) additionalFields.push({ id: FIELD_UTM_CAMPAIGN, value: utm_campaign });
+    if (utm_medium) additionalFields.push({ id: FIELD_UTM_MEDIUM, value: utm_medium });
+    if (utm_content) additionalFields.push({ id: FIELD_UTM_CONTENT, value: utm_content });
+    if (utm_term) additionalFields.push({ id: FIELD_UTM_TERM, value: utm_term });
+
+    const fieldsPromise = additionalFields.length ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
+      method: 'PATCH',
+      headers: dcHeaders,
+      body: JSON.stringify({ additionalFields }),
+    }).then(async (r) => {
+      if (!r.ok) console.error('Erro ao aplicar additionalFields no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
+
+    // 4. Cria o negócio no pipeline "Leads", etapa "Novos Leads"
     const businessPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
       method: 'POST',
       headers: dcHeaders,
@@ -107,7 +120,7 @@ export default async function handler(req, res) {
       if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
     }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
 
-    // 3. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
+    // 5. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -143,7 +156,7 @@ export default async function handler(req, res) {
 
     // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
     // response sai, então sem esse await o negócio/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([businessPromise, capiPromise]);
+    await Promise.allSettled([fieldsPromise, businessPromise, capiPromise]);
 
     return res.status(200).json({ success: true, leadId });
 
