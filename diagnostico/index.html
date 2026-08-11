@@ -16,6 +16,15 @@
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window, document, "clarity", "script", "xw6zsx67zg");
   </script>
+  <!-- Google tag (gtag.js) — GA4 + Google Ads -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WMP81BEKN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0WMP81BEKN');
+    gtag('config', 'AW-388747722');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
@@ -188,6 +197,17 @@
     .paincard h3 { font-family: var(--disp); font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 10px; line-height: 1.35; }
     .paincard p { font-size: 14px; color: var(--body); line-height: 1.7; }
 
+    /* ══════════ CTA inline reutilizável (link) ══════════ */
+    .inline-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--blue); font-weight: 700; font-size: 14.5px;
+      transition: gap .2s;
+    }
+    .inline-cta:hover { gap: 13px; }
+    .inline-cta i { font-size: 15px; transition: transform .2s; }
+    .section-cta-row { margin-top: 44px; text-align: center; }
+    .section-cta-row p { font-size: 14px; color: var(--body); margin-bottom: 10px; }
+
     /* ══════════ MÉTODO — alternado com screenshots reais ══════════ */
     .metorow {
       display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
@@ -205,6 +225,7 @@
       content: '\ea5e'; font-family: 'tabler-icons' !important; position: absolute; left: 0; top: 1px; color: var(--blue); font-size: 15px;
     }
     .metorow li strong { color: var(--navy); font-weight: 700; }
+    .metorow__cta { margin-top: 20px; }
     .metorow__visual img {
       width: 100%; border-radius: 20px;
       box-shadow: 0 24px 50px rgba(20,25,60,.14);
@@ -295,6 +316,7 @@
     @media (max-width: 960px) {
       .hero__visual { margin-bottom: 46px; }
       .formwrap { margin-top: 0; }
+      .formgrid { grid-template-columns: 1fr 1fr; }
       .paingrid { grid-template-columns: 1fr; }
       .metorow, .metorow--rev .metorow__visual { grid-template-columns: 1fr; order: initial; }
       .metorow { gap: 26px; padding: 36px 0; }
@@ -453,6 +475,11 @@
           <p>Sem canal direto pra desabafar, o cliente insatisfeito expõe sua marca no Reclame Aqui ou nas avaliações do Google.</p>
         </div>
       </div>
+
+      <div class="section-cta-row">
+        <p>Reconheceu algum desses cenários na sua empresa?</p>
+        <a href="#leadForm" class="inline-cta">Descubra como resolver <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
     </div>
   </section>
 
@@ -473,6 +500,7 @@
             <li><strong>QR Codes no ponto de contato:</strong> colete opiniões na recepção, vestiário ou balcão em segundos.</li>
             <li><strong>Widget no site ou sistema:</strong> capture a percepção de uso direto na experiência digital.</li>
           </ul>
+          <div class="metorow__cta"><a href="#leadForm" class="inline-cta">Ver esse disparo na prática <i class="ti ti-arrow-right" aria-hidden="true"></i></a></div>
         </div>
         <div class="metorow__visual">
           <img src="../shared/diagnostico/pesquisa-nps.webp" alt="Pesquisa de NPS WeHelp" />
@@ -488,6 +516,7 @@
             <li><strong>Dashboard TV:</strong> transmita os indicadores em tempo real nas telas da sua empresa.</li>
             <li><strong>Comparativo entre unidades:</strong> compare filiais, setores ou franquias num painel só.</li>
           </ul>
+          <div class="metorow__cta"><a href="#leadForm" class="inline-cta">Ver o dashboard completo <i class="ti ti-arrow-right" aria-hidden="true"></i></a></div>
         </div>
         <div class="metorow__visual">
           <img src="../shared/diagnostico/dashboard-nps.webp" alt="Dashboard de indicadores WeHelp" />
@@ -502,6 +531,7 @@
             <li><strong>Alertas automáticos de insatisfação:</strong> nota baixa abre um chamado na hora, em formato Kanban.</li>
             <li><strong>Tratativa rápida no WhatsApp:</strong> resolva o atrito no mesmo dia e converta detratores em promotores.</li>
           </ul>
+          <div class="metorow__cta"><a href="#leadForm" class="inline-cta">Ver a central de atendimento <i class="ti ti-arrow-right" aria-hidden="true"></i></a></div>
         </div>
         <div class="metorow__visual">
           <img src="../shared/diagnostico/atendimento-ticket.webp" alt="Central de atendimento WeHelp" />
@@ -549,6 +579,11 @@
           <p>O processo é o mesmo — dado real do seu cliente, não achismo.</p>
         </div>
       </div>
+
+      <div class="section-cta-row">
+        <p>Seu segmento não está exatamente na lista?</p>
+        <a href="#leadForm" class="inline-cta">Fale com um especialista <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
     </div>
   </section>
 
@@ -560,6 +595,7 @@
         <div class="quoteblock">
           <p>Saímos de um cenário de opiniões divididas na equipe para uma gestão guiada pela voz do cliente. Conseguimos responder atritos no mesmo dia e aumentamos nossa retenção significativamente.</p>
           <cite>Cliente WeHelp — Gestão de Experiência do Cliente</cite>
+          <div class="metorow__cta"><a href="#leadForm" class="inline-cta">Quero um resultado assim também <i class="ti ti-arrow-right" aria-hidden="true"></i></a></div>
         </div>
       </div>
 
@@ -735,6 +771,14 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       }).catch(() => {});
+
+      // GA4 + push pro dataLayer — GTM escuta o evento "generate_lead" pra disparar
+      // a tag de conversão do Google Ads (AW-388747722 + label configurados no GTM).
+      if (typeof gtag === 'function') {
+        gtag('event', 'generate_lead', { event_id: eventId });
+      }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'generate_lead', event_id: eventId });
 
       window.location.href = '/diagnostico/obrigado';
     });
