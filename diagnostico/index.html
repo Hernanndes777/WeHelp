@@ -148,11 +148,21 @@
     }
     .formcard__hint i { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
 
-    /* ══════════ LOGOS ══════════ */
-    .logos { padding: 60px 0 20px; }
-    .logos p { text-align: center; font-size: 12.5px; font-weight: 700; color: var(--body); letter-spacing: .02em; margin-bottom: 30px; }
-    .logos__row { display: flex; align-items: center; justify-content: center; gap: 56px; flex-wrap: wrap; }
-    .logos__row img { height: 42px; width: auto; opacity: .85; }
+    /* ══════════ LOGOS (letreiro/marquee) ══════════ */
+    .logos { padding: 64px 0 24px; }
+    .logos p { text-align: center; font-size: 12.5px; font-weight: 700; color: var(--body); letter-spacing: .02em; margin-bottom: 40px; }
+    .logos__marquee {
+      overflow: hidden; width: 100%;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .logos__track {
+      display: inline-flex; align-items: center; gap: 80px; width: max-content;
+      will-change: transform; animation: logos-scroll 26s linear infinite;
+    }
+    .logos__marquee:hover .logos__track { animation-play-state: paused; }
+    .logos__track img { height: 130px; width: auto; opacity: .85; flex-shrink: 0; }
+    @keyframes logos-scroll { from { transform: translateX(0); } to { transform: translateX(-33.3334%); } }
 
     /* ══════════ SECTION SHELL ══════════ */
     .section { padding: 100px 0; }
@@ -303,7 +313,8 @@
       .seggrid { grid-template-columns: 1fr 1fr; }
       .quotewrap { grid-template-columns: 1fr; }
       .section { padding: 68px 0; }
-      .logos__row { gap: 30px; }
+      .logos__track { gap: 60px; animation-duration: 22s; }
+      .logos__track img { height: 100px; }
     }
     @media (max-width: 600px) {
       .container { padding: 0 20px; }
@@ -315,8 +326,8 @@
       .seggrid { grid-template-columns: 1fr; }
       .ctafinal { padding: 44px 24px; }
       .badge { flex-direction: column; align-items: flex-start; }
-      .logos__row { gap: 26px; }
-      .logos__row img { height: 30px; }
+      .logos__track { gap: 40px; animation-duration: 18s; }
+      .logos__track img { height: 70px; }
       .footer { padding-bottom: 96px; }
     }
 
@@ -427,13 +438,27 @@
   <div class="logos" data-reveal>
     <div class="container">
       <p>EMPRESAS QUE JÁ CONFIAM NA WEHELP</p>
-      <div class="logos__row">
-        <img src="../shared/diagnostico/logo-selfit.webp" alt="Selfit" />
-        <img src="../shared/diagnostico/logo-bioritmo.webp" alt="Bioritmo" />
-        <img src="../shared/diagnostico/logo-cinesystem.webp" alt="Cinesystem" />
-        <img src="../shared/diagnostico/logo-beto-carreiro.webp" alt="Beto Carrero World" />
-        <img src="../shared/diagnostico/logo-oral-unic.webp" alt="OralUnic" />
-        <img src="../shared/diagnostico/logo-cellep.webp" alt="Cellep" />
+      <div class="logos__marquee">
+        <div class="logos__track">
+          <img src="../shared/diagnostico/logo-selfit.webp" alt="Selfit" />
+          <img src="../shared/diagnostico/logo-bioritmo.webp" alt="Bioritmo" />
+          <img src="../shared/diagnostico/logo-cinesystem.webp" alt="Cinesystem" />
+          <img src="../shared/diagnostico/logo-beto-carreiro.webp" alt="Beto Carrero World" />
+          <img src="../shared/diagnostico/logo-oral-unic.webp" alt="OralUnic" />
+          <img src="../shared/diagnostico/logo-cellep.webp" alt="Cellep" />
+          <img src="../shared/diagnostico/logo-selfit.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-bioritmo.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-cinesystem.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-beto-carreiro.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-oral-unic.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-cellep.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-selfit.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-bioritmo.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-cinesystem.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-beto-carreiro.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-oral-unic.webp" alt="" aria-hidden="true" />
+          <img src="../shared/diagnostico/logo-cellep.webp" alt="" aria-hidden="true" />
+        </div>
       </div>
     </div>
   </div>
