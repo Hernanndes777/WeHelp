@@ -31,6 +31,7 @@ export default async function handler(req, res) {
   const FIELD_UTM_CONTENT = 'd07ef2d1-a9fb-45a8-b8d1-2e5a4641531c';
   const FIELD_UTM_TERM = '8f5317cb-daad-487a-bfcb-53844c314227';
 
+  const SHEETS_URL = process.env.SHEETS_DIAGNOSTICO_URL;
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 
@@ -54,6 +55,13 @@ export default async function handler(req, res) {
     const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
                      || req.socket?.remoteAddress || '';
     const userAgent = req.headers['user-agent'] || '';
+    const device = /Mobile|Android|iPhone|iPad/i.test(userAgent) ? 'Mobile' : 'Desktop';
+    const geoCountry = req.headers['x-vercel-ip-country'] || '';
+    const geoRegion = req.headers['x-vercel-ip-country-region'] || '';
+    const geoCity = req.headers['x-vercel-ip-city']
+      ? decodeURIComponent(req.headers['x-vercel-ip-city'])
+      : '';
+    const receivedAt = new Date().toISOString();
     const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
     const phoneDigits = WhatsApp.replace(/\D/g, '');
     const contactEmail = E_mail_Corporativo || `wp.${phoneDigits}@noemail.invalid`;
@@ -137,7 +145,36 @@ export default async function handler(req, res) {
       if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
     }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
 
-    // 5. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
+    // 5. Envia pro Google Sheets — planilha de conversões do /diagnostico
+    const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          received_at: receivedAt,
+          Nome_Completo: Nome_Completo || '',
+          E_mail_Corporativo: contactEmail,
+          WhatsApp: WhatsApp,
+          Nome_da_Empresa: Nome_da_Empresa || '',
+          Segmento: Segmento || '',
+          UTM_Source: utm_source || '',
+          UTM_Medium: utm_medium || '',
+          UTM_Campaign: utm_campaign || '',
+          UTM_Content: utm_content || '',
+          UTM_Term: utm_term || '',
+          UTM_Id: utm_id || '',
+          fbclid: fbclid || '',
+          gclid: gclid || '',
+          IP_do_usuario: clientIp,
+          Dispositivo: device,
+          Referral_Source: referral_source || '',
+          Pais_do_usuario: geoCountry,
+          Regiao_do_usuario: geoRegion,
+          Cidade_do_usuario: geoCity,
+          URL: pageUrl || '',
+        }),
+      }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
+
+    // 6. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -173,7 +210,7 @@ export default async function handler(req, res) {
 
     // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
     // response sai, então sem esse await o negócio/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([fieldsPromise, businessPromise, capiPromise]);
+    await Promise.allSettled([fieldsPromise, businessPromise, sheetsPromise, capiPromise]);
 
     return res.status(200).json({ success: true, leadId });
 
