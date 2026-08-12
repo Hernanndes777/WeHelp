@@ -144,15 +144,6 @@
     }
     .formcard__hint i { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
 
-    .formcard__success { display: none; text-align: center; padding: 12px 0 4px; }
-    .formcard__success.is-visible { display: block; }
-    .formcard__success .check {
-      width: 56px; height: 56px; border-radius: 50%; background: var(--blue-tint); color: var(--blue);
-      display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 18px;
-    }
-    .formcard__success h3 { font-family: var(--disp); font-size: 19px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
-    .formcard__success p { font-size: 13.5px; color: var(--body); line-height: 1.6; }
-
     /* ══════════ LOGOS (letreiro/marquee) ══════════ */
     .logos { padding: 64px 0 24px; }
     .logos p { text-align: center; font-size: 12.5px; font-weight: 700; color: var(--body); letter-spacing: .02em; margin-bottom: 40px; }
@@ -334,12 +325,14 @@
                   <input type="text" class="input" id="academia" placeholder="Nome da sua academia" required />
                 </div>
                 <div class="field" style="grid-column: 1 / -1">
-                  <label for="alunos">Quantidade de Alunos Ativos</label>
+                  <label for="alunos">Quantos alunos ativos você tem atualmente?</label>
                   <select class="input" id="alunos" required>
                     <option value="" disabled selected>Selecione</option>
-                    <option>Até 300</option>
-                    <option>301 a 1000</option>
-                    <option>Mais de 1000</option>
+                    <option>Até 150 clientes</option>
+                    <option>De 151 a 300 clientes</option>
+                    <option>De 301 a 500 clientes</option>
+                    <option>De 501 a 1000 clientes</option>
+                    <option>Acima de 1000 clientes</option>
                   </select>
                 </div>
               </div>
@@ -350,11 +343,6 @@
               <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um especialista entrará em contato em até 15 minutos em horário comercial.</p>
             </form>
 
-            <div class="formcard__success" id="formSuccess">
-              <div class="check"><i class="ti ti-check" aria-hidden="true"></i></div>
-              <h3>Recebemos seus dados!</h3>
-              <p>Um especialista em retenção da WeHelp vai chamar você no WhatsApp em breve para mostrar como prever a evasão da sua academia.</p>
-            </div>
           </div>
         </div>
       </div>
@@ -501,14 +489,9 @@
     }
 
     // ── Lead form ──
-    const PIXEL_ID = '1106401696374974';
     const params = new URLSearchParams(location.search);
     const testEventCode = params.get('fbtest') || null;
 
-    function getCookie(name) {
-      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
-      return m ? decodeURIComponent(m[1]) : '';
-    }
     function getEventId() {
       let id = sessionStorage.getItem('lead_event_id');
       if (!id) {
@@ -525,8 +508,6 @@
     const form = document.getElementById('leadForm');
     const submitBtn = document.getElementById('submitBtn');
     const submitText = document.getElementById('submitText');
-    const formIntro = document.getElementById('formIntro');
-    const formSuccess = document.getElementById('formSuccess');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -562,18 +543,14 @@
         gclid: params.get('gclid') || '',
         referral_source: document.referrer || '',
         url: location.href,
-        event_id: eventId,
-        fbc: getCookie('_fbc'),
-        fbp: getCookie('_fbp'),
-        test_event_code: testEventCode || '',
       };
 
-      if (typeof fbq === 'function') {
-        fbq('init', PIXEL_ID, { em: email, ph: '55' + whatsapp });
-        const pixelExtras = { eventID: eventId };
-        if (testEventCode) pixelExtras.test_event_code = testEventCode;
-        fbq('track', 'Lead', {}, pixelExtras);
-      }
+      // E-mail/WhatsApp/event_id ficam salvos pro Meta Pixel + CAPI disparar
+      // só na página de obrigado (decisão do usuário, 2026-08-12) — mesma
+      // lógica do create_lead_success: só conta quem completou o fluxo.
+      sessionStorage.setItem('lead_email', email);
+      sessionStorage.setItem('lead_phone', whatsapp);
+      if (testEventCode) sessionStorage.setItem('lead_test_event_code', testEventCode);
 
       try {
         await fetch('/api/lead-academias', {
@@ -583,19 +560,12 @@
         });
       } catch (err) {}
 
-      // GA4 — mesmo evento "create_lead_success" já importado pela conversão
-      // do Google Ads "Lead Formulário" (propriedade GA4 "WeHelp G4"), reaproveitado
-      // aqui pra não precisar configurar uma nova conversão pra essa LP.
-      if (typeof gtag === 'function') {
-        gtag('event', 'create_lead_success', { event_id: eventId });
-      }
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
-
-      formIntro.style.display = 'none';
-      form.style.display = 'none';
-      formSuccess.classList.add('is-visible');
-      if (stickyCta) stickyCta.classList.add('is-hidden');
+      // A conversão "create_lead_success" NÃO dispara aqui — dispara só na
+      // página de obrigado (decisão do usuário, 2026-08-12), pra só contar
+      // quem realmente completou o envio. O event_id fica salvo no
+      // sessionStorage (getEventId, acima) e a página de obrigado reaproveita
+      // o mesmo valor.
+      window.location.href = '/academias/obrigado';
     });
   </script>
 

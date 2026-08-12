@@ -3,11 +3,10 @@
 // DataCrazy, pipeline "Leads", etapa "Novos Leads", tag "Site", atendente
 // padrão Caroline Bonini. Mesmo contorno do bug confirmado de additionalFields
 // da API pública do DataCrazy (ver comentário mais abaixo) — dado garantido via
-// campo nativo "notes". Mantém o evento Lead no Meta CAPI.
+// campo nativo "notes". O evento Lead do Meta CAPI NÃO roda aqui — foi movido
+// pro pageview da página de obrigado (decisão do usuário, 2026-08-12, mesma
+// lógica do create_lead_success no GA4), ver api/lead-academias-capi.js.
 // Segue o padrão de 00-base/padrao-captura-lead.md.
-
-import { createHash } from 'crypto';
-const sha256 = (v) => createHash('sha256').update(String(v).toLowerCase().trim()).digest('hex');
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -33,8 +32,6 @@ export default async function handler(req, res) {
   const FIELD_UTM_TERM = '8f5317cb-daad-487a-bfcb-53844c314227';
 
   const SHEETS_URL = process.env.SHEETS_ACADEMIAS_URL; // opcional — sem planilha própria configurada ainda
-  const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
-  const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 
   if (!DATACRAZY_API_KEY) {
     return res.status(500).json({ error: 'Configuração ausente no servidor (DATACRAZY_API_KEY)' });
@@ -46,7 +43,6 @@ export default async function handler(req, res) {
       Nome_da_Academia, Quantidade_de_Alunos_Ativos,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
       fbclid, gclid, referral_source, url: pageUrl,
-      event_id, fbc, fbp, test_event_code,
     } = req.body;
 
     if (!WhatsApp) {
@@ -63,7 +59,6 @@ export default async function handler(req, res) {
       ? decodeURIComponent(req.headers['x-vercel-ip-city'])
       : '';
     const receivedAt = new Date().toISOString();
-    const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
     const phoneDigits = WhatsApp.replace(/\D/g, '');
     const contactEmail = E_mail_Corporativo || `wp.${phoneDigits}@noemail.invalid`;
 
@@ -170,43 +165,9 @@ export default async function handler(req, res) {
         }),
       }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
 
-    // 5. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
-    let capiPromise = Promise.resolve();
-    if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
-      const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
-      const referer = req.headers['referer'] || pageUrl || '';
-
-      const capiPayload = {
-        data: [{
-          event_name: 'Lead',
-          event_time: Math.floor(Date.now() / 1000),
-          event_id: capiEventId,
-          event_source_url: referer,
-          action_source: 'website',
-          user_data: {
-            em: [sha256(contactEmail)],
-            ph: [sha256(phoneDigits)],
-            client_ip_address: clientIp,
-            client_user_agent: userAgent,
-            ...(resolvedFbc ? { fbc: resolvedFbc } : {}),
-            ...(fbp ? { fbp } : {}),
-          },
-        }],
-        access_token: META_ACCESS_TOKEN,
-      };
-
-      if (test_event_code) capiPayload.test_event_code = test_event_code;
-
-      capiPromise = fetch(CAPI_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(capiPayload),
-      }).catch((err) => console.error('CAPI error:', err));
-    }
-
     // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
-    // response sai, então sem esse await o negócio/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([fieldsPromise, businessPromise, sheetsPromise, capiPromise]);
+    // response sai, então sem esse await o negócio corria risco de nunca completar.
+    await Promise.allSettled([fieldsPromise, businessPromise, sheetsPromise]);
 
     return res.status(200).json({ success: true, leadId });
 
