@@ -77,6 +77,18 @@
       "notas": "Variante do convite pro webinário — sem formulário, botão dispara evento Lead no Pixel e redireciona direto pro grupo do WhatsApp. Sem backend."
     },
     {
+      "slug": "webinario-convite",
+      "path": "/webinario-convite/",
+      "titulo": "Aula ao vivo — Estanque a perda de alunos | WeHelp",
+      "produto": "pesquisa-satisfacao",
+      "segmento": "fitness",
+      "tipo": "webinario",
+      "funil": "topo",
+      "status": "publicada — usa o backend já existente api/lead.js (mesma lista 20 / tag 80 / campo 27 do /webinario), então cai no mesmo funil de ActiveCampaign + Sheets + CAPI sem configuração nova",
+      "origem": "página nova, criada 2026-08-12. Estrutura replicada de uma referência que o usuário mandou em print (LP 'REVOLUÇÃO' do metodoagendacheia.com) — copy e identidade são 100% WeHelp, só o esqueleto/fluxo foi reaproveitado",
+      "notas": "Terceira variante do convite do webinário, ao lado de /webinario (LP longa com form) e /webinario-whatsapp (sem form, direto pro grupo). Diferencial: fluxo de 2 páginas em dobra única, visual escuro. Página 1 (/webinario-convite/) é hero de dobra única — moldura azul fixa, fundo quase preto com glow radial + grid sutil, foto decorativa (enps-evento/assets/colaborador.png, PNG RGBA já existente no repo) à direita, headline Figtree 900 com trecho em gradiente azul, 2 linhas de fatos (quinta 12h / grupo 100 vagas) e botão verde que abre um MODAL de formulário. Modal captura Nome, WhatsApp (prefixo fixo 🇧🇷 +55, só dígitos), E-mail e o dropdown real de alunos ativos (as mesmas 5 faixas do /webinario, mapeadas no campo 27 do ActiveCampaign). Ao enviar, POST em /api/lead e redirect pra página 2 PRESERVANDO a query string (UTMs seguem pra atribuição). Página 2 (/webinario-convite/obrigado) replica o 'FALTA APENAS 1 PASSO' da referência: barra de progresso animada até 72% com 'inscrição quase concluída...', instrução pro botão verde e CTA pro mesmo grupo de WhatsApp usado em /webinario-whatsapp (chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88), mais o box com data/formato. TRACKING: segue o padrão decidido pro /academias — a conversão NÃO dispara no submit nem no clique, dispara no PAGEVIEW da página 2 (só chega lá quem completou o form). O Pixel dispara Lead com o event_id guardado no sessionStorage na página 1, o que deduplica com o evento que o api/lead.js já manda via CAPI no submit. O dataLayer recebe 'lead_webinario' (nome propositalmente diferente de 'create_lead_success' pra NÃO poluir a conversão do Google Ads que hoje é exclusiva do /diagnostico — se quiserem uma conversão de Ads pro webinário, é só criar uma nova em cima desse evento). Clique no botão do grupo dispara 'whatsapp_click_webinario' só como engajamento. PERFORMANCE: a foto do hero é aplicada via CSS (.hero__art::after) dentro de @media (min-width:641px) em vez de <img> — no mobile a arte fica escondida e a imagem nem chega a ser baixada (economiza 306KB em quem vem de anúncio no celular); tentativa anterior com <picture>+data URI em srcset não funcionou porque a vírgula do data URI quebra o parser de srcset. DECISÕES DE COPY: a referência tinha 2 dropdowns (área de atuação + faturamento mensal) e uma data fixa; aqui ficou só o dropdown de alunos ativos (é o real do funil e já tem campo no AC — não inventei faixas de faturamento nem campo que não existe no CRM) e a data ficou recorrente ('próxima QUINTA-FEIRA, às 12h', igual /webinario e /webinario-whatsapp) em vez de data fixa, pra página não vencer toda semana."
+    },
+    {
       "slug": "enps-evento",
       "path": "/enps-evento/",
       "titulo": "Transforme a experiência dos seus colaboradores com o eNPS.",

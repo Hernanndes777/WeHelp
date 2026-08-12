@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../../shared/logo-wehelp.png" type="image/png" />
+  <title>Falta 1 passo — entre no grupo | WeHelp</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:        #1B6EF3;
+      --blue-light:  #6fa3ff;
+      --blue-cyan:   #7fd4ff;
+      --ink:         #05070f;
+      --muted:       #98a6c8;
+      --green:       #25D366;
+      --disp: 'Figtree', sans-serif;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--ink);
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    .frame {
+      position: fixed; inset: 14px;
+      border: 2px solid rgba(27,110,243,.5);
+      border-radius: 20px;
+      pointer-events: none; z-index: 40;
+    }
+
+    .wrap {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 56px 24px;
+      text-align: center;
+      background:
+        radial-gradient(820px 560px at 50% 6%, rgba(27,110,243,.26), transparent 62%),
+        var(--ink);
+      overflow: hidden;
+    }
+    .wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+      background-size: 62px 62px;
+      pointer-events: none;
+    }
+    .inner { position: relative; z-index: 2; width: 100%; max-width: 560px; }
+
+    .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 34px; }
+    .brand img { height: 32px; }
+    .brand span { font-family: var(--disp); font-size: 21px; font-weight: 900; letter-spacing: -.3px; }
+
+    /* ── Barra de progresso ── */
+    .bar {
+      position: relative; height: 42px; border-radius: 60px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden; margin-bottom: 34px;
+    }
+    .bar__fill {
+      position: absolute; inset: 0 auto 0 0; width: 0;
+      border-radius: 60px;
+      background: linear-gradient(96deg, var(--blue) 0%, #3f8bff 60%, var(--blue-cyan) 100%);
+      display: flex; align-items: center; justify-content: center;
+      animation: fill 1.5s cubic-bezier(.25,.8,.35,1) .25s forwards;
+    }
+    @keyframes fill { to { width: 72%; } }
+    .bar__label {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: #fff; letter-spacing: .2px;
+      white-space: nowrap;
+    }
+
+    .kicker {
+      font-family: var(--disp); font-weight: 900;
+      font-size: clamp(30px, 5.2vw, 46px); line-height: 1.06; letter-spacing: -1.3px;
+      margin-bottom: 16px;
+    }
+    .kicker span {
+      background: linear-gradient(100deg, var(--blue-light) 0%, var(--blue) 48%, var(--blue-cyan) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .lead {
+      font-size: 16.5px; line-height: 1.6; color: #dbe4f7;
+      max-width: 40ch; margin: 0 auto 32px;
+    }
+    .lead b { color: #fff; font-weight: 800; }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(37,211,102,.5), 0 10px 34px rgba(37,211,102,.3); }
+      65%  { box-shadow: 0 0 0 20px rgba(37,211,102,0), 0 10px 34px rgba(37,211,102,.3); }
+      100% { box-shadow: 0 0 0 0 rgba(37,211,102,0), 0 10px 34px rgba(37,211,102,.3); }
+    }
+    .cta {
+      display: inline-flex; align-items: center; justify-content: center; gap: 11px;
+      width: 100%; max-width: 420px;
+      background: linear-gradient(96deg, var(--green), #1fb85a);
+      color: #fff; border: none;
+      font-size: 15px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase;
+      padding: 21px 34px; border-radius: 60px;
+      transition: transform .2s, filter .2s;
+      animation: pulse-ring 2.1s ease-out .8s infinite;
+    }
+    .cta:hover { transform: translateY(-2px); filter: brightness(1.07); animation-play-state: paused; }
+    .cta i { font-size: 20px; }
+
+    /* ── Box de detalhes ── */
+    .details {
+      margin-top: 34px; display: inline-flex; flex-direction: column; gap: 13px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 16px; padding: 20px 26px; text-align: left;
+    }
+    .details div { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: #dbe4f7; }
+    .details .ic {
+      width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px;
+      background: rgba(27,110,243,.16); border: 1px solid rgba(27,110,243,.34);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .details .ic i { font-size: 17px; color: var(--blue-light); }
+    .details b { color: #fff; font-weight: 800; }
+
+    @media (max-width: 640px) {
+      .frame { inset: 9px; border-radius: 15px; border-width: 1.5px; }
+      .wrap { padding: 40px 20px; }
+      .brand { margin-bottom: 26px; }
+      .brand img { height: 27px; }
+      .brand span { font-size: 18px; }
+      .bar { height: 38px; margin-bottom: 26px; }
+      .bar__label { font-size: 12.5px; }
+      .kicker { letter-spacing: -.7px; }
+      .lead { font-size: 15px; margin-bottom: 26px; }
+      .cta { padding: 18px 22px; font-size: 13.5px; letter-spacing: .5px; }
+      .details { display: flex; margin-top: 26px; padding: 18px 20px; }
+      .details div { font-size: 13.5px; }
+    }
+  </style>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="frame" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <div class="inner">
+      <div class="brand">
+        <img src="../../shared/logo-wehelp.png" alt="WeHelp" />
+        <span>WeHelp</span>
+      </div>
+
+      <div class="bar">
+        <div class="bar__fill"></div>
+        <span class="bar__label">inscrição quase concluída...</span>
+      </div>
+
+      <h1 class="kicker">Falta apenas <span>1 passo...</span></h1>
+
+      <p class="lead">
+        Clique no <b>botão verde</b> abaixo e entre no grupo do WhatsApp.
+        É lá que você vai receber o link da aula.
+      </p>
+
+      <a class="cta" id="waBtn" href="https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88" target="_blank" rel="noopener">
+        <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+        Entrar no grupo agora
+      </a>
+
+      <div class="details">
+        <div>
+          <span class="ic"><i class="ti ti-calendar-event" aria-hidden="true"></i></span>
+          Na próxima <b>QUINTA-FEIRA</b>, às <b>12h</b>
+        </div>
+        <div>
+          <span class="ic"><i class="ti ti-device-laptop" aria-hidden="true"></i></span>
+          Encontro <b>online e exclusivo</b> · 100 vagas
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // ── Conversão Meta (Lead) no PAGEVIEW ──
+    // Dispara aqui, não no clique do botão: só chega nessa página quem realmente
+    // completou o formulário. O event_id vem do sessionStorage gravado na página
+    // 1, então deduplica com o evento que o api/lead.js já mandou via CAPI.
+    (function () {
+      var email = sessionStorage.getItem('lead_email') || '';
+      var phone = sessionStorage.getItem('lead_phone') || '';
+      var eventId = sessionStorage.getItem('lead_event_id')
+        || ('lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10));
+      var testEventCode = sessionStorage.getItem('lead_test_event_code') || '';
+
+      if (typeof fbq === 'function') {
+        if (email || phone) {
+          fbq('init', '1106401696374974', { em: email, ph: phone ? '55' + phone.replace(/\D/g, '') : undefined });
+        }
+        var extras = { eventID: eventId };
+        if (testEventCode) extras.test_event_code = testEventCode;
+        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
+      }
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'lead_webinario', event_id: eventId });
+    })();
+
+    // Clique no grupo — engajamento extra, não é a conversão
+    document.getElementById('waBtn').addEventListener('click', function () {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'whatsapp_click_webinario' });
+      if (typeof fbq === 'function') fbq('trackCustom', 'WhatsAppClickWebinario');
+    });
+  </script>
+</body>
+</html>

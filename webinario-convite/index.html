@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>Aula ao vivo — Estanque a perda de alunos | WeHelp</title>
+  <meta name="description" content="Descubra o sistema de 3 pilares para estancar a perda de alunos — o método exato que fez uma rede saltar de 40 para mais de 200 unidades." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue:        #1B6EF3;
+      --blue-light:  #6fa3ff;
+      --blue-cyan:   #7fd4ff;
+      --ink:         #05070f;
+      --ink-2:       #0a1128;
+      --muted:       #98a6c8;
+      --green:       #25D366;
+      --green-hover: #1ebe5d;
+      --disp: 'Figtree', sans-serif;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--ink);
+      color: #fff;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; }
+    ul { list-style: none; }
+
+    /* ── MOLDURA ── */
+    .frame {
+      position: fixed; inset: 14px;
+      border: 2px solid rgba(27,110,243,.5);
+      border-radius: 20px;
+      pointer-events: none; z-index: 40;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 56px 0;
+      background:
+        radial-gradient(900px 620px at 72% 44%, rgba(27,110,243,.30), transparent 62%),
+        radial-gradient(700px 500px at 8% 8%, rgba(27,110,243,.14), transparent 60%),
+        var(--ink);
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+      background-size: 62px 62px;
+      pointer-events: none;
+    }
+    .hero__inner {
+      position: relative; z-index: 2;
+      width: 100%; max-width: 1200px; margin: 0 auto;
+      padding: 0 56px;
+      display: grid; grid-template-columns: 1.02fr .98fr;
+      gap: 30px; align-items: center;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 34px; }
+    .brand img { height: 30px; }
+    .brand span { font-family: var(--disp); font-size: 20px; font-weight: 900; letter-spacing: -.3px; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14.5px; font-weight: 600; color: #c8d4ee;
+      margin-bottom: 18px;
+    }
+    .eyebrow i { color: var(--blue-light); font-size: 16px; }
+    .eyebrow b { color: #fff; font-weight: 800; }
+
+    .headline {
+      font-family: var(--disp); font-weight: 900;
+      font-size: clamp(31px, 3.5vw, 47px);
+      line-height: 1.09; letter-spacing: -1.4px;
+      margin-bottom: 20px; max-width: 15ch;
+    }
+    .headline .hl {
+      background: linear-gradient(100deg, var(--blue-light) 0%, var(--blue) 48%, var(--blue-cyan) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    .sub {
+      font-size: 15.5px; line-height: 1.65; color: var(--muted);
+      max-width: 46ch; margin-bottom: 28px;
+    }
+    .sub strong { color: #dbe4f7; font-weight: 600; }
+
+    .facts {
+      display: flex; flex-direction: column; gap: 11px;
+      margin-bottom: 30px;
+    }
+    .facts li { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: #dbe4f7; }
+    .facts .ic {
+      width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px;
+      background: rgba(27,110,243,.16); border: 1px solid rgba(27,110,243,.34);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .facts .ic i { font-size: 17px; color: var(--blue-light); }
+    .facts b { color: #fff; font-weight: 800; }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(37,211,102,.5), 0 10px 34px rgba(37,211,102,.3); }
+      65%  { box-shadow: 0 0 0 18px rgba(37,211,102,0), 0 10px 34px rgba(37,211,102,.3); }
+      100% { box-shadow: 0 0 0 0 rgba(37,211,102,0), 0 10px 34px rgba(37,211,102,.3); }
+    }
+    .cta {
+      display: inline-flex; align-items: center; justify-content: center; gap: 11px;
+      background: linear-gradient(96deg, var(--green), #1fb85a);
+      color: #fff; border: none;
+      font-size: 14.5px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase;
+      padding: 20px 46px; border-radius: 60px;
+      transition: transform .2s, filter .2s;
+      animation: pulse-ring 2.3s ease-out 1s infinite;
+    }
+    .cta:hover { transform: translateY(-2px); filter: brightness(1.07); animation-play-state: paused; }
+    .cta i { font-size: 19px; }
+    .cta-note {
+      margin-top: 13px; font-size: 12.5px; color: #7f8cad;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .cta-note i { font-size: 14px; color: var(--green); }
+
+    /* ── FOTO ── */
+    .hero__art {
+      position: relative; justify-self: center;
+      width: 100%; max-width: 520px; aspect-ratio: 621 / 572;
+    }
+    /* Brilho azul atrás da foto (::before pinta primeiro, foto vem por cima) */
+    .hero__art::before {
+      content: '';
+      position: absolute; top: 50%; left: 50%;
+      width: 108%; aspect-ratio: 1; transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(27,110,243,.42) 0%, rgba(27,110,243,.10) 46%, transparent 68%);
+      pointer-events: none;
+    }
+    /* A foto só é declarada acima de 640px — no mobile ela fica escondida, e
+       imagem declarada dentro de media query que não casa não chega a ser
+       baixada. Assim quem entra pelo celular não paga os 306KB do PNG. */
+    @media (min-width: 641px) {
+      .hero__art::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: url('../enps-evento/assets/colaborador.png') center / contain no-repeat;
+      }
+    }
+
+    /* ── MODAL ── */
+    .overlay {
+      position: fixed; inset: 0; z-index: 60;
+      background: rgba(3,5,12,.86); backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center; padding: 22px;
+      overflow-y: auto;
+    }
+    .overlay.open { display: flex; }
+    .modal {
+      position: relative; width: 100%; max-width: 470px;
+      background: #0b0f1c;
+      border: 1.5px solid rgba(27,110,243,.5); border-radius: 20px;
+      padding: 34px 32px 28px;
+      animation: pop .28s cubic-bezier(.2,.9,.3,1.3);
+    }
+    @keyframes pop { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: none; } }
+    .modal__x {
+      position: absolute; top: 15px; right: 15px;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,.07); border: none; color: #9fadcb; font-size: 15px;
+      display: flex; align-items: center; justify-content: center; transition: background .2s, color .2s;
+    }
+    .modal__x:hover { background: rgba(255,255,255,.14); color: #fff; }
+    .modal__brand { display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 22px; }
+    .modal__brand img { height: 27px; }
+    .modal__brand span { font-family: var(--disp); font-size: 19px; font-weight: 900; }
+    .modal__title { text-align: center; font-size: 14.5px; color: #c8d4ee; margin-bottom: 20px; }
+    .modal__err {
+      display: none; background: rgba(220,38,38,.12); border: 1px solid rgba(220,38,38,.42);
+      color: #fca5a5; font-size: 13px; padding: 10px 13px; border-radius: 10px; margin-bottom: 14px;
+    }
+    .modal__err.show { display: block; }
+    .field { margin-bottom: 12px; }
+    .input, select.input {
+      width: 100%; background: #fff; border: 1.5px solid transparent; border-radius: 11px;
+      padding: 15px 16px; font-family: 'DM Sans', sans-serif; font-size: 14.5px;
+      color: #0a1128; outline: none; transition: border-color .2s; appearance: none;
+    }
+    .input::placeholder { color: #94a3b8; }
+    .input:focus { border-color: var(--blue); }
+    select.input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%235b6178' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 15px center; padding-right: 38px;
+      color: #94a3b8;
+    }
+    select.input.filled { color: #0a1128; }
+    .phone { display: flex; background: #fff; border: 1.5px solid transparent; border-radius: 11px; overflow: hidden; transition: border-color .2s; }
+    .phone:focus-within { border-color: var(--blue); }
+    .phone__ddi {
+      display: flex; align-items: center; gap: 6px; padding: 0 12px 0 16px;
+      font-size: 14.5px; color: #0a1128; font-weight: 600; border-right: 1px solid #e2e8f0; flex-shrink: 0;
+    }
+    .phone .input { border: none; border-radius: 0; }
+    .phone .input:focus { border-color: transparent; }
+    .modal__submit {
+      width: 100%; margin-top: 8px;
+      background: linear-gradient(96deg, var(--green), #1fb85a); color: #fff; border: none;
+      font-size: 14px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase;
+      padding: 18px; border-radius: 60px;
+      display: flex; align-items: center; justify-content: center; gap: 9px;
+      transition: filter .2s, transform .2s;
+    }
+    .modal__submit:hover:not(:disabled) { filter: brightness(1.07); transform: translateY(-1px); }
+    .modal__submit:disabled { opacity: .6; cursor: not-allowed; }
+    .modal__safe {
+      margin-top: 16px; text-align: center; font-size: 12.5px; color: #7f8cad;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .modal__safe i { color: var(--green); font-size: 14px; }
+
+    /* ── RESPONSIVO ── */
+    @media (max-width: 1000px) {
+      .hero__inner { grid-template-columns: 1fr; gap: 34px; text-align: center; padding: 0 34px; }
+      .brand, .eyebrow, .facts li, .cta-note { justify-content: center; }
+      .headline, .sub { max-width: 100%; margin-left: auto; margin-right: auto; }
+      .facts li { justify-content: flex-start; max-width: 330px; margin: 0 auto; }
+      .hero__art { order: -1; max-width: 320px; }
+    }
+    @media (max-width: 640px) {
+      .frame { inset: 9px; border-radius: 15px; border-width: 1.5px; }
+      .hero { padding: 40px 0; min-height: auto; }
+      .hero__inner { padding: 0 24px; gap: 26px; }
+      .hero__art { display: none; }
+      .brand { margin-bottom: 24px; }
+      .brand img { height: 26px; }
+      .brand span { font-size: 18px; }
+      .eyebrow { font-size: 13px; margin-bottom: 14px; }
+      .headline { letter-spacing: -.7px; margin-bottom: 16px; }
+      .sub { font-size: 14.5px; margin-bottom: 24px; }
+      .facts { gap: 9px; margin-bottom: 26px; }
+      .facts li { font-size: 13.5px; }
+      .cta { width: 100%; padding: 18px 22px; font-size: 13px; letter-spacing: .5px; }
+      .modal { padding: 28px 22px 22px; }
+    }
+  </style>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="frame" aria-hidden="true"></div>
+
+  <section class="hero">
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <div class="brand">
+          <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+          <span>WeHelp</span>
+        </div>
+
+        <p class="eyebrow">
+          <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+          A era do Gerente Bombeiro <b>acabou!</b>
+        </p>
+
+        <h1 class="headline">
+          Descubra como <span class="hl">estancar a perda de alunos</span> com o sistema de 3 pilares.
+        </h1>
+
+        <p class="sub">
+          O método exato que fez uma rede saltar de 40 para mais de 200 unidades.
+          Pare de tentar encher um "balde furado" apenas com novas vendas e transforme
+          a experiência do aluno no seu <strong>maior lucro líquido.</strong>
+        </p>
+
+        <ul class="facts">
+          <li>
+            <span class="ic"><i class="ti ti-calendar-event" aria-hidden="true"></i></span>
+            Na próxima <b>QUINTA-FEIRA</b>, às <b>12h</b>
+          </li>
+          <li>
+            <span class="ic"><i class="ti ti-brand-whatsapp" aria-hidden="true"></i></span>
+            Grupo exclusivo no WhatsApp · <b>100 vagas</b>
+          </li>
+        </ul>
+
+        <button class="cta" id="openModal">
+          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+          Entrar no grupo agora
+        </button>
+        <p class="cta-note">
+          <i class="ti ti-lock" aria-hidden="true"></i>
+          Acesso 100% gratuito · vagas limitadas
+        </p>
+      </div>
+
+      <!-- Foto decorativa — vem do CSS (.hero__art::after) pra não ser baixada no mobile -->
+      <div class="hero__art" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal__x" id="closeModal" aria-label="Fechar">✕</button>
+
+      <div class="modal__brand">
+        <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+        <span>WeHelp</span>
+      </div>
+
+      <p class="modal__title" id="modalTitle">Finalize sua inscrição preenchendo os dados:</p>
+
+      <div class="modal__err" id="formErr"></div>
+
+      <form id="leadForm" novalidate>
+        <div class="field">
+          <input type="text" class="input" id="nome" placeholder="* Nome completo" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <div class="phone">
+            <span class="phone__ddi">🇧🇷 +55</span>
+            <input type="tel" class="input" id="whatsapp" placeholder="* WhatsApp com DDD" autocomplete="tel" maxlength="11" required />
+          </div>
+        </div>
+        <div class="field">
+          <input type="email" class="input" id="email" placeholder="* Seu melhor e-mail" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <select class="input" id="clientes" required>
+            <option value="" disabled selected>* Quantos alunos ativos você tem atualmente?</option>
+            <option value="Até 150 clientes">Até 150 clientes</option>
+            <option value="De 151 a 300 clientes">De 151 a 300 clientes</option>
+            <option value="De 301 a 500 clientes">De 301 a 500 clientes</option>
+            <option value="De 501 a 1000 clientes">De 501 a 1000 clientes</option>
+            <option value="Acima de 1000 clientes">Acima de 1000 clientes</option>
+          </select>
+        </div>
+
+        <button type="submit" class="modal__submit" id="submitBtn">
+          <span id="submitText">Quero continuar</span>
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </button>
+      </form>
+
+      <p class="modal__safe">
+        <i class="ti ti-lock" aria-hidden="true"></i>
+        Seus dados estão seguros com a gente!
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const testEventCode = params.get('fbtest') || null;
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+    function getEventId() {
+      let id = sessionStorage.getItem('lead_event_id');
+      if (!id) {
+        id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('lead_event_id', id);
+      }
+      return id;
+    }
+
+    // ── Modal ──
+    const overlay = document.getElementById('overlay');
+    const openModal = () => {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => document.getElementById('nome').focus(), 120);
+    };
+    const closeModal = () => {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+    document.getElementById('openModal').addEventListener('click', openModal);
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // Só digitos no WhatsApp
+    document.getElementById('whatsapp').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 11);
+    });
+
+    // Select muda de cor quando preenchido (placeholder cinza -> texto escuro)
+    const clientesEl = document.getElementById('clientes');
+    clientesEl.addEventListener('change', () => clientesEl.classList.add('filled'));
+
+    // ── Envio ──
+    const form = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const formErr = document.getElementById('formErr');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value.trim();
+      const whatsapp = document.getElementById('whatsapp').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const clientes = clientesEl.value;
+
+      formErr.classList.remove('show');
+      if (!nome)                      return showErr('Preencha seu nome completo.');
+      if (whatsapp.length < 10)       return showErr('Digite um WhatsApp válido com DDD.');
+      if (!/^\S+@\S+\.\S+$/.test(email)) return showErr('Digite um e-mail válido.');
+      if (!clientes)                  return showErr('Selecione quantos alunos ativos você tem.');
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Enviando...';
+
+      const eventId = getEventId();
+
+      // Guarda pro pixel da página de obrigado (a conversão dispara lá, no
+      // pageview, não aqui no submit — mesmo padrão de /academias)
+      sessionStorage.setItem('lead_email', email);
+      sessionStorage.setItem('lead_phone', whatsapp);
+      if (testEventCode) sessionStorage.setItem('lead_test_event_code', testEventCode);
+
+      try {
+        await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nome,
+            email,
+            whatsapp: '+55' + whatsapp,
+            clientes,
+            utm_source: params.get('utm_source') || '',
+            utm_medium: params.get('utm_medium') || '',
+            utm_campaign: params.get('utm_campaign') || '',
+            utm_content: params.get('utm_content') || '',
+            utm_term: params.get('utm_term') || '',
+            utm_id: params.get('utm_id') || '',
+            fbclid: params.get('fbclid') || '',
+            gclid: params.get('gclid') || '',
+            referral_source: document.referrer || '',
+            url: location.href,
+            event_id: eventId,
+            fbc: getCookie('_fbc'),
+            fbp: getCookie('_fbp'),
+            test_event_code: testEventCode || '',
+          }),
+        });
+      } catch (err) { /* não trava o fluxo do lead */ }
+
+      // Leva as UTMs pra página 2 preservar a atribuição
+      const qs = location.search ? location.search : '';
+      window.location.href = '/webinario-convite/obrigado' + qs;
+    });
+
+    function showErr(msg) {
+      formErr.textContent = msg;
+      formErr.classList.add('show');
+      submitBtn.disabled = false;
+      submitText.textContent = 'Quero continuar';
+    }
+  </script>
+</body>
+</html>
