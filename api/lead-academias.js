@@ -1,11 +1,13 @@
 // api/lead-academias.js — Função serverless (Vercel) da LP /academias
-// Mesmo backend do /diagnostico (api/lead-diagnostico.js): leads caem no
-// DataCrazy, pipeline "Leads", etapa "Novos Leads", tag "Site", atendente
-// padrão Caroline Bonini. Mesmo contorno do bug confirmado de additionalFields
-// da API pública do DataCrazy (ver comentário mais abaixo) — dado garantido via
-// campo nativo "notes". O evento Lead do Meta CAPI NÃO roda aqui — foi movido
-// pro pageview da página de obrigado (decisão do usuário, 2026-08-12, mesma
-// lógica do create_lead_success no GA4), ver api/lead-academias-capi.js.
+// Leads caem no pipeline dedicado "Leads Academia" (grupo VENDAS, criado pelo
+// usuário em 2026-08-12) > etapa "Novo", com tag "Site" e atendente padrão
+// Caroline Bonini (mesma tag/atendente do /diagnostico, que usa o pipeline
+// "Leads" > "Novos Leads" — pipelines separados, resto do fluxo igual). Mesmo
+// contorno do bug confirmado de additionalFields da API pública do DataCrazy
+// (ver comentário mais abaixo) — dado garantido via campo nativo "notes". O
+// evento Lead do Meta CAPI NÃO roda aqui — foi movido pro pageview da página
+// de obrigado (decisão do usuário, 2026-08-12, mesma lógica do
+// create_lead_success no GA4), ver api/lead-academias-capi.js.
 // Segue o padrão de 00-base/padrao-captura-lead.md.
 
 export default async function handler(req, res) {
@@ -19,9 +21,9 @@ export default async function handler(req, res) {
   const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
   const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
 
-  // Mesmos IDs já confirmados na conta DataCrazy (usados também pelo /diagnostico)
-  const PIPELINE_STAGE_ID = 'e9ae521e-13c6-4a68-a0f8-ef7447c8d7dc'; // Pipeline "Leads" > etapa "Novos Leads"
-  const TAG_SITE = '91ed2d79-6bf8-4744-8a9a-127850f7f00f';         // Tag "Site"
+  // IDs confirmados via MCP do DataCrazy em 2026-08-12
+  const PIPELINE_STAGE_ID = '6bd8728d-76b1-406f-8703-99837aada13e'; // Pipeline "Leads Academia" > etapa "Novo"
+  const TAG_SITE = '91ed2d79-6bf8-4744-8a9a-127850f7f00f';         // Tag "Site" (mesma do /diagnostico)
   const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';     // Caroline Bonini
   const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa" — usado pro Nome da Academia
   const FIELD_AREA_ATUACAO = '91af21ad-faeb-44a5-bc2f-af9a3100bbcd'; // "Área de atuação" — usado pra Quantidade de Alunos
