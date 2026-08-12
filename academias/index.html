@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <!-- Google tag (gtag.js) — GA4 + Google Ads -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WMP81BEKN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0WMP81BEKN');
+    gtag('config', 'AW-388747722');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>WeHelp para Academias — Preveja a Evasão de Alunos</title>
+  <meta name="description" content="Com a plataforma WeHelp, você descobre exatamente o que o seu aluno pensa e age antes dele cancelar a matrícula." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #fff;
+      color: #1a2036;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; cursor: pointer; }
+    ul { list-style: none; }
+
+    :root {
+      --blue:       #1B6EF3;
+      --blue-hover: #1457c8;
+      --blue-tint:  #e8f0ff;
+      --navy:       #0a1128;
+      --navy2:      #101c42;
+      --body:       #4a5568;
+      --line:       #e2e8f0;
+      --bg:         #f4f6fb;
+      --disp: 'Figtree', sans-serif;
+    }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--blue); background: var(--blue-tint);
+      padding: 6px 14px; border-radius: 50px;
+    }
+
+    [data-reveal] { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    [data-reveal].is-visible { opacity: 1; transform: translateY(0); }
+
+    /* ══════════ HERO ══════════ */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 40px 0 72px;
+      background: radial-gradient(700px 480px at 50% -10%, rgba(27,110,243,.45), transparent 65%), var(--navy);
+    }
+    .hero__topline {
+      position: relative; z-index: 1;
+      display: flex; align-items: center;
+      padding-bottom: 36px;
+    }
+    .hero__brand { display: flex; align-items: center; gap: 9px; }
+    .hero__brand img { height: 26px; }
+    .hero__brand span { font-family: var(--disp); font-size: 17px; font-weight: 800; color: #fff; }
+
+    .hero__grid {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center;
+    }
+    .hero__headline {
+      font-family: var(--disp); font-weight: 900;
+      font-size: clamp(32px, 3.4vw, 46px); line-height: 1.14; letter-spacing: -.02em;
+      color: #fff; margin: 0 0 20px;
+    }
+    .hero__headline mark {
+      background: none;
+      color: #6fa3ff;
+    }
+    .hero__sub { font-size: 16.5px; line-height: 1.7; color: #b4c0e0; max-width: 480px; }
+
+    .formcard {
+      background: #fff; border-radius: 22px; padding: 34px 32px 28px;
+      box-shadow: 0 30px 70px rgba(0,0,10,.35); border: 1px solid var(--line);
+    }
+    .formcard h3 { font-family: var(--disp); font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+    .formcard > p { font-size: 13.5px; color: var(--body); margin-bottom: 22px; }
+    .formgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 16px; }
+    .field label {
+      display: block; font-size: 11.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px;
+    }
+    .input, select.input {
+      width: 100%; background: var(--bg); border: 1.5px solid var(--line);
+      border-radius: 12px; padding: 13px 14px; font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px; color: var(--navy); outline: none; transition: border-color .2s;
+      appearance: none;
+    }
+    select.input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%235b6178' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px;
+    }
+    .input:focus { border-color: var(--blue); }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(27,110,243,.55), 0 8px 24px rgba(27,110,243,.35); }
+      60%  { box-shadow: 0 0 0 14px rgba(27,110,243,0), 0 8px 24px rgba(27,110,243,.35); }
+      100% { box-shadow: 0 0 0 0 rgba(27,110,243,0), 0 8px 24px rgba(27,110,243,.35); }
+    }
+    .formcard__btn {
+      width: 100%; background: var(--blue); color: #fff; border: none;
+      border-radius: 50px; padding: 16px; font-size: 14px; font-weight: 700;
+      margin-top: 16px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background .2s, transform .2s;
+      animation: pulse-ring 2.2s ease-out 1s infinite;
+    }
+    .formcard__btn:hover { background: var(--blue-hover); transform: translateY(-1px); }
+    .formcard__btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .formcard__hint {
+      display: flex; align-items: flex-start; gap: 6px;
+      font-size: 12px; color: #94a3b8; margin-top: 14px; line-height: 1.5;
+    }
+    .formcard__hint i { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+
+    .formcard__success { display: none; text-align: center; padding: 12px 0 4px; }
+    .formcard__success.is-visible { display: block; }
+    .formcard__success .check {
+      width: 56px; height: 56px; border-radius: 50%; background: var(--blue-tint); color: var(--blue);
+      display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 0 auto 18px;
+    }
+    .formcard__success h3 { font-family: var(--disp); font-size: 19px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+    .formcard__success p { font-size: 13.5px; color: var(--body); line-height: 1.6; }
+
+    /* ══════════ LOGOS (letreiro/marquee) ══════════ */
+    .logos { padding: 64px 0 24px; }
+    .logos p { text-align: center; font-size: 12.5px; font-weight: 700; color: var(--body); letter-spacing: .02em; margin-bottom: 40px; }
+    .logos__marquee {
+      overflow: hidden; width: 100%;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .logos__track {
+      display: inline-flex; align-items: center; gap: 80px; width: max-content;
+      will-change: transform; animation: logos-scroll 24s linear infinite;
+    }
+    .logos__marquee:hover .logos__track { animation-play-state: paused; }
+    .logos__track img { height: 100px; width: auto; opacity: .85; flex-shrink: 0; }
+    @keyframes logos-scroll { from { transform: translateX(0); } to { transform: translateX(-33.3334%); } }
+
+    /* ══════════ SECTION SHELL ══════════ */
+    .section { padding: 100px 0; }
+    .section-head { max-width: 640px; margin-bottom: 40px; }
+    .section-head h2 {
+      font-family: var(--disp); font-size: clamp(24px, 2.8vw, 34px); font-weight: 800; line-height: 1.22;
+      letter-spacing: -.01em; color: var(--navy); margin-top: 14px;
+    }
+
+    /* ══════════ DOR ══════════ */
+    .paintext {
+      font-size: clamp(17px, 1.6vw, 19px); line-height: 1.75; color: var(--navy);
+      max-width: 760px; font-weight: 500;
+    }
+
+    /* ══════════ CTA inline reutilizável (link) ══════════ */
+    .inline-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--blue); font-weight: 700; font-size: 14.5px;
+      transition: gap .2s;
+    }
+    .inline-cta:hover { gap: 13px; }
+    .inline-cta i { font-size: 15px; transition: transform .2s; }
+    .section-cta-row { margin-top: 32px; }
+
+    /* ══════════ MÓDULOS — alternado com screenshots reais ══════════ */
+    .metorow {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+      padding: 60px 0;
+    }
+    .metorow--rev .metorow__visual { order: 2; }
+    .metorow__label {
+      display: inline-block; font-size: 11.5px; font-weight: 800; color: var(--blue);
+      background: var(--blue-tint); padding: 5px 12px; border-radius: 50px; margin-bottom: 16px;
+    }
+    .metorow h3 { font-family: var(--disp); font-size: 23px; font-weight: 800; color: var(--navy); margin-bottom: 14px; line-height: 1.3; }
+    .metorow p { font-size: 15px; color: var(--body); line-height: 1.75; }
+    .metorow__cta { margin-top: 20px; }
+    .metorow__visual img {
+      width: 100%; border-radius: 20px;
+      box-shadow: 0 24px 50px rgba(20,25,60,.14);
+    }
+
+    /* ══════════ CTA FINAL ══════════ */
+    .ctafinal {
+      border-radius: 28px; padding: 64px 48px; text-align: center; position: relative; overflow: hidden;
+      background: linear-gradient(160deg, #1B6EF3 0%, #1550c9 100%);
+    }
+    .ctafinal::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(600px 340px at 15% 0%, rgba(255,255,255,.25), transparent 60%);
+    }
+    .ctafinal__inner { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; }
+    .ctafinal .eyebrow { color: #fff; background: rgba(255,255,255,.15); }
+    .ctafinal h2 { font-family: var(--disp); font-size: clamp(26px, 3vw, 36px); font-weight: 900; color: #fff; margin: 14px 0 28px; line-height: 1.25; }
+    .ctafinal__btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #fff; color: var(--blue); border: none;
+      padding: 17px 34px; border-radius: 50px; font-size: 14px; font-weight: 800;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .ctafinal__btn:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(0,0,0,.2); }
+
+    /* ══════════ FOOTER ══════════ */
+    .footer { padding: 36px 0; border-top: 1px solid var(--line); }
+    .footer .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .footer p { font-size: 12px; color: #94a3b8; }
+
+    /* ══════════ RESPONSIVE ══════════ */
+    @media (max-width: 960px) {
+      .hero__grid { grid-template-columns: 1fr; gap: 40px; }
+      .hero__sub { max-width: none; }
+      .metorow, .metorow--rev .metorow__visual { grid-template-columns: 1fr; order: initial; }
+      .metorow { gap: 26px; padding: 36px 0; }
+      .metorow__visual { order: -1; }
+      .formgrid { grid-template-columns: 1fr 1fr; }
+      .section { padding: 68px 0; }
+      .logos__track { gap: 60px; animation-duration: 20s; }
+      .logos__track img { height: 78px; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .hero { padding-top: 26px; }
+      .formgrid { grid-template-columns: 1fr; }
+      .formcard { padding: 26px 22px 22px; }
+      .section-head { margin-bottom: 30px; }
+      .ctafinal { padding: 44px 24px; }
+      .logos__track { gap: 40px; animation-duration: 16s; }
+      .logos__track img { height: 58px; }
+      .footer { padding-bottom: 96px; }
+    }
+
+    /* ══════════ STICKY CTA (mobile) ══════════ */
+    .sticky-cta { display: none; }
+    @media (max-width: 640px) {
+      .sticky-cta {
+        display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        background: #fff; border-top: 1px solid var(--line);
+        box-shadow: 0 -10px 26px rgba(10,17,40,.14);
+        transition: transform .3s ease;
+      }
+      .sticky-cta.is-hidden { transform: translateY(110%); }
+      .sticky-cta a {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        background: var(--blue); color: #fff; font-family: 'DM Sans', sans-serif;
+        font-weight: 800; font-size: 14.5px; padding: 15px; border-radius: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <!-- STICKY CTA (mobile) -->
+  <div class="sticky-cta" id="stickyCta">
+    <a href="#leadForm">
+      Blindar minha academia <i class="ti ti-arrow-right" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero__topline">
+        <div class="hero__brand">
+          <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+          <span>WeHelp</span>
+        </div>
+      </div>
+
+      <div class="hero__grid">
+        <div class="hero__left">
+          <span class="eyebrow" style="background:rgba(27,110,243,.18); color:#fff">Exclusivo para academias e studios</span>
+          <h1 class="hero__headline" style="margin-top:16px">O aluno que sai em silêncio leva o seu lucro embora. <mark>Pare de adivinhar e comece a prever a evasão.</mark></h1>
+          <p class="hero__sub">Com a plataforma WeHelp, você descobre exatamente o que o seu aluno pensa e age antes dele cancelar a matrícula.</p>
+        </div>
+
+        <div class="hero__right">
+          <div class="formcard">
+            <div id="formIntro">
+              <h3>Peça uma demonstração gratuita</h3>
+              <p>Preencha os dados abaixo e fale com um especialista em retenção.</p>
+            </div>
+
+            <form id="leadForm" novalidate>
+              <div class="formgrid">
+                <div class="field">
+                  <label for="nome">Nome completo</label>
+                  <input type="text" class="input" id="nome" placeholder="Seu nome completo" required />
+                </div>
+                <div class="field">
+                  <label for="email">E-mail corporativo</label>
+                  <input type="email" class="input" id="email" placeholder="voce@suaacademia.com.br" required />
+                </div>
+                <div class="field">
+                  <label for="whatsapp">WhatsApp</label>
+                  <input type="tel" class="input" id="whatsapp" placeholder="(00) 00000-0000" maxlength="15" required />
+                </div>
+                <div class="field">
+                  <label for="academia">Nome da Academia</label>
+                  <input type="text" class="input" id="academia" placeholder="Nome da sua academia" required />
+                </div>
+                <div class="field" style="grid-column: 1 / -1">
+                  <label for="alunos">Quantidade de Alunos Ativos</label>
+                  <select class="input" id="alunos" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option>Até 300</option>
+                    <option>301 a 1000</option>
+                    <option>Mais de 1000</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="formcard__btn" id="submitBtn">
+                <span id="submitText">🚀 Quero blindar minha academia</span>
+              </button>
+              <p class="formcard__hint"><i class="ti ti-lock" aria-hidden="true"></i> Seus dados estão seguros. Um especialista entrará em contato em até 15 minutos em horário comercial.</p>
+            </form>
+
+            <div class="formcard__success" id="formSuccess">
+              <div class="check"><i class="ti ti-check" aria-hidden="true"></i></div>
+              <h3>Recebemos seus dados!</h3>
+              <p>Um especialista em retenção da WeHelp vai chamar você no WhatsApp em breve para mostrar como prever a evasão da sua academia.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOR REAL -->
+  <section class="section" data-reveal>
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">O problema real</span>
+        <h2>Vender mais não tampa o balde furado da sua retenção.</h2>
+      </div>
+
+      <p class="paintext">Você investe em marketing, repõe os alunos que saíram, mas no fim do mês a conta não fecha. Isso acontece porque o cliente insatisfeito com a limpeza do vestiário, com o atendimento na recepção ou com a falta de atenção do professor não vai na gerência reclamar. Ele simplesmente não renova o plano e vai para a concorrência.</p>
+
+      <div class="section-cta-row">
+        <a href="#leadForm" class="inline-cta">Quero blindar minha academia <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUÇÃO — 3 módulos contra o churn -->
+  <section class="section" data-reveal style="background:var(--bg)">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">A solução WeHelp</span>
+        <h2>3 passos para acabar com o churn na sua academia</h2>
+      </div>
+
+      <div class="metorow">
+        <div>
+          <span class="metorow__label">Módulo de Pesquisa</span>
+          <h3>Escute no canal certo.</h3>
+          <p>Substitua totens ignorados por pesquisas rápidas de NPS via WhatsApp e QR Code. Avalie a infraestrutura, os professores e o atendimento com respostas em 1 clique.</p>
+          <div class="metorow__cta"><a href="#leadForm" class="inline-cta">Ver esse disparo na prática <i class="ti ti-arrow-right" aria-hidden="true"></i></a></div>
+        </div>
+        <div class="metorow__visual">
+          <img src="../shared/diagnostico/pesquisa-nps.webp" alt="Pesquisa de NPS WeHelp" />
+        </div>
+      </div>
+
+      <div class="metorow metorow--rev">
+        <div>
+          <span class="metorow__label">Módulo de Atendimento</span>
+          <h3>Resolva atritos na hora.</h3>
+          <p>Aluno deu nota baixa porque a esteira quebrou? O gestor recebe um alerta imediato no celular (Kanban). Você resolve o problema no mesmo dia e transforma um detrator em fã.</p>
+          <div class="metorow__cta"><a href="#leadForm" class="inline-cta">Ver a central de atendimento <i class="ti ti-arrow-right" aria-hidden="true"></i></a></div>
+        </div>
+        <div class="metorow__visual">
+          <img src="../shared/diagnostico/atendimento-ticket.webp" alt="Central de atendimento WeHelp" />
+        </div>
+      </div>
+
+      <div class="metorow">
+        <div>
+          <span class="metorow__label">Módulo de Retenção/Predição</span>
+          <h3>O seu trunfo.</h3>
+          <p>Não espere o cancelamento. A WeHelp cruza os dados e te avisa exatamente quais alunos têm alto risco de evasão hoje, permitindo que você recupere até 40% deles antes que passem pela catraca pela última vez.</p>
+          <div class="metorow__cta"><a href="#leadForm" class="inline-cta">Ver a predição de evasão <i class="ti ti-arrow-right" aria-hidden="true"></i></a></div>
+        </div>
+        <div class="metorow__visual">
+          <img src="../shared/diagnostico/dashboard-nps.webp" alt="Dashboard de predição de evasão WeHelp" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <section class="section" data-reveal>
+    <div class="container">
+      <div class="section-head" style="margin-bottom:8px">
+        <span class="eyebrow">Prova social</span>
+        <h2>As maiores redes do Brasil já pararam de adivinhar.</h2>
+      </div>
+    </div>
+    <div class="logos">
+      <div class="container">
+        <div class="logos__marquee">
+          <div class="logos__track">
+            <img src="../california/assets/bluefit.png" alt="Bluefit" />
+            <img src="../california/assets/panobianco.png" alt="Panobianco" />
+            <img src="../california/assets/bodytech.png" alt="Bodytech" />
+            <img src="../california/assets/bioritmo.png" alt="Bioritmo" />
+            <img src="../california/assets/evo.png" alt="ABC Evo" />
+            <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
+            <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="ctafinal">
+        <div class="ctafinal__inner">
+          <span class="eyebrow">Última chamada</span>
+          <h2>Quanto a evasão está custando para a sua academia neste exato momento?</h2>
+          <a href="#leadForm" class="ctafinal__btn" id="ctaFinalBtn">
+            Falar com um especialista em retenção <i class="ti ti-arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2026 WeHelp — Todos os direitos reservados</p>
+      <p>Prevenção de evasão para academias e estúdios</p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Scroll reveal ──
+    const revealEls = document.querySelectorAll('[data-reveal]');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+      }, { threshold: .12 });
+      revealEls.forEach(el => io.observe(el));
+    } else {
+      revealEls.forEach(el => el.classList.add('is-visible'));
+    }
+
+    // ── Sticky CTA (mobile) — esconde quando o formulário já está visível ──
+    const stickyCta = document.getElementById('stickyCta');
+    const formCardEl = document.querySelector('.formcard');
+    if (stickyCta && formCardEl && 'IntersectionObserver' in window) {
+      const stickyIo = new IntersectionObserver((entries) => {
+        entries.forEach(e => stickyCta.classList.toggle('is-hidden', e.isIntersecting));
+      }, { threshold: .15 });
+      stickyIo.observe(formCardEl);
+    }
+
+    // ── Lead form ──
+    const PIXEL_ID = '1106401696374974';
+    const params = new URLSearchParams(location.search);
+    const testEventCode = params.get('fbtest') || null;
+
+    function getCookie(name) {
+      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : '';
+    }
+    function getEventId() {
+      let id = sessionStorage.getItem('lead_event_id');
+      if (!id) {
+        id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
+        sessionStorage.setItem('lead_event_id', id);
+      }
+      return id;
+    }
+
+    document.getElementById('whatsapp').addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 11);
+    });
+
+    const form = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const formIntro = document.getElementById('formIntro');
+    const formSuccess = document.getElementById('formSuccess');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nome = form.nome.value.trim();
+      const email = form.email.value.trim();
+      const whatsapp = form.whatsapp.value.trim();
+      const academia = form.academia.value.trim();
+      const alunos = form.alunos.value;
+
+      if (!nome || !email || whatsapp.length < 10 || !academia || !alunos) {
+        alert('Preencha todos os campos corretamente antes de continuar.');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Enviando...';
+
+      const eventId = getEventId();
+      const data = {
+        Nome_Completo: nome,
+        E_mail_Corporativo: email,
+        WhatsApp: '+55' + whatsapp,
+        Nome_da_Academia: academia,
+        Quantidade_de_Alunos_Ativos: alunos,
+        utm_source: params.get('utm_source') || '',
+        utm_medium: params.get('utm_medium') || '',
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_content: params.get('utm_content') || '',
+        utm_term: params.get('utm_term') || '',
+        utm_id: params.get('utm_id') || '',
+        fbclid: params.get('fbclid') || '',
+        gclid: params.get('gclid') || '',
+        referral_source: document.referrer || '',
+        url: location.href,
+        event_id: eventId,
+        fbc: getCookie('_fbc'),
+        fbp: getCookie('_fbp'),
+        test_event_code: testEventCode || '',
+      };
+
+      if (typeof fbq === 'function') {
+        fbq('init', PIXEL_ID, { em: email, ph: '55' + whatsapp });
+        const pixelExtras = { eventID: eventId };
+        if (testEventCode) pixelExtras.test_event_code = testEventCode;
+        fbq('track', 'Lead', {}, pixelExtras);
+      }
+
+      try {
+        await fetch('/api/lead-academias', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+      } catch (err) {}
+
+      // GA4 — mesmo evento "create_lead_success" já importado pela conversão
+      // do Google Ads "Lead Formulário" (propriedade GA4 "WeHelp G4"), reaproveitado
+      // aqui pra não precisar configurar uma nova conversão pra essa LP.
+      if (typeof gtag === 'function') {
+        gtag('event', 'create_lead_success', { event_id: eventId });
+      }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
+
+      formIntro.style.display = 'none';
+      form.style.display = 'none';
+      formSuccess.classList.add('is-visible');
+      if (stickyCta) stickyCta.classList.add('is-hidden');
+    });
+  </script>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+</body>
+</html>
