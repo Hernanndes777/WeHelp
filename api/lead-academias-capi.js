@@ -53,6 +53,7 @@ export default async function handler(req, res) {
           ...(fbc ? { fbc } : {}),
           ...(fbp ? { fbp } : {}),
         },
+        custom_data: { value: 1, currency: 'BRL' },
       }],
       access_token: META_ACCESS_TOKEN,
     };

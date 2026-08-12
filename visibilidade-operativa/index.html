@@ -1205,7 +1205,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
         const pixelExtras = { eventID: eventId };
         if (testEventCode) pixelExtras.test_event_code = testEventCode;
-        fbq('track', 'Lead', {}, pixelExtras);
+        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
       }
 
       if (click_id) {

@@ -62,7 +62,6 @@ export default async function handler(req, res) {
       ? decodeURIComponent(req.headers['x-vercel-ip-city'])
       : '';
     const receivedAt = new Date().toISOString();
-    const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
     const phoneDigits = WhatsApp.replace(/\D/g, '');
     const contactEmail = E_mail_Corporativo || `wp.${phoneDigits}@noemail.invalid`;
 
@@ -192,9 +191,10 @@ export default async function handler(req, res) {
             ph: [sha256(phoneDigits)],
             client_ip_address: clientIp,
             client_user_agent: userAgent,
-            ...(resolvedFbc ? { fbc: resolvedFbc } : {}),
+            ...(fbc ? { fbc } : {}),
             ...(fbp ? { fbp } : {}),
           },
+          custom_data: { value: 1, currency: 'BRL' },
         }],
         access_token: META_ACCESS_TOKEN,
       };

@@ -29,19 +29,32 @@ Definidos pela LP — nome, WhatsApp/e-mail, pergunta de qualificação etc.
 
 ## Regra de ouro do fbc
 
-Se o cookie `_fbc` não existir (bloqueio de cookie, primeira visita) mas veio `fbclid` na URL, **reconstrua o `_fbc`** no formato que a Meta exige, em vez de simplesmente não mandar nada:
+**NUNCA fabrique/reconstrua o `fbc`.** Só mande `fbc` quando o cookie `_fbc` real existir (`document.cookie`) — se não existir, simplesmente omita o campo. O pixel base da Meta já seta esse cookie sozinho quando detecta `fbclid` na URL, então não há necessidade de reconstruir nada manualmente.
 
 ```js
-const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
+// certo — só repassa o cookie real, nunca inventa um
+...(fbc ? { fbc } : {}),
 ```
 
-Isso evita perder o sinal de matching só porque o cookie não foi setado a tempo.
+Um padrão antigo desse doc reconstruía um `fbc` sintético com `fb.1.${Date.now()}.${fbclid}` quando o cookie não existia — **isso está errado** e foi sinalizado pela própria Meta no Events Manager em 2026-08-12 ("não modifique o valor de fbclid recuperado do cookie _fbc... ao enviar fbc"). Removido de todo `api/lead-*.js` do repo nessa data.
+
+## Regra de ouro do value/currency
+
+Todo evento `Lead` (Pixel **e** CAPI) precisa de `value` (número > 0) e `currency` (código de 3 letras) no `custom_data` — sem isso a Meta não calcula ROAS e sinaliza erro em 100% dos eventos no Events Manager. Padrão adotado (decisão do usuário, 2026-08-12): valor simbólico fixo.
+
+```js
+// Pixel (client-side)
+fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
+
+// CAPI (server-side) — dentro do objeto do evento, ao lado de user_data
+custom_data: { value: 1, currency: 'BRL' },
+```
 
 ## Pra onde esses dados vão
 
 1. **ActiveCampaign** — só os campos que já têm Custom Field ID configurado (hoje: clientes, utm_source, utm_medium, utm_campaign). Se quiser mais campos lá dentro (fbclid, ip, device etc), **precisa criar o Custom Field no AC primeiro** e me passar o ID — não dá pra inventar.
 2. **Google Sheets** (via Apps Script) — payload completo, todas as chaves acima, nomeadas exatamente igual ao cabeçalho da planilha existente (`Nome`, `E_mail`, `WhatsApp`, `fbclid`, `IP_do_usuario`, `Pais_do_usuario` etc).
-3. **Meta CAPI** — email/telefone hasheados (SHA-256) + IP + User-Agent + fbc/fbp + event_id (dedup com o Pixel do navegador).
+3. **Meta CAPI** — email/telefone hasheados (SHA-256) + IP + User-Agent + fbc/fbp + event_id (dedup com o Pixel do navegador) + `custom_data` (value/currency).
 
 ## Referência de implementação
 

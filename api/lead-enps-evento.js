@@ -49,7 +49,6 @@ export default async function handler(req, res) {
     const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
                      || req.socket?.remoteAddress || '';
     const userAgent = req.headers['user-agent'] || '';
-    const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
     const phoneDigits = (Telefone || '').replace(/\D/g, '');
     const contactEmail = Email || `wp.${phoneDigits}@noemail.invalid`;
 
@@ -135,9 +134,10 @@ export default async function handler(req, res) {
             ...(phoneDigits ? { ph: [sha256(phoneDigits)] } : {}),
             client_ip_address: clientIp,
             client_user_agent: userAgent,
-            ...(resolvedFbc ? { fbc: resolvedFbc } : {}),
+            ...(fbc ? { fbc } : {}),
             ...(fbp ? { fbp } : {}),
           },
+          custom_data: { value: 1, currency: 'BRL' },
         }],
         access_token: META_ACCESS_TOKEN,
       };

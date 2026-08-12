@@ -203,7 +203,7 @@
         fbq('init', '1106401696374974', { em: email, ph: phone.replace(/\D/g, '') });
         var pixelExtras = { eventID: eventId };
         if (testEventCode) pixelExtras.test_event_code = testEventCode;
-        fbq('track', 'Lead', {}, pixelExtras);
+        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
       }
 
       fetch('/api/lead-academias-capi', {

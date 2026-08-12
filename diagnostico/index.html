@@ -784,7 +784,7 @@
         fbq('init', PIXEL_ID, { em: email, ph: '55' + whatsapp });
         const pixelExtras = { eventID: eventId };
         if (testEventCode) pixelExtras.test_event_code = testEventCode;
-        fbq('track', 'Lead', {}, pixelExtras);
+        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
       }
 
       fetch('/api/lead-diagnostico', {

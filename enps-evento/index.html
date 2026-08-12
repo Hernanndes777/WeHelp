@@ -611,7 +611,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       fbq('init', PIXEL_ID, { em: email, ph: telefone.replace(/\D/g, '') });
       const pixelExtras = { eventID: eventId };
       if (testEventCode) pixelExtras.test_event_code = testEventCode;
-      fbq('track', 'Lead', {}, pixelExtras);
+      fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
     }
 
     try {

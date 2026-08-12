@@ -600,7 +600,7 @@
         if (typeof fbq === 'function') {
           const pixelExtras = { eventID: getEventId() };
           if (testEventCode) pixelExtras.test_event_code = testEventCode;
-          fbq('track', 'Lead', {}, pixelExtras);
+          fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
         }
 
         // Redireciona para o grupo (pequeno delay para garantir o envio do pixel)

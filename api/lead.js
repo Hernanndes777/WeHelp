@@ -63,11 +63,6 @@ export default async function handler(req, res) {
 
     const receivedAt = new Date().toISOString();
 
-    // Se o cookie _fbc não existir (ex: primeira visita bloqueou cookie) mas
-    // veio fbclid na URL, reconstrói o _fbc no formato que a Meta exige —
-    // evita perder o matching do clique só por causa disso.
-    const resolvedFbc = fbc || (fbclid ? `fb.1.${Date.now()}.${fbclid}` : '');
-
     const headers = {
       'Api-Token': AC_KEY,
       'Content-Type': 'application/json',
@@ -180,9 +175,10 @@ export default async function handler(req, res) {
             client_ip_address: clientIp,
             client_user_agent: userAgent,
             // Cookies do pixel — aumentam significativamente o match quality
-            ...(resolvedFbc ? { fbc: resolvedFbc } : {}),
+            ...(fbc ? { fbc } : {}),
             ...(fbp ? { fbp } : {}),
           },
+          custom_data: { value: 1, currency: 'BRL' },
         }],
         access_token: META_ACCESS_TOKEN,
       };
