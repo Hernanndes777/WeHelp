@@ -135,7 +135,19 @@
       "funil": "fundo",
       "status": "publicada (só o slug — MEET_URL é placeholder, ver notas)",
       "origem": "página nova, criada 2026-08-02",
-      "notas": "Página de redirect puro (sem formulário) pra colar no grupo de WhatsApp do webinário na hora do 'ao vivo' — ver [[project-wehelp-funil-webinario]]. Meta tags og:title/og:description fixas em 'ENTRAR AGORA!' / 'Google Meet Ao Vivo!' pra gerar o card de preview certo no WhatsApp. Redireciona via JS depois de ~600ms (tempo pro Pixel disparar 'WebinarJoinClick'), com botão manual de fallback. MEET_URL já foi atualizada com o link real (meet.google.com/hvn-cvyu-tai, 2026-08-06) — trocar de novo a cada novo ciclo. O slug é fixo e reaproveitável toda semana, só o valor de MEET_URL muda."
+      "notas": "Página de redirect puro (sem formulário) pra colar no grupo de WhatsApp do webinário na hora do 'ao vivo' — ver [[project-wehelp-funil-webinario]]. Meta tags og:title/og:description fixas em 'ENTRAR AGORA!' / 'Google Meet Ao Vivo!' pra gerar o card de preview certo no WhatsApp. Redireciona via JS depois de ~600ms (tempo pro Pixel disparar 'WebinarJoinClick'), com botão manual de fallback. MEET_URL já foi atualizada com o link real (meet.google.com/owa-ezed-mry, 2026-08-13) — trocar de novo a cada novo ciclo. O slug é fixo e reaproveitável toda semana, só o valor de MEET_URL muda."
+    },
+    {
+      "slug": "agendamento-wb",
+      "path": "/agendamento-wb/",
+      "titulo": "AGENDAR AGORA! — redirect pro /sessao-estrategica com UTM fixa",
+      "produto": "modulo-retencao-churn",
+      "segmento": "fitness",
+      "tipo": "captura",
+      "funil": "fundo",
+      "status": "publicada",
+      "origem": "página nova, criada 2026-08-13, pedido do usuário",
+      "notas": "Mesmo padrão do /acessar-sala (redirect puro via JS depois de ~600ms, com botão manual de fallback), mas em vez de levar pro Google Meet leva pro formulário do /sessao-estrategica — DEST_URL fixa: https://lp.wehelpsoftware.com/sessao-estrategica?utm_source=webinario&utm_medium=chat_ao_vivo&utm_campaign=apresentacao. Esse é exatamente o mesmo padrão de UTM (webinario / chat_ao_vivo / apresentacao) que já aparecia nos leads reais da planilha 'Agendamentos WB 06' antes dessa página existir — o usuário já estava usando essa URL longa no chat ao vivo do webinário, essa página só dá um slug curto pra falar em voz alta em vez de ditar a querystring inteira. Diferente do /acessar-sala, aqui o destino é fixo (não muda a cada ciclo, porque a UTM de atribuição do funil não muda), então não precisa de manutenção semanal."
     },
     {
       "slug": "diagnostico",

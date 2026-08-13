@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>AGENDAR AGORA!</title>
+  <meta name="description" content="Agende sua sessão estratégica com a WeHelp." />
+
+  <!-- Open Graph — controla o card de preview quando o link é colado no grupo do WhatsApp -->
+  <meta property="og:title" content="AGENDAR AGORA!" />
+  <meta property="og:description" content="Agende sua sessão estratégica com a WeHelp." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="lp.wehelpsoftware.com" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #0a1128;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    .card {
+      text-align: center;
+      max-width: 420px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .brand__icon {
+      width: 34px; height: 34px;
+      background: #1B6EF3;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand__icon i { font-size: 18px; color: #fff; }
+    .brand span {
+      font-family: 'Figtree', sans-serif;
+      font-size: 19px; font-weight: 800;
+    }
+
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(255,255,255,.15);
+      border-top-color: #1B6EF3;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    h1 {
+      font-family: 'Figtree', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 14px;
+      color: #b0c4e8;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #1B6EF3;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      padding: 15px 28px;
+      border-radius: 50px;
+      transition: background .2s, transform .2s;
+    }
+    .btn:hover { background: #1457c8; transform: translateY(-1px); }
+    .btn i { font-size: 17px; }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="card">
+    <div class="brand">
+      <div class="brand__icon"><i class="ti ti-calendar-event" aria-hidden="true"></i></div>
+      <span>WeHelp</span>
+    </div>
+
+    <div class="spinner" aria-hidden="true"></div>
+
+    <h1>Preparando seu agendamento...</h1>
+    <p>Você será redirecionado automaticamente em instantes.</p>
+
+    <a href="#" class="btn" id="manualLink">
+      <i class="ti ti-calendar" aria-hidden="true"></i>
+      Continuar
+    </a>
+  </div>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+
+  <script>
+    // Link fixo de atribuição pro chat ao vivo do webinário — mesmo padrão de
+    // UTM (webinario / chat_ao_vivo / apresentacao) que já aparece nos leads
+    // reais da planilha "Agendamentos WB 06". Slug curto pra falar em voz alta
+    // durante a live, em vez de ditar a URL inteira com querystring.
+    const DEST_URL = 'https://lp.wehelpsoftware.com/sessao-estrategica?utm_source=webinario&utm_medium=chat_ao_vivo&utm_campaign=apresentacao';
+
+    document.getElementById('manualLink').href = DEST_URL;
+
+    if (typeof fbq === 'function') {
+      fbq('trackCustom', 'AgendamentoWBRedirect');
+    }
+
+    setTimeout(() => {
+      window.location.replace(DEST_URL);
+    }, 600);
+  </script>
+</body>
+</html>
