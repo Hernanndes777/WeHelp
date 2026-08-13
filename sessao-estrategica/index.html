@@ -356,9 +356,11 @@
 
         <div class="field">
           <input type="text" class="input" id="nome" placeholder="* Seu nome completo" required />
+          <p class="field-error" id="nomeError">Digite seu nome completo</p>
         </div>
         <div class="field">
           <input type="email" class="input" id="email" placeholder="* E-mail profissional" required />
+          <p class="field-error" id="emailError">Digite um e-mail válido (ex: voce@empresa.com)</p>
         </div>
         <div class="field">
           <div class="phone-row">
@@ -559,14 +561,51 @@
       const maxDigits = ddi === '+55' ? 11 : 14;
       e.target.value = e.target.value.replace(/\D/g, '').slice(0, maxDigits);
       validateStep(currentStep);
+      if (isValidPhone(e.target.value, ddi)) {
+        e.target.classList.remove('invalid');
+        document.getElementById('phoneError').classList.remove('show');
+      }
     });
 
+    // Nos três campos abaixo, o aviso só aparece depois que a pessoa REALMENTE
+    // saiu do campo (blur só dispara depois de um focus, então nunca aparece
+    // sozinho ao carregar a página) — mas, uma vez que ela saiu, mostra o erro
+    // mesmo se o campo ficou vazio. Antes disso tinha um "só avisa se não
+    // estiver vazio" que escondia o aviso bem no caso que mais importa: a
+    // pessoa deixar o campo em branco e tentar seguir sem notar.
     document.getElementById('whatsapp').addEventListener('blur', () => {
       const el = document.getElementById('whatsapp');
       const ddi = document.getElementById('ddiSelect').value;
-      const valid = !el.value || isValidPhone(el.value, ddi);
+      const valid = isValidPhone(el.value, ddi);
       el.classList.toggle('invalid', !valid);
       document.getElementById('phoneError').classList.toggle('show', !valid);
+    });
+    document.getElementById('nome').addEventListener('blur', () => {
+      const el = document.getElementById('nome');
+      const valid = !!el.value.trim();
+      el.classList.toggle('invalid', !valid);
+      document.getElementById('nomeError').classList.toggle('show', !valid);
+    });
+    document.getElementById('email').addEventListener('blur', () => {
+      const el = document.getElementById('email');
+      const valid = isValidEmail(el.value.trim());
+      el.classList.toggle('invalid', !valid);
+      document.getElementById('emailError').classList.toggle('show', !valid);
+    });
+    // Assim que o campo fica válido de novo, esconde o erro na hora — sem
+    // esperar um próximo blur, pra não deixar a mensagem "grudada" depois
+    // que a pessoa já corrigiu.
+    document.getElementById('nome').addEventListener('input', () => {
+      if (document.getElementById('nome').value.trim()) {
+        document.getElementById('nome').classList.remove('invalid');
+        document.getElementById('nomeError').classList.remove('show');
+      }
+    });
+    document.getElementById('email').addEventListener('input', () => {
+      if (isValidEmail(document.getElementById('email').value.trim())) {
+        document.getElementById('email').classList.remove('invalid');
+        document.getElementById('emailError').classList.remove('show');
+      }
     });
 
     btnPrev.addEventListener('click', () => {
