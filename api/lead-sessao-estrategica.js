@@ -22,7 +22,7 @@ export default async function handler(req, res) {
 
   // IDs confirmados via MCP do DataCrazy em 2026-08-12
   const PIPELINE_STAGE_ID = 'cff64878-e74a-4056-b240-7903901ea05f'; // Pipeline "Webinário" > etapa "AGENDAMENTO"
-  const TAG_SITE = '91ed2d79-6bf8-4744-8a9a-127850f7f00f';         // Tag "Site" (mesma do /diagnostico e /academias)
+  const TAG_WB06 = '8971c60b-3d51-4795-821e-b624111a2411';         // Tag "WB 06" (criada 2026-08-13, específica dessa LP — pedido do usuário)
   const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';     // Caroline Bonini — mesmo padrão das outras LPs
   const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa" — usado pro Nome da academia
 
@@ -97,7 +97,7 @@ export default async function handler(req, res) {
         company: Nome_da_sua_academia || '',
         source: 'Sessão Estratégica (Site)',
         notes: notesLines.join('\n'),
-        tags: [{ id: TAG_SITE }],
+        tags: [{ id: TAG_WB06 }],
         attendant: { id: ATTENDANT_ID },
       }),
     });
