@@ -1,5 +1,5 @@
 /**
- * Apps Script (doPost) para a planilha "[WBN] Aplicação" — aba "Agendamentos WB 05".
+ * Apps Script (doPost) para a planilha "[WBN] Aplicação" — aba "Agendamentos WB 06".
  * Recebe o POST de api/lead-sessao-estrategica.js e escreve uma linha nova.
  *
  * Como instalar:
@@ -20,7 +20,7 @@
  * faltar uma chave — só fica em branco.
  */
 
-const SHEET_NAME = 'Agendamentos WB 05';
+const SHEET_NAME = 'Agendamentos WB 06';
 
 function doPost(e) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
