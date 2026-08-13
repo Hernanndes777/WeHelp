@@ -327,6 +327,34 @@
     }
     .btn--calendar:hover { background: var(--blue-hover); transform: translateY(-1px); }
 
+    .save-warning {
+      display: none;
+      text-align: left;
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #92400e;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 16px;
+    }
+    .save-warning.show { display: block; }
+    .save-warning i { color: #d97706; margin-right: 4px; }
+    .save-warning a { color: var(--blue); font-weight: 700; text-decoration: underline; }
+    .save-warning button {
+      display: block;
+      margin-top: 10px;
+      background: none;
+      border: none;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 12.5px;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
     @media (max-width: 480px) {
       .wizard { padding: 28px 22px 24px; border-radius: 16px; }
       .step__title { font-size: 19px; }
@@ -445,6 +473,13 @@
         <i class="ti ti-calendar" aria-hidden="true"></i>
         Ver horários disponíveis
       </button>
+      <p class="save-warning" id="saveWarning">
+        <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+        Não conseguimos confirmar o salvamento dos seus dados.
+        Você já pode agendar normalmente, mas se puder, manda uma mensagem
+        pro nosso WhatsApp depois: <a href="https://wa.me/5521976787182" target="_blank" rel="noopener">clique aqui</a>.
+        <button type="button" id="btnRetrySave">Tentar salvar de novo</button>
+      </p>
     </div>
   </div>
 
@@ -622,6 +657,30 @@
       await submitLead();
     });
 
+    // Manda o lead pro backend com timeout (não trava pra sempre se a rede
+    // cair) e considera sucesso só com HTTP 200 + {success:true} de verdade —
+    // não um "disparei e torço" como antes.
+    async function sendLead(data) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 6000);
+        const res = await fetch('/api/lead-sessao-estrategica', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        if (!res.ok) return false;
+        const json = await res.json().catch(() => null);
+        return !!(json && json.success);
+      } catch (err) {
+        return false;
+      }
+    }
+
+    let lastLeadData = null;
+
     async function submitLead() {
       btnNext.disabled = true;
       btnNextText.textContent = 'ENVIANDO...';
@@ -656,9 +715,7 @@
         test_event_code: testEventCode || '',
       };
 
-      // Mostra a etapa final imediatamente — não trava o usuário esperando o backend
-      document.getElementById('wizard').style.display = 'none';
-      document.getElementById('finalStep').style.display = 'block';
+      lastLeadData = data;
 
       // Guarda o prefill pro popup do Calendly (evento "Apresentação" do Daniel —
       // a1=Telefone, a2=Empresa, nessa ordem, diferente do evento "Ativação").
@@ -679,12 +736,39 @@
         fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
       }
 
-      fetch('/api/lead-sessao-estrategica', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }).catch(() => {});
+      // ANTES: mostrava a etapa final na hora e mandava o lead com
+      // fetch(...).catch(()=>{}) — se isso falhasse (rede, DataCrazy fora do
+      // ar etc.) o erro sumia em silêncio e a pessoa seguia pro Calendly sem
+      // nenhum registro no CRM. Foi exatamente isso que aconteceu com 3 dos
+      // 5 agendamentos do dia 2026-08-13 (Maria Angélica, Eduardo Cesar Soares
+      // Nunes de Souza e Vinicius Felipe Nogueira — confirmado comparando o
+      // Calendly com o DataCrazy/Sheets). Agora espera a confirmação de
+      // verdade (com timeout de 6s) e tenta de novo automaticamente uma vez
+      // antes de desistir.
+      let ok = await sendLead(data);
+      if (!ok) ok = await sendLead(data);
+
+      document.getElementById('wizard').style.display = 'none';
+      document.getElementById('finalStep').style.display = 'block';
+      document.getElementById('saveWarning').classList.toggle('show', !ok);
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: ok ? 'lead_capture_ok' : 'lead_capture_failed' });
     }
+
+    document.getElementById('btnRetrySave').addEventListener('click', async (e) => {
+      if (!lastLeadData) return;
+      const btn = e.currentTarget;
+      btn.textContent = 'Tentando...';
+      const ok = await sendLead(lastLeadData);
+      if (ok) {
+        document.getElementById('saveWarning').classList.remove('show');
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'lead_capture_ok_retry' });
+      } else {
+        btn.textContent = 'Não deu certo — tentar salvar de novo';
+      }
+    });
 
     document.getElementById('btnOpenCalendly').addEventListener('click', () => {
       if (typeof Calendly === 'undefined') {
