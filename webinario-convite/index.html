@@ -81,18 +81,16 @@
     }
     .hero__inner {
       position: relative; z-index: 2;
-      width: 100%; max-width: 1200px; margin: 0 auto;
-      padding: 0 56px;
-      display: grid; grid-template-columns: 1.02fr .98fr;
-      gap: 30px; align-items: center;
+      width: 100%; max-width: 880px; margin: 0 auto;
+      padding: 0 56px; text-align: center;
     }
 
-    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 34px; }
+    .brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 34px; }
     .brand img { height: 30px; }
     .brand span { font-family: var(--disp); font-size: 20px; font-weight: 900; letter-spacing: -.3px; }
 
     .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       font-size: 14.5px; font-weight: 600; color: #c8d4ee;
       margin-bottom: 18px;
     }
@@ -101,9 +99,9 @@
 
     .headline {
       font-family: var(--disp); font-weight: 900;
-      font-size: clamp(31px, 3.5vw, 47px);
-      line-height: 1.09; letter-spacing: -1.4px;
-      margin-bottom: 20px; max-width: 15ch;
+      font-size: clamp(33px, 4.4vw, 54px);
+      line-height: 1.07; letter-spacing: -1.6px;
+      margin: 0 auto 20px; max-width: 17ch;
     }
     .headline .hl {
       background: linear-gradient(100deg, var(--blue-light) 0%, var(--blue) 48%, var(--blue-cyan) 100%);
@@ -111,14 +109,14 @@
     }
 
     .sub {
-      font-size: 15.5px; line-height: 1.65; color: var(--muted);
-      max-width: 46ch; margin-bottom: 28px;
+      font-size: 16px; line-height: 1.68; color: var(--muted);
+      max-width: 52ch; margin: 0 auto 30px;
     }
     .sub strong { color: #dbe4f7; font-weight: 600; }
 
     .facts {
-      display: flex; flex-direction: column; gap: 11px;
-      margin-bottom: 30px;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 30px;
+      margin-bottom: 32px;
     }
     .facts li { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: #dbe4f7; }
     .facts .ic {
@@ -147,33 +145,104 @@
     .cta i { font-size: 19px; }
     .cta-note {
       margin-top: 13px; font-size: 12.5px; color: #7f8cad;
-      display: flex; align-items: center; gap: 7px;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
     }
     .cta-note i { font-size: 14px; color: var(--green); }
 
-    /* ── FOTO ── */
-    .hero__art {
-      position: relative; justify-self: center;
-      width: 100%; max-width: 520px; aspect-ratio: 621 / 572;
+    /* ══════════ SEÇÕES ══════════ */
+    .section { position: relative; padding: 92px 0; }
+    .section__inner { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; padding: 0 56px; }
+    .section__head { text-align: center; max-width: 620px; margin: 0 auto 52px; }
+    .tag {
+      display: inline-block; font-size: 10.5px; font-weight: 800;
+      letter-spacing: 2.4px; text-transform: uppercase; color: var(--blue-light);
+      background: rgba(27,110,243,.14); border: 1px solid rgba(27,110,243,.3);
+      padding: 7px 16px; border-radius: 60px; margin-bottom: 18px;
     }
-    /* Brilho azul atrás da foto (::before pinta primeiro, foto vem por cima) */
-    .hero__art::before {
-      content: '';
-      position: absolute; top: 50%; left: 50%;
-      width: 108%; aspect-ratio: 1; transform: translate(-50%, -50%);
-      background: radial-gradient(circle, rgba(27,110,243,.42) 0%, rgba(27,110,243,.10) 46%, transparent 68%);
-      pointer-events: none;
+    .section__head h2 {
+      font-family: var(--disp); font-weight: 900;
+      font-size: clamp(25px, 3vw, 36px); line-height: 1.14; letter-spacing: -1px;
+      margin-bottom: 12px;
     }
-    /* A foto só é declarada acima de 640px — no mobile ela fica escondida, e
-       imagem declarada dentro de media query que não casa não chega a ser
-       baixada. Assim quem entra pelo celular não paga os 306KB do PNG. */
-    @media (min-width: 641px) {
-      .hero__art::after {
-        content: '';
-        position: absolute; inset: 0;
-        background: url('../enps-evento/assets/colaborador.png') center / contain no-repeat;
-      }
+    .section__head p { font-size: 15.5px; line-height: 1.65; color: var(--muted); }
+
+    /* ── Pilares ── */
+    .pilares { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .pilar {
+      position: relative; overflow: hidden;
+      background: rgba(255,255,255,.038);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 18px; padding: 30px 26px;
+      display: flex; flex-direction: column; gap: 13px;
+      transition: transform .22s, border-color .22s, background .22s;
     }
+    .pilar::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--blue), var(--blue-cyan));
+      transform: scaleX(0); transform-origin: left; transition: transform .28s ease;
+    }
+    .pilar:hover { transform: translateY(-4px); border-color: rgba(27,110,243,.42); background: rgba(27,110,243,.07); }
+    .pilar:hover::before { transform: scaleX(1); }
+    .pilar__num { font-size: 10.5px; font-weight: 800; letter-spacing: 2.4px; text-transform: uppercase; color: var(--blue-light); opacity: .75; }
+    .pilar__ic {
+      width: 50px; height: 50px; border-radius: 13px;
+      background: rgba(27,110,243,.16); border: 1px solid rgba(27,110,243,.32);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pilar__ic i { font-size: 23px; color: var(--blue-light); }
+    .pilar h3 { font-family: var(--disp); font-size: 17px; font-weight: 800; line-height: 1.28; }
+    .pilar h3 span { color: var(--blue-light); }
+    .pilar p { font-size: 14px; line-height: 1.7; color: var(--muted); flex: 1; }
+    .pilar__note {
+      font-size: 12.5px; font-style: italic; font-weight: 600; color: var(--blue-light);
+      border-top: 1px solid rgba(255,255,255,.09); padding-top: 13px; line-height: 1.55;
+    }
+
+    /* ── Prova social (letreiro) ── */
+    .proof { padding: 24px 0 92px; }
+    .proof__label {
+      text-align: center; font-size: 11px; font-weight: 800; letter-spacing: 2.2px;
+      text-transform: uppercase; color: #6d7b9c; margin-bottom: 34px;
+    }
+    .marquee {
+      overflow: hidden; width: 100%;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+    }
+    .marquee__track {
+      display: inline-flex; align-items: center; gap: 66px; width: max-content;
+      animation: slide 26s linear infinite;
+    }
+    .marquee:hover .marquee__track { animation-play-state: paused; }
+    .marquee__track img {
+      height: 62px; width: auto; flex-shrink: 0;
+      filter: brightness(0) invert(1); opacity: .55;
+    }
+    @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-33.3334%); } }
+
+    /* ── CTA final ── */
+    .final { padding-bottom: 100px; }
+    .final__box {
+      position: relative; overflow: hidden;
+      max-width: 780px; margin: 0 auto; text-align: center;
+      border-radius: 26px; padding: 58px 44px;
+      background: linear-gradient(158deg, rgba(27,110,243,.20), rgba(27,110,243,.05));
+      border: 1px solid rgba(27,110,243,.32);
+    }
+    .final__box h2 {
+      font-family: var(--disp); font-weight: 900;
+      font-size: clamp(25px, 3vw, 35px); line-height: 1.14; letter-spacing: -1px;
+      margin-bottom: 14px;
+    }
+    .final__box h2 span {
+      background: linear-gradient(100deg, var(--blue-light) 0%, var(--blue) 48%, var(--blue-cyan) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .final__box p { font-size: 15.5px; line-height: 1.65; color: var(--muted); max-width: 46ch; margin: 0 auto 30px; }
+
+    /* ── Rodapé ── */
+    .foot { padding: 30px 24px 44px; text-align: center; border-top: 1px solid rgba(255,255,255,.07); }
+    .foot p { font-size: 12px; color: #5f6c8a; }
 
     /* ── MODAL ── */
     .overlay {
@@ -247,27 +316,39 @@
 
     /* ── RESPONSIVO ── */
     @media (max-width: 1000px) {
-      .hero__inner { grid-template-columns: 1fr; gap: 34px; text-align: center; padding: 0 34px; }
-      .brand, .eyebrow, .facts li, .cta-note { justify-content: center; }
-      .headline, .sub { max-width: 100%; margin-left: auto; margin-right: auto; }
-      .facts li { justify-content: flex-start; max-width: 330px; margin: 0 auto; }
-      .hero__art { order: -1; max-width: 320px; }
+      .hero__inner { padding: 0 34px; }
+      .headline, .sub { max-width: 100%; }
+      .section__inner { padding: 0 34px; }
+      .section { padding: 68px 0; }
+      .pilares { grid-template-columns: 1fr; gap: 16px; }
+      .proof { padding-bottom: 68px; }
+      .marquee__track { gap: 48px; animation-duration: 22s; }
+      .marquee__track img { height: 50px; }
     }
     @media (max-width: 640px) {
       .frame { inset: 9px; border-radius: 15px; border-width: 1.5px; }
-      .hero { padding: 40px 0; min-height: auto; }
-      .hero__inner { padding: 0 24px; gap: 26px; }
-      .hero__art { display: none; }
+      .hero { padding: 44px 0 40px; min-height: auto; }
+      .hero__inner { padding: 0 24px; }
       .brand { margin-bottom: 24px; }
       .brand img { height: 26px; }
       .brand span { font-size: 18px; }
       .eyebrow { font-size: 13px; margin-bottom: 14px; }
       .headline { letter-spacing: -.7px; margin-bottom: 16px; }
       .sub { font-size: 14.5px; margin-bottom: 24px; }
-      .facts { gap: 9px; margin-bottom: 26px; }
+      .facts { flex-direction: column; align-items: center; gap: 10px; margin-bottom: 26px; }
       .facts li { font-size: 13.5px; }
       .cta { width: 100%; padding: 18px 22px; font-size: 13px; letter-spacing: .5px; }
       .modal { padding: 28px 22px 22px; }
+
+      .section { padding: 54px 0; }
+      .section__inner { padding: 0 24px; }
+      .section__head { margin-bottom: 32px; }
+      .pilar { padding: 24px 20px; border-radius: 15px; }
+      .proof { padding: 16px 0 54px; }
+      .marquee__track { gap: 34px; animation-duration: 18s; }
+      .marquee__track img { height: 40px; }
+      .final { padding-bottom: 62px; }
+      .final__box { padding: 40px 24px; border-radius: 20px; }
     }
   </style>
 
@@ -331,7 +412,7 @@
           </li>
         </ul>
 
-        <button class="cta" id="openModal">
+        <button class="cta" data-open-modal>
           <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
           Entrar no grupo agora
         </button>
@@ -341,10 +422,93 @@
         </p>
       </div>
 
-      <!-- Foto decorativa — vem do CSS (.hero__art::after) pra não ser baixada no mobile -->
-      <div class="hero__art" aria-hidden="true"></div>
     </div>
   </section>
+
+  <!-- O QUE VOCÊ VAI VER -->
+  <section class="section">
+    <div class="section__inner">
+      <div class="section__head">
+        <span class="tag">O método WeHelp NPS</span>
+        <h2>Na próxima aula você vai ver na prática</h2>
+        <p>Os 3 pilares que vão estancar seu balde furado de uma vez por todas.</p>
+      </div>
+
+      <div class="pilares">
+        <article class="pilar">
+          <p class="pilar__num">Pilar 01</p>
+          <div class="pilar__ic"><i class="ti ti-settings-automation" aria-hidden="true"></i></div>
+          <h3><span>Máximo de</span> Automação</h3>
+          <p>Como integrar a escuta ativa ao seu sistema para ouvir toda a sua base de alunos automaticamente, sem dar mais trabalho para o seu time de recepção.</p>
+          <p class="pilar__note">(Você não vai mais depender daquela minoria que só reclama na catraca)</p>
+        </article>
+
+        <article class="pilar">
+          <p class="pilar__num">Pilar 02</p>
+          <div class="pilar__ic"><i class="ti ti-target" aria-hidden="true"></i></div>
+          <h3><span>Fechamento de</span> Ciclo Rápido</h3>
+          <p>A estratégia exata para transformar uma "nota baixa" em ações corretivas cirúrgicas, resolvendo a raiz do atrito muito antes do aluno pedir para cancelar.</p>
+          <p class="pilar__note">(Você não precisa de altas taxas de resposta na pesquisa para começar a agir)</p>
+        </article>
+
+        <article class="pilar">
+          <p class="pilar__num">Pilar 03</p>
+          <div class="pilar__ic"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+          <h3><span>Visibilidade</span> Operacional</h3>
+          <p>Como abandonar a gestão baseada no "achismo" e usar dados reais da operação para estancar o seu balde furado e aumentar o LTV dos seus contratos.</p>
+          <p class="pilar__note">(A solução não é fazer promoções malucas ou baixar o preço do seu plano)</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <div class="proof">
+    <div class="section__inner">
+      <p class="proof__label">Redes que já confiam na WeHelp</p>
+      <div class="marquee">
+        <div class="marquee__track">
+          <img src="../california/assets/bluefit.png" alt="Bluefit" />
+          <img src="../california/assets/panobianco.png" alt="Panobianco" />
+          <img src="../california/assets/bodytech.png" alt="Bodytech" />
+          <img src="../california/assets/bioritmo.png" alt="Bioritmo" />
+          <img src="../california/assets/evo.png" alt="ABC Evo" />
+          <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <section class="final">
+    <div class="section__inner">
+      <div class="final__box">
+        <h2>Sua vaga é <span>gratuita</span> — mas são só 100.</h2>
+        <p>Entre no grupo do WhatsApp para receber o link da aula e o material de apoio antes de quinta-feira.</p>
+        <button class="cta" data-open-modal>
+          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+          Entrar no grupo agora
+        </button>
+        <p class="cta-note">
+          <i class="ti ti-lock" aria-hidden="true"></i>
+          Acesso 100% gratuito · vagas limitadas
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p>© 2026 WeHelp · Todos os direitos reservados</p>
+  </footer>
 
   <!-- MODAL -->
   <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -425,7 +589,7 @@
       overlay.classList.remove('open');
       document.body.style.overflow = '';
     };
-    document.getElementById('openModal').addEventListener('click', openModal);
+    document.querySelectorAll('[data-open-modal]').forEach(b => b.addEventListener('click', openModal));
     document.getElementById('closeModal').addEventListener('click', closeModal);
     overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
