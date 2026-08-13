@@ -78,7 +78,8 @@
     },
     {
       "slug": "webinario-convite",
-      "path": "/webinario-convite/",
+      "path": "/LP1/webinario-convite/",
+      "convencao_de_variantes": "A partir de 2026-08-12 essa página vive dentro de um prefixo de variante (LP1, LP2, LP3...) pra rodar teste A/B no mesmo endereço: lp.wehelpsoftware.com/LP1/webinario-convite, /LP2/webinario-convite, etc. Pra criar uma variante nova basta copiar a pasta inteira (cp -r LP1/webinario-convite LP2/webinario-convite) e editar o conteúdo — NÃO precisa mexer em caminho nenhum, porque (a) todos os assets usam caminho absoluto (/shared/..., /california/assets/...) em vez de relativo, então funcionam em qualquer profundidade, e (b) o redirect do formulário pra página de obrigado é derivado de location.pathname em vez de fixo. Testado de verdade: uma cópia em /LP2 funcionou sem nenhuma edição (assets carregando, redirect indo pra /LP2/webinario-convite/obrigado, conversão disparando). O caminho antigo /webinario-convite tem redirect 302 (não 301, de propósito, pra não cravar cache no navegador enquanto ainda dá pra mudar de ideia) apontando pra /LP1 no vercel.json. ATENÇÃO: URL na Vercel é case-sensitive — /LP1 funciona, /lp1 dá 404.",
       "titulo": "Aula ao vivo — Estanque a perda de alunos | WeHelp",
       "produto": "pesquisa-satisfacao",
       "segmento": "fitness",

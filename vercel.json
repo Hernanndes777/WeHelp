@@ -2,6 +2,18 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/webinario-convite",
+      "destination": "/LP1/webinario-convite",
+      "permanent": false
+    },
+    {
+      "source": "/webinario-convite/:path*",
+      "destination": "/LP1/webinario-convite/:path*",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/shared/(.*)",
