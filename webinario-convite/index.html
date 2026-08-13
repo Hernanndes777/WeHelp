@@ -198,6 +198,125 @@
       border-top: 1px solid rgba(255,255,255,.09); padding-top: 13px; line-height: 1.55;
     }
 
+    /* ── Statement (a dor, em uma frase) ── */
+    .statement { padding: 84px 0 0; text-align: center; }
+    .statement p {
+      font-family: var(--disp); font-weight: 800;
+      font-size: clamp(23px, 3.4vw, 37px); line-height: 1.26; letter-spacing: -1.1px;
+      max-width: 22ch; margin: 0 auto; color: #eaf0fb;
+    }
+    .statement em {
+      font-style: normal;
+      background: linear-gradient(100deg, var(--blue-light) 0%, var(--blue) 48%, var(--blue-cyan) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+
+    /* ── Tese ── */
+    .thesis { padding: 56px 0 92px; }
+    .thesis__box {
+      max-width: 860px; margin: 0 auto; text-align: center;
+      border-radius: 24px; padding: 50px 46px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+    .thesis__box h2 {
+      font-family: var(--disp); font-weight: 900;
+      font-size: clamp(22px, 2.7vw, 32px); line-height: 1.2; letter-spacing: -.9px;
+      margin-bottom: 16px;
+    }
+    .thesis__box p { font-size: 16px; line-height: 1.72; color: var(--muted); max-width: 56ch; margin: 0 auto; }
+    .thesis__box strong { color: var(--blue-light); font-weight: 700; }
+
+    /* ── Comparativo ── */
+    .compare__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .compare__col { border-radius: 20px; padding: 32px 28px; }
+    .compare__col--bad { background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09); }
+    .compare__col--good {
+      background: linear-gradient(158deg, rgba(27,110,243,.22), rgba(27,110,243,.06));
+      border: 1px solid rgba(27,110,243,.4);
+    }
+    .compare__title {
+      display: flex; align-items: center; gap: 9px;
+      font-family: var(--disp); font-size: 15.5px; font-weight: 800;
+      padding-bottom: 18px; margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+    .compare__col--bad .compare__title { color: #93a2c2; }
+    .compare__col--good .compare__title { color: #fff; }
+    .compare__title i { font-size: 19px; }
+    .compare__col--bad .compare__title i { color: #7b8aab; }
+    .compare__col--good .compare__title i { color: var(--blue-cyan); }
+    .compare__list { display: flex; flex-direction: column; gap: 15px; }
+    .compare__list li { display: flex; gap: 11px; font-size: 14.5px; line-height: 1.62; }
+    .compare__list i { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+    .compare__col--bad li { color: #8e9cbb; }
+    .compare__col--bad li i { color: #64748b; }
+    .compare__col--good li { color: #dbe4f7; }
+    .compare__col--good li i { color: var(--green); }
+
+    /* ── Case ── */
+    .case { padding: 92px 0; }
+    .case__box {
+      max-width: 900px; margin: 0 auto; text-align: center;
+      border-radius: 24px; padding: 52px 44px;
+      background: radial-gradient(600px 300px at 50% 0%, rgba(27,110,243,.18), transparent 70%), rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.09);
+    }
+    .case__tag {
+      font-size: 10.5px; font-weight: 800; letter-spacing: 2.2px; text-transform: uppercase;
+      color: var(--blue-light); margin-bottom: 16px;
+    }
+    .case__headline {
+      font-family: var(--disp); font-weight: 800;
+      font-size: clamp(19px, 2.2vw, 25px); line-height: 1.34; letter-spacing: -.5px;
+      max-width: 46ch; margin: 0 auto 36px;
+    }
+    .case__stats { display: flex; align-items: center; justify-content: center; gap: 34px; margin-bottom: 22px; }
+    .case__num { font-family: var(--disp); font-size: clamp(38px, 5.5vw, 62px); font-weight: 900; line-height: 1; letter-spacing: -2px; }
+    .case__num.dim { color: #55637f; }
+    .case__num.up {
+      background: linear-gradient(100deg, var(--blue-light) 0%, var(--blue) 48%, var(--blue-cyan) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .case__lbl { font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #6d7b9c; margin-top: 8px; }
+    .case__arrow { font-size: 28px; color: var(--blue); }
+    .case__brand {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; color: #b8c6e2;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      padding: 8px 18px; border-radius: 60px;
+    }
+
+    /* ── Mentor ── */
+    .mentor { padding-bottom: 92px; }
+    .mentor__box {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: center;
+      border-radius: 24px; padding: 44px;
+      background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.09);
+    }
+    /* Placeholder até chegar a foto do Rogério — mesmo padrão que
+       visibilidade-operativa/index.html já usa. Pra trocar pela foto real:
+       apagar este bloco e usar <img class="mentor__photo" src="...">. */
+    .mentor__frame {
+      width: 200px; height: 200px; border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      background: linear-gradient(158deg, rgba(27,110,243,.28), rgba(27,110,243,.06));
+      border: 2px solid rgba(27,110,243,.42);
+    }
+    .mentor__frame .initials { font-family: var(--disp); font-size: 46px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+    .mentor__frame .label { font-size: 10.5px; color: #8e9cbb; letter-spacing: .4px; }
+    .mentor__photo { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(27,110,243,.42); }
+    .mentor__tag {
+      display: inline-block; font-size: 10.5px; font-weight: 800;
+      letter-spacing: 2.2px; text-transform: uppercase; color: var(--blue-light);
+      background: rgba(27,110,243,.14); border: 1px solid rgba(27,110,243,.3);
+      padding: 7px 15px; border-radius: 60px; margin-bottom: 16px;
+    }
+    .mentor__name { font-family: var(--disp); font-size: 27px; font-weight: 900; letter-spacing: -.8px; }
+    .mentor__role { font-size: 14px; font-weight: 700; color: var(--blue-light); margin-bottom: 14px; }
+    .mentor__bio { font-size: 14.5px; line-height: 1.72; color: var(--muted); }
+
     /* ── Prova social (letreiro) ── */
     .proof { padding: 24px 0 92px; }
     .proof__label {
@@ -324,6 +443,13 @@
       .proof { padding-bottom: 68px; }
       .marquee__track { gap: 48px; animation-duration: 22s; }
       .marquee__track img { height: 50px; }
+      .compare__grid { grid-template-columns: 1fr; }
+      .thesis { padding: 44px 0 68px; }
+      .thesis__box { padding: 38px 30px; }
+      .case { padding: 68px 0; }
+      .case__box { padding: 40px 28px; }
+      .mentor { padding-bottom: 68px; }
+      .mentor__box { grid-template-columns: 1fr; gap: 26px; justify-items: center; text-align: center; padding: 36px 28px; }
     }
     @media (max-width: 640px) {
       .frame { inset: 9px; border-radius: 15px; border-width: 1.5px; }
@@ -349,6 +475,20 @@
       .marquee__track img { height: 40px; }
       .final { padding-bottom: 62px; }
       .final__box { padding: 40px 24px; border-radius: 20px; }
+
+      .statement { padding-top: 54px; }
+      .thesis { padding: 34px 0 54px; }
+      .thesis__box { padding: 30px 22px; border-radius: 18px; }
+      .compare__col { padding: 26px 22px; border-radius: 16px; }
+      .compare__list li { font-size: 13.5px; }
+      .case { padding: 54px 0; }
+      .case__box { padding: 34px 22px; border-radius: 18px; }
+      .case__stats { gap: 18px; }
+      .mentor { padding-bottom: 54px; }
+      .mentor__box { padding: 30px 22px; border-radius: 18px; }
+      .mentor__frame, .mentor__photo { width: 150px; height: 150px; }
+      .mentor__frame .initials { font-size: 36px; }
+      .mentor__name { font-size: 23px; }
     }
   </style>
 
@@ -425,12 +565,92 @@
     </div>
   </section>
 
+  <!-- A DOR, EM UMA FRASE -->
+  <section class="statement">
+    <div class="section__inner">
+      <p>Você comemora quando bate a meta de vendas no fim do mês... <em>mas o dinheiro não sobra?</em></p>
+    </div>
+  </section>
+
+  <!-- A TESE -->
+  <section class="thesis">
+    <div class="section__inner">
+      <div class="thesis__box">
+        <h2>A grande verdade do mercado fitness é uma só: você não pode gerenciar o que não consegue ver.</h2>
+        <p>
+          O seu problema hoje não está na concorrência. Está na falta de
+          <strong>"Visibilidade Operativa"</strong>. O seu cliente vai embora em silêncio
+          simplesmente porque falta um processo contínuo de gestão para enxergar a
+          insatisfação a tempo.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <div class="proof">
+    <div class="section__inner">
+      <p class="proof__label">Redes que já confiam na WeHelp</p>
+      <div class="marquee">
+        <div class="marquee__track">
+          <img src="../california/assets/bluefit.png" alt="Bluefit" />
+          <img src="../california/assets/panobianco.png" alt="Panobianco" />
+          <img src="../california/assets/bodytech.png" alt="Bodytech" />
+          <img src="../california/assets/bioritmo.png" alt="Bioritmo" />
+          <img src="../california/assets/evo.png" alt="ABC Evo" />
+          <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
+          <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARATIVO -->
+  <section class="section" style="padding-top:0">
+    <div class="section__inner">
+      <div class="section__head">
+        <span class="tag">E com isso podemos concluir que</span>
+        <h2>Existem dois jeitos de gerenciar sua academia</h2>
+      </div>
+
+      <div class="compare__grid">
+        <div class="compare__col compare__col--bad">
+          <p class="compare__title"><i class="ti ti-x" aria-hidden="true"></i> O jeito tradicional</p>
+          <ul class="compare__list">
+            <li><i class="ti ti-x" aria-hidden="true"></i> Gasta rios de dinheiro em tráfego para atrair aluno novo.</li>
+            <li><i class="ti ti-x" aria-hidden="true"></i> O aluno vai embora em silêncio e a equipe nem percebe.</li>
+            <li><i class="ti ti-x" aria-hidden="true"></i> Acredita que a culpa do cancelamento é da academia low-cost da esquina.</li>
+            <li><i class="ti ti-x" aria-hidden="true"></i> Trata a retenção como uma ação isolada de fim de mês, e não como um processo constante.</li>
+          </ul>
+        </div>
+
+        <div class="compare__col compare__col--good">
+          <p class="compare__title"><i class="ti ti-eye" aria-hidden="true"></i> O método de Visibilidade Operativa</p>
+          <ul class="compare__list">
+            <li><i class="ti ti-check" aria-hidden="true"></i> O caixa aumenta rapidamente só retendo os alunos que já estão matriculados.</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Um sistema de escuta silenciosa avisa o que o cliente valoriza e onde a academia está falhando.</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> O gestor melhora a experiência do cliente e deixa a empresa muito mais lucrativa.</li>
+            <li><i class="ti ti-check" aria-hidden="true"></i> Toma decisões baseado em dados reais de satisfação, não em "achismos" da recepção.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- O QUE VOCÊ VAI VER -->
-  <section class="section">
+  <section class="section" style="padding-top:0">
     <div class="section__inner">
       <div class="section__head">
         <span class="tag">O método WeHelp NPS</span>
-        <h2>Na próxima aula você vai ver na prática</h2>
+        <h2>Na próxima aula eu vou te mostrar ao vivo</h2>
         <p>Os 3 pilares que vão estancar seu balde furado de uma vez por todas.</p>
       </div>
 
@@ -462,31 +682,56 @@
     </div>
   </section>
 
-  <!-- PROVA SOCIAL -->
-  <div class="proof">
+  <!-- CASE -->
+  <section class="case">
     <div class="section__inner">
-      <p class="proof__label">Redes que já confiam na WeHelp</p>
-      <div class="marquee">
-        <div class="marquee__track">
-          <img src="../california/assets/bluefit.png" alt="Bluefit" />
-          <img src="../california/assets/panobianco.png" alt="Panobianco" />
-          <img src="../california/assets/bodytech.png" alt="Bodytech" />
-          <img src="../california/assets/bioritmo.png" alt="Bioritmo" />
-          <img src="../california/assets/evo.png" alt="ABC Evo" />
-          <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/bluefit.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/panobianco.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/bodytech.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/bioritmo.png" alt="" aria-hidden="true" />
-          <img src="../california/assets/evo.png" alt="" aria-hidden="true" />
+      <div class="case__box">
+        <p class="case__tag">O mesmo ecossistema usado pelos gigantes do mercado</p>
+        <p class="case__headline">
+          Durante a aula, você vai entender como a rede aplicou essa exata
+          estratégia para diminuir a evasão de alunos.
+        </p>
+        <div class="case__stats">
+          <div>
+            <p class="case__num dim">40</p>
+            <p class="case__lbl">Unidades</p>
+          </div>
+          <i class="ti ti-arrow-right case__arrow" aria-hidden="true"></i>
+          <div>
+            <p class="case__num up">200+</p>
+            <p class="case__lbl">Unidades</p>
+          </div>
+        </div>
+        <span class="case__brand"><i class="ti ti-building-store" aria-hidden="true"></i> Selfit</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENTOR -->
+  <section class="mentor">
+    <div class="section__inner">
+      <div class="mentor__box">
+        <!-- Placeholder até chegar a foto do Rogério. Pra trocar pela real:
+             <img class="mentor__photo" src="assets/rogerio-aranda.jpg" alt="Rogério Aranda" /> -->
+        <div class="mentor__frame">
+          <span class="initials">RA</span>
+          <span class="label">Foto Rogério Aranda</span>
+        </div>
+        <div>
+          <span class="mentor__tag">Quem vai ser o seu mentor?</span>
+          <p class="mentor__name">Rogério Aranda</p>
+          <p class="mentor__role">CEO da WeHelp</p>
+          <p class="mentor__bio">
+            Com mais de 17 anos vivendo a realidade e a gestão de experiência do
+            cliente no mercado fitness, construiu o ecossistema definitivo para
+            estancar o cancelamento de clientes. Hoje, guia centenas de academias
+            e estúdios da América Latina a transformarem dados em lucro e
+            previsibilidade.
+          </p>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- CTA FINAL -->
   <section class="final">
