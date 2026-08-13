@@ -1,7 +1,10 @@
 // api/lead-sessao-estrategica.js — Função serverless (Vercel) da LP /sessao-estrategica
-// Contato + Deal no ActiveCampaign (pipeline "Webinário", etapa "LEADS APLICAÇÃO WEBNÁRIO")
-// + linha na planilha "Agendamentos WB 05" + evento Lead no Meta CAPI.
-// Segue o padrão de 00-base/padrao-captura-lead.md — mesma estrutura de api/lead.js.
+// Migrado do ActiveCampaign pro DataCrazy em 2026-08-12 (decisão do usuário: substituir
+// totalmente, mesmo padrão já usado no /diagnostico e /academias). Leads caem no pipeline
+// "Webinário" (grupo VENDAS, já existente no DataCrazy, criado pelo usuário em 2026-08-07)
+// > etapa "AGENDAMENTO". Mesmo contorno do bug confirmado de additionalFields da API
+// pública do DataCrazy — dado garantido via campo nativo "notes".
+// Segue o padrão de 00-base/padrao-captura-lead.md.
 
 import { createHash } from 'crypto';
 const sha256 = (v) => createHash('sha256').update(String(v).toLowerCase().trim()).digest('hex');
@@ -14,19 +17,14 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const AC_URL = process.env.AC_URL;
-  const AC_KEY = process.env.AC_KEY;
+  const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
+  const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
 
-  // IDs confirmados direto na conta ActiveCampaign (ver 00-base/padrao-captura-lead.md)
-  const DEAL_PIPELINE_ID = 19;   // Pipeline "Webinário"
-  const DEAL_STAGE_ID = 172;     // Etapa "LEADS APLICAÇÃO WEBNÁRIO"
-  const FIELD_ACADEMIA = 39;     // "Nome da sua academia" (texto)
-  const FIELD_CLIENTES = 35;     // "Quantos clientes ativos você tem atualmente?" (dropdown)
-  const FIELD_DESAFIO = 36;      // "Qual é o seu maior desafio financeiro ou de gestão hoje?" (dropdown)
-  const FIELD_SISTEMA = 37;      // "Qual sistema de gestão você utiliza na sua academia atualmente?" (dropdown)
-  const FIELD_UTM_SOURCE = 28;
-  const FIELD_UTM_CAMPAIGN = 29;
-  const FIELD_UTM_MEDIUM = 30;
+  // IDs confirmados via MCP do DataCrazy em 2026-08-12
+  const PIPELINE_STAGE_ID = 'cff64878-e74a-4056-b240-7903901ea05f'; // Pipeline "Webinário" > etapa "AGENDAMENTO"
+  const TAG_SITE = '91ed2d79-6bf8-4744-8a9a-127850f7f00f';         // Tag "Site" (mesma do /diagnostico e /academias)
+  const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';     // Caroline Bonini — mesmo padrão das outras LPs
+  const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa" — usado pro Nome da academia
 
   // [PENDENTE] URL do Apps Script (/exec) da planilha "Agendamentos WB 05" —
   // configurar como env var na Vercel assim que o Apps Script novo for implantado.
@@ -35,8 +33,8 @@ export default async function handler(req, res) {
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 
-  if (!AC_URL || !AC_KEY) {
-    return res.status(500).json({ error: 'Configuração ausente no servidor' });
+  if (!DATACRAZY_API_KEY) {
+    return res.status(500).json({ error: 'Configuração ausente no servidor (DATACRAZY_API_KEY)' });
   }
 
   try {
@@ -67,96 +65,73 @@ export default async function handler(req, res) {
       : '';
 
     const receivedAt = new Date().toISOString();
-
-    const headers = {
-      'Api-Token': AC_KEY,
-      'Content-Type': 'application/json',
-    };
-
     const phoneDigits = WhatsApp.replace(/\D/g, '');
     const contactEmail = E_mail_Profissional || `wp.${phoneDigits}@noemail.invalid`;
 
-    // 1. Cria ou atualiza o contato, já com os campos personalizados desse formulário
-    const fieldValues = [];
-    if (Nome_da_sua_academia) fieldValues.push({ field: String(FIELD_ACADEMIA), value: Nome_da_sua_academia });
-    if (Quantos_clientes_ativos_voce_tem_atualmente) fieldValues.push({ field: String(FIELD_CLIENTES), value: Quantos_clientes_ativos_voce_tem_atualmente });
-    if (Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje) fieldValues.push({ field: String(FIELD_DESAFIO), value: Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje });
-    if (Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente) fieldValues.push({ field: String(FIELD_SISTEMA), value: Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente });
-    if (UTM_Source) fieldValues.push({ field: String(FIELD_UTM_SOURCE), value: UTM_Source });
-    if (UTM_Medium) fieldValues.push({ field: String(FIELD_UTM_MEDIUM), value: UTM_Medium });
-    if (UTM_Campaign) fieldValues.push({ field: String(FIELD_UTM_CAMPAIGN), value: UTM_Campaign });
+    const dcHeaders = {
+      'Authorization': `Bearer ${DATACRAZY_API_KEY}`,
+      'Content-Type': 'application/json',
+    };
 
-    const syncRes = await fetch(`${AC_URL}/api/3/contact/sync`, {
+    // 1. Cria o lead no DataCrazy (nome/email/telefone/academia/tag)
+    // [BUG DataCrazy confirmado em 2026-08-11, ver api/lead-diagnostico.js pro
+    // diagnóstico completo] additionalFields não persiste via API pública —
+    // contorno: manda tudo formatado dentro de "notes" (campo nativo, texto
+    // livre, confirmado funcionando).
+    const notesLines = [];
+    if (Nome_da_sua_academia) notesLines.push(`Academia: ${Nome_da_sua_academia}`);
+    if (Quantos_clientes_ativos_voce_tem_atualmente) notesLines.push(`Clientes ativos: ${Quantos_clientes_ativos_voce_tem_atualmente}`);
+    if (Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje) notesLines.push(`Maior desafio: ${Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje}`);
+    if (Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente) notesLines.push(`Sistema de gestão atual: ${Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente}`);
+    if (UTM_Source) notesLines.push(`UTM Source: ${UTM_Source}`);
+    if (UTM_Campaign) notesLines.push(`UTM Campaign: ${UTM_Campaign}`);
+    if (UTM_Medium) notesLines.push(`UTM Medium: ${UTM_Medium}`);
+
+    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
       method: 'POST',
-      headers,
+      headers: dcHeaders,
       body: JSON.stringify({
-        contact: {
-          email: contactEmail,
-          firstName: Seu_Nome_Completo || '',
-          phone: WhatsApp,
-          fieldValues,
-        },
+        name: Seu_Nome_Completo || 'Lead sem nome',
+        email: contactEmail,
+        phone: WhatsApp,
+        company: Nome_da_sua_academia || '',
+        source: 'Sessão Estratégica (Site)',
+        notes: notesLines.join('\n'),
+        tags: [{ id: TAG_SITE }],
+        attendant: { id: ATTENDANT_ID },
       }),
     });
 
-    const syncData = await syncRes.json();
+    const leadData = await leadRes.json();
 
-    if (!syncRes.ok || !syncData.contact) {
-      console.error('Erro sync:', syncData);
-      return res.status(502).json({ error: 'Falha ao criar contato', details: syncData });
+    if (!leadRes.ok || !leadData.id) {
+      console.error('Erro ao criar lead no DataCrazy:', leadData);
+      return res.status(502).json({ error: 'Falha ao criar lead', details: leadData });
     }
 
-    const contactId = syncData.contact.id;
+    const leadId = leadData.id;
 
-    // 2. Aplica a tag "WB Aplicação 05" (id 79) — identifica leads dessa LP
-    // especificamente, mesmo padrão das tags "WB Aplicação"/"WB Aplicação 02".
-    const TAG_WB_APLICACAO_05 = 79;
-    const tagPromise = fetch(`${AC_URL}/api/3/contactTags`, {
+    // 2. Tenta aplicar o campo adicional "Empresa" (fire-and-forget — hoje não
+    // persiste pela API pública, mantido pro dia que o DataCrazy corrigir o bug)
+    const fieldsPromise = Nome_da_sua_academia ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
+      method: 'PATCH',
+      headers: dcHeaders,
+      body: JSON.stringify({ additionalFields: [{ id: FIELD_EMPRESA, value: Nome_da_sua_academia }] }),
+    }).then(async (r) => {
+      if (!r.ok) console.error('Erro ao aplicar additionalFields no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
+
+    // 3. Cria o negócio no pipeline "Webinário", etapa "AGENDAMENTO"
+    const dealPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
       method: 'POST',
-      headers,
+      headers: dcHeaders,
       body: JSON.stringify({
-        contactTag: { contact: String(contactId), tag: String(TAG_WB_APLICACAO_05) },
+        leadId,
+        stageId: PIPELINE_STAGE_ID,
       }),
     }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao aplicar tag:', await r.text());
-    }).catch((err) => console.error('Erro ao aplicar tag:', err));
-
-    // 3. Cria o Deal no pipeline "Webinário", etapa "LEADS APLICAÇÃO WEBNÁRIO"
-    // owner "6" = mesmo dono usado nos 3 deals que já existem hoje nessa etapa exata
-    // (conferido direto na conta em 2026-08-02). Ajuste aqui se o responsável mudar.
-    //
-    // [FIX] As chamadas abaixo (deal, Sheets, CAPI) precisam de "await" — a Vercel
-    // congela a execução da function assim que a response é enviada, então um
-    // fetch "fire-and-forget" (sem await) corria o risco de nunca terminar. Por
-    // isso tudo aqui embaixo é aguardado com Promise.allSettled antes do retorno.
-    //
-    // [FIX] group/stage/contact precisam ir como STRING no corpo da requisição —
-    // enviados como número, a API da ActiveCampaign rejeitava a criação do deal
-    // silenciosamente (confirmado em produção em 2026-08-02).
-    const DEAL_OWNER_ID = '6';
-    const dealPromise = fetch(`${AC_URL}/api/3/deals`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        deal: {
-          title: `Sessão Estratégica — ${Seu_Nome_Completo || 'Lead'}${Nome_da_sua_academia ? ' (' + Nome_da_sua_academia + ')' : ''}`,
-          currency: 'usd',
-          value: 0,
-          group: String(DEAL_PIPELINE_ID),
-          stage: String(DEAL_STAGE_ID),
-          contact: String(contactId),
-          owner: DEAL_OWNER_ID,
-          fields: [
-            { customFieldId: FIELD_ACADEMIA, fieldValue: Nome_da_sua_academia || '' },
-            { customFieldId: FIELD_CLIENTES, fieldValue: Quantos_clientes_ativos_voce_tem_atualmente || '' },
-            { customFieldId: FIELD_DESAFIO, fieldValue: Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje || '' },
-            { customFieldId: FIELD_SISTEMA, fieldValue: Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente || '' },
-          ],
-        },
-      }),
-    }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao criar deal:', await r.text());
-    }).catch((err) => console.error('Erro ao criar deal:', err));
+      if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
 
     // 4. Envia pro Google Sheets — colunas na mesma ordem/nome da planilha
     //    "Agendamentos WB 05" (ver PDF de referência anexado pelo usuário em 2026-08-02).
@@ -229,11 +204,11 @@ export default async function handler(req, res) {
       }).catch((err) => console.error('CAPI error:', err));
     }
 
-    // Espera as três chamadas em paralelo — a Vercel encerra a function assim que a
-    // response sai, então sem esse await o deal/Sheets/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([tagPromise, dealPromise, sheetsPromise, capiPromise]);
+    // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
+    // response sai, então sem esse await o negócio/Sheets/CAPI corriam risco de nunca completar.
+    await Promise.allSettled([fieldsPromise, dealPromise, sheetsPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, contactId });
+    return res.status(200).json({ success: true, leadId });
 
   } catch (err) {
     console.error('Erro geral:', err);

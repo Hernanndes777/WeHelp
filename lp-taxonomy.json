@@ -109,9 +109,9 @@
       "segmento": "fitness",
       "tipo": "captura",
       "funil": "fundo",
-      "status": "publicada — backend 100% funcional e testado em produção (2026-08-02)",
+      "status": "publicada — MIGRADA do ActiveCampaign pro DataCrazy em 2026-08-12 (pedido do usuário), pendente confirmar em produção com um lead real depois do deploy",
       "origem": "página nova, migrada do GreatPages (mkt.wehelpsoftware.com/vamos-entrar-em-contato-em-breve), criada 2026-08-02",
-      "notas": "Fluxo multi-step (uma pergunta por tela) que substitui o formulário único do GreatPages, terminando no mesmo agendamento via Google Calendar. Captura via api/lead-sessao-estrategica.js: cria/atualiza contato no ActiveCampaign + cria Deal no pipeline 'Webinário' (id 19), etapa 'LEADS APLICAÇÃO WEBNÁRIO' (id 172, owner id 6) + tag 'WB Aplicação 05' (id 79), usando os custom fields já existentes 39/35/36/37, e envia pro Sheets via SHEETS_SESSAO_ESTRATEGICA_URL. Confirmado ponta a ponta em produção."
+      "notas": "Fluxo multi-step (uma pergunta por tela) que substitui o formulário único do GreatPages, terminando no mesmo agendamento via Google Calendar. ATUALIZAÇÃO 2026-08-12: usuário pediu pra conectar os leads no pipeline 'Webinário' do DataCrazy (grupo VENDAS, id a752c439-0b82-479e-b4c9-911846151d23, criado pelo usuário em 2026-08-07), etapa 'AGENDAMENTO' (id cff64878-e74a-4056-b240-7903901ea05f) — perguntei se era pra substituir o ActiveCampaign totalmente ou rodar em paralelo, usuário confirmou SUBSTITUIR (mesmo padrão do /diagnostico e /academias). api/lead-sessao-estrategica.js reescrito: sai toda a integração com ActiveCampaign (contact/sync, Deal, tag 'WB Aplicação 05'), entra o padrão DataCrazy — mesma tag 'Site' e atendente Caroline Bonini das outras LPs, mesmo contorno do bug de additionalFields via campo notes (aqui incluindo os 4 campos de qualificação: academia, clientes ativos, maior desafio, sistema de gestão atual — todos só em texto livre, já que o additionalFields não persiste pela API pública). Sheets (SHEETS_SESSAO_ESTRATEGICA_URL) e Meta CAPI mantidos exatamente como estavam, sem alteração — só a etapa de CRM mudou de AC pra DataCrazy."
     },
     {
       "slug": "visibilidade-operativa",
