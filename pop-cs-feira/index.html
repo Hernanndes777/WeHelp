@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>POP CS — Operação Feira FB 2026</title>
+  <style>
+    :root{
+      --paper: #EEF0E9;
+      --surface: #FFFFFF;
+      --surface-2: #E4E7DF;
+      --ink: #16242B;
+      --ink-soft: #52646A;
+      --ink-faint: #8A9A9C;
+      --line: rgba(22,36,43,0.14);
+      --line-soft: rgba(22,36,43,0.08);
+      --accent: #C9631C;
+      --accent-ink: #7A3C0F;
+      --accent-soft: #F1DCC0;
+      --good: #2E7D63;
+      --good-soft: #DCEAE3;
+      --bad: #A83A2E;
+      --bad-soft: #F2DEDA;
+
+      --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Times New Roman", serif;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    @media (prefers-color-scheme: dark){
+      :root:not([data-theme="light"]){
+        --paper: #101A1B;
+        --surface: #172224;
+        --surface-2: #1D2B2D;
+        --ink: #ECEFE9;
+        --ink-soft: #A8B7B6;
+        --ink-faint: #6C7E7D;
+        --line: rgba(236,239,233,0.16);
+        --line-soft: rgba(236,239,233,0.09);
+        --accent: #E98A3E;
+        --accent-ink: #FBD3A6;
+        --accent-soft: #3A2A17;
+        --good: #59B296;
+        --good-soft: #163229;
+        --bad: #DE7C6C;
+        --bad-soft: #341F1C;
+      }
+    }
+    :root[data-theme="dark"]{
+      --paper: #101A1B;
+      --surface: #172224;
+      --surface-2: #1D2B2D;
+      --ink: #ECEFE9;
+      --ink-soft: #A8B7B6;
+      --ink-faint: #6C7E7D;
+      --line: rgba(236,239,233,0.16);
+      --line-soft: rgba(236,239,233,0.09);
+      --accent: #E98A3E;
+      --accent-ink: #FBD3A6;
+      --accent-soft: #3A2A17;
+      --good: #59B296;
+      --good-soft: #163229;
+      --bad: #DE7C6C;
+      --bad-soft: #341F1C;
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection{ background: var(--accent-soft); color: var(--accent-ink); }
+
+    a{ color: var(--accent-ink); }
+    a:focus-visible, button:focus-visible{
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+
+    .page{
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 56px 28px 96px;
+      display: flex;
+      flex-direction: column;
+      gap: 64px;
+    }
+
+    /* Masthead */
+    .masthead{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow{
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-ink);
+    }
+    h1{
+      font-family: var(--font-display);
+      font-size: clamp(32px, 5vw, 46px);
+      font-weight: 700;
+      margin: 0;
+      text-wrap: balance;
+      letter-spacing: -0.01em;
+    }
+    .masthead p{
+      margin:0;
+      max-width: 62ch;
+      color: var(--ink-soft);
+      font-size: 15.5px;
+    }
+    .meta-row{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: var(--ink-faint);
+      font-variant-numeric: tabular-nums;
+    }
+    .meta-row b{ color: var(--ink-soft); font-weight: 600; }
+
+    /* TOC */
+    .toc{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .toc a{
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      text-decoration:none;
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+      padding: 6px 12px;
+      border-radius: 99px;
+      transition: border-color .15s ease, color .15s ease;
+    }
+    .toc a:hover{ border-color: var(--accent); color: var(--accent-ink); }
+
+    section{ scroll-margin-top: 24px; }
+
+    .section-head{
+      display:flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    .section-num{
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--ink-faint);
+    }
+    h2{
+      font-family: var(--font-display);
+      font-size: 26px;
+      margin: 0;
+      text-wrap: balance;
+    }
+    .section-sub{
+      color: var(--ink-soft);
+      font-size: 15px;
+      max-width: 66ch;
+      margin: 10px 0 26px;
+    }
+
+    /* Tags */
+    .tag-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap: 10px;
+    }
+    .tag-card{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 4px;
+    }
+    .tag-card code{
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-ink);
+      font-weight: 600;
+    }
+    .tag-card span{
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    /* Diagram */
+    figure{ margin: 0; }
+    .diagram-wrap{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      overflow-x: auto;
+    }
+    .diagram-wrap svg{
+      display:block;
+      max-width: 100%;
+      height: auto;
+      min-width: 640px;
+      color: var(--ink-soft);
+    }
+    figcaption{
+      margin-top: 12px;
+      font-size: 13.5px;
+      color: var(--ink-faint);
+      max-width: 66ch;
+    }
+
+    /* Funnel cards */
+    .funnel-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    @media (max-width: 720px){ .funnel-grid{ grid-template-columns: 1fr; } }
+
+    .funnel-card{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 22px;
+      display:flex;
+      flex-direction:column;
+      gap: 16px;
+    }
+    .funnel-card.vip{ border-top: 3px solid var(--accent); }
+    .funnel-card.geral{ border-top: 3px solid var(--good); }
+
+    .funnel-title{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .funnel-title h3{
+      font-family: var(--font-display);
+      font-size: 18px;
+      margin: 0;
+    }
+    .funnel-target{
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--ink-faint);
+    }
+    .funnel-goal{
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      margin: -6px 0 0;
+    }
+
+    .day-chip{
+      display:inline-flex;
+      align-items:baseline;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--ink-faint);
+      margin-bottom: 6px;
+    }
+    .day-chip b{
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+    }
+
+    .bubble{
+      background: var(--surface-2);
+      border-radius: 4px 12px 12px 12px;
+      padding: 12px 14px;
+      font-size: 13.5px;
+      color: var(--ink);
+      position: relative;
+    }
+    .bubble + .bubble{ margin-top: 8px; }
+    .bubble.reply{
+      background: transparent;
+      border: 1px dashed var(--line);
+      color: var(--ink-soft);
+    }
+    .branch-label{
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--accent-ink);
+      margin: 4px 0 0;
+    }
+    .branch-label.alt{ color: var(--ink-faint); }
+
+    /* Do / Don't */
+    .conduct-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    @media (max-width: 720px){ .conduct-grid{ grid-template-columns: 1fr; } }
+    .conduct-col{
+      border-radius: 12px;
+      padding: 20px 22px 22px;
+    }
+    .conduct-col.good{ background: var(--good-soft); }
+    .conduct-col.bad{ background: var(--bad-soft); }
+    .conduct-head{
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin: 0 0 14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .conduct-col.good .conduct-head{ color: var(--good); }
+    .conduct-col.bad .conduct-head{ color: var(--bad); }
+    .conduct-col ul{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+    .conduct-col li{
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.5;
+      padding-left: 16px;
+      position: relative;
+    }
+    .conduct-col.good li::before{
+      content:"";
+      position:absolute; left:0; top: 7px;
+      width:7px; height:7px; border-radius:50%;
+      background: var(--good);
+    }
+    .conduct-col.bad li::before{
+      content:"";
+      position:absolute; left:0; top: 7px;
+      width:7px; height:7px; border-radius:50%;
+      background: var(--bad);
+    }
+    .conduct-col li b{ font-weight: 700; }
+    .conduct-col li span{ color: var(--ink-soft); }
+
+    .lesson{
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 10px 10px 0;
+      padding: 16px 18px;
+      font-size: 14px;
+      color: var(--ink-soft);
+      margin-top: 4px;
+    }
+    .lesson b{ color: var(--ink); }
+
+    /* Golden rule banner */
+    .banner{
+      background: var(--ink);
+      color: var(--paper);
+      border-radius: 14px;
+      padding: 30px 32px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root:not([data-theme="light"]) .banner{
+        background: var(--accent);
+        color: #1B0F04;
+      }
+    }
+    :root[data-theme="dark"] .banner{
+      background: var(--accent);
+      color: #1B0F04;
+    }
+    .banner .eyebrow-inv{
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity: .75;
+    }
+    .banner h2{ color: inherit; font-size: 24px; }
+    .banner p{ margin:0; font-size: 15px; opacity: .92; max-width: 68ch; }
+
+    footer{
+      border-top: 1px solid var(--line);
+      padding-top: 22px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--ink-faint);
+      display:flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">WeHelp · Time de CS · Uso interno</div>
+    <h1>POP — Operação Feira FB 2026</h1>
+    <p>Processo padrão para o time de Customer Success atender, agendar e converter clientes confirmados e da base geral durante a semana da feira — do disparo no WhatsApp até a mesa de atendimento no estande.</p>
+    <div class="meta-row">
+      <span><b>Semana de operação</b> · 17–21/08/2026</span>
+      <span><b>Disparo inicial</b> · Segunda, 17/08</span>
+      <span><b>Repescagem base geral</b> · Quinta, 20/08</span>
+      <span><b>CRM</b> · Datacrazy</span>
+    </div>
+  </header>
+
+  <nav class="toc" aria-label="Seções do documento">
+    <a href="#pipeline">Pipeline no Datacrazy</a>
+    <a href="#funis">Funis de abordagem</a>
+    <a href="#estande">Atendimento no estande</a>
+    <a href="#regra-de-ouro">Regra de ouro</a>
+  </nav>
+
+  <section id="pipeline">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>Pipeline no Datacrazy</h2>
+    </div>
+    <p class="section-sub">Todo cliente — confirmado ou da base geral — entra no mesmo funil. A origem e o interesse são marcados por tag, e o card avança pelas dez etapas abaixo conforme a conversa evolui.</p>
+
+    <div class="tag-grid" style="margin-bottom:28px;">
+      <div class="tag-card"><code>Origem_ListaVIP</code><span>Já confirmou presença pelo site</span></div>
+      <div class="tag-card"><code>Origem_BaseGeral</code><span>Não sabemos ainda se vai</span></div>
+      <div class="tag-card"><code>Interesse_Consultoria</code><span>Marcado via Calendly</span></div>
+      <div class="tag-card"><code>Interesse_Upsell</code><span>Marcado via Calendly</span></div>
+    </div>
+
+    <figure>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 1040 940" role="img" aria-label="Fluxo das dez etapas do pipeline: Base Geral passa por Sondagem antes de agendar; Lista VIP entra direto no agendamento; o card segue até Em Atendimento, Apresentação de Upsell e termina em Fechado Ganho ou Mantido, com ramais de Perdido e No-Show.">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+            <marker id="arrowAccent" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--accent)"/>
+            </marker>
+          </defs>
+
+          <!-- entry points -->
+          <rect x="150" y="20" width="220" height="50" rx="7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 3" opacity="0.75"/>
+          <text x="260" y="41" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11.5" font-weight="700" fill="currentColor">BASE GERAL</text>
+          <text x="260" y="57" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">não sabemos se vão</text>
+
+          <rect x="650" y="20" width="220" height="50" rx="7" fill="none" stroke="currentColor" stroke-width="1.3" stroke-dasharray="3 3" opacity="0.75"/>
+          <text x="760" y="41" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11.5" font-weight="700" fill="currentColor">LISTA VIP</text>
+          <text x="760" y="57" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">já confirmou no site</text>
+
+          <!-- node 1 -->
+          <rect x="150" y="130" width="220" height="56" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="260" y="153" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="currentColor">1 · Sondagem</text>
+          <text x="260" y="171" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">apenas base geral</text>
+
+          <!-- node 10 -->
+          <rect x="150" y="270" width="220" height="56" rx="7" fill="none" stroke="var(--bad)" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <text x="260" y="293" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="var(--bad)">10 · Perdido</text>
+          <text x="260" y="311" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="var(--bad)" opacity="0.8">não vai na feira</text>
+
+          <!-- node 2 -->
+          <rect x="400" y="270" width="240" height="56" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="520" y="293" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="currentColor">2 · Respondeu: VAI</text>
+          <text x="520" y="311" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">aguardando agendamento</text>
+
+          <!-- node 3 -->
+          <rect x="400" y="390" width="240" height="56" rx="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <text x="520" y="413" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="currentColor">3 · Ticket VIP Gerado</text>
+          <text x="520" y="431" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">agendado via Calendly</text>
+
+          <!-- node 4 -->
+          <rect x="400" y="510" width="240" height="56" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="520" y="533" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="currentColor">4 · Confirmado</text>
+          <text x="520" y="551" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">lembrete na véspera</text>
+
+          <!-- node 5 -->
+          <rect x="720" y="510" width="220" height="56" rx="7" fill="none" stroke="var(--bad)" stroke-width="1.4" stroke-dasharray="4 3"/>
+          <text x="830" y="533" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="var(--bad)">5 · No-Show</text>
+          <text x="830" y="551" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="var(--bad)" opacity="0.8">faltou no estande</text>
+
+          <!-- node 6 -->
+          <rect x="400" y="630" width="240" height="56" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="520" y="653" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="currentColor">6 · Em Atendimento</text>
+          <text x="520" y="671" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">na mesa, no estande</text>
+
+          <!-- node 7 -->
+          <rect x="390" y="750" width="260" height="56" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="520" y="773" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="currentColor">7 · Apresentação de Upsell</text>
+          <text x="520" y="791" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">demo do módulo no tablet</text>
+
+          <!-- node 8 (highlight) -->
+          <rect x="190" y="870" width="230" height="56" rx="7" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.8"/>
+          <text x="305" y="893" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="var(--accent-ink)">8 · Fechado Ganho</text>
+          <text x="305" y="911" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="var(--accent-ink)" opacity="0.85">assinou o módulo</text>
+
+          <!-- node 9 -->
+          <rect x="610" y="870" width="230" height="56" rx="7" fill="var(--good-soft)" stroke="var(--good)" stroke-width="1.4"/>
+          <text x="725" y="893" text-anchor="middle" font-family="Georgia,serif" font-size="13.5" font-weight="700" fill="var(--good)">9 · Mantido</text>
+          <text x="725" y="911" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="var(--good)" opacity="0.85">só consultoria, fidelizado</text>
+
+          <!-- arrows -->
+          <line x1="260" y1="70" x2="260" y2="128" stroke="currentColor" stroke-width="1.3" marker-end="url(#arrow)"/>
+
+          <line x1="230" y1="186" x2="230" y2="268" stroke="var(--bad)" stroke-width="1.3" marker-end="url(#arrow)"/>
+          <text x="238" y="230" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="var(--bad)">não vai</text>
+
+          <line x1="330" y1="158" x2="402" y2="278" stroke="currentColor" stroke-width="1.3" marker-end="url(#arrow)"/>
+          <text x="345" y="220" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.75">vai / pensando</text>
+
+          <path d="M760,70 C760,220 620,260 555,388" fill="none" stroke="var(--accent)" stroke-width="1.4" marker-end="url(#arrowAccent)"/>
+          <text x="700" y="215" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="var(--accent-ink)">direto</text>
+
+          <path d="M700,70 C660,150 590,200 560,272" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="3 3" opacity="0.6" marker-end="url(#arrow)"/>
+          <text x="640" y="140" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="9.5" fill="currentColor" opacity="0.65">se manual</text>
+
+          <line x1="520" y1="326" x2="520" y2="388" stroke="currentColor" stroke-width="1.3" marker-end="url(#arrow)"/>
+          <line x1="520" y1="446" x2="520" y2="508" stroke="currentColor" stroke-width="1.3" marker-end="url(#arrow)"/>
+
+          <line x1="640" y1="530" x2="718" y2="530" stroke="var(--bad)" stroke-width="1.3" marker-end="url(#arrow)"/>
+          <text x="648" y="522" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="9.5" fill="var(--bad)">não apareceu</text>
+
+          <path d="M800,566 C760,610 640,600 562,572" fill="none" stroke="var(--bad)" stroke-width="1.1" stroke-dasharray="4 3" opacity="0.85" marker-end="url(#arrow)"/>
+          <text x="660" y="605" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="9.5" fill="var(--bad)">reagenda p/ próx. dia</text>
+
+          <line x1="520" y1="566" x2="520" y2="628" stroke="currentColor" stroke-width="1.3" marker-end="url(#arrow)"/>
+          <text x="528" y="600" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="9.5" fill="currentColor" opacity="0.7">compareceu</text>
+
+          <line x1="520" y1="686" x2="520" y2="748" stroke="currentColor" stroke-width="1.3" marker-end="url(#arrow)"/>
+
+          <path d="M460,806 C400,830 350,845 320,868" fill="none" stroke="var(--accent)" stroke-width="1.4" marker-end="url(#arrowAccent)"/>
+          <text x="352" y="838" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="9.5" fill="var(--accent-ink)">fechou</text>
+
+          <path d="M580,806 C630,830 670,845 700,868" fill="none" stroke="var(--good)" stroke-width="1.3" marker-end="url(#arrow)"/>
+          <text x="618" y="838" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="9.5" fill="var(--good)">não fechou agora</text>
+        </svg>
+      </div>
+      <figcaption>Base Geral passa pela Sondagem antes de agendar; a Lista VIP entra direto no agendamento (etapa 3). Dali em diante o caminho é único até o estande, onde se abre em três desfechos: Fechado Ganho, Mantido, ou os ramais de exceção (Perdido, No-Show).</figcaption>
+    </figure>
+  </section>
+
+  <section id="funis">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Os dois funis de abordagem</h2>
+    </div>
+    <p class="section-sub">Mesmo objetivo final — levar o cliente até o Calendly — mas com abertura diferente conforme a origem. Textos abaixo são o roteiro-base; ajuste o tom, nunca a estrutura.</p>
+
+    <div class="funnel-grid">
+
+      <div class="funnel-card vip">
+        <div class="funnel-title">
+          <h3>Funil A — Lista VIP</h3>
+          <span class="funnel-target">já vai à feira</span>
+        </div>
+        <p class="funnel-goal">Ele já confirmou presença. O objetivo é só fazer clicar no Calendly e reservar o horário.</p>
+
+        <div>
+          <div class="day-chip">Disparo 1 · <b>Segunda, 17/08</b></div>
+          <div class="bubble">Fala [Nome], tudo bem? Vi que você confirmou presença na FB 2026! Preparamos um espaço VIP no estande exclusivo para quem já é de casa. Liberei alguns horários na minha agenda para tomarmos um café.</div>
+        </div>
+
+        <div>
+          <div class="day-chip">Mensagem 2 · na sequência</div>
+          <div class="bubble">No link abaixo, você pode escolher o seu horário e selecionar se prefere: uma Consultoria Gratuita da sua conta atual, ou conhecer nosso Novo Módulo de Retenção Preditiva — que descobre quem vai cancelar antes do aluno ir embora. Garante seu horário aqui: [Link do Calendly]</div>
+        </div>
+      </div>
+
+      <div class="funnel-card geral">
+        <div class="funnel-title">
+          <h3>Funil B — Base Geral</h3>
+          <span class="funnel-target">não sabemos se vai</span>
+        </div>
+        <p class="funnel-goal">Primeiro descobrir se ele vai. Se sim, joga para o agendamento; se não, encerra bem.</p>
+
+        <div>
+          <div class="day-chip">Sondagem · <b>Segunda, 17/08</b></div>
+          <div class="bubble">Fala [Nome do Cliente], tudo bem? Aqui é o [Nome do CS] da WeHelp! Nós estaremos com um estande super bacana na FB 2026 semana que vem. Você vai estar por lá esse ano?</div>
+        </div>
+
+        <div>
+          <p class="branch-label">se responder "não vou"</p>
+          <div class="bubble reply">Poxa, que pena! Mas tranquilo, a gente marca um papo online na volta da feira para atualizarmos as novidades. Bom trabalho por aí!</div>
+          <p class="branch-label alt">→ card vai para etapa 10 · Perdido</p>
+        </div>
+
+        <div>
+          <p class="branch-label">se responder "vou" ou "tô pensando"</p>
+          <div class="bubble reply">Sensacional! Então aproveita e já garante um espaço comigo lá. Nós vamos dar sessões gratuitas de Consultoria de NPS e demonstrar ao vivo os novos módulos de Retenção. Clica aqui, escolhe o que você quer ver e reserva seu horário VIP pra gente tomar um café: [Link do Calendly]</div>
+          <p class="branch-label alt">→ card vai para etapa 2 · Aguardando agendamento</p>
+        </div>
+
+        <div>
+          <div class="day-chip">Repescagem · <b>Quinta, 20/08</b> · se não respondeu</div>
+          <div class="bubble">Opa [Nome], passando só pra confirmar se você vai conseguir dar um pulo na FB 2026! Se for, me avisa aqui pra eu guardar o seu lugar (e o seu brinde VIP! hehe). Abs!</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="estande">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>Atendimento no estande</h2>
+    </div>
+    <p class="section-sub">No estande o CS acumula três papéis — recepção, consultoria e venda do upsell. A postura certa é de consultor estratégico, não de vendedor de balcão: o cliente fala, você direciona.</p>
+
+    <div class="conduct-grid">
+      <div class="conduct-col good">
+        <p class="conduct-head">Fazer</p>
+        <ul>
+          <li><b>A lição de casa.</b> <span>Antes do cliente chegar, abra a conta dele e anote NPS atual, volume de pesquisas e um ponto de melhoria. Nunca atenda no escuro.</span></li>
+          <li><b>Recepção VIP.</b> <span>Levante, cumprimente com atenção e entregue o brinde imediatamente. Valide os resultados dele para elevar o ego.</span></li>
+          <li><b>Escuta ativa, regra 80/20.</b> <span>Deixe o cliente falar 80% do tempo sobre o negócio dele. Você fala 20% para direcionar a conversa.</span></li>
+          <li><b>A ponte para o upsell.</b> <span>Se ele agendou só consultoria mas reclamar de estar perdendo alunos, conecte com naturalidade: "a gente já organizou sua casa com o NPS, mas pra estancar essa perda nós lançamos um módulo preditivo — deixa eu te mostrar no tablet."</span></li>
+          <li><b>Próximo passo claro.</b> <span>Se fez a demo e ele não assinou na hora, não deixe ir embora sem compromisso. Agende ali mesmo a call de fechamento da semana seguinte.</span></li>
+        </ul>
+      </div>
+
+      <div class="conduct-col bad">
+        <p class="conduct-head">Não fazer</p>
+        <ul>
+          <li><b>Não force venda em cliente insatisfeito.</b> <span>Se a conta estiver com problema ou ele estiver chateado, foco 100% em resolver o atrito. Vender pra quem está insatisfeito gera cancelamento.</span></li>
+          <li><b>Não dê treinamento de clique.</b> <span>A feira é barulhenta e o tempo é curto. Fale de resultado, economia e mostre os dashboards — não ensine onde apertar botão.</span></li>
+          <li><b>Não fique no celular.</b> <span>Estande vazio não é sinal pra desligar. O cliente pode passar a qualquer momento e precisa ver a equipe engajada.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="regra-de-ouro">
+    <div class="banner">
+      <span class="eyebrow-inv">Regra de ouro do Datacrazy</span>
+      <h2>Atendimento finalizado = anotação feita na mesma hora.</h2>
+      <p>Assim que o cliente levantar da mesa, puxe o celular ou tablet e registre no card dele: qual foi a dor, se gostou do módulo novo, qual o próximo passo. Deixar para anotar no hotel à noite é como a informação crucial se perde.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>WeHelp · POP Feira FB 2026 · exclusivo time de CS</span>
+    <span>Pipeline de referência: Datacrazy</span>
+  </footer>
+
+</div>
+</body>
+</html>
