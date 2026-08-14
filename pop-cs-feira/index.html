@@ -166,14 +166,22 @@
       padding: 22px 24px; margin-bottom: 22px;
       box-shadow: 0 4px 12px rgba(20,25,60,.06);
     }
-    .config-card__head{ display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
-    .config-card__head i{
+    .config-card__head{ display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+    .config-card__head > i{
       flex-shrink: 0; width: 38px; height: 38px; border-radius: 11px;
       background: var(--blue-tint); color: var(--blue); font-size: 17px;
       display: flex; align-items: center; justify-content: center;
     }
+    .config-card__head > div{ flex: 1 1 auto; min-width: 180px; }
     .config-card__head h3{ font-family: var(--disp); font-size: 15.5px; font-weight: 800; color: var(--navy); margin: 0 0 3px; }
     .config-card__head p{ font-size: 12.5px; color: var(--muted); margin: 0; }
+    .config-owner{
+      display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0;
+      font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; letter-spacing: .03em;
+      color: var(--blue-hover); background: var(--blue-tint);
+      padding: 6px 11px; border-radius: 50px; margin-left: auto;
+    }
+    .config-owner i{ font-size: 12px; }
     .config-grid{
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
       padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
@@ -182,11 +190,10 @@
     .config-item__label{ font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
     .config-item__value{ font-size: 13.5px; font-weight: 700; color: var(--navy); line-height: 1.35; }
     .config-note{
-      display: flex; align-items: flex-start; gap: 8px;
       font-size: 12.5px; color: var(--body); line-height: 1.6; margin: 14px 0 0;
     }
-    .config-note i{ flex-shrink: 0; font-size: 14px; color: var(--blue); margin-top: 2px; }
-    .config-note em{ font-style: normal; color: var(--navy); font-weight: 600; }
+    .config-note i{ color: var(--blue); font-size: 13px; margin-right: 7px; }
+    .config-note em, .config-note b{ font-style: normal; color: var(--navy); font-weight: 600; }
 
     .day-chip{
       display: inline-flex; align-items: baseline; gap: 6px;
@@ -288,8 +295,8 @@
       <p class="lede">Processo padrão para o time de Customer Success atender, agendar e converter clientes confirmados e da base geral durante a semana da feira — do disparo no WhatsApp até a mesa de atendimento no estande.</p>
       <div class="meta-row">
         <span><b>Feira</b> · 27–29/08/2026 (qui–sáb)</span>
-        <span><b>Disparo inicial</b> · Segunda, 24/08</span>
-        <span><b>Repescagem base geral</b> · Quarta, 26/08</span>
+        <span><b>Disparo inicial</b> · Segunda, 17/08</span>
+        <span><b>Repescagem base geral</b> · Quarta, 19/08</span>
         <span><b>Atendentes</b> · Eric &amp; Pietro · Round Robin</span>
         <span><b>CRM</b> · Datacrazy</span>
       </div>
@@ -444,6 +451,7 @@
             <h3>Configuração do Calendly</h3>
             <p>Confirmado com o Rogério — vale pros agendamentos dos dois funis.</p>
           </div>
+          <span class="config-owner"><i class="ti ti-user-cog"></i>Responsável · Hernanndes</span>
         </div>
         <div class="config-grid">
           <div class="config-item"><span class="config-item__label">Duração</span><span class="config-item__value">30 minutos cravados</span></div>
@@ -465,7 +473,7 @@
           <p class="funnel-goal">Ele já confirmou presença. O objetivo é só fazer clicar no Calendly e reservar o horário.</p>
 
           <div>
-            <div class="day-chip">Disparo 1 · <b>Segunda, 24/08</b></div>
+            <div class="day-chip">Disparo 1 · <b>Segunda, 17/08</b></div>
             <div class="bubble">Fala [Nome], tudo bem? Vi que você confirmou presença na FB 2026! Preparamos um espaço VIP no estande exclusivo para quem já é de casa. Liberei alguns horários na minha agenda para tomarmos um café.</div>
           </div>
 
@@ -483,8 +491,8 @@
           <p class="funnel-goal">Primeiro descobrir se ele vai. Se sim, joga para o agendamento; se não, encerra bem.</p>
 
           <div>
-            <div class="day-chip">Sondagem · <b>Segunda, 24/08</b></div>
-            <div class="bubble">Fala [Nome do Cliente], tudo bem? Aqui é o [Nome do CS] da WeHelp! Nós estaremos com um estande super bacana na FB 2026 essa semana, quinta a sábado. Você vai estar por lá esse ano?</div>
+            <div class="day-chip">Sondagem · <b>Segunda, 17/08</b></div>
+            <div class="bubble">Fala [Nome do Cliente], tudo bem? Aqui é o [Nome do CS] da WeHelp! Nós estaremos com um estande super bacana na FB 2026 semana que vem, quinta a sábado. Você vai estar por lá esse ano?</div>
           </div>
 
           <div>
@@ -500,7 +508,7 @@
           </div>
 
           <div>
-            <div class="day-chip">Repescagem · <b>Quarta, 26/08</b> · se não respondeu</div>
+            <div class="day-chip">Repescagem · <b>Quarta, 19/08</b> · se não respondeu</div>
             <div class="bubble">Opa [Nome], passando só pra confirmar se você vai conseguir dar um pulo na FB 2026! Se for, me avisa aqui pra eu guardar o seu lugar (e o seu brinde VIP! hehe). Abs!</div>
           </div>
         </div>
