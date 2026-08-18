@@ -1,8 +1,322 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="refresh" content="0;url=https://calendly.com/hernanndes-fzsa/wehelp-na-fb-2026-consultoria-demonstracao">
-<script>window.location.replace("https://calendly.com/hernanndes-fzsa/wehelp-na-fb-2026-consultoria-demonstracao");</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Agende sua conversa | WeHelp na Fitness Brasil 2026</title>
+<link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root{
+    --blue: #1B6EF3;
+    --blue-hover: #1457c8;
+    --blue-tint: #e8f0ff;
+    --navy: #0a1128;
+    --navy2: #101c42;
+    --ink: #1a2036;
+    --body: #4a5568;
+    --muted: #8593ab;
+    --line: #e2e8f0;
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --good: #0e9f6e;
+    --good-tint: #e6f7f0;
+    --bad: #e1473c;
+    --bad-tint: #fdeceb;
+    --disp: 'Figtree', sans-serif;
+  }
+  body{
+    margin:0; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:640px; margin:0 auto; padding: 0 20px 60px; }
+  .hero{
+    padding: 32px 0 36px; text-align:center;
+    background: radial-gradient(600px 400px at 50% -20%, rgba(27,110,243,.45), transparent 65%), var(--navy);
+    margin-bottom: 28px;
+  }
+  .hero img{ height:28px; margin-bottom:18px; }
+  .hero h1{
+    font-family: var(--disp); font-weight:900; color:#fff; margin:0 0 10px;
+    font-size: clamp(22px, 5.5vw, 30px); line-height:1.2; padding: 0 16px;
+  }
+  .hero p{ color:#b4c0e0; font-size:14.5px; margin:0; padding: 0 20px; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700;
+    letter-spacing:1.2px; text-transform:uppercase; color:#fff; background:rgba(255,255,255,.12);
+    padding:6px 14px; border-radius:50px; margin-bottom:16px;
+  }
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    padding:22px; margin-bottom:16px;
+  }
+  .card h2{ font-family:var(--disp); font-size:16px; font-weight:800; margin:0 0 14px; display:flex; align-items:center; gap:8px; }
+  .card h2 i{ color:var(--blue); }
+
+  .day-tabs{ display:flex; gap:8px; margin-bottom:16px; }
+  .day-tab{
+    flex:1; text-align:center; padding:12px 6px; border-radius:12px; border:1.5px solid var(--line);
+    background:#fff; cursor:pointer; font-family:var(--disp); font-weight:700; font-size:13px; color:var(--body);
+    transition: all .15s;
+  }
+  .day-tab small{ display:block; font-weight:600; font-size:10.5px; color:var(--muted); margin-top:2px; text-transform:uppercase; }
+  .day-tab.active{ border-color:var(--blue); background:var(--blue-tint); color:var(--blue-hover); }
+  .day-tab.active small{ color:var(--blue-hover); }
+
+  .slots{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .slot{
+    padding:11px 4px; border-radius:10px; border:1.5px solid var(--line); background:#fff;
+    text-align:center; font-weight:700; font-size:13.5px; cursor:pointer; color:var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .slot.selected{ border-color:var(--blue); background:var(--blue); color:#fff; }
+  .slot.full{ background:var(--bg); color:var(--muted); border-color:var(--line); cursor:not-allowed; text-decoration:line-through; }
+  .slot.blocked{ display:none; }
+  .empty-note{ color:var(--muted); font-size:13px; text-align:center; padding:8px 0; grid-column: 1/-1; }
+
+  label{ display:block; font-size:13px; font-weight:700; color:var(--ink); margin: 14px 0 6px; }
+  label:first-child{ margin-top:0; }
+  input[type=text], input[type=tel]{
+    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:15px; font-family:'DM Sans',sans-serif; color:var(--ink); background:#fff;
+  }
+  input:focus{ outline:none; border-color:var(--blue); }
+
+  .radio-group{ display:flex; flex-direction:column; gap:8px; }
+  .radio-opt{
+    display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border-radius:10px;
+    border:1.5px solid var(--line); cursor:pointer; font-size:13.5px;
+  }
+  .radio-opt.checked{ border-color:var(--blue); background:var(--blue-tint); }
+  .radio-opt input{ margin-top:2px; }
+  .radio-opt b{ display:block; font-size:14px; }
+  .radio-opt span{ color:var(--body); font-size:12.5px; }
+
+  .btn{
+    width:100%; padding:15px; border-radius:12px; border:none; background:var(--blue); color:#fff;
+    font-family:var(--disp); font-weight:800; font-size:15px; cursor:pointer; margin-top:20px;
+  }
+  .btn:disabled{ background:var(--muted); cursor:not-allowed; }
+  .btn:not(:disabled):hover{ background:var(--blue-hover); }
+
+  .msg{ font-size:13px; padding:10px 14px; border-radius:10px; margin-top:12px; display:none; }
+  .msg.show{ display:block; }
+  .msg.error{ background:var(--bad-tint); color:var(--bad); }
+
+  .success{ text-align:center; padding: 40px 20px; }
+  .success i{ font-size:52px; color:var(--good); }
+  .success h2{ font-family:var(--disp); font-size:22px; margin:16px 0 8px; }
+  .success p{ color:var(--body); font-size:14.5px; }
+  .hidden{ display:none !important; }
+</style>
 </head>
+<body>
+
+  <div class="hero">
+    <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+    <span class="eyebrow"><i class="ti ti-map-pin"></i> Estande WeHelp · Fitness Brasil 2026</span>
+    <h1>Agende sua conversa com a gente</h1>
+    <p>30 minutos com Eric ou Pietro — revisão gratuita da sua conta ou apresentação do novo Módulo de Retenção.</p>
+  </div>
+
+  <div class="wrap">
+
+    <div id="bookingFlow">
+      <div class="card">
+        <h2><i class="ti ti-calendar"></i> Escolha o dia</h2>
+        <div class="day-tabs" id="dayTabs"></div>
+        <div class="slots" id="slots"></div>
+      </div>
+
+      <div class="card" id="formCard" style="display:none;">
+        <h2><i class="ti ti-user"></i> Seus dados</h2>
+
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" placeholder="Seu nome" />
+
+        <label for="whatsapp">WhatsApp</label>
+        <input type="tel" id="whatsapp" placeholder="(11) 91234-5678" />
+
+        <label for="academia">Nome da academia</label>
+        <input type="text" id="academia" placeholder="Ex: Academia Fitplace" />
+
+        <label>O que você quer priorizar na conversa?</label>
+        <div class="radio-group" id="interesseGroup">
+          <label class="radio-opt" data-value="Consultoria sobre a Plataforma">
+            <input type="radio" name="interesse" value="Consultoria sobre a Plataforma" />
+            <div><b>Consultoria sobre a Plataforma</b><span>Revisão do que já uso e como melhorar</span></div>
+          </label>
+          <label class="radio-opt" data-value="Conhecer o Novo Módulo de Retenção">
+            <input type="radio" name="interesse" value="Conhecer o Novo Módulo de Retenção" />
+            <div><b>Conhecer o Novo Módulo de Retenção</b><span>Descobrir quem vai cancelar antes do aluno ir embora</span></div>
+          </label>
+        </div>
+
+        <div class="msg error" id="errorMsg"></div>
+        <button class="btn" id="submitBtn">Confirmar agendamento</button>
+      </div>
+    </div>
+
+    <div class="success hidden" id="successCard">
+      <i class="ti ti-circle-check-filled"></i>
+      <h2>Agendamento confirmado!</h2>
+      <p id="successText"></p>
+    </div>
+
+  </div>
+
+<script>
+  const DAYS = [
+    { date: '2026-08-27', label: 'Qui', num: '27/08' },
+    { date: '2026-08-28', label: 'Sex', num: '28/08' },
+    { date: '2026-08-29', label: 'Sáb', num: '29/08' },
+  ];
+  const START_HOUR = 10, END_HOUR = 19; // horário comercial da feira — ajuste aqui se mudar
+  const MAX_PER_SLOT = 2; // Eric + Pietro
+  const BLOCKED = {
+    '2026-08-28': ['17:00', '17:30', '18:00', '18:30'], // Plenária do Selo de Excelência
+  };
+
+  function buildSlots() {
+    const slots = [];
+    for (let h = START_HOUR; h < END_HOUR; h++) {
+      slots.push(`${String(h).padStart(2,'0')}:00`);
+      slots.push(`${String(h).padStart(2,'0')}:30`);
+    }
+    return slots;
+  }
+  const ALL_SLOTS = buildSlots();
+
+  let selectedDate = DAYS[0].date;
+  let selectedTime = null;
+  let counts = {};
+
+  const dayTabsEl = document.getElementById('dayTabs');
+  const slotsEl = document.getElementById('slots');
+  const formCard = document.getElementById('formCard');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  function renderDayTabs() {
+    dayTabsEl.innerHTML = DAYS.map(d => `
+      <div class="day-tab ${d.date === selectedDate ? 'active' : ''}" data-date="${d.date}">
+        ${d.label}<small>${d.num}</small>
+      </div>
+    `).join('');
+    dayTabsEl.querySelectorAll('.day-tab').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedDate = el.dataset.date;
+        selectedTime = null;
+        formCard.style.display = 'none';
+        renderDayTabs();
+        loadSlots();
+      });
+    });
+  }
+
+  function renderSlots() {
+    const blocked = BLOCKED[selectedDate] || [];
+    const visible = ALL_SLOTS.filter(t => !blocked.includes(t));
+    if (visible.length === 0) {
+      slotsEl.innerHTML = '<div class="empty-note">Sem horários neste dia.</div>';
+      return;
+    }
+    slotsEl.innerHTML = visible.map(t => {
+      const taken = counts[t] || 0;
+      const isFull = taken >= MAX_PER_SLOT;
+      const isSelected = t === selectedTime;
+      return `<div class="slot ${isFull ? 'full' : ''} ${isSelected ? 'selected' : ''}" data-time="${t}">${t}</div>`;
+    }).join('');
+    slotsEl.querySelectorAll('.slot:not(.full)').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedTime = el.dataset.time;
+        renderSlots();
+        formCard.style.display = 'block';
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  }
+
+  async function loadSlots() {
+    slotsEl.innerHTML = '<div class="empty-note">Carregando horários...</div>';
+    try {
+      const res = await fetch(`/api/agenda-lead?date=${selectedDate}`);
+      const data = await res.json();
+      counts = data.counts || {};
+    } catch (e) {
+      counts = {};
+    }
+    renderSlots();
+  }
+
+  document.querySelectorAll('.radio-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('checked'));
+      opt.classList.add('checked');
+      opt.querySelector('input').checked = true;
+    });
+  });
+
+  submitBtn.addEventListener('click', async () => {
+    errorMsg.classList.remove('show');
+
+    const nome = document.getElementById('nome').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const academia = document.getElementById('academia').value.trim();
+    const interesseInput = document.querySelector('input[name=interesse]:checked');
+
+    if (!nome || !whatsapp || !academia || !interesseInput || !selectedTime) {
+      errorMsg.textContent = 'Preenche todos os campos e escolhe um horário.';
+      errorMsg.classList.add('show');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Confirmando...';
+
+    try {
+      const res = await fetch('/api/agenda-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: selectedDate, time: selectedTime,
+          nome, whatsapp, academia,
+          interesse: interesseInput.value,
+        }),
+      });
+      const data = await res.json();
+
+      if (res.status === 409) {
+        errorMsg.textContent = 'Esse horário acabou de lotar. Escolhe outro.';
+        errorMsg.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirmar agendamento';
+        loadSlots();
+        return;
+      }
+      if (!res.ok) throw new Error(data.error || 'Falha ao confirmar');
+
+      const dayLabel = DAYS.find(d => d.date === selectedDate);
+      document.getElementById('bookingFlow').classList.add('hidden');
+      document.getElementById('successCard').classList.remove('hidden');
+      document.getElementById('successText').textContent =
+        `Te esperamos ${dayLabel.label.toLowerCase()}, ${dayLabel.num}, às ${selectedTime} no estande WeHelp.`;
+
+    } catch (e) {
+      errorMsg.textContent = 'Deu erro ao confirmar. Tenta de novo ou chama no WhatsApp.';
+      errorMsg.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirmar agendamento';
+    }
+  });
+
+  renderDayTabs();
+  loadSlots();
+</script>
+</body>
 </html>
