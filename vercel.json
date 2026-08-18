@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/calendly-sync",
+      "schedule": "*/5 * * * *"
+    }
+  ],
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
