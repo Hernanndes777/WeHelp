@@ -253,6 +253,48 @@
     .banner h2{ color: #fff; font-size: clamp(19px, 2.4vw, 24px); margin: 16px 0 12px; }
     .banner p{ margin: 0; font-size: 14.5px; color: #d9e6ff; line-height: 1.7; }
 
+    /* Stage list */
+    .stage-list{ display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+    .stage-item{
+      display: grid; grid-template-columns: 38px 1fr; gap: 14px; align-items: start;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .stage-item.terminal{ background: #fafafa; }
+    .stage-num{
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--disp); font-weight: 800; font-size: 13px;
+      background: var(--blue-tint); color: var(--blue-hover);
+    }
+    .stage-item.terminal .stage-num{ background: #f0f0f3; color: var(--muted); }
+    .stage-item.won .stage-num{ background: var(--blue-tint); color: var(--blue-hover); }
+    .stage-item.kept .stage-num{ background: var(--good-tint); color: var(--good); }
+    .stage-item.noshow .stage-num, .stage-item.lost .stage-num{ background: var(--bad-tint); color: var(--bad); }
+    .stage-body{ display: flex; flex-direction: column; gap: 3px; }
+    .stage-name{ font-family: var(--disp); font-size: 14.5px; font-weight: 800; color: var(--navy); }
+    .stage-who{
+      display: inline-flex; align-items: center; gap: 4px; margin-bottom: 2px;
+      font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .04em;
+      color: var(--muted);
+    }
+    .stage-desc{ font-size: 13.5px; color: var(--body); line-height: 1.6; }
+    .stage-action{
+      display: inline-flex; align-items: center; gap: 5px; margin-top: 6px;
+      font-size: 12px; font-weight: 600; color: var(--blue-hover);
+      background: var(--blue-tint); border-radius: 50px; padding: 4px 10px;
+    }
+    .stage-action.red{ color: var(--bad); background: var(--bad-tint); }
+    .stage-action.green{ color: var(--good); background: var(--good-tint); }
+    .stage-divider{
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--muted); margin: 8px 0 2px;
+    }
+    .stage-divider::before, .stage-divider::after{
+      content: ''; flex: 1; height: 1px; background: var(--line);
+    }
+
     /* Footer */
     footer{ border-top: 1px solid var(--line); padding-top: 22px; }
     footer .container{
@@ -435,6 +477,116 @@
         </div>
         <figcaption>Etapas 1–6 formam o fluxo ativo — nenhuma etapa pode ter mais cards que a anterior. Base Geral passa pela Sondagem (1) antes de agendar; Lista VIP entra direto no Ticket VIP Gerado (3). A partir do Em Atendimento (5) o caminho se abre nos desfechos terminais: Fechado Ganho (7), Mantido (8), No-Show (9) e Perdido (10).</figcaption>
       </figure>
+
+      <div class="stage-list">
+
+        <div class="stage-divider">Fluxo ativo · etapas 1–6</div>
+
+        <div class="stage-item">
+          <div class="stage-num">1</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-users"></i>Apenas Base Geral</span>
+            <span class="stage-name">Sondagem</span>
+            <span class="stage-desc">Primeira mensagem enviada para clientes da base que não sabemos se vão à feira. O CS pergunta diretamente se o cliente vai comparecer. O card fica aqui até o cliente responder.</span>
+            <span class="stage-action"><i class="ti ti-arrow-right"></i>Se responder "não vou" → move para etapa 10 · Perdido</span>
+            <span class="stage-action"><i class="ti ti-arrow-right"></i>Se responder "vou" ou "tô pensando" → move para etapa 2</span>
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-num">2</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-users"></i>Apenas Base Geral</span>
+            <span class="stage-name">Respondeu: VAI</span>
+            <span class="stage-desc">Cliente confirmou que vai à feira mas ainda não agendou. O CS envia o link do Calendly na sequência. O card fica aqui até o agendamento ser concluído.</span>
+            <span class="stage-action"><i class="ti ti-arrow-right"></i>Assim que agendar → move para etapa 3 · Ticket VIP Gerado</span>
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-num">3</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-star"></i>Base Geral + Lista VIP</span>
+            <span class="stage-name">Ticket VIP Gerado</span>
+            <span class="stage-desc">Agendamento feito via Calendly — data, horário e atendente (Eric ou Pietro) estão confirmados. <strong>A Lista VIP entra direto nessa etapa</strong>, sem passar pela Sondagem. O card tem a tag de interesse (Consultoria ou Upsell) marcada conforme o cliente escolheu no Calendly.</span>
+            <span class="stage-action"><i class="ti ti-arrow-right"></i>Na véspera do atendimento → move para etapa 4 · Confirmado</span>
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-num">4</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-bell"></i>Todos os agendados</span>
+            <span class="stage-name">Confirmado</span>
+            <span class="stage-desc">Lembrete enviado na véspera do atendimento. Cliente está ciente do horário e esperado no estande. O CS deve abrir a conta do cliente no WeHelp antes da reunião para fazer a lição de casa.</span>
+            <span class="stage-action"><i class="ti ti-arrow-right"></i>Cliente apareceu → move para etapa 5 · Em Atendimento</span>
+            <span class="stage-action red"><i class="ti ti-arrow-right"></i>Não apareceu → move para etapa 9 · No-Show</span>
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-num">5</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-armchair"></i>No estande</span>
+            <span class="stage-name">Em Atendimento</span>
+            <span class="stage-desc">Cliente está sentado na mesa do estande. Reunião em andamento. O CS aplica a regra 80/20 — deixa o cliente falar, ouve as dores, e conecta com o produto de forma natural.</span>
+            <span class="stage-action"><i class="ti ti-arrow-right"></i>Se houver oportunidade de demo → move para etapa 6 · Apresentação de Upsell</span>
+            <span class="stage-action green"><i class="ti ti-arrow-right"></i>Se foi só consultoria e o relacionamento foi bem → move direto para etapa 8 · Mantido</span>
+          </div>
+        </div>
+
+        <div class="stage-item">
+          <div class="stage-num">6</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-device-tablet"></i>Demo no tablet</span>
+            <span class="stage-name">Apresentação de Upsell</span>
+            <span class="stage-desc">CS mostrou ao vivo o Módulo de Retenção Preditiva no tablet. Cliente está avaliando a proposta. Não sair da mesa sem definir próximo passo — se não fechou ali, agenda a call de fechamento na semana seguinte antes de o cliente levantar.</span>
+            <span class="stage-action"><i class="ti ti-arrow-right"></i>Fechou na hora → move para etapa 7 · Fechado Ganho</span>
+            <span class="stage-action green"><i class="ti ti-arrow-right"></i>Não fechou agora (call agendada) → move para etapa 8 · Mantido</span>
+          </div>
+        </div>
+
+        <div class="stage-divider">Desfechos terminais · etapas 7–10</div>
+
+        <div class="stage-item won">
+          <div class="stage-num">7</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-trophy"></i>Resultado positivo</span>
+            <span class="stage-name">Fechado Ganho</span>
+            <span class="stage-desc">Cliente assinou o módulo. Anotar no card: qual módulo, valor, próximo passo de implantação. Marcar o negócio como ganho no Datacrazy imediatamente após a assinatura.</span>
+          </div>
+        </div>
+
+        <div class="stage-item kept">
+          <div class="stage-num">8</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-heart"></i>Resultado positivo</span>
+            <span class="stage-name">Mantido</span>
+            <span class="stage-desc">Atendimento encerrado sem upsell imediato — pode ter sido só consultoria ou o cliente ficou de pensar. O relacionamento foi reforçado. Anotar no card a dor principal ouvida e o próximo passo combinado (ligação, proposta, etc.).</span>
+          </div>
+        </div>
+
+        <div class="stage-item noshow">
+          <div class="stage-num">9</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-clock-off"></i>Exceção</span>
+            <span class="stage-name">No-Show</span>
+            <span class="stage-desc">Cliente não apareceu no horário agendado. CS tenta contato via WhatsApp assim que perceber a ausência. Se a feira ainda tem dias restantes, tenta reagendar para o próximo dia e move o card de volta para etapa 4 · Confirmado.</span>
+            <span class="stage-action red"><i class="ti ti-arrow-left"></i>Se reagendou → volta para etapa 4 · Confirmado</span>
+          </div>
+        </div>
+
+        <div class="stage-item lost">
+          <div class="stage-num">10</div>
+          <div class="stage-body">
+            <span class="stage-who"><i class="ti ti-x"></i>Exceção</span>
+            <span class="stage-name">Perdido</span>
+            <span class="stage-desc">Cliente confirmou que não vai à feira (Base Geral que respondeu "não vou"). Encerrar com gentileza e marcar no card para abordar com convite online pós-feira.</span>
+          </div>
+        </div>
+
+      </div>
+
     </section>
 
     <section id="funis">
