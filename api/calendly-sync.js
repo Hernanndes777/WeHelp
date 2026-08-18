@@ -5,7 +5,7 @@
 //   DC_TOKEN        — Chave de API do DataCrazy (dc_eyJ...)
 //   CRON_SECRET     — Qualquer string aleatória para proteger a rota
 
-const CALENDLY_ORG = "https://api.calendly.com/organizations/684ebd9f-5f2a-4bf2-90c8-e94ec6a26e30";
+const CALENDLY_ORG = "https://api.calendly.com/organizations/21625ea6-0ed2-4ba5-9040-ec6e48d255a6";
 const DC_BASE = "https://api.datacrazy.io/v1/crm/api/crm";
 const TAG_AGENDADO = { id: "fd7363a5-5b78-4e54-b6c9-bc0617acef8d" }; // Agendado_Feira
 const LOOKBACK_MS = 10 * 60 * 1000; // 10 minutos (cron roda a cada 5 → janela dupla)
