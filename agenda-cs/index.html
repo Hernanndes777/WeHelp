@@ -121,7 +121,7 @@
     <img src="../shared/logo-wehelp.png" alt="WeHelp" />
     <span class="eyebrow"><i class="ti ti-map-pin"></i> Estande WeHelp · Fitness Brasil 2026</span>
     <h1>Agende sua conversa com a gente</h1>
-    <p>30 minutos com Eric ou Pietro — revisão gratuita da sua conta ou apresentação do novo Módulo de Retenção.</p>
+    <p>Passa no estande para um bate-papo rápido de 30 minutos com nossos especialistas.</p>
   </div>
 
   <div class="wrap">
@@ -243,12 +243,19 @@
   }
 
   async function loadSlots() {
-    slotsEl.innerHTML = '<div class="empty-note">Carregando horários...</div>';
+    // Mostra os horários na hora, assumindo disponíveis — atualiza em segundo plano
+    // assim que a contagem real chegar (evita tela travada em "Carregando...").
+    counts = {};
+    renderSlots();
+
+    const requestDate = selectedDate;
     try {
-      const res = await fetch(`/api/agenda-lead?date=${selectedDate}`);
+      const res = await fetch(`/api/agenda-lead?date=${requestDate}`);
       const data = await res.json();
+      if (requestDate !== selectedDate) return; // usuário já trocou de dia
       counts = data.counts || {};
     } catch (e) {
+      if (requestDate !== selectedDate) return;
       counts = {};
     }
     renderSlots();
