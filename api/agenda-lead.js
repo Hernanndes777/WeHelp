@@ -13,6 +13,10 @@
 const DC_BASE = "https://api.datacrazy.io/v1/crm/api/crm";
 const TAG_AGENDADO = { id: "fd7363a5-5b78-4e54-b6c9-bc0617acef8d" }; // Agendado_Feira
 const MAX_PER_SLOT = 2;
+const VALID_DATES = ['2026-08-27', '2026-08-28', '2026-08-29'];
+const BLOCKED = {
+  '2026-08-28': ['17:00', '17:30', '18:00', '18:30'], // Plenária do Selo de Excelência
+};
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -44,6 +48,14 @@ export default async function handler(req, res) {
 
     if (!date || !time || !nome || !whatsapp || !academia || !interesse) {
       return res.status(400).json({ error: 'Campos obrigatórios ausentes' });
+    }
+
+    if (!VALID_DATES.includes(date)) {
+      return res.status(400).json({ error: 'Data fora do período da feira' });
+    }
+
+    if ((BLOCKED[date] || []).includes(time)) {
+      return res.status(409).json({ error: 'Horário bloqueado' });
     }
 
     try {
