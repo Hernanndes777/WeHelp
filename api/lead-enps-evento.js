@@ -1,11 +1,11 @@
 // api/lead-enps-evento.js — Função serverless (Vercel) da LP /enps-evento
-// Reaproveitada pro evento Conarh 2026: cria/atualiza contato no
-// ActiveCampaign, aplica a tag "Evento - Conarh 2026" (id 82) e cria
-// um Deal no pipeline "LEADS" (id 4), etapa "REALIZAR CONTATO" (id 21)
-// — mesmo pipeline geral já usado por api/lead-diagnostico.js.
-// Segue o padrão de 00-base/padrao-captura-lead.md e as correções já
-// aprendidas nas outras functions: await em tudo (deal/CAPI/tag) antes
-// do retorno, e group/stage/contact do Deal como STRING.
+// Migrado do ActiveCampaign pro DataCrazy em 2026-08-18 (pedido do usuário: o
+// comercial precisa ver esses leads no DataCrazy). Leads caem no pipeline
+// "Leads" (grupo VENDAS, mesmo pipeline geral usado por /diagnostico) > etapa
+// "Realizar Contato", com a tag "Evento - Conarh 2026" (criada nessa data).
+// Mesmo contorno do bug confirmado de additionalFields da API pública do
+// DataCrazy — dado garantido via campo nativo "notes".
+// Segue o padrão de 00-base/padrao-captura-lead.md.
 
 import { createHash } from 'crypto';
 const sha256 = (v) => createHash('sha256').update(String(v).toLowerCase().trim()).digest('hex');
@@ -18,20 +18,20 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const AC_URL = process.env.AC_URL;
-  const AC_KEY = process.env.AC_KEY;
+  const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
+  const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
 
-  const DEAL_PIPELINE_ID = 4;    // Pipeline "LEADS" (pipeline geral do site)
-  const DEAL_STAGE_ID = 21;      // Etapa "REALIZAR CONTATO"
-  const DEAL_OWNER_ID = '6';     // Mesmo owner padrão usado nos outros deals dessa etapa
-  const FIELD_EMPRESA = 6;       // "Empresa" (já existia, reaproveitado)
-  const TAG_CONARH_2026 = 82;    // "Evento - Conarh 2026" (criada em 2026-08-08)
+  // IDs confirmados via MCP do DataCrazy em 2026-08-18
+  const PIPELINE_STAGE_ID = 'e9ae521e-13c6-4a68-a0f8-ef7447c8d7dc'; // Pipeline "Leads" > etapa "Realizar Contato"
+  const TAG_CONARH_2026 = 'bf006040-9bef-4fe3-bc0b-cbf1a2c3ef18';   // Tag "Evento - Conarh 2026"
+  const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';      // Caroline Bonini — mesmo padrão das outras LPs
+  const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';     // "Empresa"
 
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 
-  if (!AC_URL || !AC_KEY) {
-    return res.status(500).json({ error: 'Configuração ausente no servidor' });
+  if (!DATACRAZY_API_KEY) {
+    return res.status(500).json({ error: 'Configuração ausente no servidor (DATACRAZY_API_KEY)' });
   }
 
   try {
@@ -52,69 +52,67 @@ export default async function handler(req, res) {
     const phoneDigits = (Telefone || '').replace(/\D/g, '');
     const contactEmail = Email || `wp.${phoneDigits}@noemail.invalid`;
 
-    const headers = {
-      'Api-Token': AC_KEY,
+    const dcHeaders = {
+      'Authorization': `Bearer ${DATACRAZY_API_KEY}`,
       'Content-Type': 'application/json',
     };
 
-    // 1. Cria ou atualiza o contato
-    const fieldValues = [];
-    if (Empresa) fieldValues.push({ field: String(FIELD_EMPRESA), value: Empresa });
+    // 1. Cria o lead no DataCrazy (nome/email/telefone/empresa/tag)
+    // [BUG DataCrazy confirmado em 2026-08-11, ver api/lead-diagnostico.js pro
+    // diagnóstico completo] additionalFields não persiste via API pública —
+    // contorno: manda tudo formatado dentro de "notes" (campo nativo, texto
+    // livre, confirmado funcionando).
+    const notesLines = [];
+    if (Empresa) notesLines.push(`Empresa: ${Empresa}`);
+    if (utm_source) notesLines.push(`UTM Source: ${utm_source}`);
+    if (utm_campaign) notesLines.push(`UTM Campaign: ${utm_campaign}`);
+    if (utm_medium) notesLines.push(`UTM Medium: ${utm_medium}`);
 
-    const syncRes = await fetch(`${AC_URL}/api/3/contact/sync`, {
+    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
       method: 'POST',
-      headers,
+      headers: dcHeaders,
       body: JSON.stringify({
-        contact: {
-          email: contactEmail,
-          firstName: Nome_Completo || '',
-          phone: Telefone || '',
-          fieldValues,
-        },
+        name: Nome_Completo || 'Lead sem nome',
+        email: contactEmail,
+        phone: Telefone || '',
+        company: Empresa || '',
+        source: 'Evento Conarh 2026 (Site)',
+        notes: notesLines.join('\n'),
+        tags: [{ id: TAG_CONARH_2026 }],
+        attendant: { id: ATTENDANT_ID },
       }),
     });
 
-    const syncData = await syncRes.json();
+    const leadData = await leadRes.json();
 
-    if (!syncRes.ok || !syncData.contact) {
-      console.error('Erro sync:', syncData);
-      return res.status(502).json({ error: 'Falha ao criar contato', details: syncData });
+    if (!leadRes.ok || !leadData.id) {
+      console.error('Erro ao criar lead no DataCrazy:', leadData);
+      return res.status(502).json({ error: 'Falha ao criar lead', details: leadData });
     }
 
-    const contactId = syncData.contact.id;
+    const leadId = leadData.id;
 
-    // 2. Aplica a tag "Evento - Conarh 2026"
-    const tagPromise = fetch(`${AC_URL}/api/3/contactTags`, {
+    // 2. Tenta aplicar o campo adicional "Empresa" (fire-and-forget — hoje não
+    // persiste pela API pública, mantido pro dia que o DataCrazy corrigir o bug)
+    const fieldsPromise = Empresa ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
+      method: 'PATCH',
+      headers: dcHeaders,
+      body: JSON.stringify({ additionalFields: [{ id: FIELD_EMPRESA, value: Empresa }] }),
+    }).then(async (r) => {
+      if (!r.ok) console.error('Erro ao aplicar additionalFields no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
+
+    // 3. Cria o negócio no pipeline "Leads", etapa "Realizar Contato"
+    const businessPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
       method: 'POST',
-      headers,
+      headers: dcHeaders,
       body: JSON.stringify({
-        contactTag: { contact: String(contactId), tag: String(TAG_CONARH_2026) },
+        leadId,
+        stageId: PIPELINE_STAGE_ID,
       }),
     }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao aplicar tag:', await r.text());
-    }).catch((err) => console.error('Erro ao aplicar tag:', err));
-
-    // 3. Cria o Deal no pipeline "LEADS", etapa "REALIZAR CONTATO"
-    const dealPromise = fetch(`${AC_URL}/api/3/deals`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        deal: {
-          title: `Conarh 2026 — ${Nome_Completo || 'Lead'}${Empresa ? ' (' + Empresa + ')' : ''}`,
-          currency: 'usd',
-          value: 0,
-          group: String(DEAL_PIPELINE_ID),
-          stage: String(DEAL_STAGE_ID),
-          contact: String(contactId),
-          owner: DEAL_OWNER_ID,
-          fields: [
-            { customFieldId: FIELD_EMPRESA, fieldValue: Empresa || '' },
-          ],
-        },
-      }),
-    }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao criar deal:', await r.text());
-    }).catch((err) => console.error('Erro ao criar deal:', err));
+      if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
 
     // 4. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
     let capiPromise = Promise.resolve();
@@ -151,11 +149,11 @@ export default async function handler(req, res) {
       }).catch((err) => console.error('CAPI error:', err));
     }
 
-    // Espera as três chamadas em paralelo — a Vercel encerra a function assim que a
-    // response sai, então sem esse await a tag/deal/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([tagPromise, dealPromise, capiPromise]);
+    // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
+    // response sai, então sem esse await o negócio/CAPI corriam risco de nunca completar.
+    await Promise.allSettled([fieldsPromise, businessPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, contactId });
+    return res.status(200).json({ success: true, leadId });
 
   } catch (err) {
     console.error('Erro geral:', err);
