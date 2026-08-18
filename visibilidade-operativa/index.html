@@ -607,7 +607,7 @@
       .footer { padding: 20px; }
     }
 
-    /* ─── MODAL FORMULÁRIO ─── */
+    /* ─── (modal removido — fluxo direto para WhatsApp) ─── */
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(10, 17, 40, 0.75);
@@ -809,7 +809,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </li>
         </ul>
 
-        <a href="https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88" target="_blank" rel="noopener" class="hero__cta" data-lead-btn>
+        <a href="https://chat.whatsapp.com/J1WohI7w5Dd5ulSKzHqMz3" target="_blank" rel="noopener" class="hero__cta" data-lead-btn>
           <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
           ENTRAR NO GRUPO DO WHATSAPP
         </a>
@@ -922,7 +922,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
 
       <div class="cta-block">
-        <a href="https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88" target="_blank" rel="noopener" class="cta-block__btn" data-lead-btn>
+        <a href="https://chat.whatsapp.com/J1WohI7w5Dd5ulSKzHqMz3" target="_blank" rel="noopener" class="cta-block__btn" data-lead-btn>
           <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
           ENTRAR NO GRUPO DO WHATSAPP
         </a>
@@ -985,7 +985,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section class="pilares" style="padding-bottom: 64px;">
     <div class="pilares__inner">
       <div class="cta-block">
-        <a href="https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88" target="_blank" rel="noopener" class="cta-block__btn" data-lead-btn>
+        <a href="https://chat.whatsapp.com/J1WohI7w5Dd5ulSKzHqMz3" target="_blank" rel="noopener" class="cta-block__btn" data-lead-btn>
           <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
           ENTRAR NO GRUPO DO WHATSAPP
         </a>
@@ -1002,273 +1002,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>© 2026 WeHelp · Todos os direitos reservados</p>
   </footer>
 
-  <!-- MODAL DE INSCRIÇÃO -->
-  <div class="modal-overlay" id="leadModal">
-    <div class="modal">
-      <button class="modal__close" id="modalClose" aria-label="Fechar">✕</button>
-
-      <div class="modal__error" id="modalError"></div>
-
-      <form id="leadForm" novalidate>
-        <div class="modal__field">
-          <input type="text" name="nome" class="modal__input" placeholder="* Nome completo" required />
-        </div>
-        <div class="modal__field">
-          <div class="modal__phone-row">
-            <div class="modal__ddi-wrap">
-              <select class="modal__ddi-select" id="ddiSelect" aria-label="Código do país">
-                <option value="+55" data-flag="🇧🇷" selected>🇧🇷 +55</option>
-                <option value="+351" data-flag="🇵🇹">🇵🇹 +351</option>
-                <option value="+1" data-flag="🇺🇸">🇺🇸 +1</option>
-                <option value="+44" data-flag="🇬🇧">🇬🇧 +44</option>
-                <option value="+34" data-flag="🇪🇸">🇪🇸 +34</option>
-                <option value="+54" data-flag="🇦🇷">🇦🇷 +54</option>
-                <option value="+56" data-flag="🇨🇱">🇨🇱 +56</option>
-                <option value="+57" data-flag="🇨🇴">🇨🇴 +57</option>
-                <option value="+52" data-flag="🇲🇽">🇲🇽 +52</option>
-                <option value="+595" data-flag="🇵🇾">🇵🇾 +595</option>
-                <option value="+598" data-flag="🇺🇾">🇺🇾 +598</option>
-                <option value="+39" data-flag="🇮🇹">🇮🇹 +39</option>
-                <option value="+33" data-flag="🇫🇷">🇫🇷 +33</option>
-                <option value="+49" data-flag="🇩🇪">🇩🇪 +49</option>
-              </select>
-            </div>
-            <input type="tel" name="whatsapp" class="modal__input" placeholder="* WhatsApp" required />
-          </div>
-          <p class="modal__field-error" id="phoneError">Digite um número válido com DDD</p>
-        </div>
-        <div class="modal__field">
-          <select name="clientes" class="modal__select" id="clientesSelect" required>
-            <option value="" disabled selected>* Quantos alunos ativos você tem atualmente?</option>
-            <option value="Até 150 clientes">Até 150 clientes</option>
-            <option value="De 151 a 300 clientes">De 151 a 300 clientes</option>
-            <option value="De 301 a 500 clientes">De 301 a 500 clientes</option>
-            <option value="De 501 a 1000 clientes">De 501 a 1000 clientes</option>
-            <option value="Acima de 1000 clientes">Acima de 1000 clientes</option>
-          </select>
-        </div>
-
-        <button type="submit" class="modal__submit" id="modalSubmit">
-          <span id="submitText">GARANTIR MINHA VAGA</span>
-          <span class="modal__spinner" id="submitSpinner"></span>
-        </button>
-
-        <p class="modal__redirect-info">
-          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
-          Ao confirmar, você será direcionado ao grupo de WhatsApp onde o evento vai acontecer.
-        </p>
-
-        <p class="modal__hint">
-          <i class="ti ti-lock" aria-hidden="true"></i>
-          Seus dados estão protegidos. Sem spam, garantido.
-        </p>
-      </form>
-    </div>
-  </div>
-
-  <!-- POPUP CONFIRMAÇÃO -->
-  <div class="confirm-popup" id="confirmPopup">
-    <div class="confirm-popup__box">
-      <div class="confirm-popup__icon">✅</div>
-      <h2 class="confirm-popup__title">Vaga garantida!</h2>
-      <p class="confirm-popup__sub">
-        Você será redirecionado para o grupo do WhatsApp em <span id="countdown">3</span> segundos...
-      </p>
-      <a href="#" class="confirm-popup__btn" id="confirmBtn">
-        <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
-        Entrar no grupo agora
-      </a>
-      <p class="confirm-popup__timer">Redirecionamento automático em <span id="countdown2">3</span>s</p>
-    </div>
-  </div>
-
   <script>
-    // ─── Config ───
-    const WHATSAPP_GROUP = 'https://chat.whatsapp.com/Dw43ekMeiU0Cwt9ekD6W88';
-    const PIXEL_ID = '1106401696374974';
+    const WHATSAPP_GROUP = 'https://chat.whatsapp.com/J1WohI7w5Dd5ulSKzHqMz3';
     const params = new URLSearchParams(location.search);
     const click_id = params.get('click_id');
-    const slug = params.get('slug') || click_id?.slice(0,8);
+    const slug = params.get('slug') || (click_id ? click_id.slice(0, 8) : '');
     const testEventCode = params.get('fbtest') || null;
 
-    function getCookie(name) {
-      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + name + '=([^;]*)'));
+    function getCookie(n) {
+      const m = document.cookie.match(new RegExp('(?:^|;\\s*)' + n + '=([^;]*)'));
       return m ? decodeURIComponent(m[1]) : '';
     }
 
-    const modal = document.getElementById('leadModal');
-    const form = document.getElementById('leadForm');
-    const errorBox = document.getElementById('modalError');
-    const submitBtn = document.getElementById('modalSubmit');
-    const submitText = document.getElementById('submitText');
-    const submitSpinner = document.getElementById('submitSpinner');
-    const clientesSelect = document.getElementById('clientesSelect');
-    const ddiSelect = document.getElementById('ddiSelect');
-    const phoneError = document.getElementById('phoneError');
-
-    function getEventId() {
-      let id = sessionStorage.getItem('lead_event_id');
-      if (!id) {
-        id = 'lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10);
-        sessionStorage.setItem('lead_event_id', id);
-      }
-      return id;
-    }
-
-    function isValidPhone(phone, ddi) {
-      const digits = phone.replace(/\D/g, '');
-      if (ddi === '+55') return digits.length === 10 || digits.length === 11;
-      return digits.length >= 6;
-    }
-
-    function showConfirmPopup() {
-      const popup = document.getElementById('confirmPopup');
-      const confirmBtn = document.getElementById('confirmBtn');
-      confirmBtn.href = WHATSAPP_GROUP;
-      popup.classList.add('active');
-
-      let secs = 3;
-      const c1 = document.getElementById('countdown');
-      const c2 = document.getElementById('countdown2');
-      const interval = setInterval(() => {
-        secs--;
-        if (c1) c1.textContent = secs;
-        if (c2) c2.textContent = secs;
-        if (secs <= 0) {
-          clearInterval(interval);
-          window.location.href = WHATSAPP_GROUP;
-        }
-      }, 1000);
-
-      confirmBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        clearInterval(interval);
-        window.location.href = WHATSAPP_GROUP;
-      });
-    }
-
     document.querySelectorAll('a[data-lead-btn]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
+      btn.href = WHATSAPP_GROUP;
+      btn.addEventListener('click', () => {
+        // Pixel Lead
         if (typeof fbq === 'function') {
           const extras = {};
           if (testEventCode) extras.test_event_code = testEventCode;
-          fbq('trackCustom', 'SubscribedButtonClick', {}, extras);
+          fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
+        }
+        // Link tracker
+        if (click_id) {
+          fetch('https://linktracker2-f3va.vercel.app/api/event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ click_id, slug, event_type: 'whatsapp' })
+          }).catch(() => {});
         }
       });
-    });
-
-    function closeModal() {
-      modal.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-    document.getElementById('modalClose').addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-
-    clientesSelect.addEventListener('change', () => {
-      clientesSelect.classList.toggle('filled', !!clientesSelect.value);
-    });
-
-    form.whatsapp.addEventListener('blur', () => {
-      const valid = !form.whatsapp.value || isValidPhone(form.whatsapp.value, ddiSelect.value);
-      form.whatsapp.classList.toggle('invalid', !valid);
-      phoneError.classList.toggle('show', !valid);
-    });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorBox.style.display = 'none';
-
-      const nome = form.nome.value.trim();
-      const phoneRaw = form.whatsapp.value.trim();
-      const ddi = ddiSelect.value;
-      const clientes = form.clientes.value;
-
-      let hasError = false;
-
-      if (!nome) {
-        form.nome.classList.add('invalid');
-        hasError = true;
-      } else {
-        form.nome.classList.remove('invalid');
-      }
-
-      if (!isValidPhone(phoneRaw, ddi)) {
-        form.whatsapp.classList.add('invalid');
-        phoneError.classList.add('show');
-        hasError = true;
-      } else {
-        form.whatsapp.classList.remove('invalid');
-        phoneError.classList.remove('show');
-      }
-
-      if (!clientes) {
-        clientesSelect.classList.add('invalid');
-        hasError = true;
-      } else {
-        clientesSelect.classList.remove('invalid');
-      }
-
-      if (hasError) return;
-
-      const phoneDigits = (ddi + phoneRaw.replace(/\D/g, '')).replace(/\D/g, '');
-      const generatedEmail = 'wp.' + phoneDigits + '@noemail.invalid';
-
-      const eventId = getEventId();
-
-      const data = {
-        nome: nome,
-        email: generatedEmail,
-        whatsapp: ddi + phoneRaw.replace(/\D/g, ''),
-        clientes: clientes,
-        utm_source: params.get('utm_source') || '',
-        utm_medium: params.get('utm_medium') || '',
-        utm_campaign: params.get('utm_campaign') || '',
-        utm_content: params.get('utm_content') || '',
-        utm_term: params.get('utm_term') || '',
-        utm_id: params.get('utm_id') || '',
-        fbclid: params.get('fbclid') || '',
-        gclid: params.get('gclid') || '',
-        referral_source: document.referrer || '',
-        url: location.href,
-        event_id: eventId,
-        fbc: getCookie('_fbc'),
-        fbp: getCookie('_fbp'),
-        test_event_code: testEventCode || '',
-      };
-
-      submitBtn.disabled = true;
-      submitText.textContent = 'ENVIANDO...';
-      submitSpinner.style.display = 'block';
-
-      closeModal();
-      showConfirmPopup();
-
-      if (typeof fbq === 'function') {
-        fbq('init', PIXEL_ID, {
-          em: generatedEmail,
-          ph: phoneDigits,
-        });
-        const pixelExtras = { eventID: eventId };
-        if (testEventCode) pixelExtras.test_event_code = testEventCode;
-        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
-      }
-
-      if (click_id) {
-        fetch('https://linktracker2-f3va.vercel.app/api/event', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ click_id, slug, event_type: 'whatsapp' })
-        }).catch(() => {});
-      }
-
-      fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }).catch(() => {});
     });
   </script>
 
