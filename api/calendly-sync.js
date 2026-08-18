@@ -27,11 +27,15 @@ export default async function handler(req, res) {
   const minCreatedAt = new Date(Date.now() - LOOKBACK_MS).toISOString();
 
   // 1. Busca eventos recentes no Calendly
+  // min_start_time = ontem para pegar eventos futuros recém-agendados
+  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
   const eventsUrl = new URL("https://api.calendly.com/scheduled_events");
   eventsUrl.searchParams.set("organization", CALENDLY_ORG);
-  eventsUrl.searchParams.set("sort", "created_at:desc");
-  eventsUrl.searchParams.set("count", "20");
+  eventsUrl.searchParams.set("sort", "start_time:asc");
+  eventsUrl.searchParams.set("count", "50");
   eventsUrl.searchParams.set("status", "active");
+  eventsUrl.searchParams.set("min_start_time", yesterday);
 
   const eventsRes = await fetch(eventsUrl.toString(), {
     headers: { Authorization: `Bearer ${CALENDLY_TOKEN}` },
