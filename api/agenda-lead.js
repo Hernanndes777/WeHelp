@@ -59,7 +59,9 @@ export default async function handler(req, res) {
     }
 
     try {
-      // 1. Revalida capacidade
+      // 1. Checagem rápida de capacidade (evita trabalho desnecessário) — a checagem
+      //    que realmente vale (contra corrida entre requisições simultâneas) acontece
+      //    dentro do Apps Script, protegida por lock, no passo 3.
       const counts = await getCountsForDate(date, AGENDA_SHEET_URL);
       if ((counts[time] || 0) >= MAX_PER_SLOT) {
         return res.status(409).json({ error: 'Horário lotado' });
@@ -77,12 +79,22 @@ export default async function handler(req, res) {
         leadId = matchedLead.id;
       }
 
-      // 3. Grava na planilha
-      await fetch(AGENDA_SHEET_URL, {
+      // 3. Grava na planilha — fonte de verdade final. O Apps Script usa um lock
+      //    pra garantir que 2 gravações simultâneas não furem o limite de vagas,
+      //    e só respondemos sucesso ao cliente se ele confirmar a escrita.
+      const sheetRes = await fetch(AGENDA_SHEET_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, time, nome, whatsapp, academia, interesse, leadStatus, leadId }),
       });
+      const sheetData = await sheetRes.json();
+
+      if (!sheetData.success) {
+        if (sheetData.error === 'full') {
+          return res.status(409).json({ error: 'Horário lotado' });
+        }
+        throw new Error(sheetData.error || 'Falha ao gravar na planilha');
+      }
 
       return res.status(200).json({ success: true, leadStatus });
     } catch (err) {
