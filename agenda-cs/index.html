@@ -36,24 +36,26 @@
   }
   .wrap{ max-width:640px; margin:0 auto; padding: 0 20px 60px; }
   .hero{
-    padding: 32px 0 36px; text-align:center;
+    padding: 40px 0 44px; text-align:center;
     background: radial-gradient(600px 400px at 50% -20%, rgba(27,110,243,.45), transparent 65%), var(--navy);
     margin-bottom: 28px;
   }
-  .hero img{ height:28px; margin-bottom:18px; }
+  .brand{
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:22px;
+  }
+  .brand img{ height:24px; width:auto; }
+  .brand span{
+    font-family:var(--disp); font-size:18px; font-weight:800; color:#fff; letter-spacing:-.01em;
+  }
   .hero h1{
     font-family: var(--disp); font-weight:900; color:#fff; margin:0 0 10px;
     font-size: clamp(22px, 5.5vw, 30px); line-height:1.2; padding: 0 16px;
   }
   .hero p{ color:#b4c0e0; font-size:14.5px; margin:0; padding: 0 20px; }
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700;
-    letter-spacing:1.2px; text-transform:uppercase; color:#fff; background:rgba(255,255,255,.12);
-    padding:6px 14px; border-radius:50px; margin-bottom:16px;
-  }
   .card{
     background:var(--surface); border:1px solid var(--line); border-radius:16px;
     padding:22px; margin-bottom:16px;
+    box-shadow: 0 1px 2px rgba(16,28,66,.04), 0 8px 24px -12px rgba(16,28,66,.08);
   }
   .card h2{ font-family:var(--disp); font-size:16px; font-weight:800; margin:0 0 14px; display:flex; align-items:center; gap:8px; }
   .card h2 i{ color:var(--blue); }
@@ -62,8 +64,10 @@
   .day-tab{
     flex:1; text-align:center; padding:12px 6px; border-radius:12px; border:1.5px solid var(--line);
     background:#fff; cursor:pointer; font-family:var(--disp); font-weight:700; font-size:13px; color:var(--body);
-    transition: all .15s;
+    transition: border-color .15s, background .15s, color .15s, transform .1s;
   }
+  .day-tab:hover{ border-color:#c7d3ea; }
+  .day-tab:active{ transform: scale(.98); }
   .day-tab small{ display:block; font-weight:600; font-size:10.5px; color:var(--muted); margin-top:2px; text-transform:uppercase; }
   .day-tab.active{ border-color:var(--blue); background:var(--blue-tint); color:var(--blue-hover); }
   .day-tab.active small{ color:var(--blue-hover); }
@@ -72,9 +76,12 @@
   .slot{
     padding:11px 4px; border-radius:10px; border:1.5px solid var(--line); background:#fff;
     text-align:center; font-weight:700; font-size:13.5px; cursor:pointer; color:var(--ink);
-    font-variant-numeric: tabular-nums;
+    font-variant-numeric: tabular-nums; transition: border-color .15s, background .15s, color .15s, transform .1s;
   }
+  .slot:not(.full):hover{ border-color:var(--blue); color:var(--blue-hover); }
+  .slot:not(.full):active{ transform: scale(.96); }
   .slot.selected{ border-color:var(--blue); background:var(--blue); color:#fff; }
+  .slot.selected:hover{ color:#fff; }
   .slot.full{ background:var(--bg); color:var(--muted); border-color:var(--line); cursor:not-allowed; text-decoration:line-through; }
   .slot.blocked{ display:none; }
   .empty-note{ color:var(--muted); font-size:13px; text-align:center; padding:8px 0; grid-column: 1/-1; }
@@ -85,13 +92,14 @@
     width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
     font-size:15px; font-family:'DM Sans',sans-serif; color:var(--ink); background:#fff;
   }
-  input:focus{ outline:none; border-color:var(--blue); }
+  input:focus{ outline:none; border-color:var(--blue); box-shadow: 0 0 0 3px var(--blue-tint); }
 
   .radio-group{ display:flex; flex-direction:column; gap:8px; }
   .radio-opt{
     display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border-radius:10px;
-    border:1.5px solid var(--line); cursor:pointer; font-size:13.5px;
+    border:1.5px solid var(--line); cursor:pointer; font-size:13.5px; transition: border-color .15s, background .15s;
   }
+  .radio-opt:hover{ border-color:#c7d3ea; }
   .radio-opt.checked{ border-color:var(--blue); background:var(--blue-tint); }
   .radio-opt input{ margin-top:2px; }
   .radio-opt b{ display:block; font-size:14px; }
@@ -100,9 +108,11 @@
   .btn{
     width:100%; padding:15px; border-radius:12px; border:none; background:var(--blue); color:#fff;
     font-family:var(--disp); font-weight:800; font-size:15px; cursor:pointer; margin-top:20px;
+    box-shadow: 0 6px 16px -6px rgba(27,110,243,.5); transition: background .15s, transform .1s;
   }
-  .btn:disabled{ background:var(--muted); cursor:not-allowed; }
+  .btn:disabled{ background:var(--muted); cursor:not-allowed; box-shadow:none; }
   .btn:not(:disabled):hover{ background:var(--blue-hover); }
+  .btn:not(:disabled):active{ transform: scale(.99); }
 
   .msg{ font-size:13px; padding:10px 14px; border-radius:10px; margin-top:12px; display:none; }
   .msg.show{ display:block; }
@@ -118,8 +128,7 @@
 <body>
 
   <div class="hero">
-    <img src="../shared/logo-wehelp.png" alt="WeHelp" />
-    <span class="eyebrow"><i class="ti ti-map-pin"></i> Estande WeHelp · Fitness Brasil 2026</span>
+    <div class="brand"><img src="../shared/logo-wehelp.png" alt="" /><span>WeHelp</span></div>
     <h1>Agende sua conversa com a gente</h1>
     <p>Passa no estande para um bate-papo rápido de 30 minutos com nossos especialistas.</p>
   </div>
