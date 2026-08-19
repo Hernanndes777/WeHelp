@@ -359,7 +359,7 @@
         <span class="section-badge">01</span>
         <h2>Pipeline no Datacrazy</h2>
       </div>
-      <p class="section-sub">Todo cliente entra no mesmo funil "Feira FB 2026" no Datacrazy, mas em <strong>pontos de entrada diferentes</strong>: os 29 da Lista VIP já estão em <em>Confirmado</em> (etapa 4) porque sabemos que vão à feira — o CS só precisa oferecer o slot no Calendly. Os 120 da Base Geral entram em <em>Sondagem</em> (etapa 1) porque ainda não sabemos se vão.</p>
+      <p class="section-sub">Todo cliente entra no mesmo funil "Feira FB 2026" no Datacrazy, mas em <strong>pontos de entrada diferentes</strong>: os 29 da Lista VIP já estão em <em>Confirmado</em> (etapa 4) porque sabemos que vão à feira — o CS só precisa oferecer o link de agendamento. Os 120 da Base Geral entram em <em>Sondagem</em> (etapa 1) porque ainda não sabemos se vão.</p>
 
       <div class="tag-grid" style="margin-bottom:26px;">
         <div class="tag-card"><code>Origem_ListaVIP</code><span>Já confirmou presença pelo site</span></div>
@@ -407,7 +407,7 @@
             <!-- node 3 -->
             <rect x="400" y="390" width="240" height="56" rx="10" fill="#fff" stroke="var(--line)" stroke-width="1.8"/>
             <text x="520" y="413" text-anchor="middle" font-family="Figtree,sans-serif" font-size="13.5" font-weight="700" fill="var(--navy)">3 · Ticket VIP Gerado</text>
-            <text x="520" y="431" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">agendado via Calendly</text>
+            <text x="520" y="431" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" fill="currentColor" opacity="0.7">agendado no site</text>
 
             <!-- node 4 -->
             <rect x="400" y="510" width="240" height="56" rx="10" fill="#fff" stroke="var(--line)" stroke-width="1.4"/>
@@ -495,7 +495,7 @@
           <div class="stage-body">
             <span class="stage-who"><i class="ti ti-users"></i>Apenas Base Geral</span>
             <span class="stage-name">Respondeu: VAI</span>
-            <span class="stage-desc">Cliente confirmou que vai à feira mas ainda não agendou. O CS envia o link do Calendly na sequência. O card fica aqui até o agendamento ser concluído.</span>
+            <span class="stage-desc">Cliente confirmou que vai à feira mas ainda não agendou. O CS envia o link de agendamento (lp.wehelpsoftware.com/agenda-cs) na sequência. O card fica aqui até o agendamento ser concluído.</span>
             <span class="stage-action"><i class="ti ti-arrow-right"></i>Assim que agendar → move para etapa 3 · Ticket VIP Gerado</span>
           </div>
         </div>
@@ -505,7 +505,8 @@
           <div class="stage-body">
             <span class="stage-who"><i class="ti ti-users"></i>Apenas Base Geral</span>
             <span class="stage-name">Ticket VIP Gerado</span>
-            <span class="stage-desc">Agendamento feito via Calendly — data, horário e atendente (Eric ou Pietro) estão confirmados. O card tem a tag de interesse (Consultoria ou Upsell) conforme o cliente escolheu no Calendly. O CS deve abrir a conta do cliente no WeHelp já nesse momento para estudar a situação antes da reunião.</span>
+            <span class="stage-desc">Agendamento feito no nosso site (não é mais Calendly) — data e horário confirmados, e o cliente já recebe a mensagem de confirmação automaticamente por WhatsApp assim que agenda. A tag <code>Agendado_Feira</code> cai sozinha no Datacrazy, cruzando pelo telefone com o lead que já existe no pipeline. O CS deve abrir a conta do cliente no WeHelp já nesse momento para estudar a situação antes da reunião.</span>
+            <span class="stage-action"><i class="ti ti-alert-triangle"></i>Se o lead aparecer como "Não encontrado no CRM" no painel (lp.wehelpsoftware.com/agenda-painel), é porque o telefone não bateu com nenhum cadastro — buscar manualmente ou cadastrar o lead antes da reunião</span>
             <span class="stage-action"><i class="ti ti-arrow-right"></i>Na véspera do atendimento → move para etapa 4 · Confirmado</span>
           </div>
         </div>
@@ -515,9 +516,9 @@
           <div class="stage-body">
             <span class="stage-who"><i class="ti ti-star"></i>Lista VIP entra aqui · Base Geral chega aqui após agendar</span>
             <span class="stage-name">Confirmado</span>
-            <span class="stage-desc"><strong>Os 29 da Lista VIP já estão nessa etapa</strong> — eles confirmaram presença na feira via formulário de inscrição. O CS deve enviar o link do Calendly (Funil A) para que agendem o horário no estande. Já para a Base Geral, o card chega aqui vindo da etapa 3 e o lembrete de véspera é enviado. Em ambos os casos: abrir a conta do cliente no WeHelp antes da reunião para fazer a lição de casa.</span>
-            <span class="stage-action"><i class="ti ti-send"></i><strong>VIP sem Calendly ainda:</strong> enviar mensagem do Funil A com o link de agendamento</span>
-            <span class="stage-action"><i class="ti ti-bell"></i><strong>VIP ou Base Geral com Calendly agendado:</strong> enviar lembrete na véspera do atendimento</span>
+            <span class="stage-desc"><strong>Os 29 da Lista VIP já estão nessa etapa</strong> — eles confirmaram presença na feira via formulário de inscrição. O CS deve enviar o link de agendamento (Funil A) para que agendem o horário no estande. Já para a Base Geral, o card chega aqui vindo da etapa 3 e o lembrete de véspera é enviado. Em ambos os casos: abrir a conta do cliente no WeHelp antes da reunião para fazer a lição de casa.</span>
+            <span class="stage-action"><i class="ti ti-send"></i><strong>VIP sem agendamento ainda:</strong> enviar mensagem do Funil A com o link lp.wehelpsoftware.com/agenda-cs</span>
+            <span class="stage-action"><i class="ti ti-bell"></i><strong>VIP ou Base Geral já agendado:</strong> enviar lembrete na véspera do atendimento</span>
             <span class="stage-action"><i class="ti ti-arrow-right"></i>Cliente apareceu → move para etapa 5 · Em Atendimento</span>
             <span class="stage-action red"><i class="ti ti-arrow-right"></i>Não apareceu → move para etapa 9 · No-Show</span>
           </div>
@@ -593,25 +594,26 @@
         <span class="section-badge">02</span>
         <h2>Os dois funis de abordagem</h2>
       </div>
-      <p class="section-sub">Mesmo objetivo final — levar o cliente até o Calendly — mas com abertura diferente conforme a origem. Textos abaixo são o roteiro-base; ajuste o tom, nunca a estrutura.</p>
+      <p class="section-sub">Mesmo objetivo final — levar o cliente até o link de agendamento — mas com abertura diferente conforme a origem. Textos abaixo são o roteiro-base; ajuste o tom, nunca a estrutura.</p>
 
       <div class="config-card">
         <div class="config-card__head">
           <i class="ti ti-calendar-event"></i>
           <div>
-            <h3>Configuração do Calendly</h3>
-            <p>Confirmado com o Rogério — vale pros agendamentos dos dois funis.</p>
+            <h3>Configuração do agendamento</h3>
+            <p>Site próprio da WeHelp — substituiu o Calendly. Link único: <b>lp.wehelpsoftware.com/agenda-cs</b></p>
           </div>
           <span class="config-owner"><i class="ti ti-user-cog"></i>Responsável · Hernanndes</span>
         </div>
         <div class="config-grid">
           <div class="config-item"><span class="config-item__label">Duração</span><span class="config-item__value">30 minutos cravados</span></div>
           <div class="config-item"><span class="config-item__label">Formato</span><span class="config-item__value">Presencial · Estande WeHelp</span></div>
-          <div class="config-item"><span class="config-item__label">Atendentes</span><span class="config-item__value">Eric e Pietro · Round Robin</span></div>
-          <div class="config-item"><span class="config-item__label">Acompanhantes</span><span class="config-item__value">Até 2 pessoas por agendamento</span></div>
+          <div class="config-item"><span class="config-item__label">Vagas por horário</span><span class="config-item__value">2 (Eric e Pietro dividem entre si quem atende)</span></div>
+          <div class="config-item"><span class="config-item__label">Janela de horário</span><span class="config-item__value">10h às 19h, blocos de 30 min</span></div>
         </div>
-        <p class="config-note"><i class="ti ti-users-plus"></i>Ative "Permitir que os convidados adicionem outras pessoas" no Calendly e inclua na descrição do evento: <em>"Você pode trazer seu sócio ou gerente com você (limite de 2 pessoas por agendamento)."</em></p>
-        <p class="config-note"><i class="ti ti-clock"></i>Grade aberta em blocos contínuos de 30 min durante todo o horário comercial da feira. Único bloqueio necessário: <b>sexta, 28/08, das 17h às 19h</b> (Plenária do Selo de Excelência — time todo precisa estar presente). Eric e Pietro não precisam mais bloquear horário de gravação do WHCast, a não ser que forem participar.</p>
+        <p class="config-note"><i class="ti ti-clock"></i>Grade aberta em blocos contínuos de 30 min das 10h às 19h (fechamento da feira). Único bloqueio: <b>sexta, 28/08, das 17h às 19h</b> (Plenária do Selo de Excelência — time todo precisa estar presente). O site já barra automaticamente agendamento nesse horário e não deixa passar de 2 pessoas no mesmo bloco.</p>
+        <p class="config-note"><i class="ti ti-alert-triangle"></i>O site não tem mais o campo "traga seu acompanhante" do Calendly — cada uma das 2 vagas é para um cliente diferente, não para acompanhante. Se o cliente quiser levar o sócio, é um ajuste manual no estande, não algo que o site controla.</p>
+        <p class="config-note"><i class="ti ti-clipboard-list"></i>Confira quem agendou em <b>lp.wehelpsoftware.com/agenda-painel</b> — atualiza sozinho a cada minuto e mostra nome, WhatsApp, academia e se o lead já foi encontrado no CRM.</p>
       </div>
 
       <div class="funnel-grid">
@@ -621,7 +623,7 @@
             <h3>Funil A — Lista VIP</h3>
             <span class="funnel-target">já vai à feira</span>
           </div>
-          <p class="funnel-goal">Ele já confirmou presença. O objetivo é só fazer clicar no Calendly e reservar o horário.</p>
+          <p class="funnel-goal">Ele já confirmou presença. O objetivo é só fazer clicar no link e reservar o horário.</p>
 
           <div>
             <div class="day-chip">Disparo 1 · <b>Segunda, 17/08</b></div>
@@ -630,7 +632,7 @@
 
           <div>
             <div class="day-chip">Mensagem 2 · na sequência</div>
-            <div class="bubble">No link abaixo, escolha um bloco de 30 minutos com o Eric ou o Pietro e selecione se prefere: uma Consultoria Gratuita da sua conta atual, ou conhecer nosso Novo Módulo de Retenção Preditiva — que descobre quem vai cancelar antes do aluno ir embora. Pode trazer seu sócio junto (limite de 2 por horário). Garante seu horário aqui: [Link do Calendly]</div>
+            <div class="bubble">No link abaixo, escolha um horário de 30 minutos e selecione se prefere: uma Consultoria Gratuita da sua conta atual, ou conhecer nosso Novo Módulo de Retenção Preditiva — que descobre quem vai cancelar antes do aluno ir embora. Garante seu horário aqui: lp.wehelpsoftware.com/agenda-cs</div>
           </div>
         </div>
 
@@ -654,7 +656,7 @@
 
           <div>
             <p class="branch-label"><i class="ti ti-corner-down-right"></i>se responder "vou" ou "tô pensando"</p>
-            <div class="bubble reply">Sensacional! Então aproveita e já garante um espaço VIP com a gente lá. Nossos especialistas (Eric e Pietro) separaram blocos rápidos de 30 minutos para dar uma Consultoria Gratuita na sua conta ou mostrar ao vivo os novos módulos de Retenção. Clica aqui, escolhe seu horário e vem tomar um café com a gente (pode trazer seu sócio junto!): [Link do Calendly]</div>
+            <div class="bubble reply">Sensacional! Então aproveita e já garante um espaço VIP com a gente lá. Nossos especialistas separaram blocos rápidos de 30 minutos para dar uma Consultoria Gratuita na sua conta ou mostrar ao vivo os novos módulos de Retenção. Clica aqui, escolhe seu horário e vem tomar um café com a gente: lp.wehelpsoftware.com/agenda-cs</div>
             <p class="branch-label alt">→ card vai para etapa 2 · Aguardando agendamento</p>
           </div>
 
