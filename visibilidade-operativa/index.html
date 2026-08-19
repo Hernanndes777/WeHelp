@@ -932,9 +932,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // Google Sheets — rastreamento por conjunto/criativo
         fetch(SHEETS_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
           body: JSON.stringify({
-            utm_adset:    params.get('utm_adset')    || params.get('utm_content') || '',
+            utm_adset:    params.get('utm_adset')    || '',
             utm_content:  params.get('utm_content')  || '',
             utm_campaign: params.get('utm_campaign') || '',
             utm_source:   params.get('utm_source')   || '',
