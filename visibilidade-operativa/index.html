@@ -918,6 +918,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return m ? decodeURIComponent(m[1]) : '';
     }
 
+    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzF_WmuggUzogri61ynSzBIqfRXj3I4xRbS7YS7JRaaYfpqpOKuzcubc0y8iMCVuhT8/exec';
+
     document.querySelectorAll('a[data-lead-btn]').forEach(btn => {
       btn.href = WHATSAPP_GROUP;
       btn.addEventListener('click', () => {
@@ -927,6 +929,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           if (testEventCode) extras.test_event_code = testEventCode;
           fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
         }
+        // Google Sheets — rastreamento por conjunto/criativo
+        fetch(SHEETS_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            utm_adset:    params.get('utm_adset')    || params.get('utm_content') || '',
+            utm_content:  params.get('utm_content')  || '',
+            utm_campaign: params.get('utm_campaign') || '',
+            utm_source:   params.get('utm_source')   || '',
+            utm_medium:   params.get('utm_medium')   || '',
+            referral:     document.referrer          || ''
+          })
+        }).catch(() => {});
         // Link tracker
         if (click_id) {
           fetch('https://linktracker2-f3va.vercel.app/api/event', {
