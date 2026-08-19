@@ -233,7 +233,7 @@
       </a>
 
       <div class="help-note">
-        Precisa remarcar? Chama a gente no <a href="https://wa.me/5521976787182" target="_blank" rel="noopener">WhatsApp</a>.
+        Precisa remarcar? Chama a gente no <a href="#" id="waHelpLink" target="_blank" rel="noopener">WhatsApp</a>.
       </div>
     </div>
 
@@ -411,6 +411,9 @@
       document.getElementById('sumDate').textContent = `${dayLabel.label}, ${dayLabel.num}`;
       document.getElementById('sumTime').textContent = `${selectedTime} (30 min)`;
       document.getElementById('calBtn').href = buildGoogleCalendarLink(selectedDate, selectedTime, nome);
+
+      const waMsg = `Oi! Sou ${nome}, confirmei um horário na Fitness Brasil 2026 pra ${dayLabel.label}, ${dayLabel.num} às ${selectedTime}. Só passando pra confirmar com o time!`;
+      document.getElementById('waHelpLink').href = `https://wa.me/5521976787182?text=${encodeURIComponent(waMsg)}`;
 
     } catch (e) {
       errorMsg.textContent = 'Deu erro ao confirmar. Tenta de novo ou chama no WhatsApp.';
