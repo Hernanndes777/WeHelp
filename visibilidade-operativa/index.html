@@ -219,6 +219,56 @@
     }
     .hero__cta i { font-size: 17px; }
 
+    /* ── COUNTDOWN ── */
+    .countdown-wrap {
+      margin: 20px 0 24px;
+      opacity: 0;
+      animation: fadeUp .6s ease .45s forwards;
+    }
+    .countdown-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--body);
+      margin-bottom: 10px;
+    }
+    .countdown {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .countdown__unit {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: center;
+      min-width: 68px;
+    }
+    .countdown__num {
+      font-family: 'Figtree', sans-serif;
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1;
+      display: block;
+      letter-spacing: -1px;
+    }
+    .countdown__lbl {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.5;
+      display: block;
+      margin-top: 4px;
+    }
+    .countdown--ended .countdown__num { color: var(--blue); }
+    @media (max-width: 600px) {
+      .countdown__unit { min-width: 60px; padding: 10px 12px; }
+      .countdown__num { font-size: 26px; }
+    }
+
     /* ── DIVIDER ── */
     .divider {
       position: relative; z-index: 1;
@@ -809,6 +859,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </li>
         </ul>
 
+        <div class="countdown-wrap">
+          <p class="countdown-label">A aula começa em</p>
+          <div class="countdown" id="countdown">
+            <div class="countdown__unit"><span class="countdown__num" id="cd-d">00</span><span class="countdown__lbl">dias</span></div>
+            <div class="countdown__unit"><span class="countdown__num" id="cd-h">00</span><span class="countdown__lbl">horas</span></div>
+            <div class="countdown__unit"><span class="countdown__num" id="cd-m">00</span><span class="countdown__lbl">min</span></div>
+            <div class="countdown__unit"><span class="countdown__num" id="cd-s">00</span><span class="countdown__lbl">seg</span></div>
+          </div>
+        </div>
+
         <a href="https://chat.whatsapp.com/J1WohI7w5Dd5ulSKzHqMz3" target="_blank" rel="noopener" class="hero__cta" data-lead-btn>
           <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
           ENTRAR NO GRUPO DO WHATSAPP
@@ -979,6 +1039,28 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </footer>
 
   <script>
+    // Countdown — quinta 20/08/2026 às 12h BRT (UTC-3 = 15h UTC)
+    const TARGET_DATE = new Date('2026-08-20T15:00:00Z');
+    function pad(n) { return String(n).padStart(2, '0'); }
+    function updateCountdown() {
+      const diff = TARGET_DATE - Date.now();
+      if (diff <= 0) {
+        document.getElementById('countdown').classList.add('countdown--ended');
+        ['cd-d','cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '00');
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('cd-d').textContent = pad(d);
+      document.getElementById('cd-h').textContent = pad(h);
+      document.getElementById('cd-m').textContent = pad(m);
+      document.getElementById('cd-s').textContent = pad(s);
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
     const WHATSAPP_GROUP = 'https://chat.whatsapp.com/J1WohI7w5Dd5ulSKzHqMz3';
     const params = new URLSearchParams(location.search);
     const click_id = params.get('click_id');
