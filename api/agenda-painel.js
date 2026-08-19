@@ -19,6 +19,7 @@ export default async function handler(req, res) {
     const sheetRes = await fetch(AGENDA_SHEET_URL);
     const sheetData = await sheetRes.json();
     const rows = (sheetData.data || []).map((r) => ({
+      id: r['ID'] || '',
       date: r['Data'] || '',
       time: r['Horário'] || '',
       nome: r['Nome'] || '',
@@ -27,6 +28,7 @@ export default async function handler(req, res) {
       interesse: r['Interesse'] || '',
       leadStatus: r['Lead Encontrado'] || '',
       leadId: r['Lead ID'] || '',
+      atendente: r['Atendente'] || '',
     }));
 
     rows.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));

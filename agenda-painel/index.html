@@ -108,8 +108,46 @@
     background:var(--good-tint); color:var(--good); flex-shrink:0; font-size:17px;
   }
 
+  .row-actions{ display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .atendente-select{
+    font-family:'DM Sans',sans-serif; font-size:12px; font-weight:700; color:var(--body);
+    border:1.5px solid var(--line); border-radius:8px; padding:6px 8px; background:#fff; cursor:pointer;
+  }
+  .atendente-select.set{ border-color:var(--blue); color:var(--blue-hover); background:var(--blue-tint); }
+  .icon-btn{
+    display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px;
+    border:1.5px solid var(--line); background:#fff; color:var(--body); cursor:pointer; font-size:14px; flex-shrink:0;
+  }
+  .icon-btn:hover{ border-color:#c7d3ea; }
+  .icon-btn.danger:hover{ border-color:var(--bad); color:var(--bad); background:var(--bad-tint); }
+
   .empty-day{ text-align:center; color:var(--muted); font-size:13.5px; padding:40px 20px; }
   .loading{ text-align:center; color:var(--muted); font-size:13.5px; padding:40px 20px; }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(10,17,40,.5); display:flex; align-items:center; justify-content:center;
+    padding:20px; z-index:100;
+  }
+  .modal-card{
+    background:#fff; border-radius:16px; padding:22px; width:100%; max-width:360px;
+    box-shadow: 0 20px 50px -12px rgba(10,17,40,.3);
+  }
+  .modal-card h3{ font-family:var(--disp); font-size:16px; margin:0 0 4px; }
+  .modal-card p{ font-size:13px; color:var(--body); margin:0 0 16px; }
+  .modal-card label{ display:block; font-size:12px; font-weight:700; color:var(--ink); margin:12px 0 6px; }
+  .modal-card select{
+    width:100%; padding:11px 12px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:14px; font-family:'DM Sans',sans-serif; color:var(--ink); background:#fff;
+  }
+  .modal-actions{ display:flex; gap:10px; margin-top:20px; }
+  .modal-actions button{
+    flex:1; padding:12px; border-radius:10px; font-family:var(--disp); font-weight:700; font-size:13.5px; cursor:pointer;
+  }
+  .modal-actions .cancel{ border:1.5px solid var(--line); background:#fff; color:var(--body); }
+  .modal-actions .save{ border:none; background:var(--blue); color:#fff; }
+  .modal-error{ font-size:12.5px; color:var(--bad); margin-top:10px; display:none; }
+  .modal-error.show{ display:block; }
+  .hidden{ display:none !important; }
 </style>
 </head>
 <body>
@@ -128,6 +166,26 @@
     <div class="summary" id="summary"></div>
 
     <div id="content"><div class="loading">Carregando agendamentos...</div></div>
+  </div>
+
+  <div class="modal-overlay hidden" id="editModal">
+    <div class="modal-card">
+      <h3>Mudar horário</h3>
+      <p id="editModalName"></p>
+
+      <label>Dia</label>
+      <select id="editDate"></select>
+
+      <label>Horário</label>
+      <select id="editTime"></select>
+
+      <div class="modal-error" id="editError"></div>
+
+      <div class="modal-actions">
+        <button class="cancel" id="editCancel">Cancelar</button>
+        <button class="save" id="editSave">Salvar</button>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -221,6 +279,17 @@
                 : '<span class="badge bad"><i class="ti ti-alert-circle"></i> Não encontrado no CRM</span>'}
             </div>
           </div>
+          ${l.id ? `
+            <div class="row-actions">
+              <select class="atendente-select ${l.atendente ? 'set' : ''}" data-id="${l.id}" data-action="assign">
+                <option value="" ${!l.atendente ? 'selected' : ''}>Quem atende?</option>
+                <option value="Eric" ${l.atendente === 'Eric' ? 'selected' : ''}>Eric</option>
+                <option value="Pietro" ${l.atendente === 'Pietro' ? 'selected' : ''}>Pietro</option>
+              </select>
+              <button class="icon-btn" data-id="${l.id}" data-action="edit" title="Mudar horário"><i class="ti ti-calendar-time"></i></button>
+              <button class="icon-btn danger" data-id="${l.id}" data-nome="${escapeHtml(l.nome)}" data-action="delete" title="Apagar"><i class="ti ti-trash"></i></button>
+            </div>
+          ` : `<span style="font-size:11px;color:var(--muted);flex-shrink:0;">sem ID</span>`}
         </div>
       `).join('') + (leads.length < MAX_PER_SLOT ? `<div class="lead-row empty">${MAX_PER_SLOT - leads.length} vaga(s) livre(s)</div>` : '');
 
@@ -244,6 +313,103 @@
     render();
     if (showSpinner) refreshBtn.classList.remove('spinning');
   }
+
+  async function manage(body) {
+    const res = await fetch('/api/agenda-manage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Falha na ação');
+    return data;
+  }
+
+  // --- Ações da lista (delegação de evento — os cards são recriados a cada render) ---
+  contentEl.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const { id, action } = btn.dataset;
+
+    if (action === 'delete') {
+      if (!confirm(`Apagar o agendamento de ${btn.dataset.nome}? Isso não pode ser desfeito.`)) return;
+      try {
+        await manage({ action: 'delete', id });
+        allRows = allRows.filter(r => r.id !== id);
+        render();
+      } catch (err) {
+        alert('Erro ao apagar: ' + err.message);
+      }
+    }
+
+    if (action === 'edit') {
+      openEditModal(allRows.find(r => r.id === id));
+    }
+  });
+
+  contentEl.addEventListener('change', async (e) => {
+    const sel = e.target.closest('[data-action="assign"]');
+    if (!sel) return;
+    const id = sel.dataset.id;
+    const atendente = sel.value;
+    try {
+      await manage({ action: 'assign', id, atendente });
+      const row = allRows.find(r => r.id === id);
+      if (row) row.atendente = atendente;
+      render();
+    } catch (err) {
+      alert('Erro ao definir atendente: ' + err.message);
+      loadData(false);
+    }
+  });
+
+  // --- Modal de mudar horário ---
+  const editModal = document.getElementById('editModal');
+  const editDateEl = document.getElementById('editDate');
+  const editTimeEl = document.getElementById('editTime');
+  const editErrorEl = document.getElementById('editError');
+  let editingRow = null;
+
+  function slotsForDate(date) {
+    const blocked = BLOCKED[date] || [];
+    return ALL_SLOTS.filter(t => !blocked.includes(t));
+  }
+
+  function openEditModal(row) {
+    editingRow = row;
+    editErrorEl.classList.remove('show');
+    document.getElementById('editModalName').textContent = `${row.nome} — atualmente ${row.date.split('-').reverse().slice(0,2).join('/')} às ${row.time}`;
+
+    editDateEl.innerHTML = DAYS.map(d => `<option value="${d.date}" ${d.date === row.date ? 'selected' : ''}>${d.label}, ${d.num}</option>`).join('');
+    populateEditTimes(row.date, row.time);
+
+    editModal.classList.remove('hidden');
+  }
+
+  function populateEditTimes(date, selectedTime) {
+    const slots = slotsForDate(date);
+    editTimeEl.innerHTML = slots.map(t => `<option value="${t}" ${t === selectedTime ? 'selected' : ''}>${t}</option>`).join('');
+  }
+
+  editDateEl.addEventListener('change', () => populateEditTimes(editDateEl.value, null));
+
+  document.getElementById('editCancel').addEventListener('click', () => editModal.classList.add('hidden'));
+
+  document.getElementById('editSave').addEventListener('click', async () => {
+    editErrorEl.classList.remove('show');
+    const date = editDateEl.value;
+    const time = editTimeEl.value;
+    try {
+      await manage({ action: 'update', id: editingRow.id, date, time });
+      editingRow.date = date;
+      editingRow.time = time;
+      editModal.classList.add('hidden');
+      render();
+    } catch (err) {
+      editErrorEl.textContent = err.message === 'Horário lotado' ? 'Esse horário já está com 2 pessoas.' : err.message;
+      editErrorEl.classList.add('show');
+    }
+  });
 
   refreshBtn.addEventListener('click', () => loadData(true));
 
