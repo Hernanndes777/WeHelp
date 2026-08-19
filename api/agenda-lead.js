@@ -12,6 +12,10 @@
 
 const DC_BASE = "https://api.datacrazy.io/v1/crm/api/crm";
 const TAG_AGENDADO = { id: "fd7363a5-5b78-4e54-b6c9-bc0617acef8d" }; // Agendado_Feira
+const TAG_INTERESSE = {
+  'Consultoria sobre a Plataforma': { id: '360c5420-9d19-4f55-bbf2-f43489300d0d' }, // Interesse_Consultoria
+  'Conhecer o Novo Módulo de Retenção': { id: '4da7e5db-ec13-4ef8-bf90-429e90a28afc' }, // Interesse_Upsell
+};
 const MAX_PER_SLOT = 2;
 const VALID_DATES = ['2026-08-27', '2026-08-28', '2026-08-29'];
 const BLOCKED = {
@@ -74,7 +78,9 @@ export default async function handler(req, res) {
 
       const matchedLead = await findLeadByPhone(phoneDigits, DC_TOKEN);
       if (matchedLead) {
-        await addTag(matchedLead.id, DC_TOKEN);
+        const tagsToAdd = [TAG_AGENDADO];
+        if (TAG_INTERESSE[interesse]) tagsToAdd.push(TAG_INTERESSE[interesse]);
+        await addTags(matchedLead.id, tagsToAdd, DC_TOKEN);
         leadStatus = 'encontrado';
         leadId = matchedLead.id;
       }
@@ -137,17 +143,19 @@ async function findLeadByPhone(phoneDigits, token) {
   return match || null;
 }
 
-// Adiciona a tag Agendado_Feira sem remover as tags existentes do lead.
-async function addTag(leadId, token) {
+// Adiciona as tags (Agendado_Feira + interesse) sem remover as tags existentes do lead.
+async function addTags(leadId, tagsToAdd, token) {
   const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 
   const getRes = await fetch(`${DC_BASE}/leads/${leadId}`, { headers });
   const lead = await getRes.json();
   const existingTags = Array.isArray(lead.tags) ? lead.tags : [];
+  const existingIds = new Set(existingTags.map((t) => t.id));
 
-  if (existingTags.some((t) => t.id === TAG_AGENDADO.id)) return;
+  const newTags = tagsToAdd.filter((t) => !existingIds.has(t.id));
+  if (newTags.length === 0) return;
 
-  const merged = [...existingTags.map((t) => ({ id: t.id })), TAG_AGENDADO];
+  const merged = [...existingTags.map((t) => ({ id: t.id })), ...newTags];
 
   await fetch(`${DC_BASE}/leads/${leadId}`, {
     method: 'PATCH',
