@@ -26,6 +26,7 @@ export default async function handler(req, res) {
       whatsapp: r['WhatsApp'] ? String(r['WhatsApp']) : '',
       academia: r['Academia'] || '',
       interesse: r['Interesse'] || '',
+      detalhes: r['Detalhes'] || '',
       leadStatus: r['Lead Encontrado'] || '',
       leadId: r['Lead ID'] || '',
       atendente: r['Atendente'] || '',

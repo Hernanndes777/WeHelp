@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'POST') {
-    const { date, time, nome, whatsapp, academia, interesse } = req.body || {};
+    const { date, time, nome, whatsapp, academia, interesse, detalhes } = req.body || {};
 
     if (!date || !time || !nome || !whatsapp || !academia || !interesse) {
       return res.status(400).json({ error: 'Campos obrigatórios ausentes' });
@@ -79,7 +79,7 @@ export default async function handler(req, res) {
       const sheetPromise = fetch(AGENDA_SHEET_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date, time, nome, whatsapp, academia, interesse, leadStatus, leadId }),
+        body: JSON.stringify({ date, time, nome, whatsapp, academia, interesse, detalhes: detalhes || '', leadStatus, leadId }),
       }).then((r) => r.json());
 
       const tagPromise = matchedLead

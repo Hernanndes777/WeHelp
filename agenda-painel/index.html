@@ -96,6 +96,11 @@
   .lead-name{ font-weight:700; font-size:14px; color:var(--ink); }
   .lead-meta{ font-size:12px; color:var(--body); margin-top:2px; }
   .lead-badges{ display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+  .lead-detalhes{
+    margin-top:8px; padding:8px 10px; background:var(--bg); border-radius:8px; font-size:12px;
+    color:var(--body); line-height:1.4; display:flex; gap:6px; align-items:flex-start;
+  }
+  .lead-detalhes i{ color:var(--muted); font-size:13px; flex-shrink:0; margin-top:1px; }
   .badge{
     display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700;
     padding:3px 9px; border-radius:50px;
@@ -278,6 +283,7 @@
                 ? '<span class="badge good"><i class="ti ti-circle-check"></i> No CRM</span>'
                 : '<span class="badge bad"><i class="ti ti-alert-circle"></i> Não encontrado no CRM</span>'}
             </div>
+            ${l.detalhes ? `<div class="lead-detalhes"><i class="ti ti-message-2"></i> ${escapeHtml(l.detalhes)}</div>` : ''}
           </div>
           ${l.id ? `
             <div class="row-actions">

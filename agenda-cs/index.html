@@ -94,6 +94,13 @@
   }
   input:focus{ outline:none; border-color:var(--blue); box-shadow: 0 0 0 3px var(--blue-tint); }
 
+  textarea{
+    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:14.5px; font-family:'DM Sans',sans-serif; color:var(--ink); background:#fff;
+    resize:vertical; min-height:72px;
+  }
+  textarea:focus{ outline:none; border-color:var(--blue); box-shadow: 0 0 0 3px var(--blue-tint); }
+
   .radio-group{ display:flex; flex-direction:column; gap:8px; }
   .radio-opt{
     display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border-radius:10px;
@@ -187,6 +194,11 @@
             <input type="radio" name="interesse" value="Conhecer o Novo Módulo de Retenção" />
             <div><b>Conhecer o Novo Módulo de Retenção</b><span>Descobrir quem vai cancelar antes do aluno ir embora</span></div>
           </label>
+        </div>
+
+        <div id="detalhesWrap" class="hidden">
+          <label for="detalhes">Quer detalhar o que quer priorizar? (opcional)</label>
+          <textarea id="detalhes" placeholder="Ex: quero entender por que meu NPS caiu, ou como configurar as automações de recuperação..."></textarea>
         </div>
 
         <div class="msg error" id="errorMsg"></div>
@@ -341,11 +353,14 @@
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   }
 
+  const detalhesWrap = document.getElementById('detalhesWrap');
+
   document.querySelectorAll('.radio-opt').forEach(opt => {
     opt.addEventListener('click', () => {
       document.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('checked'));
       opt.classList.add('checked');
       opt.querySelector('input').checked = true;
+      detalhesWrap.classList.toggle('hidden', opt.dataset.value !== 'Consultoria sobre a Plataforma');
     });
   });
 
@@ -356,6 +371,7 @@
     const whatsapp = document.getElementById('whatsapp').value.trim();
     const academia = document.getElementById('academia').value.trim();
     const interesseInput = document.querySelector('input[name=interesse]:checked');
+    const detalhes = document.getElementById('detalhes').value.trim();
 
     if (!nome || !whatsapp || !academia || !interesseInput || !selectedTime) {
       errorMsg.textContent = 'Preenche todos os campos e escolhe um horário.';
@@ -374,6 +390,7 @@
           date: selectedDate, time: selectedTime,
           nome, whatsapp, academia,
           interesse: interesseInput.value,
+          detalhes,
         }),
       });
       const data = await res.json();
