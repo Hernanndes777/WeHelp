@@ -1,10 +1,9 @@
 // api/agenda-lead.js — Serverless function para a página /agenda-cs
 // GET  ?date=YYYY-MM-DD  → retorna quantos agendamentos existem por horário nesse dia
 // POST { date, time, nome, whatsapp, academia, interesse } → confirma o agendamento:
-//   1. Revalida se o horário ainda tem vaga (máx 2, contra a planilha)
-//   2. Busca o lead no DataCrazy por telefone — se achar, só adiciona a tag Agendado_Feira
-//      (nunca cria lead novo — os leads da feira já existem no CRM)
-//   3. Grava a linha na planilha (Google Sheets via Apps Script), inclusive se não achou o lead
+//   1. Busca o lead no DataCrazy por telefone (nunca cria lead novo)
+//   2. Grava na planilha (fonte de verdade — capacidade de 2/horário é validada com
+//      lock dentro do próprio Apps Script) e marca as tags no DataCrazy em paralelo
 //
 // Variáveis de ambiente (Vercel):
 //   DC_TOKEN          — chave de API do DataCrazy
@@ -16,7 +15,6 @@ const TAG_INTERESSE = {
   'Consultoria sobre a Plataforma': { id: '360c5420-9d19-4f55-bbf2-f43489300d0d' }, // Interesse_Consultoria
   'Conhecer o Novo Módulo de Retenção': { id: '4da7e5db-ec13-4ef8-bf90-429e90a28afc' }, // Interesse_Upsell
 };
-const MAX_PER_SLOT = 2;
 const VALID_DATES = ['2026-08-27', '2026-08-28', '2026-08-29'];
 const BLOCKED = {
   '2026-08-28': ['17:00', '17:30', '18:00', '18:30'], // Plenária do Selo de Excelência
@@ -63,37 +61,41 @@ export default async function handler(req, res) {
     }
 
     try {
-      // 1. Checagem rápida de capacidade (evita trabalho desnecessário) — a checagem
-      //    que realmente vale (contra corrida entre requisições simultâneas) acontece
-      //    dentro do Apps Script, protegida por lock, no passo 3.
-      const counts = await getCountsForDate(date, AGENDA_SHEET_URL);
-      if ((counts[time] || 0) >= MAX_PER_SLOT) {
-        return res.status(409).json({ error: 'Horário lotado' });
-      }
-
-      // 2. Busca lead existente no DataCrazy e marca a tag (nunca cria lead novo)
+      // 1. Busca lead existente no DataCrazy (nunca cria lead novo). A checagem de
+      //    capacidade real (contra corrida entre requisições simultâneas) acontece
+      //    dentro do Apps Script, protegida por lock, no passo 2 — não precisamos
+      //    de uma pré-checagem aqui, só atrasaria a resposta.
       const phoneDigits = whatsapp.replace(/\D/g, '');
-      let leadStatus = 'não encontrado';
-      let leadId = '';
-
       const matchedLead = await findLeadByPhone(phoneDigits, DC_TOKEN);
-      if (matchedLead) {
-        const tagsToAdd = [TAG_AGENDADO];
-        if (TAG_INTERESSE[interesse]) tagsToAdd.push(TAG_INTERESSE[interesse]);
-        await addTags(matchedLead.id, tagsToAdd, DC_TOKEN);
-        leadStatus = 'encontrado';
-        leadId = matchedLead.id;
-      }
+      const leadStatus = matchedLead ? 'encontrado' : 'não encontrado';
+      const leadId = matchedLead ? matchedLead.id : '';
 
-      // 3. Grava na planilha — fonte de verdade final. O Apps Script usa um lock
-      //    pra garantir que 2 gravações simultâneas não furem o limite de vagas,
-      //    e só respondemos sucesso ao cliente se ele confirmar a escrita.
-      const sheetRes = await fetch(AGENDA_SHEET_URL, {
+      // 2. Grava na planilha (fonte de verdade — trava via lock no Apps Script) e,
+      //    em paralelo, marca as tags no DataCrazy usando o lead que já veio da
+      //    busca acima (sem round-trip extra pra buscar as tags de novo). As duas
+      //    chamadas saem juntas e são aguardadas juntas — não é "fire and forget"
+      //    (a função serverless pode ser encerrada antes de uma promise solta
+      //    terminar), mas a tag é best-effort: se falhar, não derruba o agendamento.
+      const sheetPromise = fetch(AGENDA_SHEET_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, time, nome, whatsapp, academia, interesse, leadStatus, leadId }),
-      });
-      const sheetData = await sheetRes.json();
+      }).then((r) => r.json());
+
+      const tagPromise = matchedLead
+        ? addTags(matchedLead, [TAG_AGENDADO, TAG_INTERESSE[interesse]].filter(Boolean), DC_TOKEN)
+        : Promise.resolve();
+
+      const [sheetResult, tagResult] = await Promise.allSettled([sheetPromise, tagPromise]);
+
+      if (tagResult.status === 'rejected') {
+        console.error('Falha ao marcar tag (não bloqueia o agendamento):', tagResult.reason);
+      }
+
+      if (sheetResult.status === 'rejected') {
+        throw sheetResult.reason;
+      }
+      const sheetData = sheetResult.value;
 
       if (!sheetData.success) {
         if (sheetData.error === 'full') {
@@ -144,11 +146,9 @@ async function findLeadByPhone(phoneDigits, token) {
 }
 
 // Adiciona as tags (Agendado_Feira + interesse) sem remover as tags existentes do lead.
-async function addTags(leadId, tagsToAdd, token) {
-  const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
-
-  const getRes = await fetch(`${DC_BASE}/leads/${leadId}`, { headers });
-  const lead = await getRes.json();
+// Recebe o lead já carregado (a busca por telefone já retorna as tags atuais —
+// evita um GET extra só pra reler o que já temos em mãos).
+async function addTags(lead, tagsToAdd, token) {
   const existingTags = Array.isArray(lead.tags) ? lead.tags : [];
   const existingIds = new Set(existingTags.map((t) => t.id));
 
@@ -157,9 +157,9 @@ async function addTags(leadId, tagsToAdd, token) {
 
   const merged = [...existingTags.map((t) => ({ id: t.id })), ...newTags];
 
-  await fetch(`${DC_BASE}/leads/${leadId}`, {
+  await fetch(`${DC_BASE}/leads/${lead.id}`, {
     method: 'PATCH',
-    headers,
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ tags: merged }),
   });
 }
