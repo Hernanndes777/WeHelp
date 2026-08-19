@@ -118,10 +118,33 @@
   .msg.show{ display:block; }
   .msg.error{ background:var(--bad-tint); color:var(--bad); }
 
-  .success{ text-align:center; padding: 40px 20px; }
-  .success i{ font-size:52px; color:var(--good); }
-  .success h2{ font-family:var(--disp); font-size:22px; margin:16px 0 8px; }
-  .success p{ color:var(--body); font-size:14.5px; }
+  .success-icon{ text-align:center; padding: 34px 20px 4px; }
+  .success-icon i{ font-size:52px; color:var(--good); }
+  .success-icon h2{ font-family:var(--disp); font-size:22px; margin:16px 0 4px; }
+  .success-icon p{ color:var(--body); font-size:14.5px; margin:0; }
+
+  .detail-row{
+    display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .detail-row:last-child{ border-bottom:none; }
+  .detail-row i{ color:var(--blue); font-size:19px; width:22px; text-align:center; flex-shrink:0; }
+  .detail-row .label{ font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; }
+  .detail-row .value{ font-size:14.5px; font-weight:700; color:var(--ink); margin-top:1px; }
+
+  .cal-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px;
+    border-radius:12px; border:1.5px solid var(--line); background:#fff; color:var(--ink);
+    font-family:var(--disp); font-weight:700; font-size:13.5px; cursor:pointer; text-decoration:none;
+    margin-top:14px; transition: border-color .15s;
+  }
+  .cal-btn:hover{ border-color:#c7d3ea; }
+  .cal-btn i{ color:var(--blue); }
+
+  .help-note{
+    text-align:center; font-size:13px; color:var(--body); margin-top:18px; padding-top:16px; border-top:1px solid var(--line);
+  }
+  .help-note a{ color:var(--blue-hover); font-weight:700; text-decoration:none; }
+
   .hidden{ display:none !important; }
 </style>
 </head>
@@ -171,10 +194,35 @@
       </div>
     </div>
 
-    <div class="success hidden" id="successCard">
-      <i class="ti ti-circle-check-filled"></i>
-      <h2>Agendamento confirmado!</h2>
-      <p id="successText"></p>
+    <div class="card hidden" id="successCard">
+      <div class="success-icon">
+        <i class="ti ti-circle-check-filled"></i>
+        <h2>Agendamento confirmado!</h2>
+        <p>Te esperamos no estande WeHelp.</p>
+      </div>
+
+      <div style="margin-top:18px;">
+        <div class="detail-row">
+          <i class="ti ti-calendar"></i>
+          <div><div class="label">Dia</div><div class="value" id="sumDate"></div></div>
+        </div>
+        <div class="detail-row">
+          <i class="ti ti-clock"></i>
+          <div><div class="label">Horário</div><div class="value" id="sumTime"></div></div>
+        </div>
+        <div class="detail-row">
+          <i class="ti ti-map-pin"></i>
+          <div><div class="label">Local</div><div class="value">Estande WeHelp · Fitness Brasil 2026</div></div>
+        </div>
+      </div>
+
+      <a class="cal-btn" id="calBtn" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-calendar-plus"></i> Adicionar ao Google Calendar
+      </a>
+
+      <div class="help-note">
+        Precisa remarcar? Chama a gente no <a href="https://wa.me/5521976787182" target="_blank" rel="noopener">WhatsApp</a>.
+      </div>
     </div>
 
   </div>
@@ -270,6 +318,29 @@
     renderSlots();
   }
 
+  function buildGoogleCalendarLink(date, time, nome) {
+    const [h, m] = time.split(':').map(Number);
+    const startMin = h * 60 + m;
+    const endMin = startMin + 30;
+    const fmt = (mins) => {
+      const hh = String(Math.floor(mins / 60)).padStart(2, '0');
+      const mm = String(mins % 60).padStart(2, '0');
+      return `${hh}${mm}00`;
+    };
+    const ymd = date.replace(/-/g, '');
+    const dates = `${ymd}T${fmt(startMin)}/${ymd}T${fmt(endMin)}`;
+
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: 'Conversa com a WeHelp — Fitness Brasil 2026',
+      dates,
+      details: `Bate-papo de 30 minutos com a equipe WeHelp no estande da Fitness Brasil 2026.`,
+      location: 'Estande WeHelp, Fitness Brasil 2026',
+      ctz: 'America/Sao_Paulo',
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  }
+
   document.querySelectorAll('.radio-opt').forEach(opt => {
     opt.addEventListener('click', () => {
       document.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('checked'));
@@ -320,8 +391,9 @@
       const dayLabel = DAYS.find(d => d.date === selectedDate);
       document.getElementById('bookingFlow').classList.add('hidden');
       document.getElementById('successCard').classList.remove('hidden');
-      document.getElementById('successText').textContent =
-        `Te esperamos ${dayLabel.label.toLowerCase()}, ${dayLabel.num}, às ${selectedTime} no estande WeHelp.`;
+      document.getElementById('sumDate').textContent = `${dayLabel.label}, ${dayLabel.num}`;
+      document.getElementById('sumTime').textContent = `${selectedTime} (30 min)`;
+      document.getElementById('calBtn').href = buildGoogleCalendarLink(selectedDate, selectedTime, nome);
 
     } catch (e) {
       errorMsg.textContent = 'Deu erro ao confirmar. Tenta de novo ou chama no WhatsApp.';
