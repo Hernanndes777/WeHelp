@@ -74,68 +74,10 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json',
     };
 
-    // 1. Cria o lead no DataCrazy (nome/email/telefone/academia/tag)
-    // [BUG DataCrazy confirmado em 2026-08-11, ver api/lead-diagnostico.js pro
-    // diagnóstico completo] additionalFields não persiste via API pública —
-    // contorno: manda tudo formatado dentro de "notes" (campo nativo, texto
-    // livre, confirmado funcionando).
-    const notesLines = [];
-    if (Nome_da_sua_academia) notesLines.push(`Academia: ${Nome_da_sua_academia}`);
-    if (Quantos_clientes_ativos_voce_tem_atualmente) notesLines.push(`Clientes ativos: ${Quantos_clientes_ativos_voce_tem_atualmente}`);
-    if (Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje) notesLines.push(`Maior desafio: ${Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje}`);
-    if (Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente) notesLines.push(`Sistema de gestão atual: ${Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente}`);
-    if (UTM_Source) notesLines.push(`UTM Source: ${UTM_Source}`);
-    if (UTM_Campaign) notesLines.push(`UTM Campaign: ${UTM_Campaign}`);
-    if (UTM_Medium) notesLines.push(`UTM Medium: ${UTM_Medium}`);
-
-    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
-      method: 'POST',
-      headers: dcHeaders,
-      body: JSON.stringify({
-        name: Seu_Nome_Completo || 'Lead sem nome',
-        email: contactEmail,
-        phone: WhatsApp,
-        company: Nome_da_sua_academia || '',
-        source: 'Sessão Estratégica (Site)',
-        notes: notesLines.join('\n'),
-        tags: [{ id: TAG_WB06 }],
-        attendant: { id: ATTENDANT_ID },
-      }),
-    });
-
-    const leadData = await leadRes.json();
-
-    if (!leadRes.ok || !leadData.id) {
-      console.error('Erro ao criar lead no DataCrazy:', leadData);
-      return res.status(502).json({ error: 'Falha ao criar lead', details: leadData });
-    }
-
-    const leadId = leadData.id;
-
-    // 2. Tenta aplicar o campo adicional "Empresa" (fire-and-forget — hoje não
-    // persiste pela API pública, mantido pro dia que o DataCrazy corrigir o bug)
-    const fieldsPromise = Nome_da_sua_academia ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
-      method: 'PATCH',
-      headers: dcHeaders,
-      body: JSON.stringify({ additionalFields: [{ id: FIELD_EMPRESA, value: Nome_da_sua_academia }] }),
-    }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao aplicar additionalFields no DataCrazy:', await r.text());
-    }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
-
-    // 3. Cria o negócio no pipeline "Webinário", etapa "AGENDAMENTO"
-    const dealPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
-      method: 'POST',
-      headers: dcHeaders,
-      body: JSON.stringify({
-        leadId,
-        stageId: PIPELINE_STAGE_ID,
-      }),
-    }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
-    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
-
-    // 4. Envia pro Google Sheets — colunas na mesma ordem/nome da planilha
-    //    "Agendamentos WB 05" (ver PDF de referência anexado pelo usuário em 2026-08-02).
+    // O Sheets dispara ANTES do DataCrazy e nunca depende dele. Quando a pessoa
+    // já existia no CRM (todo mundo que veio do webinário já existe), a criação
+    // do lead falhava com "lead-with-same-contact-exists", a function devolvia
+    // 502 e o agendamento sumia sem nunca chegar na planilha.
     const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -170,7 +112,67 @@ export default async function handler(req, res) {
         }),
       }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
 
-    // 5. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
+    // 1. Cria o lead no DataCrazy (nome/email/telefone/academia/tag)
+    // [BUG DataCrazy confirmado em 2026-08-11, ver api/lead-diagnostico.js pro
+    // diagnóstico completo] additionalFields não persiste via API pública —
+    // contorno: manda tudo formatado dentro de "notes" (campo nativo, texto
+    // livre, confirmado funcionando).
+    const notesLines = [];
+    if (Nome_da_sua_academia) notesLines.push(`Academia: ${Nome_da_sua_academia}`);
+    if (Quantos_clientes_ativos_voce_tem_atualmente) notesLines.push(`Clientes ativos: ${Quantos_clientes_ativos_voce_tem_atualmente}`);
+    if (Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje) notesLines.push(`Maior desafio: ${Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje}`);
+    if (Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente) notesLines.push(`Sistema de gestão atual: ${Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente}`);
+    if (UTM_Source) notesLines.push(`UTM Source: ${UTM_Source}`);
+    if (UTM_Campaign) notesLines.push(`UTM Campaign: ${UTM_Campaign}`);
+    if (UTM_Medium) notesLines.push(`UTM Medium: ${UTM_Medium}`);
+
+    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
+      method: 'POST',
+      headers: dcHeaders,
+      body: JSON.stringify({
+        name: Seu_Nome_Completo || 'Lead sem nome',
+        email: contactEmail,
+        phone: WhatsApp,
+        company: Nome_da_sua_academia || '',
+        source: 'Sessão Estratégica (Site)',
+        notes: notesLines.join('\n'),
+        tags: [{ id: TAG_WB06 }],
+        attendant: { id: ATTENDANT_ID },
+      }),
+    });
+
+    const leadData = await leadRes.json().catch(() => ({}));
+    const leadId = leadRes.ok ? leadData.id : null;
+
+    if (!leadId) {
+      console.error('Erro ao criar lead no DataCrazy:', leadData);
+      await Promise.allSettled([sheetsPromise]);
+      return res.status(200).json({ success: true, leadId: null, crm: 'failed' });
+    }
+
+    // 2. Tenta aplicar o campo adicional "Empresa" (fire-and-forget — hoje não
+    // persiste pela API pública, mantido pro dia que o DataCrazy corrigir o bug)
+    const fieldsPromise = Nome_da_sua_academia ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
+      method: 'PATCH',
+      headers: dcHeaders,
+      body: JSON.stringify({ additionalFields: [{ id: FIELD_EMPRESA, value: Nome_da_sua_academia }] }),
+    }).then(async (r) => {
+      if (!r.ok) console.error('Erro ao aplicar additionalFields no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
+
+    // 3. Cria o negócio no pipeline "Webinário", etapa "AGENDAMENTO"
+    const dealPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
+      method: 'POST',
+      headers: dcHeaders,
+      body: JSON.stringify({
+        leadId,
+        stageId: PIPELINE_STAGE_ID,
+      }),
+    }).then(async (r) => {
+      if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
+    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
+
+    // 4. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
