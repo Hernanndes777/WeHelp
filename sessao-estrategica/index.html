@@ -717,14 +717,15 @@
 
       lastLeadData = data;
 
-      // Guarda o prefill pro popup do Calendly (evento "Apresentação" do Daniel —
-      // a1=Telefone, a2=Empresa, nessa ordem, diferente do evento "Ativação").
+      // Prefill do popup do Calendly. No evento "Sessão Estratégica — WeHelp"
+      // a ordem das perguntas é a1=Nome da academia, a2=WhatsApp — invertida em
+      // relação ao evento "Apresentação" que a página usava antes.
       calendlyPrefill = {
         name: data.Seu_Nome_Completo,
         email: data.E_mail_Profissional,
         customAnswers: {
-          a1: data.WhatsApp,
-          a2: data.Nome_da_sua_academia,
+          a1: data.Nome_da_sua_academia,
+          a2: data.WhatsApp,
         },
       };
 
@@ -772,11 +773,11 @@
 
     document.getElementById('btnOpenCalendly').addEventListener('click', () => {
       if (typeof Calendly === 'undefined') {
-        window.open('https://calendly.com/wehelp-software/apresentacao', '_blank');
+        window.open('https://calendly.com/sessao_estrategica_wehelp/ativacao-do-modulo-de-retencao', '_blank');
         return;
       }
       Calendly.initPopupWidget({
-        url: 'https://calendly.com/wehelp-software/apresentacao?primary_color=1B6EF3&hide_gdpr_banner=1',
+        url: 'https://calendly.com/sessao_estrategica_wehelp/ativacao-do-modulo-de-retencao?primary_color=1B6EF3&hide_gdpr_banner=1',
         prefill: calendlyPrefill || {},
       });
     });
