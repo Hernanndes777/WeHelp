@@ -249,12 +249,16 @@
   const MAX_PER_SLOT = 2; // Eric + Pietro
   const BLOCKED = {
     '2026-08-28': ['17:00', '17:30', '18:00', '18:30'], // Plenária do Selo de Excelência
+    '2026-08-29': ['18:30'], // pedido do usuário, 2026-08-19
   };
 
   function buildSlots() {
     const slots = [];
     for (let h = START_HOUR; h < END_HOUR; h++) {
-      slots.push(`${String(h).padStart(2,'0')}:00`);
+      // Pula o :00 da primeira hora — o time chega às 10h e precisa de meia
+      // hora pra se organizar antes do primeiro atendimento (primeiro
+      // horário vira 10:30, não 10:00).
+      if (h !== START_HOUR) slots.push(`${String(h).padStart(2,'0')}:00`);
       slots.push(`${String(h).padStart(2,'0')}:30`);
     }
     return slots;
