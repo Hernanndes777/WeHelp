@@ -26,9 +26,10 @@ export default async function handler(req, res) {
   const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';     // Caroline Bonini — mesmo padrão das outras LPs
   const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa" — usado pro Nome da academia
 
-  // [PENDENTE] URL do Apps Script (/exec) da planilha "Agendamentos WB 05" —
-  // configurar como env var na Vercel assim que o Apps Script novo for implantado.
-  const SHEETS_URL = process.env.SHEETS_SESSAO_ESTRATEGICA_URL;
+  // URL do Apps Script (/exec) da aba "Agendamentos WB 07". Fixa no código porque
+  // a env var da Vercel ficou apontando pro deployment antigo (WB 06) e os leads
+  // sumiam em silêncio — trocar aqui a cada ciclo de webinário.
+  const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzu1GYaIYE-kCj7TEef2nm5W5TegaRFPvFg33OSVMT9YFbDFtIPzHOGOAJfYV2yFszD/exec';
 
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
