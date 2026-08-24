@@ -23,7 +23,10 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-0WMP81BEKN');
-    gtag('config', 'AW-388747722');
+    // AW-388747722 removido daqui em 2026-08-24: o Google Ads ja e carregado
+    // pela tag do GTM (M2RST4PH). Com os dois ativos, TODO hit saia em dobro
+    // (pageview, remarketing e a conversao create_lead_success) — era isso que
+    // inflava as conversoes no Ads. O GTM e o unico dono do AW agora.
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
