@@ -153,6 +153,10 @@
       if (typeof gtag === 'function') {
         gtag('event', 'create_lead_success', { event_id: eventId });
       }
+      // Google Ads recebe por AQUI (tag de evento no GTM escuta esse push);
+      // o gtag acima cobre so o GA4. Guard de sessao acima evita recontagem.
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
     })();
 
     // ── Tracking de clique no WhatsApp (engajamento extra, não é a conversão) ──

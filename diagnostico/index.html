@@ -804,9 +804,16 @@
       // em 2026-08-24: o GTM (M2RST4PH) reenviava o mesmo evento pro
       // AW-388747722 e cada lead contava 2x no Google Ads (63 conversoes
       // pra ~24 leads reais — confirmado no Tag Assistant, 2 hits por envio).
+      // Arquitetura final (2026-08-24): CADA destino tem UM caminho.
+      // - GA4 recebe pelo gtag('event') abaixo.
+      // - Google Ads recebe pelo dataLayer.push — no GTM (M2RST4PH) existe uma
+      //   tag de evento AW-388747722 disparada pelo evento 'create_lead_success'.
+      // O config inline do AW foi removido (dobrava tudo). NAO recolocar.
       if (typeof gtag === 'function') {
         gtag('event', 'create_lead_success', { event_id: eventId });
       }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
 
       window.location.href = '/diagnostico/obrigado';
     });
