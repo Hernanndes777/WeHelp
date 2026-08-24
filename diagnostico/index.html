@@ -797,11 +797,13 @@
       // "Create Lead Success" já importa direto da propriedade GA4 "WeHelp G4"
       // (conferido nas Configurações da conversão, 2026-08-11) — não precisa de
       // tag/label separada do Google Ads, só disparar esse evento com esse nome.
+      // Dispara UMA vez so, via gtag. O dataLayer.push duplicado foi removido
+      // em 2026-08-24: o GTM (M2RST4PH) reenviava o mesmo evento pro
+      // AW-388747722 e cada lead contava 2x no Google Ads (63 conversoes
+      // pra ~24 leads reais — confirmado no Tag Assistant, 2 hits por envio).
       if (typeof gtag === 'function') {
         gtag('event', 'create_lead_success', { event_id: eventId });
       }
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
 
       window.location.href = '/diagnostico/obrigado';
     });

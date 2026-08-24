@@ -138,13 +138,18 @@
     // aqui quem realmente completou o envio com sucesso (form em /academias
     // faz window.location.href pra cá só depois da resposta 200 do backend).
     (function () {
+      // Guarda anti-duplicacao (2026-08-24): (1) refresh/revisita desta pagina
+      // nao pode recontar a conversao — flag no sessionStorage garante 1 disparo
+      // por sessao; (2) o dataLayer.push duplicado foi removido — o GTM
+      // (M2RST4PH) reenviava o mesmo evento pro AW-388747722 e cada lead
+      // contava 2x no Google Ads (confirmado no Tag Assistant do /diagnostico).
+      if (sessionStorage.getItem('lead_conv_fired')) return;
+      sessionStorage.setItem('lead_conv_fired', '1');
       var eventId = sessionStorage.getItem('lead_event_id')
         || ('lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10));
       if (typeof gtag === 'function') {
         gtag('event', 'create_lead_success', { event_id: eventId });
       }
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
     })();
 
     // ── Tracking de clique no WhatsApp (engajamento extra, não é a conversão) ──
