@@ -18,13 +18,26 @@
       "source": "/webinario-convite/:path*",
       "destination": "/LP1/webinario-convite/:path*",
       "permanent": false
+    },
+    {
+      "source": "/feira",
+      "destination": "/fitness-brasil-2026",
+      "permanent": false
+    },
+    {
+      "source": "/feira/:path*",
+      "destination": "/fitness-brasil-2026/:path*",
+      "permanent": false
     }
   ],
   "headers": [
     {
       "source": "/shared/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
       ]
     }
   ]
