@@ -241,14 +241,14 @@
 
 <script>
   const DAYS = [
-    { date: '2026-08-27', label: 'Qui', num: '27/08' },
+    // Quinta (27/08) encerrada por pedido do usuário, 2026-08-27 — dia já em andamento, sem mais vagas novas pelo site.
     { date: '2026-08-28', label: 'Sex', num: '28/08' },
     { date: '2026-08-29', label: 'Sáb', num: '29/08' },
   ];
   const START_HOUR = 10, END_HOUR = 19; // horário comercial da feira — ajuste aqui se mudar
   const MAX_PER_SLOT = 2; // Eric + Pietro
   const BLOCKED = {
-    '2026-08-28': ['17:00', '17:30', '18:00', '18:30'], // Plenária do Selo de Excelência
+    '2026-08-28': ['10:00', '10:30', '11:00', '17:00', '17:30', '18:00', '18:30'], // 10h-11h fechado (pedido 2026-08-27) + Plenária do Selo de Excelência
     '2026-08-29': ['18:30'], // pedido do usuário, 2026-08-19
   };
 
