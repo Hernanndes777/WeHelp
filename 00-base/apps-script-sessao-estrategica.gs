@@ -20,7 +20,7 @@
  * faltar uma chave — só fica em branco.
  */
 
-const SHEET_NAME = 'Agendamentos WB 06';
+const SHEET_NAME = 'Agendamentos WB 07';
 
 function doPost(e) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
