@@ -344,7 +344,8 @@
     document.getElementById('s-attract').addEventListener('click', function (e) {
       if (e.target.id === 'logoTap') return; // toques na logo sao do export escondido
       show('s-calc');
-      setTimeout(function () { document.getElementById('cAlunos').focus(); }, 500);
+      // foco SINCRONO no gesto do toque — e o que faz o teclado abrir sozinho
+      document.getElementById('cAlunos').focus();
     });
     document.getElementById('btnCalcBack').addEventListener('click', function () { show('s-attract'); });
     document.getElementById('btnCapBack').addEventListener('click', function () { show('s-calc'); });
@@ -375,7 +376,7 @@
         perdaAnual: (c * 12) * (m * p)
       };
       show('s-capture');
-      setTimeout(function () { document.getElementById('fNome').focus(); }, 500);
+      document.getElementById('fNome').focus();
     });
 
     // ---------- passo 2: captura -> envia -> calculando -> resultado ----------
