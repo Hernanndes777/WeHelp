@@ -41,7 +41,7 @@
     /* ---------- telas: transicao de fade+slide ---------- */
     .screen {
       position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
       padding: 32px 28px; text-align: center; overflow-y: auto;
       opacity: 0; visibility: hidden; transform: translateY(26px);
       transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
@@ -50,15 +50,19 @@
       opacity: 1; visibility: visible; transform: translateY(0);
       transition: opacity .45s ease, transform .45s ease, visibility 0s;
     }
+    .inner {
+      margin: auto; width: 100%;
+      display: flex; flex-direction: column; align-items: center;
+    }
     /* entrada em cascata dos filhos da tela ativa */
-    .screen > *:not(.orb):not(#pendingBadge) { opacity: 0; transform: translateY(18px); }
-    .screen.on > *:not(.orb):not(#pendingBadge) { animation: rise .55s cubic-bezier(.2,.7,.3,1) forwards; }
-    .screen.on > *:nth-child(1) { animation-delay: .05s; }
-    .screen.on > *:nth-child(2) { animation-delay: .15s; }
-    .screen.on > *:nth-child(3) { animation-delay: .25s; }
-    .screen.on > *:nth-child(4) { animation-delay: .35s; }
-    .screen.on > *:nth-child(5) { animation-delay: .45s; }
-    .screen.on > *:nth-child(6) { animation-delay: .55s; }
+    .screen .inner > * { opacity: 0; transform: translateY(18px); }
+    .screen.on .inner > * { animation: rise .55s cubic-bezier(.2,.7,.3,1) forwards; }
+    .screen.on .inner > *:nth-child(1) { animation-delay: .05s; }
+    .screen.on .inner > *:nth-child(2) { animation-delay: .15s; }
+    .screen.on .inner > *:nth-child(3) { animation-delay: .25s; }
+    .screen.on .inner > *:nth-child(4) { animation-delay: .35s; }
+    .screen.on .inner > *:nth-child(5) { animation-delay: .45s; }
+    .screen.on .inner > *:nth-child(6) { animation-delay: .55s; }
     @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
     /* ---------- TELA 1: ATRACAO ---------- */
@@ -161,7 +165,7 @@
     #s-result .lbl { font-size: 18px; color: #9fb4e8; font-weight: 500; }
     #bigLoss {
       font-family: 'Figtree', sans-serif; font-weight: 900;
-      font-size: clamp(50px, 9.5vw, 98px); letter-spacing: -0.02em; line-height: 1.04;
+      font-size: clamp(34px, 9vw, 98px); max-width: 100%; overflow-wrap: break-word; letter-spacing: -0.02em; line-height: 1.04;
       color: var(--red); margin: 10px 0 6px; font-variant-numeric: tabular-nums;
     }
     #bigLoss.landed { animation: land .5s cubic-bezier(.2,.7,.3,1.4) !important; opacity: 1 !important; transform: none; }
@@ -203,13 +207,16 @@
     <div class="orb orb--1"></div>
     <div class="orb orb--2"></div>
     <div class="orb orb--3"></div>
+    <div class="inner">
     <img class="logo" id="logoTap" src="../shared/logo-wehelp.png" alt="WeHelp" />
     <h1>Quanto a evasão vai custar pra sua academia <em>nos próximos 12 meses?</em></h1>
     <div class="tap"><span class="tap-ring"><span class="tap-dot"></span></span> Toque na tela para descobrir</div>
+    </div>
   </section>
 
   <!-- TELA 2 — CALCULADORA -->
   <section class="screen light" id="s-calc">
+    <div class="inner">
     <div class="card">
       <div class="step-eyebrow">Passo 1 de 2 · A conta</div>
       <h2>4 números que você sabe de cabeça.</h2>
@@ -221,7 +228,7 @@
         </div>
         <div class="field">
           <label for="cMensalidade">Mensalidade média (R$)</label>
-          <input id="cMensalidade" type="text" inputmode="numeric" placeholder="ex: 150" />
+          <input id="cMensalidade" type="text" inputmode="decimal" placeholder="ex: 149,90" />
         </div>
         <div class="field">
           <label for="cPermanencia">Permanência média (meses)</label>
@@ -236,10 +243,12 @@
       <button class="btn" id="btnCalc">Fazer a conta <span class="arrow">→</span></button>
       <button class="btn btn--ghost" id="btnCalcBack">Voltar</button>
     </div>
+</div>
   </section>
 
   <!-- TELA 3 — CAPTURA (gate: contato libera o resultado) -->
   <section class="screen light" id="s-capture">
+    <div class="inner">
     <div class="card">
       <div class="step-eyebrow">Passo 2 de 2 · Quase lá</div>
       <h2>Seu diagnóstico está pronto.</h2>
@@ -260,17 +269,21 @@
       <button class="btn" id="btnSend">Ver meu resultado <span class="arrow">→</span></button>
       <button class="btn btn--ghost" id="btnCapBack">Voltar</button>
     </div>
+</div>
   </section>
 
   <!-- TELA 4 — CALCULANDO -->
   <section class="screen" id="s-loading">
+    <div class="inner">
     <div class="ring"></div>
     <h2>Calculando seu diagnóstico…</h2>
     <div id="loadingStep"></div>
+    </div>
   </section>
 
   <!-- TELA 5 — RESULTADO (tela final, fica pra conversa com o time) -->
   <section class="screen" id="s-result">
+    <div class="inner">
     <div class="lbl" id="resultName">Sua academia está deixando de faturar</div>
     <div id="bigLoss">R$ 0</div>
     <div id="lossDetail"></div>
@@ -282,6 +295,7 @@
     <div class="result-cta"><span class="check">✅</span> Diagnóstico registrado — chama alguém do time WeHelp pra montar o plano de recuperação com esses números.</div>
     <button class="btn btn--ghost" id="btnNew">Fazer novo cálculo</button>
     <div id="resetCount"></div>
+    </div>
   </section>
 
   <script>
@@ -298,7 +312,9 @@
     };
 
     // separador de milhar ao vivo nos campos numericos
-    ['cAlunos', 'cMensalidade', 'cCancel'].forEach(function (id) {
+    // cMensalidade fica de fora: precisa aceitar centavos (149,90) — o
+    // formatador de milhar engolia a virgula e multiplicava por 100.
+    ['cAlunos', 'cCancel'].forEach(function (id) {
       var el = document.getElementById(id);
       el.addEventListener('input', function () {
         var d = el.value.replace(/\D/g, '');
@@ -350,7 +366,9 @@
     });
 
     // ---------- passo 2: captura -> envia -> calculando -> resultado ----------
+    var sending = false;
     document.getElementById('btnSend').addEventListener('click', function () {
+      if (sending) return;
       var nome = document.getElementById('fNome').value.trim();
       var zap = document.getElementById('fZap').value.replace(/\D/g, '');
       var academia = document.getElementById('fAcademia').value.trim();
@@ -380,6 +398,9 @@
         skip_capi: true,
         captured_at: new Date().toISOString()
       };
+
+      sending = true;
+      setTimeout(function () { sending = false; }, 2500);
 
       pushTo(BKEY, lead);   // backup permanente no aparelho
       pushTo(QKEY, lead);   // fila de envio
