@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0a1128" />
+  <title>Calculadora de Churn — Estande WeHelp</title>
+  <!--
+    MODO KIOSK pro tablet do estande (Fitness Brasil 2026).
+    - SEM GTM / GA4 / Meta Pixel de propósito: um aparelho gerando dezenas de
+      leads inflaria as conversões do Ads e sujaria o pixel. Lead vai só pela API.
+    - API: /api/lead-fitness-brasil-2026 com skip_capi=true (Sheets recebe, CAPI não).
+    - Fila offline em localStorage (wifi de feira cai): todo lead salva primeiro
+      no aparelho, tenta enviar, reenvia sozinho. Export de emergência: 5 toques
+      na logo da tela inicial.
+    - Reset automático: 90s de inatividade em qualquer tela volta pro início.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #1B6EF3; --blue-hover: #1457c8; --blue-light: #e8f0ff;
+      --navy: #0a1128; --navy2: #101c42; --body: #4a5568;
+      --border: #e2e8f0; --bg: #f4f6fb; --white: #fff;
+      --red: #d93a5c; --green: #0f9d6a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif; color: var(--navy);
+      background: var(--bg); overflow: hidden;
+      -webkit-user-select: none; user-select: none;
+    }
+
+    .screen {
+      position: absolute; inset: 0; display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      padding: 32px 28px; text-align: center; overflow-y: auto;
+    }
+    .screen.on { display: flex; }
+
+    /* ---------- TELA 1: ATRACAO ---------- */
+    #s-attract { background: radial-gradient(120% 120% at 50% 0%, var(--navy2) 0%, var(--navy) 60%); color: #fff; cursor: pointer; }
+    #s-attract .logo { height: 54px; margin-bottom: 48px; filter: brightness(0) invert(1); }
+    #s-attract h1 {
+      font-family: 'Figtree', sans-serif; font-weight: 900;
+      font-size: clamp(34px, 6vw, 58px); line-height: 1.12; letter-spacing: -0.015em;
+      max-width: 15ch;
+    }
+    #s-attract h1 em { font-style: normal; color: #6ea8ff; }
+    #s-attract .tap {
+      margin-top: 56px; font-size: 19px; font-weight: 500; color: #9fb4e8;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+    #pendingBadge {
+      position: absolute; top: 14px; right: 16px; font-size: 12px; font-weight: 700;
+      background: var(--red); color: #fff; border-radius: 20px; padding: 4px 10px; display: none;
+    }
+
+    /* ---------- CARTOES (telas claras) ---------- */
+    .card { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 34px 30px; width: 100%; max-width: 620px; box-shadow: 0 10px 40px rgba(10,17,40,.07); text-align: left; }
+    .screen h2 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.18; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .sub { color: var(--body); font-size: 16.5px; margin-bottom: 26px; }
+
+    .field { margin-bottom: 20px; }
+    .field label { display: block; font-weight: 700; font-size: 15.5px; margin-bottom: 8px; }
+    .field input {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 500;
+      padding: 16px 18px; border: 2px solid var(--border); border-radius: 14px;
+      background: var(--bg); color: var(--navy); outline: none;
+      -webkit-user-select: text; user-select: text;
+    }
+    .field input:focus { border-color: var(--blue); background: #fff; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+
+    .btn {
+      display: block; width: 100%; border: none; cursor: pointer; text-align: center;
+      font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 20px;
+      padding: 20px; border-radius: 16px; background: var(--blue); color: #fff;
+      margin-top: 6px; transition: background .15s;
+    }
+    .btn:active { background: var(--blue-hover); }
+    .btn--ghost { background: transparent; color: var(--body); font-weight: 700; font-size: 16px; padding: 14px; margin-top: 10px; }
+    .btn--ghost:active { background: var(--border); }
+
+    /* ---------- TELA 3: RESULTADO ---------- */
+    #s-result { background: var(--navy); color: #fff; }
+    #s-result .lbl { font-size: 17px; color: #9fb4e8; font-weight: 500; }
+    #bigLoss {
+      font-family: 'Figtree', sans-serif; font-weight: 900;
+      font-size: clamp(46px, 9vw, 92px); letter-spacing: -0.02em; line-height: 1.05;
+      color: #ff7a93; margin: 10px 0 6px;
+    }
+    #lossDetail { font-size: 17px; color: #c3d0f5; margin-bottom: 30px; }
+    .recov { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 640px; margin-bottom: 34px; }
+    @media (max-width: 560px) { .recov { grid-template-columns: 1fr; } }
+    .recov div { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 18px 14px; }
+    .recov .pct { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #9fb4e8; }
+    .recov .val { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(19px, 2.6vw, 26px); color: #6ee7b7; margin-top: 4px; }
+    .recov .tag { font-size: 12.5px; color: #c3d0f5; margin-top: 3px; }
+    #s-result .btn { max-width: 640px; }
+
+    /* ---------- TELA 5: OBRIGADO ---------- */
+    #s-thanks { background: radial-gradient(120% 120% at 50% 0%, var(--navy2) 0%, var(--navy) 60%); color: #fff; }
+    #s-thanks .check { font-size: 64px; margin-bottom: 18px; }
+    #s-thanks h2 { color: #fff; max-width: 22ch; }
+    #s-thanks p { color: #c3d0f5; font-size: 18px; margin-top: 10px; max-width: 44ch; }
+    #resetCount { color: #9fb4e8; font-size: 14px; margin-top: 34px; }
+
+    .err { color: var(--red); font-size: 14.5px; font-weight: 700; margin-top: -10px; margin-bottom: 14px; display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- TELA 1 — ATRACAO -->
+  <section class="screen on" id="s-attract">
+    <span id="pendingBadge"></span>
+    <img class="logo" id="logoTap" src="../shared/logo-wehelp.png" alt="WeHelp" />
+    <h1>Quanto a evasão custou pra sua academia <em>nos últimos 12 meses?</em></h1>
+    <div class="tap">Toque na tela para descobrir</div>
+  </section>
+
+  <!-- TELA 2 — CALCULADORA -->
+  <section class="screen" id="s-calc">
+    <div class="card">
+      <h2>Vamos fazer a conta.</h2>
+      <p class="sub">4 números que você sabe de cabeça.</p>
+      <div class="grid2">
+        <div class="field">
+          <label for="cAlunos">Alunos ativos</label>
+          <input id="cAlunos" type="text" inputmode="numeric" placeholder="ex: 800" />
+        </div>
+        <div class="field">
+          <label for="cMensalidade">Mensalidade média (R$)</label>
+          <input id="cMensalidade" type="text" inputmode="numeric" placeholder="ex: 150" />
+        </div>
+        <div class="field">
+          <label for="cPermanencia">Permanência média (meses)</label>
+          <input id="cPermanencia" type="text" inputmode="numeric" placeholder="ex: 8" />
+        </div>
+        <div class="field">
+          <label for="cCancel">Cancelamentos por mês</label>
+          <input id="cCancel" type="text" inputmode="numeric" placeholder="ex: 60" />
+        </div>
+      </div>
+      <div class="err" id="calcErr">Preencha os 4 campos pra fazer a conta.</div>
+      <button class="btn" id="btnCalc">Ver quanto estou perdendo</button>
+      <button class="btn btn--ghost" id="btnCalcBack">Voltar</button>
+    </div>
+  </section>
+
+  <!-- TELA 3 — RESULTADO -->
+  <section class="screen" id="s-result">
+    <div class="lbl">Sua academia está deixando de faturar</div>
+    <div id="bigLoss">R$ 0</div>
+    <div id="lossDetail"></div>
+    <div class="recov">
+      <div><div class="pct">Recuperando 10%</div><div class="val" id="r10"></div><div class="tag">cenário conservador</div></div>
+      <div><div class="pct">Recuperando 25%</div><div class="val" id="r25"></div><div class="tag">cenário realista</div></div>
+      <div><div class="pct">Recuperando 45%</div><div class="val" id="r45"></div><div class="tag">com a WeHelp</div></div>
+    </div>
+    <button class="btn" id="btnWant">Quero recuperar esse dinheiro</button>
+    <button class="btn btn--ghost" id="btnRedo" style="color:#9fb4e8;">Refazer o cálculo</button>
+  </section>
+
+  <!-- TELA 4 — CAPTURA -->
+  <section class="screen" id="s-capture">
+    <div class="card">
+      <h2>Nosso time monta o plano com você agora.</h2>
+      <p class="sub">Deixa seu contato — a gente te chama aqui no estande.</p>
+      <div class="field">
+        <label for="fNome">Seu nome</label>
+        <input id="fNome" type="text" autocomplete="off" placeholder="Nome" />
+      </div>
+      <div class="field">
+        <label for="fZap">WhatsApp</label>
+        <input id="fZap" type="text" inputmode="numeric" autocomplete="off" placeholder="(00) 00000-0000" />
+      </div>
+      <div class="field">
+        <label for="fAcademia">Nome da academia</label>
+        <input id="fAcademia" type="text" autocomplete="off" placeholder="Academia" />
+      </div>
+      <div class="err" id="capErr">Preencha nome e um WhatsApp válido com DDD.</div>
+      <button class="btn" id="btnSend">Chamar o time WeHelp</button>
+      <button class="btn btn--ghost" id="btnCapBack">Voltar pro resultado</button>
+    </div>
+  </section>
+
+  <!-- TELA 5 — OBRIGADO -->
+  <section class="screen" id="s-thanks">
+    <div class="check">✅</div>
+    <h2 id="thanksTitle">Recebido!</h2>
+    <p>Mostra essa tela pra alguém do time WeHelp aqui no estande — a gente já monta seu plano de retenção com os seus números.</p>
+    <div id="resetCount"></div>
+  </section>
+
+  <script>
+    // ---------- estado ----------
+    var calc = { alunos: 0, mensalidade: 0, permanencia: 0, cancelamentos: 0, perdaAnual: 0, churn: 0 };
+    var QKEY = 'estande_fila';      // leads aguardando envio
+    var BKEY = 'estande_backup';    // copia de TUDO que foi capturado (seguro)
+
+    var brl = function (v) {
+      return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+    };
+    var num = function (id) {
+      return parseFloat((document.getElementById(id).value || '').replace(/\./g, '').replace(',', '.')) || 0;
+    };
+
+    // ---------- navegacao ----------
+    function show(id) {
+      document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('on'); });
+      document.getElementById(id).classList.add('on');
+      bumpIdle();
+    }
+    document.getElementById('s-attract').addEventListener('click', function (e) {
+      if (e.target.id === 'logoTap') return; // toques na logo sao do export escondido
+      show('s-calc');
+    });
+    document.getElementById('btnCalcBack').addEventListener('click', function () { show('s-attract'); });
+    document.getElementById('btnRedo').addEventListener('click', function () { show('s-calc'); });
+    document.getElementById('btnCapBack').addEventListener('click', function () { show('s-result'); });
+
+    // ---------- calculo (formula oficial do app: LTV = mensalidade x permanencia) ----------
+    document.getElementById('btnCalc').addEventListener('click', function () {
+      var a = num('cAlunos'), m = num('cMensalidade'), p = num('cPermanencia'), c = num('cCancel');
+      var err = document.getElementById('calcErr');
+      if (!a || !m || !p || !c) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+
+      calc = {
+        alunos: a, mensalidade: m, permanencia: p, cancelamentos: c,
+        churn: (c / a) * 100,
+        perdaAnual: (c * 12) * (m * p)
+      };
+      document.getElementById('bigLoss').textContent = brl(calc.perdaAnual) + '/ano';
+      document.getElementById('lossDetail').textContent =
+        'Isso é ' + brl(calc.perdaAnual / 12) + ' por mês indo embora · taxa de churn de ' + calc.churn.toFixed(1).replace('.', ',') + '%';
+      document.getElementById('r10').textContent = brl(calc.perdaAnual * 0.10) + '/ano';
+      document.getElementById('r25').textContent = brl(calc.perdaAnual * 0.25) + '/ano';
+      document.getElementById('r45').textContent = brl(calc.perdaAnual * 0.45) + '/ano';
+      show('s-result');
+    });
+
+    document.getElementById('btnWant').addEventListener('click', function () { show('s-capture'); });
+
+    // ---------- captura ----------
+    document.getElementById('btnSend').addEventListener('click', function () {
+      var nome = document.getElementById('fNome').value.trim();
+      var zap = document.getElementById('fZap').value.replace(/\D/g, '');
+      var academia = document.getElementById('fAcademia').value.trim();
+      var err = document.getElementById('capErr');
+      if (!nome || zap.length < 10) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+
+      var lead = {
+        Nome_Completo: nome,
+        WhatsApp: '+55' + zap,
+        Nome_da_Academia: academia,
+        Alunos_ativos: calc.alunos,
+        Mensalidade_media: calc.mensalidade,
+        Permanencia_media_meses: calc.permanencia,
+        Cancelamentos_mes: calc.cancelamentos,
+        Perda_anual_calculada: Math.round(calc.perdaAnual),
+        utm_source: 'evento',
+        utm_medium: 'tablet',
+        utm_campaign: 'fitness_brasil_2026',
+        url: location.href,
+        event_id: 'estande_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+        skip_capi: true,
+        captured_at: new Date().toISOString()
+      };
+
+      pushTo(BKEY, lead);   // backup permanente no aparelho
+      pushTo(QKEY, lead);   // fila de envio
+      flushQueue();
+
+      document.getElementById('thanksTitle').textContent = 'Recebido, ' + nome.split(' ')[0] + '!';
+      show('s-thanks');
+      startThanksCountdown();
+
+      // limpa so os campos de contato — os do calculo resetam junto com a tela
+      document.getElementById('fNome').value = '';
+      document.getElementById('fZap').value = '';
+      document.getElementById('fAcademia').value = '';
+    });
+
+    // ---------- fila offline ----------
+    function readList(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch (e) { return []; } }
+    function pushTo(k, item) { var l = readList(k); l.push(item); try { localStorage.setItem(k, JSON.stringify(l)); } catch (e) {} }
+    function updateBadge() {
+      var n = readList(QKEY).length;
+      var b = document.getElementById('pendingBadge');
+      b.style.display = n ? 'block' : 'none';
+      b.textContent = n + ' aguardando envio';
+    }
+    var flushing = false;
+    function flushQueue() {
+      if (flushing) return;
+      var fila = readList(QKEY);
+      updateBadge();
+      if (!fila.length) return;
+      flushing = true;
+      var lead = fila[0];
+      fetch('/api/lead-fitness-brasil-2026', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead)
+      }).then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        var l = readList(QKEY); l.shift();
+        localStorage.setItem(QKEY, JSON.stringify(l));
+        flushing = false;
+        flushQueue(); // proximo da fila
+      }).catch(function () {
+        flushing = false; // sem rede — tenta de novo no proximo ciclo
+        updateBadge();
+      });
+    }
+    setInterval(flushQueue, 30000);
+    window.addEventListener('online', flushQueue);
+
+    // ---------- export escondido (5 toques na logo) ----------
+    var taps = 0, tapTimer = null;
+    document.getElementById('logoTap').addEventListener('click', function (e) {
+      e.stopPropagation();
+      taps++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(function () { taps = 0; }, 2500);
+      if (taps >= 5) {
+        taps = 0;
+        var backup = readList(BKEY), fila = readList(QKEY);
+        prompt(
+          'BACKUP DO APARELHO — ' + backup.length + ' leads capturados, ' + fila.length + ' aguardando envio. Copie o texto abaixo:',
+          JSON.stringify(backup)
+        );
+      }
+    });
+
+    // ---------- reset por inatividade ----------
+    var idleTimer = null;
+    function bumpIdle() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(function () {
+        if (!document.getElementById('s-attract').classList.contains('on')) hardReset();
+      }, 90000);
+    }
+    ['click', 'touchstart', 'input', 'keydown'].forEach(function (ev) {
+      document.addEventListener(ev, bumpIdle, { passive: true });
+    });
+
+    function hardReset() {
+      ['cAlunos', 'cMensalidade', 'cPermanencia', 'cCancel', 'fNome', 'fZap', 'fAcademia'].forEach(function (id) {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('calcErr').style.display = 'none';
+      document.getElementById('capErr').style.display = 'none';
+      show('s-attract');
+      updateBadge();
+    }
+
+    // ---------- countdown do obrigado ----------
+    var cdTimer = null;
+    function startThanksCountdown() {
+      var s = 12;
+      clearInterval(cdTimer);
+      var el = document.getElementById('resetCount');
+      el.textContent = 'Liberando pro próximo em ' + s + 's';
+      cdTimer = setInterval(function () {
+        s--;
+        el.textContent = 'Liberando pro próximo em ' + s + 's';
+        if (s <= 0) { clearInterval(cdTimer); hardReset(); }
+      }, 1000);
+    }
+
+    updateBadge();
+    flushQueue();
+  </script>
+</body>
+</html>

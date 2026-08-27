@@ -28,7 +28,7 @@ export default async function handler(req, res) {
       Alunos_ativos, Mensalidade_media, Permanencia_media_meses, Cancelamentos_mes,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
       fbclid, gclid, referral_source, url: pageUrl,
-      event_id, fbc, fbp, test_event_code,
+      event_id, fbc, fbp, test_event_code, skip_capi,
     } = req.body;
 
     if (!WhatsApp) {
@@ -83,7 +83,9 @@ export default async function handler(req, res) {
 
     // 2. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
     let capiPromise = Promise.resolve();
-    if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
+    // skip_capi: o tablet do estande (/estande) manda dezenas de leads do mesmo
+    // IP/aparelho — CAPI com isso envenena o aprendizado do pixel. Sheets continua.
+    if (CAPI_ENDPOINT && META_ACCESS_TOKEN && !skip_capi) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
       const referer = req.headers['referer'] || pageUrl || '';
 
