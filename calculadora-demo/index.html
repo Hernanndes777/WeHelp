@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0a1128" />
+  <title>Calculadora de Churn — Demonstração WeHelp</title>
+  <!--
+    Versao de DEMONSTRACAO da calculadora do estande, pedida pelo Eric (CS).
+    Diferencas de proposito em relacao ao /estande:
+    - NAO captura lead, NAO chama API, NAO manda pro DataCrazy nem planilha.
+    - Sem reset automatico (nao pode apagar a tela no meio de uma demo).
+    - Fluxo direto: conta -> calculando -> resultado -> novo calculo.
+    Mesma formula oficial do app (LTV = mensalidade x permanencia).
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #1B6EF3; --blue-hover: #1457c8; --blue-soft: #6ea8ff;
+      --navy: #0a1128; --navy2: #101c42; --body: #4a5568;
+      --border: #e2e8f0; --bg: #f4f6fb;
+      --red: #ff7a93; --red-solid: #d93a5c; --green: #6ee7b7;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { height: 100%; }
+    body { font-family: 'DM Sans', system-ui, sans-serif; color: var(--navy); background: var(--navy); overflow: hidden; }
+
+    .screen {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      padding: 32px 28px; text-align: center; overflow-y: auto;
+      opacity: 0; visibility: hidden; transform: translateY(26px);
+      transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
+    }
+    .screen.on {
+      opacity: 1; visibility: visible; transform: translateY(0);
+      transition: opacity .45s ease, transform .45s ease, visibility 0s;
+    }
+    .inner { margin: auto; width: 100%; display: flex; flex-direction: column; align-items: center; }
+    .screen .inner > * { opacity: 0; transform: translateY(18px); }
+    .screen.on .inner > * { animation: rise .55s cubic-bezier(.2,.7,.3,1) forwards; }
+    .screen.on .inner > *:nth-child(1) { animation-delay: .05s; }
+    .screen.on .inner > *:nth-child(2) { animation-delay: .15s; }
+    .screen.on .inner > *:nth-child(3) { animation-delay: .25s; }
+    .screen.on .inner > *:nth-child(4) { animation-delay: .35s; }
+    .screen.on .inner > *:nth-child(5) { animation-delay: .45s; }
+    .screen.on .inner > *:nth-child(6) { animation-delay: .55s; }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+    .light { background: var(--bg); }
+    .card {
+      background: #fff; border: 1px solid var(--border); border-radius: 22px;
+      padding: 36px 32px; width: 100%; max-width: 640px;
+      box-shadow: 0 18px 60px rgba(10,17,40,.10); text-align: left;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .brand img { height: 30px; }
+    .brand span {
+      font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--blue); background: #e8f0ff; border-radius: 100px; padding: 5px 12px;
+    }
+    .card h2 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(24px, 3.4vw, 33px); line-height: 1.16; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .sub { color: var(--body); font-size: 16.5px; margin-bottom: 26px; }
+
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-weight: 700; font-size: 15.5px; margin-bottom: 8px; }
+    .field input {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 500;
+      padding: 16px 18px; border: 2px solid var(--border); border-radius: 14px;
+      background: var(--bg); color: var(--navy); outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+    .field input:focus { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 4px rgba(27,110,243,.13); }
+    .field input.invalid { border-color: var(--red-solid); animation: shake .35s ease; }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 60% { transform: translateX(7px); } }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 580px) { .grid2 { grid-template-columns: 1fr; } }
+
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; border: none; cursor: pointer; text-align: center;
+      font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 20px;
+      padding: 20px; border-radius: 16px; background: var(--blue); color: #fff;
+      margin-top: 8px; transition: transform .12s ease, background .15s, box-shadow .2s;
+      box-shadow: 0 8px 22px rgba(27,110,243,.35);
+    }
+    .btn:active { background: var(--blue-hover); transform: scale(.965); }
+    .err { color: var(--red-solid); font-size: 14.5px; font-weight: 700; margin: 2px 0 12px; display: none; }
+
+    #s-loading { background: var(--navy); color: #fff; }
+    .ring {
+      width: 92px; height: 92px; border-radius: 50%;
+      border: 5px solid rgba(255,255,255,.12); border-top-color: var(--blue-soft);
+      animation: rise .55s cubic-bezier(.2,.7,.3,1) forwards, spin 1s linear infinite !important;
+      margin-bottom: 34px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #s-loading h2 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(24px, 3.6vw, 34px); color: #fff; }
+    #loadingStep { color: #9fb4e8; font-size: 17px; margin-top: 12px; min-height: 24px; transition: opacity .25s; }
+
+    #s-result { background: radial-gradient(130% 130% at 50% -10%, var(--navy2) 0%, var(--navy) 62%); color: #fff; }
+    #s-result .lbl { font-size: 18px; color: #9fb4e8; font-weight: 500; }
+    #bigLoss {
+      font-family: 'Figtree', sans-serif; font-weight: 900;
+      font-size: clamp(34px, 9vw, 98px); max-width: 100%; overflow-wrap: break-word;
+      letter-spacing: -0.02em; line-height: 1.04;
+      color: var(--red); margin: 10px 0 6px; font-variant-numeric: tabular-nums;
+    }
+    #bigLoss.landed { animation: land .5s cubic-bezier(.2,.7,.3,1.4) !important; opacity: 1 !important; transform: none; }
+    @keyframes land { 0% { transform: scale(1.06); } 100% { transform: scale(1); } }
+    #lossDetail { font-size: 17.5px; color: #c3d0f5; margin-bottom: 30px; }
+    .recov { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 660px; margin-bottom: 30px; }
+    @media (max-width: 580px) { .recov { grid-template-columns: 1fr; } }
+    .recov > div {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px; padding: 18px 14px;
+      opacity: 0; transform: translateY(16px) scale(.96);
+    }
+    .recov.play > div { animation: pop .5s cubic-bezier(.2,.7,.3,1.3) forwards; }
+    .recov.play > div:nth-child(1) { animation-delay: .15s; }
+    .recov.play > div:nth-child(2) { animation-delay: .35s; }
+    .recov.play > div:nth-child(3) { animation-delay: .55s; }
+    @keyframes pop { to { opacity: 1; transform: translateY(0) scale(1); } }
+    .recov > div:last-child { border-color: rgba(110,231,183,.5); background: rgba(110,231,183,.08); }
+    .recov .pct { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #9fb4e8; }
+    .recov .val { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(20px, 2.7vw, 27px); color: var(--green); margin-top: 4px; }
+    .recov .tag { font-size: 12.5px; color: #c3d0f5; margin-top: 3px; }
+    #s-result .btn { max-width: 660px; }
+  </style>
+</head>
+<body>
+
+  <!-- TELA 1 — CALCULADORA (entrada direta, sem tela de atracao) -->
+  <section class="screen light on" id="s-calc">
+    <div class="inner">
+    <div class="card">
+      <div class="brand">
+        <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+        <span>Demonstração</span>
+      </div>
+      <h2>Quanto a evasão vai custar nos próximos 12 meses?</h2>
+      <p class="sub">4 números da academia e a conta sai na hora.</p>
+      <div class="grid2">
+        <div class="field">
+          <label for="cAlunos">Alunos ativos</label>
+          <input id="cAlunos" type="text" inputmode="numeric" placeholder="ex: 800" />
+        </div>
+        <div class="field">
+          <label for="cMensalidade">Mensalidade média (R$)</label>
+          <input id="cMensalidade" type="text" inputmode="decimal" placeholder="ex: 149,90" />
+        </div>
+        <div class="field">
+          <label for="cPermanencia">Permanência média (meses)</label>
+          <input id="cPermanencia" type="text" inputmode="numeric" placeholder="ex: 8" />
+        </div>
+        <div class="field">
+          <label for="cCancel">Cancelamentos por mês</label>
+          <input id="cCancel" type="text" inputmode="numeric" placeholder="ex: 60" />
+        </div>
+      </div>
+      <div class="err" id="calcErr">Preencha os 4 campos pra fazer a conta.</div>
+      <button class="btn" id="btnCalc">Calcular</button>
+    </div>
+    </div>
+  </section>
+
+  <!-- TELA 2 — CALCULANDO -->
+  <section class="screen" id="s-loading">
+    <div class="inner">
+    <div class="ring"></div>
+    <h2>Calculando o diagnóstico…</h2>
+    <div id="loadingStep"></div>
+    </div>
+  </section>
+
+  <!-- TELA 3 — RESULTADO -->
+  <section class="screen" id="s-result">
+    <div class="inner">
+    <div class="lbl">A academia está deixando de faturar</div>
+    <div id="bigLoss">R$ 0</div>
+    <div id="lossDetail"></div>
+    <div class="recov" id="recovGrid">
+      <div><div class="pct">Recuperando 10%</div><div class="val" id="r10"></div><div class="tag">cenário conservador</div></div>
+      <div><div class="pct">Recuperando 25%</div><div class="val" id="r25"></div><div class="tag">cenário realista</div></div>
+      <div><div class="pct">Recuperando 45%</div><div class="val" id="r45"></div><div class="tag">com a WeHelp</div></div>
+    </div>
+    <button class="btn" id="btnNew">Fazer novo cálculo</button>
+    </div>
+  </section>
+
+  <script>
+    var calc = { perdaAnual: 0, churn: 0 };
+
+    var brl = function (v) {
+      return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+    };
+    var num = function (id) {
+      return parseFloat((document.getElementById(id).value || '').replace(/\./g, '').replace(',', '.')) || 0;
+    };
+
+    // separador de milhar so nos campos inteiros — mensalidade aceita centavos
+    ['cAlunos', 'cCancel'].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.addEventListener('input', function () {
+        var d = el.value.replace(/\D/g, '');
+        el.value = d ? Number(d).toLocaleString('pt-BR') : '';
+      });
+    });
+
+    function show(id) {
+      document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('on'); });
+      document.getElementById(id).classList.add('on');
+    }
+
+    document.getElementById('btnCalc').addEventListener('click', function () {
+      var a = num('cAlunos'), m = num('cMensalidade'), p = num('cPermanencia'), c = num('cCancel');
+      var err = document.getElementById('calcErr');
+      var fields = { cAlunos: a, cMensalidade: m, cPermanencia: p, cCancel: c };
+      var bad = false;
+      Object.keys(fields).forEach(function (id) {
+        var el = document.getElementById(id);
+        el.classList.remove('invalid');
+        if (!fields[id]) { el.classList.add('invalid'); bad = true; }
+      });
+      if (bad) { err.style.display = 'block'; return; }
+      err.style.display = 'none';
+
+      // formula oficial do app: LTV = mensalidade x permanencia
+      calc = { churn: (c / a) * 100, perdaAnual: (c * 12) * (m * p) };
+
+      show('s-loading');
+      playLoading(function () { showResult(); });
+    });
+
+    document.getElementById('btnNew').addEventListener('click', function () { show('s-calc'); });
+
+    function playLoading(done) {
+      var steps = ['Cruzando os 4 números…', 'Projetando os próximos 12 meses…', 'Calculando o que dá pra recuperar…'];
+      var el = document.getElementById('loadingStep');
+      var i = 0;
+      el.textContent = steps[0];
+      var t = setInterval(function () {
+        i++;
+        if (i < steps.length) {
+          el.style.opacity = 0;
+          setTimeout(function () { el.textContent = steps[i - 0]; el.style.opacity = 1; }, 220);
+        } else { clearInterval(t); done(); }
+      }, 800);
+    }
+
+    function showResult() {
+      document.getElementById('lossDetail').textContent =
+        'Isso é ' + brl(calc.perdaAnual / 12) + ' por mês indo embora · taxa de churn de ' + calc.churn.toFixed(1).replace('.', ',') + '%';
+      document.getElementById('r10').textContent = brl(calc.perdaAnual * 0.10) + '/ano';
+      document.getElementById('r25').textContent = brl(calc.perdaAnual * 0.25) + '/ano';
+      document.getElementById('r45').textContent = brl(calc.perdaAnual * 0.45) + '/ano';
+
+      var grid = document.getElementById('recovGrid');
+      grid.classList.remove('play');
+      var big = document.getElementById('bigLoss');
+      big.classList.remove('landed');
+      big.textContent = 'R$ 0';
+
+      show('s-result');
+
+      setTimeout(function () {
+        var alvo = calc.perdaAnual, dur = 1800, t0 = null;
+        function frame(ts) {
+          if (!t0) t0 = ts;
+          var p = Math.min((ts - t0) / dur, 1);
+          var eased = 1 - Math.pow(2, -10 * p);
+          big.textContent = brl(alvo * eased) + '/ano';
+          if (p < 1) { requestAnimationFrame(frame); }
+          else {
+            big.textContent = brl(alvo) + '/ano';
+            big.classList.add('landed');
+            grid.classList.add('play');
+          }
+        }
+        requestAnimationFrame(frame);
+      }, 550);
+    }
+  </script>
+</body>
+</html>
