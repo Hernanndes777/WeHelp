@@ -24,7 +24,7 @@ export default async function handler(req, res) {
 
   try {
     const {
-      Nome_Completo, WhatsApp, Nome_da_Academia, Faixa_alunos,
+      Nome_Completo, WhatsApp, Nome_da_Academia, Faixa_alunos, Email, Area_da_Empresa,
       Alunos_ativos, Mensalidade_media, Permanencia_media_meses, Cancelamentos_mes,
       Perda_anual_calculada,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
@@ -60,6 +60,8 @@ export default async function handler(req, res) {
           WhatsApp: WhatsApp,
           Nome_da_Academia: Nome_da_Academia || '',
           Faixa_alunos: Faixa_alunos || '',
+          Email: Email || '',
+          Area_da_Empresa: Area_da_Empresa || '',
           Alunos_ativos: Alunos_ativos || '',
           Mensalidade_media: Mensalidade_media || '',
           Permanencia_media_meses: Permanencia_media_meses || '',
@@ -105,6 +107,7 @@ export default async function handler(req, res) {
       const notesLines = [];
       if (Nome_da_Academia) notesLines.push(`Academia: ${Nome_da_Academia}`);
       if (Faixa_alunos) notesLines.push(`Faixa de alunos: ${Faixa_alunos}`);
+      if (Area_da_Empresa) notesLines.push(`Area da empresa: ${Area_da_Empresa}`);
       if (Alunos_ativos) notesLines.push(`Alunos ativos: ${Alunos_ativos}`);
       if (Mensalidade_media) notesLines.push(`Mensalidade media: R$ ${Mensalidade_media}`);
       if (Permanencia_media_meses) notesLines.push(`Permanencia media: ${Permanencia_media_meses} meses`);
@@ -118,7 +121,7 @@ export default async function handler(req, res) {
         headers: dcHeaders,
         body: JSON.stringify({
           name: Nome_Completo || 'Lead sem nome',
-          email: `wp.${phoneDigits}@noemail.invalid`,
+          email: Email || `wp.${phoneDigits}@noemail.invalid`,
           phone: WhatsApp,
           company: Nome_da_Academia || '',
           source: utm_medium === 'tablet' ? 'Feira Fitness Brasil 2026 (Tablet)' : 'Feira Fitness Brasil 2026 (LP)',

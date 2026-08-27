@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0a1128" />
+  <title>Cadastro — WeHelp · Fitness Brasil 2026</title>
+  <!--
+    Captacao rapida de abordagem na feira (marketing abordando no corredor).
+    Um formulario so, envia e reseta pro proximo. Leads: aba "Site" da
+    planilha (utm_medium=abordagem pra separar) + DataCrazy tag da feira.
+    Fila offline igual ao /estande — wifi de feira cai.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #1B6EF3; --blue-hover: #1457c8;
+      --navy: #0a1128; --body: #4a5568;
+      --border: #e2e8f0; --bg: #f4f6fb;
+      --red: #d93a5c; --green: #0f9d6a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      min-height: 100vh; font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg); color: var(--navy);
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 22px 16px 40px;
+    }
+    .card {
+      background: #fff; border: 1px solid var(--border); border-radius: 20px;
+      padding: 26px 22px; width: 100%; max-width: 480px;
+      box-shadow: 0 12px 44px rgba(10,17,40,.08);
+    }
+    .brand { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .brand img { height: 28px; }
+    #fila {
+      font-size: 11.5px; font-weight: 700; color: #fff; background: var(--red);
+      border-radius: 20px; padding: 3px 9px; display: none;
+    }
+    h1 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 21px; line-height: 1.2; margin-bottom: 4px; }
+    .sub { color: var(--body); font-size: 14px; margin-bottom: 18px; }
+
+    .field { margin-bottom: 13px; }
+    .field label { display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 5px; }
+    .field input, .field select {
+      width: 100%; font-family: 'DM Sans', sans-serif; font-size: 17px;
+      padding: 13px 14px; border: 2px solid var(--border); border-radius: 12px;
+      background: var(--bg); color: var(--navy); outline: none;
+      transition: border-color .15s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .field select { background-image: linear-gradient(45deg, transparent 50%, #94a3b8 50%), linear-gradient(135deg, #94a3b8 50%, transparent 50%); background-position: calc(100% - 20px) 55%, calc(100% - 14px) 55%; background-size: 6px 6px; background-repeat: no-repeat; }
+    .field input:focus, .field select:focus { border-color: var(--blue); background: #fff; }
+    .field .invalid { border-color: var(--red); }
+
+    .err { color: var(--red); font-size: 13px; font-weight: 700; margin: 2px 0 10px; display: none; }
+
+    button {
+      width: 100%; border: none; cursor: pointer;
+      font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 17.5px;
+      padding: 16px; border-radius: 14px; background: var(--blue); color: #fff;
+      margin-top: 4px; transition: transform .1s, background .15s;
+    }
+    button:active { background: var(--blue-hover); transform: scale(.97); }
+
+    #ok {
+      display: none; text-align: center; padding: 34px 10px;
+    }
+    #ok .check { font-size: 52px; margin-bottom: 10px; }
+    #ok h2 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 22px; margin-bottom: 6px; }
+    #ok p { color: var(--body); font-size: 14.5px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">
+      <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+      <span id="fila"></span>
+    </div>
+
+    <div id="form">
+      <h1>Cadastro rápido</h1>
+      <p class="sub">Fitness Brasil 2026 · leva 20 segundos</p>
+
+      <div class="field">
+        <label for="nome">Nome *</label>
+        <input id="nome" type="text" autocomplete="off" placeholder="Nome completo" />
+      </div>
+      <div class="field">
+        <label for="telefone">WhatsApp *</label>
+        <input id="telefone" type="tel" inputmode="numeric" autocomplete="off" placeholder="(00) 00000-0000" />
+      </div>
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" inputmode="email" autocomplete="off" placeholder="email@empresa.com" />
+      </div>
+      <div class="field">
+        <label for="area">Área da empresa</label>
+        <select id="area">
+          <option value="" selected>Selecione</option>
+          <option>Academia</option>
+          <option>Studio ou Box</option>
+          <option>Rede (2+ unidades)</option>
+          <option>Clínica / Saúde</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="faixa">Clientes ativos</label>
+        <select id="faixa">
+          <option value="" selected>Selecione</option>
+          <option>Até 150 clientes</option>
+          <option>De 151 a 300 clientes</option>
+          <option>De 301 a 500 clientes</option>
+          <option>De 501 a 1000 clientes</option>
+          <option>Acima de 1000 clientes</option>
+        </select>
+      </div>
+
+      <div class="err" id="erro">Preencha nome e um WhatsApp válido com DDD.</div>
+      <button id="btn">Cadastrar</button>
+    </div>
+
+    <div id="ok">
+      <div class="check">✅</div>
+      <h2 id="okNome">Cadastrado!</h2>
+      <p>Liberando pro próximo em <span id="cd">3</span>s…</p>
+    </div>
+  </div>
+
+  <script>
+    var QKEY = 'captacao_fila';
+    var BKEY = 'captacao_backup';
+
+    function readList(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch (e) { return []; } }
+    function pushTo(k, item) { var l = readList(k); l.push(item); try { localStorage.setItem(k, JSON.stringify(l)); } catch (e) {} }
+    function updateBadge() {
+      var n = readList(QKEY).length;
+      var b = document.getElementById('fila');
+      b.style.display = n ? 'inline-block' : 'none';
+      b.textContent = n + ' na fila';
+    }
+    var flushing = false;
+    function flushQueue() {
+      if (flushing) return;
+      var fila = readList(QKEY);
+      updateBadge();
+      if (!fila.length) return;
+      flushing = true;
+      fetch('/api/lead-fitness-brasil-2026', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fila[0])
+      }).then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        var l = readList(QKEY); l.shift();
+        localStorage.setItem(QKEY, JSON.stringify(l));
+        flushing = false;
+        flushQueue();
+      }).catch(function () { flushing = false; updateBadge(); });
+    }
+    setInterval(flushQueue, 30000);
+    window.addEventListener('online', flushQueue);
+
+    var enviando = false;
+    document.getElementById('btn').addEventListener('click', function () {
+      if (enviando) return;
+      var nome = document.getElementById('nome').value.trim();
+      var tel = document.getElementById('telefone').value.replace(/\D/g, '');
+      var email = document.getElementById('email').value.trim();
+      var erro = document.getElementById('erro');
+      document.getElementById('nome').classList.remove('invalid');
+      document.getElementById('telefone').classList.remove('invalid');
+      var bad = false;
+      if (!nome) { document.getElementById('nome').classList.add('invalid'); bad = true; }
+      if (tel.length < 10) { document.getElementById('telefone').classList.add('invalid'); bad = true; }
+      if (bad) { erro.style.display = 'block'; return; }
+      erro.style.display = 'none';
+      enviando = true;
+      setTimeout(function () { enviando = false; }, 2500);
+
+      var lead = {
+        Nome_Completo: nome,
+        WhatsApp: '+55' + tel,
+        Email: email,
+        Area_da_Empresa: document.getElementById('area').value,
+        Faixa_alunos: document.getElementById('faixa').value,
+        utm_source: 'evento',
+        utm_medium: 'abordagem',
+        utm_campaign: 'fitness_brasil_2026',
+        url: location.href,
+        event_id: 'abordagem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+        skip_capi: true,
+        captured_at: new Date().toISOString()
+      };
+      pushTo(BKEY, lead);
+      pushTo(QKEY, lead);
+      flushQueue();
+
+      // sucesso + reset pro proximo
+      document.getElementById('okNome').textContent = 'Valeu, ' + nome.split(' ')[0] + '!';
+      document.getElementById('form').style.display = 'none';
+      document.getElementById('ok').style.display = 'block';
+      var s = 3;
+      var t = setInterval(function () {
+        s--;
+        document.getElementById('cd').textContent = s;
+        if (s <= 0) {
+          clearInterval(t);
+          ['nome', 'telefone', 'email'].forEach(function (id) { document.getElementById(id).value = ''; });
+          document.getElementById('area').value = '';
+          document.getElementById('faixa').value = '';
+          document.getElementById('ok').style.display = 'none';
+          document.getElementById('form').style.display = 'block';
+          document.getElementById('nome').focus();
+        }
+      }, 1000);
+    });
+
+    updateBadge();
+    flushQueue();
+  </script>
+</body>
+</html>
