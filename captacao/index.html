@@ -8,8 +8,8 @@
   <title>Cadastro — WeHelp · Fitness Brasil 2026</title>
   <!--
     Captacao rapida de abordagem na feira (marketing abordando no corredor).
-    Um formulario so, envia e reseta pro proximo. Leads: aba "Site" da
-    planilha (utm_medium=abordagem pra separar) + DataCrazy tag da feira.
+    Um formulario so, envia e reseta pro proximo. Leads: planilha propria
+    "Leads FB Brasil" (api/lead-captacao.js) + DataCrazy tag da feira.
     Fila offline igual ao /estande — wifi de feira cai.
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -108,6 +108,10 @@
           <option>Outro</option>
         </select>
       </div>
+      <div class="field" id="areaOutroField" style="display:none;">
+        <label for="areaOutro">Qual segmento?</label>
+        <input id="areaOutro" type="text" autocomplete="off" placeholder="Escreva o segmento" />
+      </div>
       <div class="field">
         <label for="faixa">Clientes ativos</label>
         <select id="faixa">
@@ -150,7 +154,7 @@
       updateBadge();
       if (!fila.length) return;
       flushing = true;
-      fetch('/api/lead-fitness-brasil-2026', {
+      fetch('/api/lead-captacao', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(fila[0])
@@ -164,6 +168,12 @@
     }
     setInterval(flushQueue, 30000);
     window.addEventListener('online', flushQueue);
+
+    document.getElementById('area').addEventListener('change', function () {
+      var mostra = this.value === 'Outro';
+      document.getElementById('areaOutroField').style.display = mostra ? 'block' : 'none';
+      if (mostra) document.getElementById('areaOutro').focus();
+    });
 
     var enviando = false;
     document.getElementById('btn').addEventListener('click', function () {
@@ -187,6 +197,8 @@
         WhatsApp: '+55' + tel,
         Email: email,
         Area_da_Empresa: document.getElementById('area').value,
+        Area_da_Empresa_Detalhe: document.getElementById('area').value === 'Outro'
+          ? document.getElementById('areaOutro').value.trim() : '',
         Faixa_alunos: document.getElementById('faixa').value,
         utm_source: 'evento',
         utm_medium: 'abordagem',
@@ -210,9 +222,10 @@
         document.getElementById('cd').textContent = s;
         if (s <= 0) {
           clearInterval(t);
-          ['nome', 'telefone', 'email'].forEach(function (id) { document.getElementById(id).value = ''; });
+          ['nome', 'telefone', 'email', 'areaOutro'].forEach(function (id) { document.getElementById(id).value = ''; });
           document.getElementById('area').value = '';
           document.getElementById('faixa').value = '';
+          document.getElementById('areaOutroField').style.display = 'none';
           document.getElementById('ok').style.display = 'none';
           document.getElementById('form').style.display = 'block';
           document.getElementById('nome').focus();
