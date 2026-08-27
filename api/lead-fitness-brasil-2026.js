@@ -91,7 +91,8 @@ export default async function handler(req, res) {
     // planilha e a fonte primaria do estande.
     const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
     const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
-    const DC_TAG_FITNESS_BRASIL = 'b7d33288-e3ff-4930-82fd-e476adec8950'; // "Evento - Fitness Brasil 2026"
+    const DC_TAG_FITNESS_BRASIL = 'b7d33288-e3ff-4930-82fd-e476adec8950';    // "Evento - Fitness Brasil 2026" (LP)
+    const DC_TAG_CALCULADORA = 'fc48dd3b-a781-4086-95c2-ac8c7e63e028';        // "Evento - Calculadora Fitness Brasil 2026" (tablet /estande)
     const DC_STAGE_REALIZAR_CONTATO = 'e9ae521e-13c6-4a68-a0f8-ef7447c8d7dc';
     const DC_ATTENDANT_CAROL = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';
 
@@ -123,7 +124,7 @@ export default async function handler(req, res) {
           source: utm_medium === 'tablet' ? 'Feira Fitness Brasil 2026 (Tablet)' : 'Feira Fitness Brasil 2026 (LP)',
           notes: notesLines.join('
 '),
-          tags: [{ id: DC_TAG_FITNESS_BRASIL }],
+          tags: [{ id: utm_medium === 'tablet' ? DC_TAG_CALCULADORA : DC_TAG_FITNESS_BRASIL }],
           attendant: { id: DC_ATTENDANT_CAROL },
         }),
       }).then(async (r) => {
