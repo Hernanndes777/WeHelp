@@ -44,24 +44,35 @@ function doPost(e) {
     ? ABA_CALCULADORA
     : ABA_SITE;
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(abaNome);
-  if (!sheet) sheet = ss.insertSheet(abaNome); // se a aba sumir, recria em vez de perder lead
+  // Trava a execucao: sem isso, dois leads chegando ao mesmo tempo podem
+  // ler o mesmo cabecalho e um appendRow sobrescrever o outro (achado no
+  // teste de estresse do /captacao — 1 em 10 requisicoes simultaneas sumiu
+  // sem erro nenhum). Critico aqui pq o tablet do estande pode receber
+  // varios cadastros em sequencia rapida.
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(abaNome);
+    if (!sheet) sheet = ss.insertSheet(abaNome); // se a aba sumir, recria em vez de perder lead
 
-  const lastCol = sheet.getLastColumn();
-  let headers = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
+    const lastCol = sheet.getLastColumn();
+    let headers = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
 
-  if (headers.length === 0 || headers.every((h) => String(h).trim() === '')) {
-    sheet.getRange(1, 1, 1, CAMPOS.length).setValues([CAMPOS]);
-    headers = CAMPOS.slice();
+    if (headers.length === 0 || headers.every((h) => String(h).trim() === '')) {
+      sheet.getRange(1, 1, 1, CAMPOS.length).setValues([CAMPOS]);
+      headers = CAMPOS.slice();
+    }
+
+    const row = headers.map((h) => {
+      const key = String(h).trim();
+      return data[key] !== undefined && data[key] !== null ? data[key] : '';
+    });
+
+    sheet.appendRow(row);
+  } finally {
+    lock.releaseLock();
   }
-
-  const row = headers.map((h) => {
-    const key = String(h).trim();
-    return data[key] !== undefined && data[key] !== null ? data[key] : '';
-  });
-
-  sheet.appendRow(row);
 
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true, aba: abaNome }))

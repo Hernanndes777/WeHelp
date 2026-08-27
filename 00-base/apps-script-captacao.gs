@@ -31,24 +31,33 @@ const CAMPOS = [
 function doPost(e) {
   const data = JSON.parse(e.postData.contents);
 
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(ABA_LEADS);
-  if (!sheet) sheet = ss.insertSheet(ABA_LEADS);
+  // Trava a execucao: sem isso, dois leads chegando ao mesmo tempo podem
+  // ler o mesmo cabecalho e um appendRow sobrescrever o outro (achado no
+  // teste de estresse — 1 em 10 requisicoes simultaneas sumiu sem erro).
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(ABA_LEADS);
+    if (!sheet) sheet = ss.insertSheet(ABA_LEADS);
 
-  const lastCol = sheet.getLastColumn();
-  let headers = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
+    const lastCol = sheet.getLastColumn();
+    let headers = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
 
-  if (headers.length === 0 || headers.every((h) => String(h).trim() === '')) {
-    sheet.getRange(1, 1, 1, CAMPOS.length).setValues([CAMPOS]);
-    headers = CAMPOS.slice();
+    if (headers.length === 0 || headers.every((h) => String(h).trim() === '')) {
+      sheet.getRange(1, 1, 1, CAMPOS.length).setValues([CAMPOS]);
+      headers = CAMPOS.slice();
+    }
+
+    const row = headers.map((h) => {
+      const key = String(h).trim();
+      return data[key] !== undefined && data[key] !== null ? data[key] : '';
+    });
+
+    sheet.appendRow(row);
+  } finally {
+    lock.releaseLock();
   }
-
-  const row = headers.map((h) => {
-    const key = String(h).trim();
-    return data[key] !== undefined && data[key] !== null ? data[key] : '';
-  });
-
-  sheet.appendRow(row);
 
   return ContentService
     .createTextOutput(JSON.stringify({ ok: true }))
