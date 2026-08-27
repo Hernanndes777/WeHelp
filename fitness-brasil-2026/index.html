@@ -445,9 +445,20 @@
           <label for="whatsapp">WhatsApp</label>
           <input type="tel" inputmode="numeric" class="offerform__input" id="whatsapp" placeholder="(00) 00000-0000" maxlength="11" required />
         </div>
-        <div class="offerform__field" style="margin-bottom:0">
+        <div class="offerform__field">
           <label for="academia">Nome da academia</label>
           <input type="text" class="offerform__input" id="academia" placeholder="Nome da sua academia" required />
+        </div>
+        <div class="offerform__field" style="margin-bottom:0">
+          <label for="faixaAlunos">Quantidade de alunos</label>
+          <select class="offerform__input" id="faixaAlunos" required>
+            <option value="" disabled selected>Selecione a faixa</option>
+            <option>Até 300</option>
+            <option>301 a 600</option>
+            <option>601 a 1.000</option>
+            <option>1.001 a 2.000</option>
+            <option>Mais de 2.000</option>
+          </select>
         </div>
 
         <div class="calc__cta">
@@ -547,13 +558,15 @@
       const nome = form.nome.value.trim();
       const whatsappDigits = whatsappInput.value.replace(/\D/g, '');
       const academia = form.academia.value.trim();
+      const faixaAlunos = form.faixaAlunos.value;
 
       let hasError = false;
-      [form.nome, whatsappInput, form.academia].forEach(el => el.classList.remove('invalid'));
+      [form.nome, whatsappInput, form.academia, form.faixaAlunos].forEach(el => el.classList.remove('invalid'));
 
       if (!nome) { form.nome.classList.add('invalid'); hasError = true; }
       if (whatsappDigits.length < 10) { whatsappInput.classList.add('invalid'); hasError = true; }
       if (!academia) { form.academia.classList.add('invalid'); hasError = true; }
+      if (!faixaAlunos) { form.faixaAlunos.classList.add('invalid'); hasError = true; }
 
       if (hasError) {
         formError.style.display = 'block';
@@ -569,6 +582,7 @@
         Nome_Completo: nome,
         WhatsApp: '+55' + whatsappDigits,
         Nome_da_Academia: academia,
+        Faixa_alunos: faixaAlunos,
         Alunos_ativos: calcAlunos.value || '',
         Mensalidade_media: calcMensalidade.value || '',
         Permanencia_media_meses: calcPermanencia.value || '',

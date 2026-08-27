@@ -24,8 +24,9 @@ export default async function handler(req, res) {
 
   try {
     const {
-      Nome_Completo, WhatsApp, Nome_da_Academia,
+      Nome_Completo, WhatsApp, Nome_da_Academia, Faixa_alunos,
       Alunos_ativos, Mensalidade_media, Permanencia_media_meses, Cancelamentos_mes,
+      Perda_anual_calculada,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
       fbclid, gclid, referral_source, url: pageUrl,
       event_id, fbc, fbp, test_event_code, skip_capi,
@@ -58,10 +59,12 @@ export default async function handler(req, res) {
           Nome_Completo: Nome_Completo || '',
           WhatsApp: WhatsApp,
           Nome_da_Academia: Nome_da_Academia || '',
+          Faixa_alunos: Faixa_alunos || '',
           Alunos_ativos: Alunos_ativos || '',
           Mensalidade_media: Mensalidade_media || '',
           Permanencia_media_meses: Permanencia_media_meses || '',
           Cancelamentos_mes: Cancelamentos_mes || '',
+          Perda_anual_calculada: Perda_anual_calculada || '',
           fbclid: fbclid || '',
           gclid: gclid || '',
           IP_do_usuario: clientIp,
@@ -80,6 +83,64 @@ export default async function handler(req, res) {
           UTM_Content: utm_content || '',
         }),
       }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
+
+    // 1b. DataCrazy — lead + tag "Evento - Fitness Brasil 2026" + negocio no
+    // pipeline Leads > Realizar Contato. Mesmo padrao do lead-enps-evento.js
+    // (notes carrega os numeros da calculadora — additionalFields tem bug na
+    // API publica). Best-effort: falha aqui NUNCA derruba a request, a
+    // planilha e a fonte primaria do estande.
+    const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
+    const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
+    const DC_TAG_FITNESS_BRASIL = 'b7d33288-e3ff-4930-82fd-e476adec8950'; // "Evento - Fitness Brasil 2026"
+    const DC_STAGE_REALIZAR_CONTATO = 'e9ae521e-13c6-4a68-a0f8-ef7447c8d7dc';
+    const DC_ATTENDANT_CAROL = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';
+
+    let dcPromise = Promise.resolve();
+    if (DATACRAZY_API_KEY) {
+      const dcHeaders = {
+        'Authorization': `Bearer ${DATACRAZY_API_KEY}`,
+        'Content-Type': 'application/json',
+      };
+      const notesLines = [];
+      if (Nome_da_Academia) notesLines.push(`Academia: ${Nome_da_Academia}`);
+      if (Faixa_alunos) notesLines.push(`Faixa de alunos: ${Faixa_alunos}`);
+      if (Alunos_ativos) notesLines.push(`Alunos ativos: ${Alunos_ativos}`);
+      if (Mensalidade_media) notesLines.push(`Mensalidade media: R$ ${Mensalidade_media}`);
+      if (Permanencia_media_meses) notesLines.push(`Permanencia media: ${Permanencia_media_meses} meses`);
+      if (Cancelamentos_mes) notesLines.push(`Cancelamentos/mes: ${Cancelamentos_mes}`);
+      if (Perda_anual_calculada) notesLines.push(`Perda anual calculada: R$ ${Number(Perda_anual_calculada).toLocaleString('pt-BR')}`);
+      notesLines.push(`Origem: ${utm_medium === 'tablet' ? 'Tablet do estande' : 'LP fitness-brasil-2026'}`);
+      if (utm_source) notesLines.push(`UTM: ${utm_source} / ${utm_medium || ''} / ${utm_campaign || ''}`);
+
+      dcPromise = fetch(`${DATACRAZY_URL}/api/v1/leads`, {
+        method: 'POST',
+        headers: dcHeaders,
+        body: JSON.stringify({
+          name: Nome_Completo || 'Lead sem nome',
+          email: `wp.${phoneDigits}@noemail.invalid`,
+          phone: WhatsApp,
+          company: Nome_da_Academia || '',
+          source: utm_medium === 'tablet' ? 'Feira Fitness Brasil 2026 (Tablet)' : 'Feira Fitness Brasil 2026 (LP)',
+          notes: notesLines.join('
+'),
+          tags: [{ id: DC_TAG_FITNESS_BRASIL }],
+          attendant: { id: DC_ATTENDANT_CAROL },
+        }),
+      }).then(async (r) => {
+        const leadData = await r.json().catch(() => ({}));
+        if (!r.ok || !leadData.id) {
+          console.error('DataCrazy: falha ao criar lead (nao-fatal):', leadData);
+          return;
+        }
+        return fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
+          method: 'POST',
+          headers: dcHeaders,
+          body: JSON.stringify({ leadId: leadData.id, stageId: DC_STAGE_REALIZAR_CONTATO }),
+        }).then(async (r2) => {
+          if (!r2.ok) console.error('DataCrazy: falha ao criar negocio (nao-fatal):', await r2.text());
+        });
+      }).catch((err) => console.error('DataCrazy: erro (nao-fatal):', err));
+    }
 
     // 2. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
     let capiPromise = Promise.resolve();
@@ -119,7 +180,7 @@ export default async function handler(req, res) {
 
     // Espera as duas chamadas em paralelo — a Vercel encerra a function assim que a
     // response sai, então sem esse await o Sheets/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([sheetsPromise, capiPromise]);
+    await Promise.allSettled([sheetsPromise, dcPromise, capiPromise]);
 
     return res.status(200).json({ success: true });
 
