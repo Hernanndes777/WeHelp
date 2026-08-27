@@ -122,8 +122,7 @@ export default async function handler(req, res) {
           phone: WhatsApp,
           company: Nome_da_Academia || '',
           source: utm_medium === 'tablet' ? 'Feira Fitness Brasil 2026 (Tablet)' : 'Feira Fitness Brasil 2026 (LP)',
-          notes: notesLines.join('
-'),
+          notes: notesLines.join('\n'),
           tags: [{ id: utm_medium === 'tablet' ? DC_TAG_CALCULADORA : DC_TAG_FITNESS_BRASIL }],
           attendant: { id: DC_ATTENDANT_CAROL },
         }),
