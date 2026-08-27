@@ -67,3 +67,38 @@ function doPost(e) {
     .createTextOutput(JSON.stringify({ ok: true, aba: abaNome }))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+/**
+ * doGet — alimenta o painel /painel-feira com CONTAGENS apenas (sem dados
+ * pessoais): total e leads de hoje por aba + horario do ultimo lead.
+ * Depois de colar esta versao, publicar NOVA VERSAO na MESMA implantacao
+ * (Implantar > Gerenciar implantacoes > editar > Versao: Nova versao) —
+ * assim a URL /exec nao muda.
+ */
+function doGet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const out = { geradoEm: new Date().toISOString(), abas: {} };
+  [ABA_CALCULADORA, ABA_SITE].forEach(function (nome) {
+    const sh = ss.getSheetByName(nome);
+    if (!sh || sh.getLastRow() < 2) {
+      out.abas[nome] = { total: 0, hoje: 0, ultimo: null };
+      return;
+    }
+    const total = sh.getLastRow() - 1;
+    const vals = sh.getRange(2, 1, total, 1).getValues();
+    const hojeStr = Utilities.formatDate(new Date(), 'America/Sao_Paulo', 'yyyy-MM-dd');
+    let hoje = 0;
+    let ultimo = null;
+    vals.forEach(function (v) {
+      const raw = v[0];
+      const d = raw instanceof Date ? raw : new Date(String(raw));
+      if (isNaN(d.getTime())) return;
+      if (Utilities.formatDate(d, 'America/Sao_Paulo', 'yyyy-MM-dd') === hojeStr) hoje++;
+      if (!ultimo || d > ultimo) ultimo = d;
+    });
+    out.abas[nome] = { total: total, hoje: hoje, ultimo: ultimo ? ultimo.toISOString() : null };
+  });
+  return ContentService
+    .createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}

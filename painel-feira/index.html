@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0a1128" />
+  <title>Painel — Leads da Feira · WeHelp</title>
+  <!--
+    Painel de leads da Fitness Brasil 2026, mobile-first.
+    Le SO contagens via /api/painel-feira (proxy do doGet do Apps Script) —
+    nenhum dado pessoal chega aqui. Atualiza sozinho a cada 60s.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #1B6EF3; --blue-soft: #6ea8ff;
+      --navy: #0a1128; --navy2: #101c42;
+      --green: #6ee7b7; --red: #ff7a93;
+      --muted: #9fb4e8; --line: rgba(255,255,255,.14);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: radial-gradient(130% 130% at 50% -10%, var(--navy2) 0%, var(--navy) 62%);
+      color: #fff; padding: 28px 20px 48px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .wrap { width: 100%; max-width: 720px; }
+
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px; }
+    header h1 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
+    header h1 span { color: var(--blue-soft); }
+    #status { font-size: 12.5px; color: var(--muted); text-align: right; line-height: 1.4; }
+    #status .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 5px; vertical-align: 1px; }
+    #status.err .dot { background: var(--red); }
+
+    .total {
+      background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 20px;
+      padding: 26px 24px; text-align: center; margin-bottom: 16px;
+    }
+    .total .lbl { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .total .num {
+      font-family: 'Figtree', sans-serif; font-weight: 900;
+      font-size: clamp(56px, 16vw, 96px); line-height: 1.05; color: #fff;
+      font-variant-numeric: tabular-nums;
+    }
+    .total .hoje { font-size: 15px; color: var(--green); font-weight: 700; margin-top: 2px; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 460px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 18px;
+      padding: 22px 20px;
+    }
+    .card .nome { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15.5px; margin-bottom: 12px; }
+    .card .ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 17px; background: rgba(27,110,243,.25); }
+    .card .num {
+      font-family: 'Figtree', sans-serif; font-weight: 900; font-size: clamp(40px, 10vw, 62px);
+      line-height: 1.05; color: var(--blue-soft); font-variant-numeric: tabular-nums;
+    }
+    .card .meta { margin-top: 8px; font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+    .card .meta b { color: var(--green); font-weight: 700; }
+
+    #erro {
+      display: none; margin-top: 16px; background: rgba(255,122,147,.1);
+      border: 1px solid rgba(255,122,147,.4); color: #ffd7de;
+      border-radius: 14px; padding: 14px 18px; font-size: 14px; line-height: 1.55;
+    }
+    footer { margin-top: 26px; font-size: 12px; color: #6d81b8; text-align: center; }
+    .atualizando .num { opacity: .55; transition: opacity .2s; }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="painel">
+    <header>
+      <h1>Leads da Feira <span>· Fitness Brasil 2026</span></h1>
+      <div id="status"><span class="dot"></span><span id="statusTxt">carregando…</span></div>
+    </header>
+
+    <div class="total">
+      <div class="lbl">Total de leads</div>
+      <div class="num" id="tTotal">–</div>
+      <div class="hoje" id="tHoje"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="nome"><span class="ico">📱</span> Calculadora (tablet)</div>
+        <div class="num" id="cTotal">–</div>
+        <div class="meta">Hoje: <b id="cHoje">–</b><br /><span id="cUltimo"></span></div>
+      </div>
+      <div class="card">
+        <div class="nome"><span class="ico">🔗</span> Site (QR / LP)</div>
+        <div class="num" id="sTotal">–</div>
+        <div class="meta">Hoje: <b id="sHoje">–</b><br /><span id="sUltimo"></span></div>
+      </div>
+    </div>
+
+    <div id="erro"></div>
+    <footer>Atualiza sozinho a cada 60s · toque em qualquer lugar pra atualizar agora</footer>
+  </div>
+
+  <script>
+    var API = '/api/painel-feira';
+
+    function horaBr(iso) {
+      if (!iso) return 'nenhum lead ainda';
+      var d = new Date(iso);
+      var agora = new Date();
+      var mesmoDia = d.toDateString() === agora.toDateString();
+      var hora = d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
+      var dia = d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Sao_Paulo' });
+      return 'Último: ' + (mesmoDia ? 'hoje às ' + hora : dia + ' às ' + hora);
+    }
+
+    var carregando = false;
+    function atualizar() {
+      if (carregando) return;
+      carregando = true;
+      document.getElementById('painel').classList.add('atualizando');
+      fetch(API + '?t=' + Date.now())
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          var erroEl = document.getElementById('erro');
+          var st = document.getElementById('status');
+          if (!res.ok || !res.j.abas) {
+            erroEl.style.display = 'block';
+            erroEl.textContent = res.j && res.j.error ? res.j.error : 'Erro ao carregar os dados.';
+            st.classList.add('err');
+            document.getElementById('statusTxt').textContent = 'erro ao atualizar';
+            return;
+          }
+          erroEl.style.display = 'none';
+          st.classList.remove('err');
+          var calc = res.j.abas['Calculadora'] || { total: 0, hoje: 0, ultimo: null };
+          var site = res.j.abas['Site'] || { total: 0, hoje: 0, ultimo: null };
+
+          document.getElementById('cTotal').textContent = calc.total;
+          document.getElementById('cHoje').textContent = calc.hoje;
+          document.getElementById('cUltimo').textContent = horaBr(calc.ultimo);
+
+          document.getElementById('sTotal').textContent = site.total;
+          document.getElementById('sHoje').textContent = site.hoje;
+          document.getElementById('sUltimo').textContent = horaBr(site.ultimo);
+
+          document.getElementById('tTotal').textContent = calc.total + site.total;
+          document.getElementById('tHoje').textContent = '+' + (calc.hoje + site.hoje) + ' hoje';
+
+          document.getElementById('statusTxt').textContent =
+            'atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        })
+        .catch(function () {
+          var st = document.getElementById('status');
+          st.classList.add('err');
+          document.getElementById('statusTxt').textContent = 'sem conexão';
+        })
+        .finally(function () {
+          carregando = false;
+          document.getElementById('painel').classList.remove('atualizando');
+        });
+    }
+
+    atualizar();
+    setInterval(atualizar, 60000);
+    document.addEventListener('click', atualizar);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) atualizar();
+    });
+  </script>
+</body>
+</html>
