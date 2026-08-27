@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Painel de Agendamentos Comerciais | WeHelp</title>
+<link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root{
+    --blue: #1B6EF3;
+    --blue-hover: #1457c8;
+    --blue-tint: #e8f0ff;
+    --navy: #0a1128;
+    --ink: #1a2036;
+    --body: #4a5568;
+    --muted: #8593ab;
+    --line: #e2e8f0;
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --good: #0e9f6e;
+    --good-tint: #e6f7f0;
+    --bad: #e1473c;
+    --bad-tint: #fdeceb;
+    --disp: 'Figtree', sans-serif;
+  }
+  body{
+    margin:0; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 20px 60px; }
+  .hero{
+    padding: 26px 0 30px; text-align:center;
+    background: radial-gradient(600px 400px at 50% -20%, rgba(27,110,243,.45), transparent 65%), var(--navy);
+    margin-bottom: 24px;
+  }
+  .brand{ display:inline-flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .brand img{ height:22px; width:auto; }
+  .brand span{ font-family:var(--disp); font-size:16px; font-weight:800; color:#fff; }
+  .hero h1{
+    font-family: var(--disp); font-weight:900; color:#fff; margin:0;
+    font-size: clamp(19px, 4.5vw, 24px); line-height:1.25; padding: 0 16px;
+  }
+
+  .toolbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .day-tabs{ display:flex; gap:8px; flex:1; overflow-x:auto; }
+  .day-tab{
+    flex:1; min-width:64px; text-align:center; padding:11px 6px; border-radius:12px; border:1.5px solid var(--line);
+    background:#fff; cursor:pointer; font-family:var(--disp); font-weight:700; font-size:13px; color:var(--body);
+  }
+  .day-tab small{ display:block; font-weight:600; font-size:10px; color:var(--muted); margin-top:2px; text-transform:uppercase; }
+  .day-tab.active{ border-color:var(--blue); background:var(--blue-tint); color:var(--blue-hover); }
+  .day-tab.active small{ color:var(--blue-hover); }
+
+  .refresh-btn{
+    display:flex; align-items:center; gap:6px; padding:11px 14px; border-radius:12px; border:1.5px solid var(--line);
+    background:#fff; cursor:pointer; font-family:var(--disp); font-weight:700; font-size:12.5px; color:var(--body);
+    white-space:nowrap;
+  }
+  .refresh-btn i{ color:var(--blue); }
+  .refresh-btn.spinning i{ animation: spin 0.7s linear infinite; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  .summary{ display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  .stat{
+    flex:1; min-width:110px; background:var(--surface); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; box-shadow: 0 1px 2px rgba(16,28,66,.04);
+  }
+  .stat b{ display:block; font-family:var(--disp); font-size:20px; font-weight:800; color:var(--ink); }
+  .stat span{ font-size:11.5px; color:var(--muted); font-weight:600; }
+
+  .slot-block{
+    background:var(--surface); border:1px solid var(--line); border-radius:14px; margin-bottom:10px;
+    box-shadow: 0 1px 2px rgba(16,28,66,.04);
+  }
+  .slot-time{
+    display:flex; align-items:center; gap:8px; padding:12px 16px; border-bottom:1px solid var(--line);
+    font-family:var(--disp); font-weight:800; font-size:14px; color:var(--ink);
+  }
+  .slot-time i{ color:var(--blue); font-size:15px; }
+  .slot-time .count{ margin-left:auto; font-size:11px; font-weight:700; color:var(--muted); }
+
+  .lead-row{ display:flex; align-items:center; gap:12px; padding:12px 16px; border-bottom:1px solid var(--line); }
+  .lead-row:last-child{ border-bottom:none; }
+  .lead-row.empty{ color:var(--muted); font-size:13px; font-style:italic; }
+  .lead-info{ flex:1; min-width:0; }
+  .lead-name{ font-weight:700; font-size:14px; color:var(--ink); }
+  .lead-meta{ font-size:12px; color:var(--body); margin-top:2px; }
+  .lead-badges{ display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+  .badge{
+    display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700;
+    padding:3px 9px; border-radius:50px;
+  }
+  .badge.good{ background:var(--good-tint); color:var(--good); }
+  .badge.bad{ background:var(--bad-tint); color:var(--bad); }
+  .wa-link{
+    display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:10px;
+    background:var(--good-tint); color:var(--good); flex-shrink:0; font-size:17px;
+  }
+
+  .row-actions{ display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .atendente-select{
+    font-family:'DM Sans',sans-serif; font-size:12px; font-weight:700; color:var(--body);
+    border:1.5px solid var(--line); border-radius:8px; padding:6px 8px; background:#fff; cursor:pointer;
+  }
+  .atendente-select.set{ border-color:var(--blue); color:var(--blue-hover); background:var(--blue-tint); }
+  .icon-btn{
+    display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px;
+    border:1.5px solid var(--line); background:#fff; color:var(--body); cursor:pointer; font-size:14px; flex-shrink:0;
+  }
+  .icon-btn:hover{ border-color:#c7d3ea; }
+  .icon-btn.danger:hover{ border-color:var(--bad); color:var(--bad); background:var(--bad-tint); }
+
+  .empty-day{ text-align:center; color:var(--muted); font-size:13.5px; padding:40px 20px; }
+  .loading{ text-align:center; color:var(--muted); font-size:13.5px; padding:40px 20px; }
+
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(10,17,40,.5); display:flex; align-items:center; justify-content:center;
+    padding:20px; z-index:100;
+  }
+  .modal-card{
+    background:#fff; border-radius:16px; padding:22px; width:100%; max-width:360px;
+    box-shadow: 0 20px 50px -12px rgba(10,17,40,.3);
+  }
+  .modal-card h3{ font-family:var(--disp); font-size:16px; margin:0 0 4px; }
+  .modal-card p{ font-size:13px; color:var(--body); margin:0 0 16px; }
+  .modal-card label{ display:block; font-size:12px; font-weight:700; color:var(--ink); margin:12px 0 6px; }
+  .modal-card select{
+    width:100%; padding:11px 12px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:14px; font-family:'DM Sans',sans-serif; color:var(--ink); background:#fff;
+  }
+  .modal-actions{ display:flex; gap:10px; margin-top:20px; }
+  .modal-actions button{
+    flex:1; padding:12px; border-radius:10px; font-family:var(--disp); font-weight:700; font-size:13.5px; cursor:pointer;
+  }
+  .modal-actions .cancel{ border:1.5px solid var(--line); background:#fff; color:var(--body); }
+  .modal-actions .save{ border:none; background:var(--blue); color:#fff; }
+  .modal-error{ font-size:12.5px; color:var(--bad); margin-top:10px; display:none; }
+  .modal-error.show{ display:block; }
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="brand"><img src="../shared/logo-wehelp.png" alt="" /><span>WeHelp</span></div>
+    <h1>Painel de Agendamentos Comerciais</h1>
+  </div>
+
+  <div class="wrap">
+    <div class="toolbar">
+      <div class="day-tabs" id="dayTabs"></div>
+      <button class="refresh-btn" id="refreshBtn"><i class="ti ti-refresh"></i> Atualizar</button>
+    </div>
+
+    <div class="summary" id="summary"></div>
+
+    <div id="content"><div class="loading">Carregando agendamentos...</div></div>
+  </div>
+
+  <div class="modal-overlay hidden" id="editModal">
+    <div class="modal-card">
+      <h3>Mudar horário</h3>
+      <p id="editModalName"></p>
+
+      <label>Dia</label>
+      <select id="editDate"></select>
+
+      <label>Horário</label>
+      <select id="editTime"></select>
+
+      <div class="modal-error" id="editError"></div>
+
+      <div class="modal-actions">
+        <button class="cancel" id="editCancel">Cancelar</button>
+        <button class="save" id="editSave">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const MAX_PER_SLOT = 1;
+  const DAILY_CAP = 4;
+  const WEEKDAY_LABELS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+  // Mesma regra de horários usada pelo backend (api/agenda-comercial-lead.js) —
+  // duplicada aqui só pra montar o modal de edição sem round-trip extra.
+  function slotsForDate(dateStr) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dow = new Date(Date.UTC(y, m - 1, d, 12)).getUTCDay();
+    const startHour = [1, 2, 5].includes(dow) ? 12 : 11;
+    const slots = [];
+    for (let h = startHour; h <= 15; h++) slots.push(`${String(h).padStart(2, '0')}:00`);
+    return slots;
+  }
+
+  function fmtNum(dateStr) {
+    const [, m, d] = dateStr.split('-');
+    return `${d}/${m}`;
+  }
+
+  function weekdayLabel(dateStr) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return WEEKDAY_LABELS[new Date(Date.UTC(y, m - 1, d, 12)).getUTCDay()];
+  }
+
+  let dayList = []; // [{ date, label }] — dias abertos + qualquer dia que já tenha agendamento
+  let selectedDate = null;
+  let allRows = [];
+
+  const dayTabsEl = document.getElementById('dayTabs');
+  const contentEl = document.getElementById('content');
+  const summaryEl = document.getElementById('summary');
+  const refreshBtn = document.getElementById('refreshBtn');
+
+  function renderDayTabs() {
+    dayTabsEl.innerHTML = dayList.map(d => {
+      const count = allRows.filter(r => r.date === d.date).length;
+      return `
+        <div class="day-tab ${d.date === selectedDate ? 'active' : ''}" data-date="${d.date}">
+          ${d.label}<small>${fmtNum(d.date)} · ${count}</small>
+        </div>`;
+    }).join('');
+    dayTabsEl.querySelectorAll('.day-tab').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedDate = el.dataset.date;
+        render();
+      });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function waLink(phone) {
+    const digits = String(phone || '').replace(/\D/g, '');
+    return digits ? `https://wa.me/${digits}` : '#';
+  }
+
+  function render() {
+    renderDayTabs();
+
+    const dayRows = allRows.filter(r => r.date === selectedDate);
+
+    summaryEl.innerHTML = `
+      <div class="stat"><b>${dayRows.length}/${DAILY_CAP}</b><span>Agendados no dia</span></div>
+      <div class="stat"><b>${dayRows.filter(r => r.leadStatus === 'encontrado').length}</b><span>Encontrados no CRM</span></div>
+      <div class="stat"><b>${dayRows.filter(r => r.leadStatus !== 'encontrado').length}</b><span>Não encontrados</span></div>
+    `;
+
+    if (!selectedDate) {
+      contentEl.innerHTML = '<div class="empty-day">Nenhum dia disponível.</div>';
+      return;
+    }
+
+    if (dayRows.length === 0) {
+      contentEl.innerHTML = '<div class="empty-day">Nenhum agendamento neste dia ainda.</div>';
+      return;
+    }
+
+    const visibleSlots = slotsForDate(selectedDate);
+
+    contentEl.innerHTML = visibleSlots.map(time => {
+      const leads = dayRows.filter(r => r.time === time);
+      if (leads.length === 0) return '';
+
+      const rowsHtml = leads.map(l => `
+        <div class="lead-row">
+          <a class="wa-link" href="${waLink(l.telefone)}" target="_blank" rel="noopener"><i class="ti ti-brand-whatsapp"></i></a>
+          <div class="lead-info">
+            <div class="lead-name">${escapeHtml(l.nome)}</div>
+            <div class="lead-meta">${escapeHtml(l.empresa)} · ${escapeHtml(l.telefone)} · ${escapeHtml(l.email)}</div>
+            <div class="lead-badges">
+              ${l.leadStatus === 'encontrado'
+                ? '<span class="badge good"><i class="ti ti-circle-check"></i> No CRM</span>'
+                : '<span class="badge bad"><i class="ti ti-alert-circle"></i> Não encontrado no CRM</span>'}
+            </div>
+          </div>
+          ${l.id ? `
+            <div class="row-actions">
+              <select class="atendente-select ${l.atendente ? 'set' : ''}" data-id="${l.id}" data-action="assign">
+                <option value="" ${!l.atendente ? 'selected' : ''}>Quem atende?</option>
+                <option value="Eric" ${l.atendente === 'Eric' ? 'selected' : ''}>Eric</option>
+                <option value="Pietro" ${l.atendente === 'Pietro' ? 'selected' : ''}>Pietro</option>
+                <option value="William" ${l.atendente === 'William' ? 'selected' : ''}>William</option>
+              </select>
+              <button class="icon-btn" data-id="${l.id}" data-action="edit" title="Mudar horário"><i class="ti ti-calendar-time"></i></button>
+              <button class="icon-btn danger" data-id="${l.id}" data-nome="${escapeHtml(l.nome)}" data-action="delete" title="Apagar"><i class="ti ti-trash"></i></button>
+            </div>
+          ` : `<span style="font-size:11px;color:var(--muted);flex-shrink:0;">sem ID</span>`}
+        </div>
+      `).join('') + (leads.length < MAX_PER_SLOT ? `<div class="lead-row empty">Vaga livre</div>` : '');
+
+      return `
+        <div class="slot-block">
+          <div class="slot-time"><i class="ti ti-clock"></i> ${time} <span class="count">${leads.length}/${MAX_PER_SLOT}</span></div>
+          ${rowsHtml}
+        </div>`;
+    }).join('');
+  }
+
+  function buildDayList(openDates, rows) {
+    const map = new Map();
+    openDates.forEach(d => map.set(d.date, { date: d.date, label: d.label }));
+    rows.forEach(r => {
+      if (r.date && !map.has(r.date)) map.set(r.date, { date: r.date, label: weekdayLabel(r.date) });
+    });
+    return Array.from(map.values()).sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  async function loadData(showSpinner) {
+    if (showSpinner) refreshBtn.classList.add('spinning');
+    try {
+      const [painelRes, agendaRes] = await Promise.all([
+        fetch('/api/agenda-comercial-painel'),
+        fetch('/api/agenda-comercial-lead'),
+      ]);
+      const painelData = await painelRes.json();
+      const agendaData = await agendaRes.json();
+      allRows = painelData.rows || [];
+      dayList = buildDayList(agendaData.openDates || [], allRows);
+      if (!selectedDate || !dayList.some(d => d.date === selectedDate)) {
+        selectedDate = dayList.length ? dayList[0].date : null;
+      }
+    } catch (e) {
+      // mantém os dados anteriores em caso de falha temporária
+    }
+    render();
+    if (showSpinner) refreshBtn.classList.remove('spinning');
+  }
+
+  async function manage(body) {
+    const res = await fetch('/api/agenda-comercial-manage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Falha na ação');
+    return data;
+  }
+
+  contentEl.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const { id, action } = btn.dataset;
+
+    if (action === 'delete') {
+      if (!confirm(`Apagar o agendamento de ${btn.dataset.nome}? Isso não pode ser desfeito.`)) return;
+      try {
+        await manage({ action: 'delete', id });
+        allRows = allRows.filter(r => r.id !== id);
+        render();
+      } catch (err) {
+        alert('Erro ao apagar: ' + err.message);
+      }
+    }
+
+    if (action === 'edit') {
+      openEditModal(allRows.find(r => r.id === id));
+    }
+  });
+
+  contentEl.addEventListener('change', async (e) => {
+    const sel = e.target.closest('[data-action="assign"]');
+    if (!sel) return;
+    const id = sel.dataset.id;
+    const atendente = sel.value;
+    try {
+      await manage({ action: 'assign', id, atendente });
+      const row = allRows.find(r => r.id === id);
+      if (row) row.atendente = atendente;
+      render();
+    } catch (err) {
+      alert('Erro ao definir atendente: ' + err.message);
+      loadData(false);
+    }
+  });
+
+  const editModal = document.getElementById('editModal');
+  const editDateEl = document.getElementById('editDate');
+  const editTimeEl = document.getElementById('editTime');
+  const editErrorEl = document.getElementById('editError');
+  let editingRow = null;
+
+  function openEditModal(row) {
+    editingRow = row;
+    editErrorEl.classList.remove('show');
+    document.getElementById('editModalName').textContent = `${row.nome} — atualmente ${fmtNum(row.date)} às ${row.time}`;
+
+    editDateEl.innerHTML = dayList.map(d => `<option value="${d.date}" ${d.date === row.date ? 'selected' : ''}>${d.label}, ${fmtNum(d.date)}</option>`).join('');
+    populateEditTimes(row.date, row.time);
+
+    editModal.classList.remove('hidden');
+  }
+
+  function populateEditTimes(date, selectedTime) {
+    const slots = slotsForDate(date);
+    editTimeEl.innerHTML = slots.map(t => `<option value="${t}" ${t === selectedTime ? 'selected' : ''}>${t}</option>`).join('');
+  }
+
+  editDateEl.addEventListener('change', () => populateEditTimes(editDateEl.value, null));
+
+  document.getElementById('editCancel').addEventListener('click', () => editModal.classList.add('hidden'));
+
+  document.getElementById('editSave').addEventListener('click', async () => {
+    editErrorEl.classList.remove('show');
+    const date = editDateEl.value;
+    const time = editTimeEl.value;
+    try {
+      await manage({ action: 'update', id: editingRow.id, date, time });
+      editingRow.date = date;
+      editingRow.time = time;
+      editModal.classList.add('hidden');
+      render();
+    } catch (err) {
+      editErrorEl.textContent = err.message === 'Horário lotado' ? 'Esse horário/dia já está lotado.' : err.message;
+      editErrorEl.classList.add('show');
+    }
+  });
+
+  refreshBtn.addEventListener('click', () => loadData(true));
+
+  loadData(true);
+  setInterval(() => loadData(false), 60000);
+</script>
+</body>
+</html>

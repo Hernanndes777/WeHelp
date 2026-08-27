@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Agende sua reunião | WeHelp</title>
+<link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root{
+    --blue: #1B6EF3;
+    --blue-hover: #1457c8;
+    --blue-tint: #e8f0ff;
+    --navy: #0a1128;
+    --navy2: #101c42;
+    --ink: #1a2036;
+    --body: #4a5568;
+    --muted: #8593ab;
+    --line: #e2e8f0;
+    --bg: #f4f6fb;
+    --surface: #ffffff;
+    --good: #0e9f6e;
+    --good-tint: #e6f7f0;
+    --bad: #e1473c;
+    --bad-tint: #fdeceb;
+    --disp: 'Figtree', sans-serif;
+  }
+  body{
+    margin:0; font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink);
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:640px; margin:0 auto; padding: 0 20px 60px; }
+  .hero{
+    padding: 40px 0 44px; text-align:center;
+    background: radial-gradient(600px 400px at 50% -20%, rgba(27,110,243,.45), transparent 65%), var(--navy);
+    margin-bottom: 28px;
+  }
+  .brand{ display:inline-flex; align-items:center; gap:8px; margin-bottom:22px; }
+  .brand img{ height:24px; width:auto; }
+  .brand span{ font-family:var(--disp); font-size:18px; font-weight:800; color:#fff; letter-spacing:-.01em; }
+  .hero h1{
+    font-family: var(--disp); font-weight:900; color:#fff; margin:0 0 10px;
+    font-size: clamp(22px, 5.5vw, 30px); line-height:1.2; padding: 0 16px;
+  }
+  .hero p{ color:#b4c0e0; font-size:14.5px; margin:0; padding: 0 20px; }
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:16px;
+    padding:22px; margin-bottom:16px;
+    box-shadow: 0 1px 2px rgba(16,28,66,.04), 0 8px 24px -12px rgba(16,28,66,.08);
+  }
+  .card h2{ font-family:var(--disp); font-size:16px; font-weight:800; margin:0 0 14px; display:flex; align-items:center; gap:8px; }
+  .card h2 i{ color:var(--blue); }
+
+  .day-tabs{ display:flex; gap:8px; margin-bottom:16px; overflow-x:auto; }
+  .day-tab{
+    flex:1; min-width:64px; text-align:center; padding:12px 6px; border-radius:12px; border:1.5px solid var(--line);
+    background:#fff; cursor:pointer; font-family:var(--disp); font-weight:700; font-size:13px; color:var(--body);
+    transition: border-color .15s, background .15s, color .15s, transform .1s;
+  }
+  .day-tab:hover{ border-color:#c7d3ea; }
+  .day-tab:active{ transform: scale(.98); }
+  .day-tab small{ display:block; font-weight:600; font-size:10.5px; color:var(--muted); margin-top:2px; text-transform:uppercase; }
+  .day-tab.active{ border-color:var(--blue); background:var(--blue-tint); color:var(--blue-hover); }
+  .day-tab.active small{ color:var(--blue-hover); }
+
+  .slots{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .slot{
+    padding:11px 4px; border-radius:10px; border:1.5px solid var(--line); background:#fff;
+    text-align:center; font-weight:700; font-size:13.5px; cursor:pointer; color:var(--ink);
+    font-variant-numeric: tabular-nums; transition: border-color .15s, background .15s, color .15s, transform .1s;
+  }
+  .slot:not(.full):hover{ border-color:var(--blue); color:var(--blue-hover); }
+  .slot:not(.full):active{ transform: scale(.96); }
+  .slot.selected{ border-color:var(--blue); background:var(--blue); color:#fff; }
+  .slot.selected:hover{ color:#fff; }
+  .slot.full{ background:var(--bg); color:var(--muted); border-color:var(--line); cursor:not-allowed; text-decoration:line-through; }
+  .empty-note{ color:var(--muted); font-size:13px; text-align:center; padding:8px 0; grid-column: 1/-1; }
+
+  label{ display:block; font-size:13px; font-weight:700; color:var(--ink); margin: 14px 0 6px; }
+  label:first-child{ margin-top:0; }
+  input[type=text], input[type=tel], input[type=email]{
+    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:15px; font-family:'DM Sans',sans-serif; color:var(--ink); background:#fff;
+  }
+  input:focus{ outline:none; border-color:var(--blue); box-shadow: 0 0 0 3px var(--blue-tint); }
+
+  .btn{
+    width:100%; padding:15px; border-radius:12px; border:none; background:var(--blue); color:#fff;
+    font-family:var(--disp); font-weight:800; font-size:15px; cursor:pointer; margin-top:20px;
+    box-shadow: 0 6px 16px -6px rgba(27,110,243,.5); transition: background .15s, transform .1s;
+  }
+  .btn:disabled{ background:var(--muted); cursor:not-allowed; box-shadow:none; }
+  .btn:not(:disabled):hover{ background:var(--blue-hover); }
+  .btn:not(:disabled):active{ transform: scale(.99); }
+
+  .msg{ font-size:13px; padding:10px 14px; border-radius:10px; margin-top:12px; display:none; }
+  .msg.show{ display:block; }
+  .msg.error{ background:var(--bad-tint); color:var(--bad); }
+
+  .success-icon{ text-align:center; padding: 34px 20px 4px; }
+  .success-icon i{ font-size:52px; color:var(--good); }
+  .success-icon h2{ display:block; font-family:var(--disp); font-size:22px; margin:16px 0 4px; }
+  .success-icon p{ color:var(--body); font-size:14.5px; margin:0; }
+
+  .detail-row{ display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); }
+  .detail-row:last-child{ border-bottom:none; }
+  .detail-row i{ color:var(--blue); font-size:19px; width:22px; text-align:center; flex-shrink:0; }
+  .detail-row .label{ font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.4px; }
+  .detail-row .value{ font-size:14.5px; font-weight:700; color:var(--ink); margin-top:1px; }
+
+  .cal-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:13px;
+    border-radius:12px; border:1.5px solid var(--line); background:#fff; color:var(--ink);
+    font-family:var(--disp); font-weight:700; font-size:13.5px; cursor:pointer; text-decoration:none;
+    margin-top:14px; transition: border-color .15s;
+  }
+  .cal-btn:hover{ border-color:#c7d3ea; }
+  .cal-btn i{ color:var(--blue); }
+
+  .help-note{
+    text-align:center; font-size:13px; color:var(--body); margin-top:18px; padding-top:16px; border-top:1px solid var(--line);
+  }
+  .help-note a{ color:var(--blue-hover); font-weight:700; text-decoration:none; }
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="brand"><img src="../shared/logo-wehelp.png" alt="" /><span>WeHelp</span></div>
+    <h1>Agende sua reunião com o comercial</h1>
+    <p>Escolhe o melhor dia e horário pra gente conversar, com calma, sobre a sua academia.</p>
+  </div>
+
+  <div class="wrap">
+
+    <div id="bookingFlow">
+      <div class="card">
+        <h2><i class="ti ti-calendar"></i> Escolha o dia</h2>
+        <div class="day-tabs" id="dayTabs"><div class="empty-note">Carregando dias disponíveis...</div></div>
+        <div class="slots" id="slots"></div>
+      </div>
+
+      <div class="card" id="formCard" style="display:none;">
+        <h2><i class="ti ti-user"></i> Seus dados</h2>
+
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" placeholder="Seu nome" />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="voce@empresa.com" />
+
+        <label for="telefone">Telefone / WhatsApp</label>
+        <input type="tel" id="telefone" placeholder="(11) 91234-5678" />
+
+        <label for="empresa">Nome da empresa</label>
+        <input type="text" id="empresa" placeholder="Ex: Academia Fitplace" />
+
+        <div class="msg error" id="errorMsg"></div>
+        <button class="btn" id="submitBtn">Confirmar agendamento</button>
+      </div>
+    </div>
+
+    <div class="card hidden" id="successCard">
+      <div class="success-icon">
+        <i class="ti ti-circle-check-filled"></i>
+        <h2>Agendamento confirmado!</h2>
+        <p>A gente te vê no horário combinado.</p>
+      </div>
+
+      <div style="margin-top:18px;">
+        <div class="detail-row">
+          <i class="ti ti-calendar"></i>
+          <div><div class="label">Dia</div><div class="value" id="sumDate"></div></div>
+        </div>
+        <div class="detail-row">
+          <i class="ti ti-clock"></i>
+          <div><div class="label">Horário</div><div class="value" id="sumTime"></div></div>
+        </div>
+      </div>
+
+      <a class="cal-btn" id="calBtn" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-calendar-plus"></i> Adicionar ao Google Calendar
+      </a>
+
+      <div class="help-note">
+        Precisa remarcar? Chama a gente no <a href="#" id="waHelpLink" target="_blank" rel="noopener">WhatsApp</a>.
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  const MAX_PER_SLOT = 1;
+
+  let openDates = [];
+  let counts = {};
+  let selectedDate = null;
+  let selectedTime = null;
+
+  const dayTabsEl = document.getElementById('dayTabs');
+  const slotsEl = document.getElementById('slots');
+  const formCard = document.getElementById('formCard');
+  const submitBtn = document.getElementById('submitBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  function fmtNum(dateStr) {
+    const [, m, d] = dateStr.split('-');
+    return `${d}/${m}`;
+  }
+
+  function renderDayTabs() {
+    dayTabsEl.innerHTML = openDates.map(d => `
+      <div class="day-tab ${d.date === selectedDate ? 'active' : ''}" data-date="${d.date}">
+        ${d.label}<small>${fmtNum(d.date)}</small>
+      </div>
+    `).join('');
+    dayTabsEl.querySelectorAll('.day-tab').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedDate = el.dataset.date;
+        selectedTime = null;
+        formCard.style.display = 'none';
+        renderDayTabs();
+        renderSlots();
+      });
+    });
+  }
+
+  function renderSlots() {
+    const day = openDates.find(d => d.date === selectedDate);
+    if (!day) {
+      slotsEl.innerHTML = '<div class="empty-note">Sem dias disponíveis no momento.</div>';
+      return;
+    }
+    const dayCounts = counts[selectedDate] || {};
+    const dayFull = day.booked >= day.cap;
+    slotsEl.innerHTML = day.slots.map(t => {
+      const taken = dayCounts[t] || 0;
+      const isFull = dayFull || taken >= MAX_PER_SLOT;
+      const isSelected = t === selectedTime;
+      return `<div class="slot ${isFull ? 'full' : ''} ${isSelected ? 'selected' : ''}" data-time="${t}">${t}</div>`;
+    }).join('');
+    slotsEl.querySelectorAll('.slot:not(.full)').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedTime = el.dataset.time;
+        renderSlots();
+        formCard.style.display = 'block';
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+  }
+
+  async function loadAgenda() {
+    try {
+      const res = await fetch('/api/agenda-comercial-lead');
+      const data = await res.json();
+      openDates = data.openDates || [];
+      counts = data.counts || {};
+      if (!selectedDate && openDates.length) selectedDate = openDates[0].date;
+    } catch (e) {
+      openDates = [];
+      counts = {};
+    }
+    renderDayTabs();
+    renderSlots();
+  }
+
+  function buildGoogleCalendarLink(date, time, nome) {
+    const [h, m] = time.split(':').map(Number);
+    const startMin = h * 60 + m;
+    const endMin = startMin + 60;
+    const fmt = (mins) => {
+      const hh = String(Math.floor(mins / 60)).padStart(2, '0');
+      const mm = String(mins % 60).padStart(2, '0');
+      return `${hh}${mm}00`;
+    };
+    const ymd = date.replace(/-/g, '');
+    const dates = `${ymd}T${fmt(startMin)}/${ymd}T${fmt(endMin)}`;
+
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: 'Reunião com o time comercial da WeHelp',
+      dates,
+      details: `Reunião de 1 hora com o time comercial da WeHelp. Qualquer dúvida, chama no WhatsApp.`,
+      ctz: 'America/Sao_Paulo',
+    });
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    errorMsg.classList.remove('show');
+
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+    const empresa = document.getElementById('empresa').value.trim();
+
+    if (!nome || !email || !telefone || !empresa || !selectedDate || !selectedTime) {
+      errorMsg.textContent = 'Preenche todos os campos e escolhe um horário.';
+      errorMsg.classList.add('show');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Confirmando...';
+
+    try {
+      const res = await fetch('/api/agenda-comercial-lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ date: selectedDate, time: selectedTime, nome, email, telefone, empresa }),
+      });
+      const data = await res.json();
+
+      if (res.status === 409) {
+        errorMsg.textContent = 'Esse horário acabou de lotar. Escolhe outro.';
+        errorMsg.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirmar agendamento';
+        loadAgenda();
+        return;
+      }
+      if (!res.ok) throw new Error(data.error || 'Falha ao confirmar');
+
+      const dayLabel = openDates.find(d => d.date === selectedDate);
+      document.getElementById('bookingFlow').classList.add('hidden');
+      document.getElementById('successCard').classList.remove('hidden');
+      document.getElementById('sumDate').textContent = `${dayLabel.label}, ${fmtNum(selectedDate)}`;
+      document.getElementById('sumTime').textContent = `${selectedTime} (1h)`;
+      document.getElementById('calBtn').href = buildGoogleCalendarLink(selectedDate, selectedTime, nome);
+
+      const waMsg = `Oi! Sou ${nome}, confirmei uma reunião com a WeHelp pra ${dayLabel.label}, ${fmtNum(selectedDate)} às ${selectedTime}. Só passando pra confirmar com o time!`;
+      document.getElementById('waHelpLink').href = `https://wa.me/5521976787182?text=${encodeURIComponent(waMsg)}`;
+
+    } catch (e) {
+      errorMsg.textContent = 'Deu erro ao confirmar. Tenta de novo ou chama no WhatsApp.';
+      errorMsg.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirmar agendamento';
+    }
+  });
+
+  loadAgenda();
+</script>
+</body>
+</html>
