@@ -50,7 +50,32 @@ function getSheet_() {
     sheet.getRange(1, 1, 1, CAMPOS.length).setValues([CAMPOS]);
     headers = CAMPOS.slice();
   }
+
+  // Crítico: sem isto, o Sheets detecta "2026-09-01" e "12:00" como data/hora de
+  // verdade e converte a célula sozinho — aí a comparação por string em
+  // handleCreate_/handleAdminAction_ nunca bate com o valor enviado pelo POST e a
+  // checagem de vaga ocupada nunca dispara (permite overbooking ilimitado, testado
+  // e confirmado em 2026-08-27). Forçar texto plano nas colunas Data/Horário
+  // garante que o que é gravado é exatamente o que é lido de volta.
+  const dataCol = headers.indexOf('Data') + 1;
+  const horaCol = headers.indexOf('Horário') + 1;
+  const formatRows = 2000; // cobre bem além do volume esperado, sem varrer getMaxRows() a cada chamada
+  if (dataCol > 0) sheet.getRange(2, dataCol, formatRows, 1).setNumberFormat('@');
+  if (horaCol > 0) sheet.getRange(2, horaCol, formatRows, 1).setNumberFormat('@');
+
   return { sheet, headers };
+}
+
+// Normaliza Data/Horário pra string mesmo se a célula já tiver virado Date antes
+// da correção de formato acima (linhas antigas, ou edição manual na planilha).
+function normalizeRow_(obj) {
+  if (obj['Data'] instanceof Date) {
+    obj['Data'] = Utilities.formatDate(obj['Data'], 'America/Sao_Paulo', 'yyyy-MM-dd');
+  }
+  if (obj['Horário'] instanceof Date) {
+    obj['Horário'] = Utilities.formatDate(obj['Horário'], 'America/Sao_Paulo', 'HH:mm');
+  }
+  return obj;
 }
 
 function readAllRows_() {
@@ -62,7 +87,7 @@ function readAllRows_() {
     const obj = {};
     headers.forEach((h, idx) => { obj[h] = row[idx]; });
     obj.__rowNum = i + 2; // linha real na planilha, pra editar/apagar depois
-    return obj;
+    return normalizeRow_(obj);
   });
 }
 
@@ -118,6 +143,7 @@ function handleCreate_(body) {
   };
   const row = headers.map((h) => linha[h] !== undefined ? linha[h] : '');
   sheet.appendRow(row);
+  SpreadsheetApp.flush(); // garante que a próxima execução concorrente (após o lock soltar) já enxergue esta linha
 
   return jsonOut_({ success: true, id });
 }
@@ -134,6 +160,7 @@ function handleAdminAction_(body) {
 
   if (action === 'delete') {
     sheet.deleteRow(alvo.__rowNum);
+    SpreadsheetApp.flush();
     return jsonOut_({ success: true });
   }
 
@@ -145,11 +172,13 @@ function handleAdminAction_(body) {
     }
     sheet.getRange(alvo.__rowNum, colId('Data')).setValue(date);
     sheet.getRange(alvo.__rowNum, colId('Horário')).setValue(time);
+    SpreadsheetApp.flush();
     return jsonOut_({ success: true });
   }
 
   if (action === 'assign') {
     sheet.getRange(alvo.__rowNum, colId('Atendente')).setValue(atendente || '');
+    SpreadsheetApp.flush();
     return jsonOut_({ success: true });
   }
 
