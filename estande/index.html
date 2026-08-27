@@ -10,110 +10,189 @@
   <title>Calculadora de Churn — Estande WeHelp</title>
   <!--
     MODO KIOSK pro tablet do estande (Fitness Brasil 2026).
-    - SEM GTM / GA4 / Meta Pixel de propósito: um aparelho gerando dezenas de
-      leads inflaria as conversões do Ads e sujaria o pixel. Lead vai só pela API.
-    - API: /api/lead-fitness-brasil-2026 com skip_capi=true (Sheets recebe, CAPI não).
-    - Fila offline em localStorage (wifi de feira cai): todo lead salva primeiro
-      no aparelho, tenta enviar, reenvia sozinho. Export de emergência: 5 toques
-      na logo da tela inicial.
-    - Reset automático: 90s de inatividade em qualquer tela volta pro início.
+    Fluxo: atracao -> 4 campos -> CAPTURA (gate) -> calculando -> resultado.
+    O contato e pedido ANTES do resultado, de proposito: o visitante ja
+    investiu preenchendo os 4 numeros e esta a um toque da resposta — e o
+    momento de maior conversao. O resultado fica como ultima tela, que e a
+    que ele mostra pro vendedor.
+    - SEM GTM / GA4 / Meta Pixel de proposito (tablet inflaria conversoes).
+    - API: /api/lead-fitness-brasil-2026 com skip_capi=true.
+    - Fila offline em localStorage + backup integral (export: 5 toques na logo).
+    - Reset automatico: 90s de inatividade; 45s na tela de resultado.
   -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --blue: #1B6EF3; --blue-hover: #1457c8; --blue-light: #e8f0ff;
+      --blue: #1B6EF3; --blue-hover: #1457c8; --blue-soft: #6ea8ff;
       --navy: #0a1128; --navy2: #101c42; --body: #4a5568;
-      --border: #e2e8f0; --bg: #f4f6fb; --white: #fff;
-      --red: #d93a5c; --green: #0f9d6a;
+      --border: #e2e8f0; --bg: #f4f6fb;
+      --red: #ff7a93; --red-solid: #d93a5c; --green: #6ee7b7;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { height: 100%; }
     body {
       font-family: 'DM Sans', system-ui, sans-serif; color: var(--navy);
-      background: var(--bg); overflow: hidden;
+      background: var(--navy); overflow: hidden;
       -webkit-user-select: none; user-select: none;
     }
 
+    /* ---------- telas: transicao de fade+slide ---------- */
     .screen {
-      position: absolute; inset: 0; display: none;
-      flex-direction: column; align-items: center; justify-content: center;
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 32px 28px; text-align: center; overflow-y: auto;
+      opacity: 0; visibility: hidden; transform: translateY(26px);
+      transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
     }
-    .screen.on { display: flex; }
+    .screen.on {
+      opacity: 1; visibility: visible; transform: translateY(0);
+      transition: opacity .45s ease, transform .45s ease, visibility 0s;
+    }
+    /* entrada em cascata dos filhos da tela ativa */
+    .screen > *:not(.orb):not(#pendingBadge) { opacity: 0; transform: translateY(18px); }
+    .screen.on > *:not(.orb):not(#pendingBadge) { animation: rise .55s cubic-bezier(.2,.7,.3,1) forwards; }
+    .screen.on > *:nth-child(1) { animation-delay: .05s; }
+    .screen.on > *:nth-child(2) { animation-delay: .15s; }
+    .screen.on > *:nth-child(3) { animation-delay: .25s; }
+    .screen.on > *:nth-child(4) { animation-delay: .35s; }
+    .screen.on > *:nth-child(5) { animation-delay: .45s; }
+    .screen.on > *:nth-child(6) { animation-delay: .55s; }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
     /* ---------- TELA 1: ATRACAO ---------- */
-    #s-attract { background: radial-gradient(120% 120% at 50% 0%, var(--navy2) 0%, var(--navy) 60%); color: #fff; cursor: pointer; }
-    #s-attract .logo { height: 54px; margin-bottom: 48px; filter: brightness(0) invert(1); }
+    #s-attract { background: radial-gradient(130% 130% at 50% -10%, var(--navy2) 0%, var(--navy) 62%); color: #fff; cursor: pointer; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .35; pointer-events: none; }
+    .orb--1 { width: 46vw; height: 46vw; background: #1B6EF3; top: -12%; left: -10%; animation: drift1 14s ease-in-out infinite alternate; }
+    .orb--2 { width: 38vw; height: 38vw; background: #4338ca; bottom: -14%; right: -8%; animation: drift2 17s ease-in-out infinite alternate; }
+    .orb--3 { width: 22vw; height: 22vw; background: #0ea5e9; top: 52%; left: 8%; animation: drift3 11s ease-in-out infinite alternate; }
+    @keyframes drift1 { to { transform: translate(9vw, 7vh) scale(1.15); } }
+    @keyframes drift2 { to { transform: translate(-7vw, -9vh) scale(1.1); } }
+    @keyframes drift3 { to { transform: translate(6vw, -6vh) scale(1.25); } }
+    #s-attract .logo { height: 54px; margin-bottom: 46px; filter: brightness(0) invert(1); }
     #s-attract h1 {
       font-family: 'Figtree', sans-serif; font-weight: 900;
-      font-size: clamp(34px, 6vw, 58px); line-height: 1.12; letter-spacing: -0.015em;
-      max-width: 15ch;
+      font-size: clamp(36px, 6.2vw, 62px); line-height: 1.1; letter-spacing: -0.015em;
+      max-width: 15ch; position: relative; z-index: 1;
     }
-    #s-attract h1 em { font-style: normal; color: #6ea8ff; }
+    #s-attract h1 em { font-style: normal; color: var(--blue-soft); }
     #s-attract .tap {
-      margin-top: 56px; font-size: 19px; font-weight: 500; color: #9fb4e8;
-      animation: pulse 1.8s ease-in-out infinite;
+      margin-top: 54px; font-size: 19px; font-weight: 500; color: #9fb4e8;
+      display: flex; align-items: center; gap: 14px;
     }
-    @keyframes pulse { 0%,100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
+    .tap-ring {
+      width: 46px; height: 46px; border-radius: 50%; border: 2px solid #9fb4e8;
+      display: grid; place-items: center; position: relative; flex-shrink: 0;
+    }
+    .tap-ring::after {
+      content: ''; position: absolute; inset: -2px; border-radius: 50%;
+      border: 2px solid #9fb4e8; animation: sonar 1.9s ease-out infinite;
+    }
+    .tap-dot { width: 14px; height: 14px; border-radius: 50%; background: #fff; animation: tapdot 1.9s ease-in-out infinite; }
+    @keyframes sonar { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.1); opacity: 0; } }
+    @keyframes tapdot { 0%,100% { transform: scale(1); } 40% { transform: scale(.72); } }
     #pendingBadge {
       position: absolute; top: 14px; right: 16px; font-size: 12px; font-weight: 700;
-      background: var(--red); color: #fff; border-radius: 20px; padding: 4px 10px; display: none;
+      background: var(--red-solid); color: #fff; border-radius: 20px; padding: 4px 10px;
+      display: none; z-index: 5;
     }
 
     /* ---------- CARTOES (telas claras) ---------- */
-    .card { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 34px 30px; width: 100%; max-width: 620px; box-shadow: 0 10px 40px rgba(10,17,40,.07); text-align: left; }
-    .screen h2 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.18; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .light { background: var(--bg); }
+    .card {
+      background: #fff; border: 1px solid var(--border); border-radius: 22px;
+      padding: 36px 32px; width: 100%; max-width: 640px;
+      box-shadow: 0 18px 60px rgba(10,17,40,.10); text-align: left;
+    }
+    .step-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--blue); background: #e8f0ff; border-radius: 100px; padding: 6px 14px; margin-bottom: 14px;
+    }
+    .card h2 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(24px, 3.4vw, 33px); line-height: 1.16; letter-spacing: -0.01em; margin-bottom: 8px; }
     .sub { color: var(--body); font-size: 16.5px; margin-bottom: 26px; }
 
-    .field { margin-bottom: 20px; }
+    .field { margin-bottom: 18px; }
     .field label { display: block; font-weight: 700; font-size: 15.5px; margin-bottom: 8px; }
     .field input {
       width: 100%; font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 500;
       padding: 16px 18px; border: 2px solid var(--border); border-radius: 14px;
       background: var(--bg); color: var(--navy); outline: none;
+      transition: border-color .2s, box-shadow .2s, background .2s;
       -webkit-user-select: text; user-select: text;
     }
-    .field input:focus { border-color: var(--blue); background: #fff; }
+    .field input:focus { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 4px rgba(27,110,243,.13); }
+    .field input.invalid { border-color: var(--red-solid); animation: shake .35s ease; }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 60% { transform: translateX(7px); } }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
+    @media (max-width: 580px) { .grid2 { grid-template-columns: 1fr; } }
 
     .btn {
-      display: block; width: 100%; border: none; cursor: pointer; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; border: none; cursor: pointer; text-align: center;
       font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 20px;
       padding: 20px; border-radius: 16px; background: var(--blue); color: #fff;
-      margin-top: 6px; transition: background .15s;
+      margin-top: 8px; transition: transform .12s ease, background .15s, box-shadow .2s;
+      box-shadow: 0 8px 22px rgba(27,110,243,.35);
     }
-    .btn:active { background: var(--blue-hover); }
-    .btn--ghost { background: transparent; color: var(--body); font-weight: 700; font-size: 16px; padding: 14px; margin-top: 10px; }
-    .btn--ghost:active { background: var(--border); }
+    .btn:active { background: var(--blue-hover); transform: scale(.965); box-shadow: 0 4px 12px rgba(27,110,243,.3); }
+    .btn .arrow { display: inline-block; transition: transform .2s; }
+    .btn:active .arrow { transform: translateX(4px); }
+    .btn--ghost { background: transparent; color: var(--body); font-weight: 700; font-size: 16px; padding: 14px; margin-top: 10px; box-shadow: none; }
+    .btn--ghost:active { background: var(--border); transform: scale(.98); }
 
-    /* ---------- TELA 3: RESULTADO ---------- */
-    #s-result { background: var(--navy); color: #fff; }
-    #s-result .lbl { font-size: 17px; color: #9fb4e8; font-weight: 500; }
+    .err { color: var(--red-solid); font-size: 14.5px; font-weight: 700; margin: 2px 0 12px; display: none; }
+
+    /* ---------- INTERSTICIO: CALCULANDO ---------- */
+    #s-loading { background: var(--navy); color: #fff; }
+    .ring {
+      width: 92px; height: 92px; border-radius: 50%;
+      border: 5px solid rgba(255,255,255,.12); border-top-color: var(--blue-soft);
+      animation: rise .55s cubic-bezier(.2,.7,.3,1) forwards, spin 1s linear infinite !important;
+      margin-bottom: 34px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #s-loading h2 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(24px, 3.6vw, 34px); color: #fff; }
+    #loadingStep { color: #9fb4e8; font-size: 17px; margin-top: 12px; min-height: 24px; transition: opacity .25s; }
+
+    /* ---------- RESULTADO ---------- */
+    #s-result { background: radial-gradient(130% 130% at 50% -10%, var(--navy2) 0%, var(--navy) 62%); color: #fff; }
+    #s-result .lbl { font-size: 18px; color: #9fb4e8; font-weight: 500; }
     #bigLoss {
       font-family: 'Figtree', sans-serif; font-weight: 900;
-      font-size: clamp(46px, 9vw, 92px); letter-spacing: -0.02em; line-height: 1.05;
-      color: #ff7a93; margin: 10px 0 6px;
+      font-size: clamp(50px, 9.5vw, 98px); letter-spacing: -0.02em; line-height: 1.04;
+      color: var(--red); margin: 10px 0 6px; font-variant-numeric: tabular-nums;
     }
-    #lossDetail { font-size: 17px; color: #c3d0f5; margin-bottom: 30px; }
-    .recov { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 640px; margin-bottom: 34px; }
-    @media (max-width: 560px) { .recov { grid-template-columns: 1fr; } }
-    .recov div { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); border-radius: 16px; padding: 18px 14px; }
+    #bigLoss.landed { animation: land .5s cubic-bezier(.2,.7,.3,1.4) !important; opacity: 1 !important; transform: none; }
+    @keyframes land { 0% { transform: scale(1.06); } 100% { transform: scale(1); } }
+    #lossDetail { font-size: 17.5px; color: #c3d0f5; margin-bottom: 30px; }
+    .recov { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; width: 100%; max-width: 660px; margin-bottom: 30px; }
+    @media (max-width: 580px) { .recov { grid-template-columns: 1fr; } }
+    .recov > div {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px; padding: 18px 14px;
+      opacity: 0; transform: translateY(16px) scale(.96);
+    }
+    .recov.play > div { animation: pop .5s cubic-bezier(.2,.7,.3,1.3) forwards; }
+    .recov.play > div:nth-child(1) { animation-delay: .15s; }
+    .recov.play > div:nth-child(2) { animation-delay: .35s; }
+    .recov.play > div:nth-child(3) { animation-delay: .55s; }
+    @keyframes pop { to { opacity: 1; transform: translateY(0) scale(1); } }
+    .recov > div:last-child { border-color: rgba(110,231,183,.5); background: rgba(110,231,183,.08); }
     .recov .pct { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #9fb4e8; }
-    .recov .val { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(19px, 2.6vw, 26px); color: #6ee7b7; margin-top: 4px; }
+    .recov .val { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: clamp(20px, 2.7vw, 27px); color: var(--green); margin-top: 4px; }
     .recov .tag { font-size: 12.5px; color: #c3d0f5; margin-top: 3px; }
-    #s-result .btn { max-width: 640px; }
 
-    /* ---------- TELA 5: OBRIGADO ---------- */
-    #s-thanks { background: radial-gradient(120% 120% at 50% 0%, var(--navy2) 0%, var(--navy) 60%); color: #fff; }
-    #s-thanks .check { font-size: 64px; margin-bottom: 18px; }
-    #s-thanks h2 { color: #fff; max-width: 22ch; }
-    #s-thanks p { color: #c3d0f5; font-size: 18px; margin-top: 10px; max-width: 44ch; }
-    #resetCount { color: #9fb4e8; font-size: 14px; margin-top: 34px; }
-
-    .err { color: var(--red); font-size: 14.5px; font-weight: 700; margin-top: -10px; margin-bottom: 14px; display: none; }
+    .result-cta {
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(110,231,183,.1); border: 1px solid rgba(110,231,183,.4);
+      color: #d7fbe8; border-radius: 16px; padding: 16px 22px;
+      font-size: 16.5px; font-weight: 500; max-width: 660px; text-align: left;
+    }
+    .result-cta .check { font-size: 26px; }
+    #s-result .btn--ghost { color: #9fb4e8; }
+    #resetCount { color: #6d81b8; font-size: 13.5px; margin-top: 14px; min-height: 18px; }
   </style>
 </head>
 <body>
@@ -121,16 +200,20 @@
   <!-- TELA 1 — ATRACAO -->
   <section class="screen on" id="s-attract">
     <span id="pendingBadge"></span>
+    <div class="orb orb--1"></div>
+    <div class="orb orb--2"></div>
+    <div class="orb orb--3"></div>
     <img class="logo" id="logoTap" src="../shared/logo-wehelp.png" alt="WeHelp" />
     <h1>Quanto a evasão vai custar pra sua academia <em>nos próximos 12 meses?</em></h1>
-    <div class="tap">Toque na tela para descobrir</div>
+    <div class="tap"><span class="tap-ring"><span class="tap-dot"></span></span> Toque na tela para descobrir</div>
   </section>
 
   <!-- TELA 2 — CALCULADORA -->
-  <section class="screen" id="s-calc">
+  <section class="screen light" id="s-calc">
     <div class="card">
-      <h2>Vamos fazer a conta.</h2>
-      <p class="sub">4 números que você sabe de cabeça.</p>
+      <div class="step-eyebrow">Passo 1 de 2 · A conta</div>
+      <h2>4 números que você sabe de cabeça.</h2>
+      <p class="sub">Sem cadastro nessa etapa — primeiro a conta.</p>
       <div class="grid2">
         <div class="field">
           <label for="cAlunos">Alunos ativos</label>
@@ -150,30 +233,17 @@
         </div>
       </div>
       <div class="err" id="calcErr">Preencha os 4 campos pra fazer a conta.</div>
-      <button class="btn" id="btnCalc">Ver quanto estou perdendo</button>
+      <button class="btn" id="btnCalc">Fazer a conta <span class="arrow">→</span></button>
       <button class="btn btn--ghost" id="btnCalcBack">Voltar</button>
     </div>
   </section>
 
-  <!-- TELA 3 — RESULTADO -->
-  <section class="screen" id="s-result">
-    <div class="lbl">Sua academia está deixando de faturar</div>
-    <div id="bigLoss">R$ 0</div>
-    <div id="lossDetail"></div>
-    <div class="recov">
-      <div><div class="pct">Recuperando 10%</div><div class="val" id="r10"></div><div class="tag">cenário conservador</div></div>
-      <div><div class="pct">Recuperando 25%</div><div class="val" id="r25"></div><div class="tag">cenário realista</div></div>
-      <div><div class="pct">Recuperando 45%</div><div class="val" id="r45"></div><div class="tag">com a WeHelp</div></div>
-    </div>
-    <button class="btn" id="btnWant">Quero recuperar esse dinheiro</button>
-    <button class="btn btn--ghost" id="btnRedo" style="color:#9fb4e8;">Refazer o cálculo</button>
-  </section>
-
-  <!-- TELA 4 — CAPTURA -->
-  <section class="screen" id="s-capture">
+  <!-- TELA 3 — CAPTURA (gate: contato libera o resultado) -->
+  <section class="screen light" id="s-capture">
     <div class="card">
-      <h2>Nosso time monta o plano com você agora.</h2>
-      <p class="sub">Deixa seu contato — a gente te chama aqui no estande.</p>
+      <div class="step-eyebrow">Passo 2 de 2 · Quase lá</div>
+      <h2>Seu diagnóstico está pronto.</h2>
+      <p class="sub">Coloca seu contato pra liberar o resultado — nosso time usa esses números pra montar seu plano aqui no estande.</p>
       <div class="field">
         <label for="fNome">Seu nome</label>
         <input id="fNome" type="text" autocomplete="off" placeholder="Nome" />
@@ -187,16 +257,30 @@
         <input id="fAcademia" type="text" autocomplete="off" placeholder="Academia" />
       </div>
       <div class="err" id="capErr">Preencha nome e um WhatsApp válido com DDD.</div>
-      <button class="btn" id="btnSend">Chamar o time WeHelp</button>
-      <button class="btn btn--ghost" id="btnCapBack">Voltar pro resultado</button>
+      <button class="btn" id="btnSend">Ver meu resultado <span class="arrow">→</span></button>
+      <button class="btn btn--ghost" id="btnCapBack">Voltar</button>
     </div>
   </section>
 
-  <!-- TELA 5 — OBRIGADO -->
-  <section class="screen" id="s-thanks">
-    <div class="check">✅</div>
-    <h2 id="thanksTitle">Recebido!</h2>
-    <p>Mostra essa tela pra alguém do time WeHelp aqui no estande — a gente já monta seu plano de retenção com os seus números.</p>
+  <!-- TELA 4 — CALCULANDO -->
+  <section class="screen" id="s-loading">
+    <div class="ring"></div>
+    <h2>Calculando seu diagnóstico…</h2>
+    <div id="loadingStep"></div>
+  </section>
+
+  <!-- TELA 5 — RESULTADO (tela final, fica pra conversa com o time) -->
+  <section class="screen" id="s-result">
+    <div class="lbl" id="resultName">Sua academia está deixando de faturar</div>
+    <div id="bigLoss">R$ 0</div>
+    <div id="lossDetail"></div>
+    <div class="recov" id="recovGrid">
+      <div><div class="pct">Recuperando 10%</div><div class="val" id="r10"></div><div class="tag">cenário conservador</div></div>
+      <div><div class="pct">Recuperando 25%</div><div class="val" id="r25"></div><div class="tag">cenário realista</div></div>
+      <div><div class="pct">Recuperando 45%</div><div class="val" id="r45"></div><div class="tag">com a WeHelp</div></div>
+    </div>
+    <div class="result-cta"><span class="check">✅</span> Diagnóstico registrado — chama alguém do time WeHelp pra montar o plano de recuperação com esses números.</div>
+    <button class="btn btn--ghost" id="btnNew">Fazer novo cálculo</button>
     <div id="resetCount"></div>
   </section>
 
@@ -213,6 +297,15 @@
       return parseFloat((document.getElementById(id).value || '').replace(/\./g, '').replace(',', '.')) || 0;
     };
 
+    // separador de milhar ao vivo nos campos numericos
+    ['cAlunos', 'cMensalidade', 'cCancel'].forEach(function (id) {
+      var el = document.getElementById(id);
+      el.addEventListener('input', function () {
+        var d = el.value.replace(/\D/g, '');
+        el.value = d ? Number(d).toLocaleString('pt-BR') : '';
+      });
+    });
+
     // ---------- navegacao ----------
     function show(id) {
       document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('on'); });
@@ -222,41 +315,52 @@
     document.getElementById('s-attract').addEventListener('click', function (e) {
       if (e.target.id === 'logoTap') return; // toques na logo sao do export escondido
       show('s-calc');
+      setTimeout(function () { document.getElementById('cAlunos').focus(); }, 500);
     });
     document.getElementById('btnCalcBack').addEventListener('click', function () { show('s-attract'); });
-    document.getElementById('btnRedo').addEventListener('click', function () { show('s-calc'); });
-    document.getElementById('btnCapBack').addEventListener('click', function () { show('s-result'); });
+    document.getElementById('btnCapBack').addEventListener('click', function () { show('s-calc'); });
+    document.getElementById('btnNew').addEventListener('click', function () {
+      clearInterval(cdTimer);
+      document.getElementById('resetCount').textContent = '';
+      show('s-calc');
+    });
 
-    // ---------- calculo (formula oficial do app: LTV = mensalidade x permanencia) ----------
+    // ---------- passo 1: valida a conta e vai pro gate ----------
     document.getElementById('btnCalc').addEventListener('click', function () {
       var a = num('cAlunos'), m = num('cMensalidade'), p = num('cPermanencia'), c = num('cCancel');
       var err = document.getElementById('calcErr');
-      if (!a || !m || !p || !c) { err.style.display = 'block'; return; }
+      var fields = { cAlunos: a, cMensalidade: m, cPermanencia: p, cCancel: c };
+      var bad = false;
+      Object.keys(fields).forEach(function (id) {
+        var el = document.getElementById(id);
+        el.classList.remove('invalid');
+        if (!fields[id]) { el.classList.add('invalid'); bad = true; }
+      });
+      if (bad) { err.style.display = 'block'; return; }
       err.style.display = 'none';
 
+      // formula oficial do app: LTV = mensalidade x permanencia
       calc = {
         alunos: a, mensalidade: m, permanencia: p, cancelamentos: c,
         churn: (c / a) * 100,
         perdaAnual: (c * 12) * (m * p)
       };
-      document.getElementById('bigLoss').textContent = brl(calc.perdaAnual) + '/ano';
-      document.getElementById('lossDetail').textContent =
-        'Isso é ' + brl(calc.perdaAnual / 12) + ' por mês indo embora · taxa de churn de ' + calc.churn.toFixed(1).replace('.', ',') + '%';
-      document.getElementById('r10').textContent = brl(calc.perdaAnual * 0.10) + '/ano';
-      document.getElementById('r25').textContent = brl(calc.perdaAnual * 0.25) + '/ano';
-      document.getElementById('r45').textContent = brl(calc.perdaAnual * 0.45) + '/ano';
-      show('s-result');
+      show('s-capture');
+      setTimeout(function () { document.getElementById('fNome').focus(); }, 500);
     });
 
-    document.getElementById('btnWant').addEventListener('click', function () { show('s-capture'); });
-
-    // ---------- captura ----------
+    // ---------- passo 2: captura -> envia -> calculando -> resultado ----------
     document.getElementById('btnSend').addEventListener('click', function () {
       var nome = document.getElementById('fNome').value.trim();
       var zap = document.getElementById('fZap').value.replace(/\D/g, '');
       var academia = document.getElementById('fAcademia').value.trim();
       var err = document.getElementById('capErr');
-      if (!nome || zap.length < 10) { err.style.display = 'block'; return; }
+      document.getElementById('fNome').classList.remove('invalid');
+      document.getElementById('fZap').classList.remove('invalid');
+      var bad = false;
+      if (!nome) { document.getElementById('fNome').classList.add('invalid'); bad = true; }
+      if (zap.length < 10) { document.getElementById('fZap').classList.add('invalid'); bad = true; }
+      if (bad) { err.style.display = 'block'; return; }
       err.style.display = 'none';
 
       var lead = {
@@ -279,17 +383,77 @@
 
       pushTo(BKEY, lead);   // backup permanente no aparelho
       pushTo(QKEY, lead);   // fila de envio
-      flushQueue();
+      flushQueue();         // lead garantido ANTES de mostrar o resultado
 
-      document.getElementById('thanksTitle').textContent = 'Recebido, ' + nome.split(' ')[0] + '!';
-      show('s-thanks');
-      startThanksCountdown();
+      // intersticio de drama + resultado
+      show('s-loading');
+      playLoading(function () { showResult(nome); });
 
-      // limpa so os campos de contato — os do calculo resetam junto com a tela
+      // limpa os campos de contato pro proximo
       document.getElementById('fNome').value = '';
       document.getElementById('fZap').value = '';
       document.getElementById('fAcademia').value = '';
     });
+
+    function playLoading(done) {
+      var steps = [
+        'Cruzando seus 4 números…',
+        'Projetando os próximos 12 meses…',
+        'Calculando o que dá pra recuperar…'
+      ];
+      var el = document.getElementById('loadingStep');
+      var i = 0;
+      el.textContent = steps[0];
+      var t = setInterval(function () {
+        i++;
+        if (i < steps.length) {
+          el.style.opacity = 0;
+          setTimeout(function () { el.textContent = steps[i - 0]; el.style.opacity = 1; }, 220);
+        } else {
+          clearInterval(t);
+          done();
+        }
+      }, 800);
+    }
+
+    // ---------- resultado com contagem crescente ----------
+    function showResult(nome) {
+      var primeiro = nome.split(' ')[0];
+      document.getElementById('resultName').textContent = primeiro + ', sua academia está deixando de faturar';
+      document.getElementById('lossDetail').textContent =
+        'Isso é ' + brl(calc.perdaAnual / 12) + ' por mês indo embora · taxa de churn de ' + calc.churn.toFixed(1).replace('.', ',') + '%';
+      document.getElementById('r10').textContent = brl(calc.perdaAnual * 0.10) + '/ano';
+      document.getElementById('r25').textContent = brl(calc.perdaAnual * 0.25) + '/ano';
+      document.getElementById('r45').textContent = brl(calc.perdaAnual * 0.45) + '/ano';
+
+      var grid = document.getElementById('recovGrid');
+      grid.classList.remove('play');
+      var big = document.getElementById('bigLoss');
+      big.classList.remove('landed');
+      big.textContent = 'R$ 0';
+
+      show('s-result');
+
+      // contagem crescente (easeOutExpo, 1.8s) depois da entrada da tela
+      setTimeout(function () {
+        var alvo = calc.perdaAnual, dur = 1800, t0 = null;
+        function frame(ts) {
+          if (!t0) t0 = ts;
+          var p = Math.min((ts - t0) / dur, 1);
+          var eased = 1 - Math.pow(2, -10 * p);
+          big.textContent = brl(alvo * eased) + '/ano';
+          if (p < 1) { requestAnimationFrame(frame); }
+          else {
+            big.textContent = brl(alvo) + '/ano';
+            big.classList.add('landed');
+            grid.classList.add('play'); // cards de recuperacao entram depois do numero
+          }
+        }
+        requestAnimationFrame(frame);
+      }, 550);
+
+      startResultCountdown();
+    }
 
     // ---------- fila offline ----------
     function readList(k) { try { return JSON.parse(localStorage.getItem(k)) || []; } catch (e) { return []; } }
@@ -356,28 +520,35 @@
     });
 
     function hardReset() {
+      clearInterval(cdTimer);
       ['cAlunos', 'cMensalidade', 'cPermanencia', 'cCancel', 'fNome', 'fZap', 'fAcademia'].forEach(function (id) {
         document.getElementById(id).value = '';
+        document.getElementById(id).classList.remove('invalid');
       });
       document.getElementById('calcErr').style.display = 'none';
       document.getElementById('capErr').style.display = 'none';
+      document.getElementById('resetCount').textContent = '';
       show('s-attract');
       updateBadge();
     }
 
-    // ---------- countdown do obrigado ----------
+    // ---------- countdown do resultado (45s: e a tela da conversa) ----------
     var cdTimer = null;
-    function startThanksCountdown() {
-      var s = 12;
+    var cdSeconds = 45;
+    function startResultCountdown() {
+      cdSeconds = 45;
       clearInterval(cdTimer);
       var el = document.getElementById('resetCount');
-      el.textContent = 'Liberando pro próximo em ' + s + 's';
       cdTimer = setInterval(function () {
-        s--;
-        el.textContent = 'Liberando pro próximo em ' + s + 's';
-        if (s <= 0) { clearInterval(cdTimer); hardReset(); }
+        cdSeconds--;
+        el.textContent = 'Liberando pro próximo em ' + cdSeconds + 's — toque na tela pra continuar vendo';
+        if (cdSeconds <= 0) { clearInterval(cdTimer); hardReset(); }
       }, 1000);
     }
+    // qualquer toque na tela de resultado renova o tempo
+    document.getElementById('s-result').addEventListener('click', function () {
+      if (document.getElementById('s-result').classList.contains('on')) { cdSeconds = 45; }
+    });
 
     updateBadge();
     flushQueue();
