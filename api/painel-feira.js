@@ -19,7 +19,7 @@ export default async function handler(req, res) {
       // HTML de erro do Apps Script = doGet ainda nao publicado nessa versao
       return res.status(502).json({ error: 'Apps Script sem doGet publicado — publique a nova versao do script' });
     }
-    res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate=60');
+    res.setHeader('Cache-Control', 's-maxage=25, stale-while-revalidate=300, stale-if-error=600');
     return res.status(200).json(data);
   } catch (err) {
     return res.status(502).json({ error: 'Falha ao consultar a planilha' });

@@ -117,12 +117,31 @@
       return 'Último: ' + (mesmoDia ? 'hoje às ' + hora : dia + ' às ' + hora);
     }
 
+    // render instantaneo: mostra o ultimo snapshot salvo enquanto busca o novo
+    var SNAP = 'painel_feira_snap';
+    function render(abas) {
+      var calc = abas['Calculadora'] || { total: 0, hoje: 0, ultimo: null };
+      var site = abas['Site'] || { total: 0, hoje: 0, ultimo: null };
+      document.getElementById('cTotal').textContent = calc.total;
+      document.getElementById('cHoje').textContent = calc.hoje;
+      document.getElementById('cUltimo').textContent = horaBr(calc.ultimo);
+      document.getElementById('sTotal').textContent = site.total;
+      document.getElementById('sHoje').textContent = site.hoje;
+      document.getElementById('sUltimo').textContent = horaBr(site.ultimo);
+      document.getElementById('tTotal').textContent = calc.total + site.total;
+      document.getElementById('tHoje').textContent = '+' + (calc.hoje + site.hoje) + ' hoje';
+    }
+    try {
+      var salvo = JSON.parse(localStorage.getItem(SNAP));
+      if (salvo && salvo.abas) render(salvo.abas);
+    } catch (e) {}
+
     var carregando = false;
     function atualizar() {
       if (carregando) return;
       carregando = true;
       document.getElementById('painel').classList.add('atualizando');
-      fetch(API + '?t=' + Date.now())
+      fetch(API)
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
         .then(function (res) {
           var erroEl = document.getElementById('erro');
@@ -136,19 +155,8 @@
           }
           erroEl.style.display = 'none';
           st.classList.remove('err');
-          var calc = res.j.abas['Calculadora'] || { total: 0, hoje: 0, ultimo: null };
-          var site = res.j.abas['Site'] || { total: 0, hoje: 0, ultimo: null };
-
-          document.getElementById('cTotal').textContent = calc.total;
-          document.getElementById('cHoje').textContent = calc.hoje;
-          document.getElementById('cUltimo').textContent = horaBr(calc.ultimo);
-
-          document.getElementById('sTotal').textContent = site.total;
-          document.getElementById('sHoje').textContent = site.hoje;
-          document.getElementById('sUltimo').textContent = horaBr(site.ultimo);
-
-          document.getElementById('tTotal').textContent = calc.total + site.total;
-          document.getElementById('tHoje').textContent = '+' + (calc.hoje + site.hoje) + ' hoje';
+          render(res.j.abas);
+          try { localStorage.setItem(SNAP, JSON.stringify(res.j)); } catch (e) {}
 
           document.getElementById('statusTxt').textContent =
             'atualizado ' + new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
