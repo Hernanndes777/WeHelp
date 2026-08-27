@@ -96,6 +96,17 @@
     .tap-dot { width: 14px; height: 14px; border-radius: 50%; background: #fff; animation: tapdot 1.9s ease-in-out infinite; }
     @keyframes sonar { 0% { transform: scale(1); opacity: .9; } 100% { transform: scale(2.1); opacity: 0; } }
     @keyframes tapdot { 0%,100% { transform: scale(1); } 40% { transform: scale(.72); } }
+    #fsBtn {
+      position: fixed; bottom: 14px; left: 14px; z-index: 50;
+      width: 46px; height: 46px; border-radius: 12px; border: 1px solid rgba(255,255,255,.25);
+      background: rgba(10,17,40,.55); color: #fff; font-size: 20px; line-height: 1;
+      display: grid; place-items: center; cursor: pointer; opacity: .55;
+      transition: opacity .2s, transform .12s;
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    }
+    #fsBtn:active { transform: scale(.92); opacity: 1; }
+    .light ~ #fsBtn, #fsBtn.dark-on-light { background: rgba(10,17,40,.75); }
+
     #pendingBadge {
       position: absolute; top: 14px; right: 16px; font-size: 12px; font-weight: 700;
       background: var(--red-solid); color: #fff; border-radius: 20px; padding: 4px 10px;
@@ -200,6 +211,8 @@
   </style>
 </head>
 <body>
+
+  <button id="fsBtn" aria-label="Tela cheia" title="Tela cheia">⛶</button>
 
   <!-- TELA 1 — ATRACAO -->
   <section class="screen on" id="s-attract">
@@ -570,6 +583,29 @@
     document.getElementById('s-result').addEventListener('click', function () {
       if (document.getElementById('s-result').classList.contains('on')) { cdSeconds = 45; }
     });
+
+    // ---------- botao de tela cheia (tablet sem F11) ----------
+    var fsBtn = document.getElementById('fsBtn');
+    function fsAtivo() {
+      return document.fullscreenElement || document.webkitFullscreenElement || null;
+    }
+    function fsAtualizaIcone() {
+      fsBtn.textContent = fsAtivo() ? '✕' : '⛶';
+      fsBtn.title = fsAtivo() ? 'Sair da tela cheia' : 'Tela cheia';
+    }
+    fsBtn.addEventListener('click', function (e) {
+      e.stopPropagation(); // nao dispara o 'toque em qualquer lugar' da atracao
+      var raiz = document.documentElement;
+      if (fsAtivo()) {
+        (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+      } else {
+        var pedir = raiz.requestFullscreen || raiz.webkitRequestFullscreen;
+        if (pedir) { try { pedir.call(raiz); } catch (err) {} }
+        else { fsBtn.style.display = 'none'; } // iPad Safari nao suporta — some pra nao enganar
+      }
+    });
+    document.addEventListener('fullscreenchange', fsAtualizaIcone);
+    document.addEventListener('webkitfullscreenchange', fsAtualizaIcone);
 
     updateBadge();
     flushQueue();
