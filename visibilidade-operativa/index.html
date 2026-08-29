@@ -929,20 +929,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           if (testEventCode) extras.test_event_code = testEventCode;
           fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
         }
-        // Google Sheets — rastreamento por conjunto/criativo
-        fetch(SHEETS_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-          body: JSON.stringify({
-            utm_adset:    params.get('utm_adset')    || '',
-            utm_content:  params.get('utm_content')  || '',
-            utm_campaign: params.get('utm_campaign') || '',
-            utm_source:   params.get('utm_source')   || '',
-            utm_medium:   params.get('utm_medium')   || '',
-            referral:     document.referrer          || ''
-          })
-        }).catch(() => {});
+        // Google Sheets — rastreamento por conjunto/criativo.
+        // sendBeacon em vez de fetch solto: o clique navega pro WhatsApp no
+        // mesmo instante, e um fetch normal morre quando a página é descarregada.
+        // Era por isso que o Meta contava mais Leads do que a planilha registrava
+        // cliques (3 x 1 em 2026-08-28). O beacon o navegador entrega mesmo
+        // depois da saída; o keepalive cobre quem não tem sendBeacon.
+        const trackPayload = JSON.stringify({
+          utm_adset:    params.get('utm_adset')    || '',
+          utm_content:  params.get('utm_content')  || '',
+          utm_campaign: params.get('utm_campaign') || '',
+          utm_source:   params.get('utm_source')   || '',
+          utm_medium:   params.get('utm_medium')   || '',
+          referral:     document.referrer          || ''
+        });
+        let beaconOk = false;
+        if (navigator.sendBeacon) {
+          beaconOk = navigator.sendBeacon(
+            SHEETS_URL,
+            new Blob([trackPayload], { type: 'text/plain;charset=UTF-8' })
+          );
+        }
+        if (!beaconOk) {
+          fetch(SHEETS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            keepalive: true,
+            headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+            body: trackPayload
+          }).catch(() => {});
+        }
         // Link tracker
         if (click_id) {
           fetch('https://linktracker2-f3va.vercel.app/api/event', {
