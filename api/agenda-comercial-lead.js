@@ -186,12 +186,41 @@ function computeOpenDates(bookedCountByDate) {
   return dates;
 }
 
+// O Apps Script devolve as colunas "Data"/"Horário" como objetos Date do Sheets
+// serializados em JSON (ex: "2026-09-01T03:00:00.000Z" em vez de "2026-09-01",
+// e "1899-12-30T18:06:xx.000Z" pra uma célula só-hora tipo "15:00" — 1899-12-30
+// é a data-âncora que o Sheets usa internamente pra valores de hora pura, e o
+// :06 de drift vem de arredondamento de ponto flutuante do serial number).
+// Sem normalizar isso, as chaves nunca batem com as datas "YYYY-MM-DD" limpas
+// que o resto do código usa — contador de vagas sempre fica 0.
+function normalizeDateStr(v) {
+  if (typeof v !== 'string' || !v) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return '';
+  const fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' });
+  return fmt.format(d);
+}
+
+function normalizeTimeStr(v) {
+  if (typeof v !== 'string' || !v) return '';
+  if (/^\d{2}:\d{2}$/.test(v)) return v;
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return '';
+  const fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit', hour12: false });
+  const parts = fmt.formatToParts(d);
+  let hour = Number(parts.find((p) => p.type === 'hour').value);
+  const minute = Number(parts.find((p) => p.type === 'minute').value);
+  if (minute >= 30) hour = (hour + 1) % 24; // arredonda pro slot cheio mais próximo
+  return `${String(hour).padStart(2, '0')}:00`;
+}
+
 function summarize(rows) {
   const bookedCountByDate = {};
   const countsByDateTime = {};
   for (const r of rows) {
-    const d = r['Data'];
-    const t = r['Horário'];
+    const d = normalizeDateStr(r['Data']);
+    const t = normalizeTimeStr(r['Horário']);
     if (!d || !t) continue;
     bookedCountByDate[d] = (bookedCountByDate[d] || 0) + 1;
     countsByDateTime[d] = countsByDateTime[d] || {};
