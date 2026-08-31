@@ -203,6 +203,7 @@
   let counts = {};
   let selectedDate = null;
   let selectedTime = null;
+  let loadFailed = false;
 
   const dayTabsEl = document.getElementById('dayTabs');
   const slotsEl = document.getElementById('slots');
@@ -235,7 +236,9 @@
   function renderSlots() {
     const day = openDates.find(d => d.date === selectedDate);
     if (!day) {
-      slotsEl.innerHTML = '<div class="empty-note">Sem dias disponíveis no momento.</div>';
+      slotsEl.innerHTML = loadFailed
+        ? '<div class="empty-note">Deu erro ao carregar os horários. <a href="javascript:location.reload()">Atualizar página</a> ou chama no <a href="https://wa.me/5521976787182" target="_blank" rel="noopener">WhatsApp</a>.</div>'
+        : '<div class="empty-note">Sem dias disponíveis no momento.</div>';
       return;
     }
     const dayCounts = counts[selectedDate] || {};
@@ -256,16 +259,26 @@
     });
   }
 
-  async function loadAgenda() {
+  async function loadAgenda(isRetry) {
     try {
       const res = await fetch('/api/agenda-comercial-lead');
+      if (!res.ok) throw new Error('http ' + res.status);
       const data = await res.json();
       openDates = data.openDates || [];
       counts = data.counts || {};
+      loadFailed = false;
       if (!selectedDate && openDates.length) selectedDate = openDates[0].date;
     } catch (e) {
+      // erro transitorio (planilha fria, timeout) as vezes some numa segunda
+      // tentativa -- sem isso, a pessoa via "sem dias disponiveis" e desistia
+      // achando que a agenda tava lotada, quando era so um erro de rede
+      if (!isRetry) {
+        await new Promise((r) => setTimeout(r, 1500));
+        return loadAgenda(true);
+      }
       openDates = [];
       counts = {};
+      loadFailed = true;
     }
     renderDayTabs();
     renderSlots();
