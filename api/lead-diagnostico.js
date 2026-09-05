@@ -70,6 +70,41 @@ export default async function handler(req, res) {
       'Content-Type': 'application/json',
     };
 
+    // 0. Sheets dispara em paralelo, sem depender do DataCrazy — antes
+    // (2026-09-05) a planilha só recebia o lead DEPOIS do DataCrazy confirmar
+    // a criação, então uma falha do DataCrazy (ex: contato duplicado, API
+    // fora do ar) fazia a request inteira retornar 502 antes de chegar aqui,
+    // e o lead nunca caía na planilha — mesmo sendo genuíno. A planilha é o
+    // nosso registro de verdade, não pode depender de terceiro pra existir.
+    const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          received_at: receivedAt,
+          Nome_Completo: Nome_Completo || '',
+          E_mail_Corporativo: contactEmail,
+          WhatsApp: WhatsApp,
+          Nome_da_Empresa: Nome_da_Empresa || '',
+          Segmento: Segmento || '',
+          Quantidade_de_Clientes: Quantidade_de_Clientes || '',
+          UTM_Source: utm_source || '',
+          UTM_Medium: utm_medium || '',
+          UTM_Campaign: utm_campaign || '',
+          UTM_Content: utm_content || '',
+          UTM_Term: utm_term || '',
+          UTM_Id: utm_id || '',
+          fbclid: fbclid || '',
+          gclid: gclid || '',
+          IP_do_usuario: clientIp,
+          Dispositivo: device,
+          Referral_Source: referral_source || '',
+          Pais_do_usuario: geoCountry,
+          Regiao_do_usuario: geoRegion,
+          Cidade_do_usuario: geoCity,
+          URL: pageUrl || '',
+        }),
+      }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
+
     // 1. Cria o lead no DataCrazy (nome/email/telefone/empresa/tag)
     // [BUG DataCrazy confirmado em 2026-08-11] Nem POST /leads/additional-fields
     // (retorna 500, Prisma error) nem PATCH /leads/{id} com additionalFields
@@ -107,13 +142,14 @@ export default async function handler(req, res) {
     });
 
     const leadData = await leadRes.json();
-
-    if (!leadRes.ok || !leadData.id) {
-      console.error('Erro ao criar lead no DataCrazy:', leadData);
-      return res.status(502).json({ error: 'Falha ao criar lead', details: leadData });
+    const dcOk = leadRes.ok && !!leadData.id;
+    if (!dcOk) {
+      // Best-effort: log e segue sem o CRM (ex: "lead with same contacts
+      // already exists" num reenvio/clique duplo) — a planilha acima já
+      // recebeu o lead independente disso, então nada se perde.
+      console.error('Erro ao criar lead no DataCrazy (nao-fatal):', leadData);
     }
-
-    const leadId = leadData.id;
+    const leadId = dcOk ? leadData.id : null;
 
     // 2. Aplica os campos adicionais (empresa, segmento → Área de atuação, UTMs) via PATCH
     const additionalFields = [];
@@ -125,7 +161,7 @@ export default async function handler(req, res) {
     if (utm_content) additionalFields.push({ id: FIELD_UTM_CONTENT, value: utm_content });
     if (utm_term) additionalFields.push({ id: FIELD_UTM_TERM, value: utm_term });
 
-    const fieldsPromise = additionalFields.length ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
+    const fieldsPromise = (leadId && additionalFields.length) ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
       method: 'PATCH',
       headers: dcHeaders,
       body: JSON.stringify({ additionalFields }),
@@ -134,7 +170,7 @@ export default async function handler(req, res) {
     }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
 
     // 4. Cria o negócio no pipeline "Leads", etapa "Novos Leads"
-    const businessPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
+    const businessPromise = leadId ? fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
       method: 'POST',
       headers: dcHeaders,
       body: JSON.stringify({
@@ -143,39 +179,9 @@ export default async function handler(req, res) {
       }),
     }).then(async (r) => {
       if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
-    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
+    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err)) : Promise.resolve();
 
-    // 5. Envia pro Google Sheets — planilha de conversões do /diagnostico
-    const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          received_at: receivedAt,
-          Nome_Completo: Nome_Completo || '',
-          E_mail_Corporativo: contactEmail,
-          WhatsApp: WhatsApp,
-          Nome_da_Empresa: Nome_da_Empresa || '',
-          Segmento: Segmento || '',
-          Quantidade_de_Clientes: Quantidade_de_Clientes || '',
-          UTM_Source: utm_source || '',
-          UTM_Medium: utm_medium || '',
-          UTM_Campaign: utm_campaign || '',
-          UTM_Content: utm_content || '',
-          UTM_Term: utm_term || '',
-          UTM_Id: utm_id || '',
-          fbclid: fbclid || '',
-          gclid: gclid || '',
-          IP_do_usuario: clientIp,
-          Dispositivo: device,
-          Referral_Source: referral_source || '',
-          Pais_do_usuario: geoCountry,
-          Regiao_do_usuario: geoRegion,
-          Cidade_do_usuario: geoCity,
-          URL: pageUrl || '',
-        }),
-      }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
-
-    // 6. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
+    // 5. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -214,7 +220,7 @@ export default async function handler(req, res) {
     // response sai, então sem esse await o negócio/CAPI corriam risco de nunca completar.
     await Promise.allSettled([fieldsPromise, businessPromise, sheetsPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, leadId });
+    return res.status(200).json({ success: true, leadId, crm: dcOk ? 'ok' : 'falhou' });
 
   } catch (err) {
     console.error('Erro geral:', err);
