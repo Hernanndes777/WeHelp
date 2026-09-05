@@ -42,7 +42,7 @@ export default async function handler(req, res) {
   try {
     const {
       Nome_Completo, E_mail_Corporativo, WhatsApp,
-      Nome_da_Empresa, Segmento,
+      Nome_da_Empresa, Segmento, Quantidade_de_Clientes,
       utm_source, utm_medium, utm_campaign, utm_content, utm_term, utm_id,
       fbclid, gclid, referral_source, url: pageUrl,
       event_id, fbc, fbp, test_event_code,
@@ -84,6 +84,7 @@ export default async function handler(req, res) {
     const notesLines = [];
     if (Nome_da_Empresa) notesLines.push(`Empresa: ${Nome_da_Empresa}`);
     if (Segmento) notesLines.push(`Segmento: ${Segmento}`);
+    if (Quantidade_de_Clientes) notesLines.push(`Quantidade de clientes: ${Quantidade_de_Clientes}`);
     if (utm_source) notesLines.push(`UTM Source: ${utm_source}`);
     if (utm_campaign) notesLines.push(`UTM Campaign: ${utm_campaign}`);
     if (utm_medium) notesLines.push(`UTM Medium: ${utm_medium}`);
@@ -155,6 +156,7 @@ export default async function handler(req, res) {
           WhatsApp: WhatsApp,
           Nome_da_Empresa: Nome_da_Empresa || '',
           Segmento: Segmento || '',
+          Quantidade_de_Clientes: Quantidade_de_Clientes || '',
           UTM_Source: utm_source || '',
           UTM_Medium: utm_medium || '',
           UTM_Campaign: utm_campaign || '',

@@ -30,7 +30,7 @@
 // Ordem usada só na primeira escrita (quando a planilha ainda está vazia).
 const CAMPOS = [
   'received_at', 'Nome_Completo', 'E_mail_Corporativo', 'WhatsApp',
-  'Nome_da_Empresa', 'Segmento',
+  'Nome_da_Empresa', 'Segmento', 'Quantidade_de_Clientes',
   'UTM_Source', 'UTM_Medium', 'UTM_Campaign', 'UTM_Content', 'UTM_Term', 'UTM_Id',
   'fbclid', 'gclid', 'IP_do_usuario', 'Dispositivo', 'Referral_Source',
   'Pais_do_usuario', 'Regiao_do_usuario', 'Cidade_do_usuario', 'URL',

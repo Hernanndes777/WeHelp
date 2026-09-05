@@ -423,6 +423,17 @@
                     <option>Outros</option>
                   </select>
                 </div>
+                <div class="field" style="grid-column: 1 / -1">
+                  <label for="quantidadeClientes">Quantidade de clientes</label>
+                  <select class="input" id="quantidadeClientes" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option>Até 150 clientes</option>
+                    <option>De 151 a 300 clientes</option>
+                    <option>De 301 a 500 clientes</option>
+                    <option>De 501 a 1000 clientes</option>
+                    <option>Acima de 1000 clientes</option>
+                  </select>
+                </div>
               </div>
 
               <button type="submit" class="formcard__btn" id="submitBtn">
@@ -751,8 +762,9 @@
       const whatsapp = form.whatsapp.value.trim();
       const empresa = form.empresa.value.trim();
       const segmento = form.segmento.value;
+      const quantidadeClientes = form.quantidadeClientes.value;
 
-      if (!nome || !email || whatsapp.length < 10 || !empresa || !segmento) {
+      if (!nome || !email || whatsapp.length < 10 || !empresa || !segmento || !quantidadeClientes) {
         alert('Preencha todos os campos corretamente antes de continuar.');
         return;
       }
@@ -767,6 +779,7 @@
         WhatsApp: '+55' + whatsapp,
         Nome_da_Empresa: empresa,
         Segmento: segmento,
+        Quantidade_de_Clientes: quantidadeClientes,
         utm_source: params.get('utm_source') || '',
         utm_medium: params.get('utm_medium') || '',
         utm_campaign: params.get('utm_campaign') || '',
