@@ -141,11 +141,9 @@
     // aqui quem realmente completou o envio com sucesso (form em /academias
     // faz window.location.href pra cá só depois da resposta 200 do backend).
     (function () {
-      // Guarda anti-duplicacao (2026-08-24): (1) refresh/revisita desta pagina
-      // nao pode recontar a conversao — flag no sessionStorage garante 1 disparo
-      // por sessao; (2) o dataLayer.push duplicado foi removido — o GTM
-      // (M2RST4PH) reenviava o mesmo evento pro AW-388747722 e cada lead
-      // contava 2x no Google Ads (confirmado no Tag Assistant do /diagnostico).
+      // Guarda anti-duplicacao: refresh/revisita desta pagina nao pode
+      // recontar a conversao — flag no sessionStorage garante 1 disparo por
+      // sessao.
       if (sessionStorage.getItem('lead_conv_fired')) return;
       sessionStorage.setItem('lead_conv_fired', '1');
       var eventId = sessionStorage.getItem('lead_event_id')
@@ -153,10 +151,12 @@
       if (typeof gtag === 'function') {
         gtag('event', 'create_lead_success', { event_id: eventId });
       }
-      // Google Ads recebe por AQUI (tag de evento no GTM escuta esse push);
-      // o gtag acima cobre so o GA4. Guard de sessao acima evita recontagem.
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
+      // NAO adicionar dataLayer.push manual deste evento — o GTM (M2RST4PH)
+      // tem uma tag de EVENTO DO GA4 (nao uma conversao nativa do Ads) que
+      // dispara nesse mesmo nome de evento; ter as duas vias ativas manda o
+      // evento 2x pro GA4 e dobra a conversao "Lead Formulario" importada no
+      // Ads (raiz real do bug, confirmado 2026-09-05 — o guard de sessao
+      // acima resolve reconta por revisita, mas nao essa duplicacao).
     })();
 
     // ── Tracking de clique no WhatsApp (engajamento extra, não é a conversão) ──

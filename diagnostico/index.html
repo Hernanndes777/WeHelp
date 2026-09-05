@@ -810,23 +810,22 @@
       }).catch(() => {});
 
       // GA4 — "create_lead_success" é o evento que a conversão do Google Ads
-      // "Create Lead Success" já importa direto da propriedade GA4 "WeHelp G4"
-      // (conferido nas Configurações da conversão, 2026-08-11) — não precisa de
-      // tag/label separada do Google Ads, só disparar esse evento com esse nome.
-      // Dispara UMA vez so, via gtag. O dataLayer.push duplicado foi removido
-      // em 2026-08-24: o GTM (M2RST4PH) reenviava o mesmo evento pro
-      // AW-388747722 e cada lead contava 2x no Google Ads (63 conversoes
-      // pra ~24 leads reais — confirmado no Tag Assistant, 2 hits por envio).
-      // Arquitetura final (2026-08-24): CADA destino tem UM caminho.
-      // - GA4 recebe pelo gtag('event') abaixo.
-      // - Google Ads recebe pelo dataLayer.push — no GTM (M2RST4PH) existe uma
-      //   tag de evento AW-388747722 disparada pelo evento 'create_lead_success'.
-      // O config inline do AW foi removido (dobrava tudo). NAO recolocar.
+      // "Lead Formulário" já importa direto da propriedade GA4 (confirmado na
+      // conta de Ads em 2026-09-05: é a UNICA acao de conversao de lead ativa,
+      // origem "Site (Google Analytics GA4)" — nao existe conversao nativa do
+      // Ads alimentada pelo GTM). Dispara UMA vez so, via gtag.
+      // NAO adicionar dataLayer.push manual deste evento de novo — o GTM
+      // (M2RST4PH) tem uma tag de EVENTO DO GA4 (nao uma conversao nativa do
+      // Ads) que dispara nesse mesmo nome de evento; ter as duas vias ativas
+      // manda o evento 2x pro GA4 e dobra a conversao importada no Ads
+      // (confirmado 2026-09-05: 7 leads reais no dia vs 16 marcados no Ads
+      // em 3 dias — proporção agregada ~2,3x). Essa duplicacao ja aconteceu
+      // uma vez antes (2026-08-24, outra causa: config inline do AW) — se
+      // aparecer de novo, o primeiro lugar pra olhar e sempre "quantas vias
+      // mandam o mesmo nome de evento pro dataLayer".
       if (typeof gtag === 'function') {
         gtag('event', 'create_lead_success', { event_id: eventId });
       }
-      window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ event: 'create_lead_success', event_id: eventId });
 
       window.location.href = '/diagnostico/obrigado';
     });
