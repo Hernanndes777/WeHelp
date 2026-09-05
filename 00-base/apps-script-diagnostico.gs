@@ -25,6 +25,11 @@
  * Esse é o mesmo padrão usado em 00-base/apps-script-sessao-estrategica.gs,
  * criado depois de um bug real de escrita por posição fixa de coluna
  * (ver 00-base/padrao-captura-lead.md).
+ *
+ * Auto-extensão de colunas (2026-09-05): se o payload trouxer uma chave que
+ * ainda não existe no cabeçalho (ex: campo novo adicionado no formulário),
+ * o script cria a coluna sozinho no fim do cabeçalho, na hora — não precisa
+ * mais editar a planilha manualmente toda vez que um campo novo entrar.
  */
 
 // Ordem usada só na primeira escrita (quando a planilha ainda está vazia).
@@ -46,6 +51,16 @@ function doPost(e) {
   if (headers.length === 0 || headers.every((h) => String(h).trim() === '')) {
     sheet.getRange(1, 1, 1, CAMPOS.length).setValues([CAMPOS]);
     headers = CAMPOS;
+  }
+
+  // Campo novo no payload sem coluna correspondente? Cria a coluna no fim
+  // do cabeçalho agora, em vez de descartar o dado silenciosamente.
+  const headerSet = {};
+  headers.forEach((h) => { headerSet[String(h).trim()] = true; });
+  const novasChaves = Object.keys(data).filter((k) => !headerSet[k]);
+  if (novasChaves.length > 0) {
+    sheet.getRange(1, headers.length + 1, 1, novasChaves.length).setValues([novasChaves]);
+    headers = headers.concat(novasChaves);
   }
 
   const row = headers.map((header) => {
