@@ -831,9 +831,12 @@
       // o pixel de novo mesmo que o back-end rejeite a segunda tentativa
       // como duplicata (achado real: mesma pessoa gerou 2 conversoes no Ads
       // com 1 lead so na planilha). Sessao garante 1 conversao por pessoa,
-      // mesmo padrao ja usado em /academias/obrigado.
-      if (!sessionStorage.getItem('lead_conv_fired')) {
-        sessionStorage.setItem('lead_conv_fired', '1');
+      // mesmo padrao ja usado em /academias/obrigado. Chave especifica desta
+      // pagina, nao generica — sessionStorage e por DOMINIO, nao por pagina,
+      // uma chave genérica bloquearia por engano a conversao de outro funil
+      // visitado na mesma aba/sessao.
+      if (!sessionStorage.getItem('lead_conv_fired_diagnostico')) {
+        sessionStorage.setItem('lead_conv_fired_diagnostico', '1');
         if (typeof gtag === 'function') {
           gtag('event', 'create_lead_success', { event_id: eventId });
         }

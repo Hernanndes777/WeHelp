@@ -143,9 +143,12 @@
     (function () {
       // Guarda anti-duplicacao: refresh/revisita desta pagina nao pode
       // recontar a conversao — flag no sessionStorage garante 1 disparo por
-      // sessao.
-      if (sessionStorage.getItem('lead_conv_fired')) return;
-      sessionStorage.setItem('lead_conv_fired', '1');
+      // sessao. Chave especifica desta pagina (nao generica) — sessionStorage
+      // e por DOMINIO, nao por pagina; uma chave generica bloquearia por
+      // engano a conversao de outro funil visitado na mesma aba/sessao
+      // (achado 2026-09-05 revisando o mesmo fix no /diagnostico).
+      if (sessionStorage.getItem('lead_conv_fired_academias')) return;
+      sessionStorage.setItem('lead_conv_fired_academias', '1');
       var eventId = sessionStorage.getItem('lead_event_id')
         || ('lead_' + Date.now() + '_' + Math.random().toString(36).slice(2, 10));
       if (typeof gtag === 'function') {

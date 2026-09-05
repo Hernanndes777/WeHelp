@@ -234,7 +234,16 @@
     // Dispara aqui, não no clique do botão: só chega nessa página quem realmente
     // completou o formulário. O event_id vem do sessionStorage gravado na página
     // 1, então deduplica com o evento que o api/lead.js já mandou via CAPI.
+    //
+    // Guarda anti-duplicacao (2026-09-05): sem isso, um F5 ou revisita nessa
+    // pagina de obrigado dispara a conversao de novo (achado no mesmo
+    // checkup que revelou o bug em /diagnostico — mesma classe de problema,
+    // aqui pior ainda porque nao depende nem de reenviar formulario, so de
+    // recarregar a pagina). Chave especifica deste funil.
     (function () {
+      if (sessionStorage.getItem('lead_conv_fired_webinario')) return;
+      sessionStorage.setItem('lead_conv_fired_webinario', '1');
+
       var email = sessionStorage.getItem('lead_email') || '';
       var phone = sessionStorage.getItem('lead_phone') || '';
       var eventId = sessionStorage.getItem('lead_event_id')
