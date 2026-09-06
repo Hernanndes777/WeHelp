@@ -253,7 +253,7 @@
         <tbody>
           ${linha('Visitantes', 'visitantes', 'visitantes', '', false)}
           ${linha('Cliques no botão', 'cliques', 'cliques', '', false)}
-          ${linha('Taxa de clique', 'taxa_clique', 'taxa_clique', '%', false)}
+          ${linha('Conversão da página', 'taxa_clique', 'taxa_clique', '%', false)}
           ${linha('Entraram no grupo', 'entradas', 'entradas', '', false)}
           ${linha('Taxa de entrada', 'taxa_entrada', 'taxa_entrada', '%', false)}
           ${linha('Conversão total', 'taxa_conversao', 'taxa_conversao', '%', true)}
@@ -306,7 +306,7 @@
           <div class="destaque-lbl">conversão total — viu a página e entrou no grupo</div>
           <div class="linha"><span>Visitantes</span><span>${v.visitantes}</span></div>
           <div class="linha"><span>Cliques no botão</span><span>${v.cliques}</span></div>
-          <div class="linha"><span>Taxa de clique</span><span>${v.taxa_clique}%</span></div>
+          <div class="linha"><span>Conversão da página</span><span>${v.taxa_clique}%</span></div>
           <div class="linha"><span>Entraram no grupo</span><span>${v.entradas}</span></div>
           <div class="linha"><span>Taxa de entrada</span><span>${v.taxa_entrada}%</span></div>
         </div>`).join('');
