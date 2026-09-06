@@ -96,6 +96,19 @@
     button:disabled { opacity: .5; cursor: default; }
     #salvoMsg { font-size: 13px; margin-left: 12px; }
 
+    .grupo-form { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 4px; }
+    @media (max-width: 560px) { .grupo-form { grid-template-columns: 1fr; } }
+    .grupo-form label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); font-weight: 700; }
+    .grupo-form label span { font-weight: 400; opacity: .75; }
+    .grupo-form input { width: 100%; }
+    #gHistorico { margin-top: 16px; }
+    #gHistorico .h {
+      display: grid; grid-template-columns: 1fr 90px 90px; gap: 8px;
+      padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px;
+    }
+    #gHistorico .h span:not(:first-child) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    #gHistorico .cab { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; border-top: 0; }
+
     .vazio { text-align: center; color: var(--muted); font-size: 14.5px; line-height: 1.6; padding: 34px 20px; }
     code { background: rgba(255,255,255,.09); padding: 2px 6px; border-radius: 5px; font-size: 13px; }
   </style>
@@ -120,6 +133,24 @@
     </div>
 
     <div class="grid" id="cards"></div>
+
+    <div class="pesos">
+      <h2>Entradas nos grupos</h2>
+      <p class="ajuda">
+        O único número que precisa ser contado à mão — o WhatsApp não avisa
+        ninguém quando alguém entra. Abre os dois grupos, conta os participantes
+        novos e lança aqui. Lançar o mesmo dia de novo <strong>corrige</strong> o
+        número, não duplica.
+      </p>
+      <div class="grupo-form">
+        <label>Dia<input type="date" id="gData" /></label>
+        <label>Grupo 04 <span>(variante A)</span><input type="number" min="0" id="gA" placeholder="0" /></label>
+        <label>Grupo 05 <span>(variante B)</span><input type="number" min="0" id="gB" placeholder="0" /></label>
+      </div>
+      <button type="button" id="btnGrupos">Lançar entradas</button>
+      <span id="gMsg"></span>
+      <div id="gHistorico"></div>
+    </div>
 
     <div class="pesos" id="blocoPesos" style="display:none;">
       <h2>Distribuição do tráfego</h2>
@@ -205,6 +236,7 @@
         el('tEntradas').textContent = data.totais.entradas;
 
         renderCards(data.variantes || []);
+        renderHistorico(data.grupos || []);
         pesosAtuais = (data.pesos || []).map(p => ({ variante: p.variante, peso: p.peso, ativa: p.ativa }));
         renderPesos();
 
@@ -234,6 +266,42 @@
       btn.disabled = false;
       setTimeout(() => { el('salvoMsg').textContent = ''; }, 4000);
     });
+
+    function renderHistorico(linhas) {
+      if (!linhas.length) { el('gHistorico').innerHTML = ''; return; }
+      el('gHistorico').innerHTML =
+        '<div class="h cab"><span>Dia</span><span>Grupo 04</span><span>Grupo 05</span></div>' +
+        linhas.map(l => `<div class="h"><span>${l.data}</span><span>${l.A}</span><span>${l.B}</span></div>`).join('');
+    }
+
+    el('btnGrupos').addEventListener('click', async () => {
+      const data = el('gData').value;
+      if (!data) { el('gMsg').textContent = 'escolha o dia'; el('gMsg').style.color = 'var(--red)'; return; }
+      const btn = el('btnGrupos');
+      btn.disabled = true;
+      el('gMsg').textContent = 'salvando...';
+      el('gMsg').style.color = 'var(--muted)';
+      try {
+        const r = await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ grupos: { data, A: Number(el('gA').value) || 0, B: Number(el('gB').value) || 0 } }),
+        });
+        const d = await r.json();
+        el('gMsg').textContent = d.error ? d.error : (d.acao === 'atualizado' ? 'dia corrigido' : 'lançado');
+        el('gMsg').style.color = d.error ? 'var(--red)' : 'var(--green)';
+        if (!d.error) carregar();
+      } catch {
+        el('gMsg').textContent = 'falhou';
+        el('gMsg').style.color = 'var(--red)';
+      }
+      btn.disabled = false;
+      setTimeout(() => { el('gMsg').textContent = ''; }, 4000);
+    });
+
+    // Já abre com a data de hoje preenchida — é o dia que você vai lançar em
+    // 99% das vezes.
+    el('gData').value = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
 
     el('btnFiltrar').addEventListener('click', carregar);
     carregar();

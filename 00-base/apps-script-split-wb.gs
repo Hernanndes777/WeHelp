@@ -47,7 +47,10 @@ const IGNORAR = ['check', 'teste', 'test-final', 'claude', 'sonda', 'verificacao
 const CABECALHOS = {
   'Eventos': ['Data', 'Variante', 'Evento', 'Campaign', 'Adset', 'Criativo', 'Source', 'Medium', 'Referral'],
   'Config':  ['Variante', 'Peso', 'Ativa'],
-  'Grupos':  ['Data', 'Variante', 'Entradas'],
+  // Uma linha por DIA, com os dois grupos lado a lado — é assim que a contagem
+  // acontece na prática: você abre os dois grupos no mesmo momento e anota.
+  // Grupo #04 é a variante A, #05 é a B.
+  'Grupos':  ['Data', 'Grupo 04 (A)', 'Grupo 05 (B)'],
 };
 
 // Sorteio padrão enquanto só existe a variante A.
@@ -56,7 +59,17 @@ const CONFIG_INICIAL = [['A', 100, 'sim']];
 function _aba(nome) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sh = ss.getSheetByName(nome);
-  if (sh) return sh;
+
+  if (sh) {
+    // Conserta cabeçalho antigo, mas SÓ com a aba vazia — reescrever cabeçalho
+    // em aba com dados desalinharia tudo que já foi gravado.
+    const cabEsperado = CABECALHOS[nome];
+    if (cabEsperado && sh.getLastRow() <= 1) {
+      sh.getRange(1, 1, 1, cabEsperado.length).setValues([cabEsperado]).setFontWeight('bold');
+      sh.setFrozenRows(1);
+    }
+    return sh;
+  }
 
   const cab = CABECALHOS[nome];
   if (!cab) throw new Error('Aba desconhecida: ' + nome);
@@ -97,7 +110,8 @@ function doPost(e) {
   try {
     const d = JSON.parse(e.postData.contents);
 
-    if (d.acao === 'pesos') return _salvarPesos(d.pesos);
+    if (d.acao === 'pesos')  return _salvarPesos(d.pesos);
+    if (d.acao === 'grupos') return _salvarGrupos(d);
 
     // Data como Date real, não string formatada: string em dd/MM/yyyy não é
     // parseável em JS e quebrava o filtro por data na versão anterior.
@@ -161,11 +175,36 @@ function _lerEntradasGrupo(desde) {
   sh.getRange(2, 1, sh.getLastRow() - 1, 3).getValues().forEach(function (l) {
     const quando = l[0] instanceof Date ? l[0] : new Date(l[0]);
     if (desde && !(quando >= desde)) return;
-    const v = String(l[1] || '').trim();
-    if (!v) return;
-    out[v] = (out[v] || 0) + (Number(l[2]) || 0);
+    out.A = (out.A || 0) + (Number(l[1]) || 0);
+    out.B = (out.B || 0) + (Number(l[2]) || 0);
   });
   return out;
+}
+
+/**
+ * Lança as entradas de um dia. Se o dia já existe, ATUALIZA a linha em vez de
+ * criar outra — assim recontar o mesmo dia corrige o número, não duplica.
+ */
+function _salvarGrupos(d) {
+  const dia = String(d.data || '').trim();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dia)) {
+    return _json({ status: 'erro', message: 'data deve ser AAAA-MM-DD' });
+  }
+  const sh = _aba(ABA_GRUPOS);
+  const linha = [new Date(dia + 'T12:00:00-03:00'), Number(d.A) || 0, Number(d.B) || 0];
+
+  if (sh.getLastRow() >= 2) {
+    const datas = sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues();
+    for (var i = 0; i < datas.length; i++) {
+      const q = datas[i][0] instanceof Date ? datas[i][0] : new Date(datas[i][0]);
+      if (!isNaN(q.getTime()) && Utilities.formatDate(q, TZ, 'yyyy-MM-dd') === dia) {
+        sh.getRange(i + 2, 1, 1, 3).setValues([linha]);
+        return _json({ status: 'ok', acao: 'atualizado', data: dia });
+      }
+    }
+  }
+  sh.appendRow(linha);
+  return _json({ status: 'ok', acao: 'criado', data: dia });
 }
 
 function doGet(e) {
@@ -213,10 +252,27 @@ function doGet(e) {
     return s;
   }).sort(function (a, b) { return b.visitantes - a.visitantes; });
 
+  // Histórico dia a dia, pro painel mostrar o que já foi lançado e permitir
+  // corrigir um dia sem abrir a planilha.
+  const shG = _aba(ABA_GRUPOS);
+  const historico = shG.getLastRow() < 2 ? [] :
+    shG.getRange(2, 1, shG.getLastRow() - 1, 3).getValues()
+      .filter(function (l) { return l[0]; })
+      .map(function (l) {
+        const q = l[0] instanceof Date ? l[0] : new Date(l[0]);
+        return {
+          data: isNaN(q.getTime()) ? String(l[0]) : Utilities.formatDate(q, TZ, 'yyyy-MM-dd'),
+          A: Number(l[1]) || 0,
+          B: Number(l[2]) || 0
+        };
+      })
+      .sort(function (a, b) { return a.data < b.data ? 1 : -1; });
+
   return _json({
     geradoEm: Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm'),
     desde: p.desde || null,
     variantes: linhas,
+    grupos: historico,
     pesos: _lerPesos(),
     totais: linhas.reduce(function (acc, s) {
       acc.visitantes += s.visitantes;
