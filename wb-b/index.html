@@ -141,7 +141,10 @@
     .dor h2 em { font-style: normal; color: var(--blue); }
     .dor .lead { font-size: 16px; font-weight: 700; color: var(--blue); line-height: 1.6; margin-bottom: 14px; }
     .dor p { font-size: 15px; line-height: 1.75; color: var(--body); }
-    .dor img { border-radius: 12px; }
+    /* height:auto junto com o width/height do HTML: as dimensoes reservam espaco
+       antes de carregar (o lazy nao dispara em elemento de altura zero) e o auto
+       devolve a proporcao quando a coluna encolhe. */
+    .dor img { border-radius: 12px; width: 100%; height: auto; }
 
     /* ── TABELA COMPARATIVA ── */
     .versus { padding: 0 0 76px; }
@@ -225,7 +228,7 @@
 
   <section class="hero">
     <div class="wrap">
-      <img src="/wb-b/img/3.svg" alt="WeHelp" class="hero__logo" />
+      <img src="/wb-b/img/3.svg" alt="WeHelp" width="178" height="43" class="hero__logo" />
       <div class="hero__body">
         <p class="hero__eyebrow">Aula ao vivo para donos de academias e estúdios</p>
         <h1 class="hero__title">Como estancar a perda de clientes e aumentar o caixa da sua academia em 30 dias.</h1>
@@ -260,7 +263,7 @@
           processo contínuo de gestão para enxergar a insatisfação a tempo.
         </p>
       </div>
-      <img src="/wb-b/img/12.png" alt="Gestor de academia preocupado analisando os números" loading="lazy" />
+      <img src="/wb-b/img/12.png" alt="Gestor de academia preocupado analisando os números" width="360" height="320" loading="lazy" />
     </div>
   </section>
 
@@ -357,7 +360,7 @@
           <i class="ti ti-arrow-right" aria-hidden="true"></i>
         </a>
       </div>
-      <img src="/wb-b/img/mentor.webp" alt="Rogério Aranda palestrando na Fitness Brasil" loading="lazy" />
+      <img src="/wb-b/img/mentor.webp" alt="Rogério Aranda palestrando na Fitness Brasil" width="720" height="960" loading="lazy" />
     </div>
   </section>
 
