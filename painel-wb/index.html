@@ -125,12 +125,16 @@
     .grupo-form label span { font-weight: 400; opacity: .75; }
     .grupo-form input { width: 100%; }
     #gHistorico { margin-top: 16px; }
-    #gHistorico .h {
+    #gHistorico .h, #tabConjuntos .h {
       display: grid; grid-template-columns: 1fr 90px 90px; gap: 8px;
       padding: 8px 0; border-top: 1px solid var(--line); font-size: 14px;
     }
-    #gHistorico .h span:not(:first-child) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
-    #gHistorico .cab { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; border-top: 0; }
+    #gHistorico .h span:not(:first-child), #tabConjuntos .h span:not(:first-child) { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+    #gHistorico .cab, #tabConjuntos .cab { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; border-top: 0; }
+
+    /* 4 colunas aqui: conjunto, chegaram, cliques, conversao. */
+    #tabConjuntos { margin-top: 4px; }
+    #tabConjuntos .h { grid-template-columns: 1fr 84px 72px 68px; }
 
     .vazio { text-align: center; color: var(--muted); font-size: 14.5px; line-height: 1.6; padding: 34px 20px; }
     code { background: rgba(255,255,255,.09); padding: 2px 6px; border-radius: 5px; font-size: 13px; }
@@ -162,6 +166,16 @@
     </div>
 
     <div class="grid" id="cards"></div>
+
+    <div class="pesos" id="blocoConjuntos" style="display:none;">
+      <h2>Por conjunto</h2>
+      <p class="ajuda">
+        O Gerenciador mostra clique e custo por conjunto, mas não sabe quem
+        chegou na página nem quem clicou no botão do grupo. Esse cruzamento só
+        existe aqui — clique barato que não chega não vale nada.
+      </p>
+      <div id="tabConjuntos"></div>
+    </div>
 
     <div class="pesos">
       <h2>Entradas nos grupos</h2>
@@ -325,6 +339,7 @@
 
         renderComparativo(data.variantes || []);
         renderCards(data.variantes || []);
+        renderConjuntos(data.conjuntos || []);
         renderHistorico(data.grupos || []);
         pesosAtuais = (data.pesos || []).map(p => ({ variante: p.variante, peso: p.peso, ativa: p.ativa }));
         renderPesos();
@@ -355,6 +370,17 @@
       btn.disabled = false;
       setTimeout(() => { el('salvoMsg').textContent = ''; }, 4000);
     });
+
+    function renderConjuntos(linhas) {
+      const bloco = el('blocoConjuntos');
+      if (!linhas.length) { bloco.style.display = 'none'; return; }
+      bloco.style.display = 'block';
+      el('tabConjuntos').innerHTML =
+        '<div class="h cab"><span>Conjunto</span><span>Chegaram</span><span>Cliques</span><span>Conv.</span></div>' +
+        linhas.map(l => `<div class="h">
+          <span>${l.nome}</span><span>${l.visitantes}</span><span>${l.cliques}</span><span>${l.taxa_pagina}%</span>
+        </div>`).join('');
+    }
 
     function renderHistorico(linhas) {
       if (!linhas.length) { el('gHistorico').innerHTML = ''; return; }

@@ -97,6 +97,15 @@ function _json(obj) {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
+/** Ordena por volume e já calcula a conversão da página de cada linha. */
+function _ranking(mapa) {
+  return Object.keys(mapa).map(function (nome) {
+    const s = mapa[nome];
+    s.taxa_pagina = s.visitantes ? +(s.cliques / s.visitantes * 100).toFixed(1) : 0;
+    return s;
+  }).sort(function (a, b) { return b.visitantes - a.visitantes; });
+}
+
 function _ehTeste(txt) {
   const s = String(txt || '').toLowerCase();
   return IGNORAR.some(function (t) { return s.indexOf(t) !== -1; });
@@ -231,6 +240,16 @@ function doGet(e) {
     return porVariante[v];
   }
 
+  // Quebra por conjunto e por criativo. O Meta já mostra clique e custo por
+  // conjunto, mas não sabe quem chegou na página nem quem clicou no botão do
+  // grupo — esse cruzamento só existe aqui.
+  const porConjunto = {};
+  const porCriativo = {};
+  function slotN(mapa, nome) {
+    if (!mapa[nome]) mapa[nome] = { nome: nome, visitantes: 0, cliques: 0 };
+    return mapa[nome];
+  }
+
   if (sh.getLastRow() >= 2) {
     sh.getRange(2, 1, sh.getLastRow() - 1, 6).getValues().forEach(function (l) {
       const quando = l[0] instanceof Date ? l[0] : new Date(l[0]);
@@ -242,8 +261,14 @@ function doGet(e) {
 
       const evento = String(l[2] || 'pageview').trim().toLowerCase();
       const s = slot(variante);
-      if (evento === 'clique') s.cliques++;
-      else s.visitantes++;
+      const ehClique = evento === 'clique';
+      if (ehClique) s.cliques++; else s.visitantes++;
+
+      const conj = String(l[4] || '').trim() || '(direto / sem conjunto)';
+      const crit = String(l[5] || '').trim() || '(direto / sem criativo)';
+      const sc = slotN(porConjunto, conj);
+      const sr = slotN(porCriativo, crit);
+      if (ehClique) { sc.cliques++; sr.cliques++; } else { sc.visitantes++; sr.visitantes++; }
     });
   }
 
@@ -283,6 +308,8 @@ function doGet(e) {
     geradoEm: Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd HH:mm'),
     desde: p.desde || null,
     variantes: linhas,
+    conjuntos: _ranking(porConjunto),
+    criativos: _ranking(porCriativo),
     grupos: historico,
     pesos: _lerPesos(),
     totais: linhas.reduce(function (acc, s) {
