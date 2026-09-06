@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>Aula ao Vivo para Donos de Academias e Estúdios | WeHelp</title>
+  <meta name="description" content="Como estancar a perda de clientes e aumentar o caixa da sua academia em 30 dias. Quinta-feira, 10 de setembro, às 12h." />
+
+  <!--
+    Variante B do teste A/B do webinário (/wb).
+    Reconstrução da página que rodou no WB02 (11/08) — 113 leads a R$23,28,
+    5 agendamentos e 3 conversões, o ciclo que mais VENDEU. Estava no GreatPages,
+    em outro domínio, sem Clarity e com o link do grupo revogado; trazida pra cá
+    pra rodar com a mesma instrumentação da variante A.
+
+    A hipótese que ela testa contra a A: página longa, escura, com prova social
+    e rosto do fundador converte mais que a página curta e minimalista do WB03.
+    Fluxo idêntico ao da A — botão direto pro grupo, sem formulário.
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:      #070d24;
+      --navy-2:    #101a4a;
+      --indigo:    #1b1f6b;
+      --gold:      #c9a13b;
+      --gold-hover:#b08c2c;
+      --blue:      #1B6EF3;
+      --ink:       #0a1128;
+      --body:      #4a5568;
+      --border:    #e2e8f0;
+      --bg:        #ffffff;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── CTA dourado, assinatura visual desta variante ── */
+    .cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold); color: #1a1405;
+      font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
+      padding: 17px 34px; border-radius: 6px;
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+    .cta:hover { background: var(--gold-hover); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,161,59,.35); }
+    .cta i { font-size: 17px; }
+    .cta-center { text-align: center; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      background: var(--navy) url('img/10.webp') center/cover no-repeat;
+      color: #fff;
+      padding: 46px 0 64px;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(100deg, rgba(7,13,36,.94) 0%, rgba(7,13,36,.84) 46%, rgba(7,13,36,.25) 100%);
+    }
+    @media (max-width: 860px) {
+      .hero::after { background: linear-gradient(180deg, rgba(7,13,36,.86) 0%, rgba(7,13,36,.95) 60%); }
+    }
+    .hero .wrap { position: relative; z-index: 2; }
+    .hero__logo { width: 150px; margin-bottom: 44px; }
+    .hero__body { max-width: 560px; }
+    .hero__eyebrow {
+      font-family: 'Figtree', sans-serif; font-weight: 800;
+      font-size: clamp(17px, 3.6vw, 22px); line-height: 1.25;
+      letter-spacing: .5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .hero__title {
+      font-family: 'Figtree', sans-serif; font-weight: 800;
+      font-size: clamp(26px, 5.6vw, 38px); line-height: 1.18;
+      letter-spacing: -.5px; margin-bottom: 20px;
+    }
+    .hero__sub { font-size: 15px; line-height: 1.7; color: #c6d2ee; margin-bottom: 26px; }
+    .hero__quando {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 30px; font-size: 14.5px; line-height: 1.45;
+    }
+    .hero__quando i { font-size: 24px; color: var(--gold); flex-shrink: 0; }
+    .hero__quando strong { display: block; font-weight: 700; }
+    .hero__quando span { color: #a9b8dd; font-size: 13.5px; }
+
+    /* ── SEÇÃO: o dinheiro não sobra ── */
+    .dor { padding: 74px 0; }
+    .dor__grid { display: grid; grid-template-columns: 1fr 340px; gap: 48px; align-items: center; }
+    @media (max-width: 860px) { .dor__grid { grid-template-columns: 1fr; gap: 30px; } }
+    .dor h2 {
+      font-family: 'Figtree', sans-serif; font-weight: 800;
+      font-size: clamp(24px, 4.6vw, 32px); line-height: 1.24; margin-bottom: 18px;
+    }
+    .dor h2 em { font-style: normal; color: var(--blue); }
+    .dor .lead { font-size: 16px; font-weight: 700; color: var(--blue); line-height: 1.6; margin-bottom: 14px; }
+    .dor p { font-size: 15px; line-height: 1.75; color: var(--body); }
+    .dor img { border-radius: 12px; }
+
+    /* ── TABELA COMPARATIVA ── */
+    .versus { padding: 0 0 76px; }
+    .versus__titulo {
+      text-align: center; font-family: 'Figtree', sans-serif; font-weight: 800;
+      font-size: clamp(21px, 4vw, 28px); margin-bottom: 34px;
+    }
+    .versus__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 780px) { .versus__grid { grid-template-columns: 1fr; } }
+    .col { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .col__head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 14px 18px; color: #fff; font-weight: 700; font-size: 13.5px;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .col--ruim .col__head { background: #b91c4e; }
+    .col--bom  .col__head { background: #0f9d63; }
+    .col__head i { font-size: 20px; }
+    .col ul { list-style: none; }
+    .col li { padding: 15px 18px; font-size: 14.5px; line-height: 1.6; border-top: 1px solid var(--border); }
+    .col--ruim li { color: #7f1d3a; background: #fff5f7; }
+    .col--bom  li { color: #0b5c3d; background: #f2fbf7; }
+
+    /* ── O QUE VOU MOSTRAR ── */
+    .aula { background: linear-gradient(160deg, var(--indigo) 0%, var(--navy) 78%); color: #fff; padding: 76px 0; }
+    .aula__dia { text-align: center; color: var(--gold); font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+    .aula__titulo {
+      text-align: center; font-family: 'Figtree', sans-serif; font-weight: 800;
+      font-size: clamp(23px, 4.4vw, 31px); margin-bottom: 40px;
+    }
+    .aula__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 42px; }
+    @media (max-width: 900px) { .aula__grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { .aula__grid { grid-template-columns: 1fr; } }
+    .item {
+      background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px; padding: 24px 20px; text-align: center;
+    }
+    .item__n {
+      width: 44px; height: 44px; margin: 0 auto 14px;
+      border: 2px solid var(--gold); border-radius: 50%;
+      display: grid; place-items: center;
+      font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 19px; color: var(--gold);
+    }
+    .item h3 { font-family: 'Figtree', sans-serif; font-size: 16px; font-weight: 800; margin-bottom: 9px; }
+    .item p { font-size: 13.5px; line-height: 1.62; color: #bcc9ea; }
+
+    /* ── PROVA ── */
+    .prova { padding: 76px 0; text-align: center; }
+    .prova h2 {
+      font-family: 'Figtree', sans-serif; font-weight: 800;
+      font-size: clamp(22px, 4.2vw, 30px); line-height: 1.28; margin-bottom: 18px;
+    }
+    .prova p { max-width: 720px; margin: 0 auto 30px; font-size: 15px; line-height: 1.75; color: var(--body); }
+    .prova p strong { color: var(--ink); }
+    .prova img { max-width: 420px; margin: 0 auto; border-radius: 12px; }
+
+    /* ── MENTOR ── */
+    .mentor { background: #f5f7fb; padding: 68px 0; }
+    .mentor__grid { display: grid; grid-template-columns: 1fr 340px; gap: 44px; align-items: center; }
+    @media (max-width: 860px) { .mentor__grid { grid-template-columns: 1fr; gap: 26px; } }
+    .mentor h2 {
+      font-family: 'Figtree', sans-serif; font-weight: 800;
+      font-size: clamp(24px, 4.6vw, 32px); line-height: 1.24; margin-bottom: 16px;
+    }
+    .mentor h2 em { font-style: normal; color: var(--blue); }
+    .mentor p { font-size: 15px; line-height: 1.75; color: var(--body); margin-bottom: 18px; }
+    .mentor .nome { font-weight: 700; color: var(--blue); font-size: 16px; }
+    .mentor .cargo { color: var(--body); font-size: 14.5px; margin-bottom: 22px; }
+
+    footer { background: #fff; padding: 30px 0; text-align: center; border-top: 1px solid var(--border); }
+    footer img { width: 128px; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <section class="hero">
+    <div class="wrap">
+      <img src="img/3.svg" alt="WeHelp" class="hero__logo" />
+      <div class="hero__body">
+        <p class="hero__eyebrow">Aula ao vivo para donos de academias e estúdios</p>
+        <h1 class="hero__title">Como estancar a perda de clientes e aumentar o caixa da sua academia em 30 dias.</h1>
+        <p class="hero__sub">
+          Por que sua academia não cresce mesmo batendo a meta de vendas? Descubra a
+          falha de atendimento que está expulsando seus clientes em silêncio e como
+          consertar isso sem baixar o seu preço.
+        </p>
+        <div class="hero__quando">
+          <i class="ti ti-calendar-event" aria-hidden="true"></i>
+          <div>
+            <strong>10 de Setembro (Quinta-feira), às 12h.</strong>
+            <span>Encontro exclusivo.</span>
+          </div>
+        </div>
+        <a href="#" class="cta" data-lead-btn>
+          Entrar no grupo agora
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="dor">
+    <div class="wrap dor__grid">
+      <div>
+        <h2>Você comemora quando bate a meta de vendas no fim do mês... <em>mas o dinheiro não sobra?</em></h2>
+        <p class="lead">A grande verdade do mercado fitness é uma só: você não pode gerenciar o que não consegue ver.</p>
+        <p>
+          O seu problema hoje não está na concorrência. Está na falta de "Visibilidade
+          Operativa". O seu cliente vai embora em silêncio simplesmente porque falta um
+          processo contínuo de gestão para enxergar a insatisfação a tempo.
+        </p>
+      </div>
+      <img src="img/5.webp" alt="Gestor preocupado analisando os números da academia" loading="lazy" />
+    </div>
+  </section>
+
+  <section class="versus">
+    <div class="wrap">
+      <h2 class="versus__titulo">E com isso nós podemos concluir que:</h2>
+      <div class="versus__grid">
+        <div class="col col--ruim">
+          <div class="col__head">O jeito tradicional <i class="ti ti-circle-x" aria-hidden="true"></i></div>
+          <ul>
+            <li>Gasta rios de dinheiro em tráfego para atrair aluno novo.</li>
+            <li>O aluno vai embora em silêncio e a equipe nem percebe.</li>
+            <li>Acredita que a culpa do cancelamento é da academia low-cost da esquina.</li>
+            <li>Trata a retenção como uma ação isolada de fim de mês, e não como um processo constante.</li>
+          </ul>
+        </div>
+        <div class="col col--bom">
+          <div class="col__head">O método de Visibilidade Operativa <i class="ti ti-circle-check" aria-hidden="true"></i></div>
+          <ul>
+            <li>O caixa aumenta rapidamente só retendo os alunos que já estão matriculados.</li>
+            <li>Um sistema de escuta silenciosa avisa exatamente o que o cliente valoriza e onde a academia está falhando.</li>
+            <li>O gestor melhora a experiência do cliente e deixa a empresa muito mais lucrativa.</li>
+            <li>Toma decisões estratégicas e muda processos baseado em dados reais de satisfação, não em "achismos" da recepção.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="aula">
+    <div class="wrap">
+      <p class="aula__dia">Dia 10 de Setembro</p>
+      <h2 class="aula__titulo">Eu vou te mostrar ao vivo:</h2>
+      <div class="aula__grid">
+        <div class="item">
+          <div class="item__n">1</div>
+          <h3>A Coleta Invisível</h3>
+          <p>Como identificar os atritos na jornada do aluno e descobrir exatamente o que faz ele querer ficar por anos.</p>
+        </div>
+        <div class="item">
+          <div class="item__n">2</div>
+          <h3>A Matemática do Caixa</h3>
+          <p>Entenda como pequenas melhorias na retenção geram um impacto gigantesco nas receitas do seu negócio.</p>
+        </div>
+        <div class="item">
+          <div class="item__n">3</div>
+          <h3>O Fechamento de Ciclo</h3>
+          <p>O fluxo prático para analisar os dados coletados e agir rápido para resgatar o aluno antes que ele peça o cancelamento.</p>
+        </div>
+        <div class="item">
+          <div class="item__n">4</div>
+          <h3>O Nível do Gestor</h3>
+          <p>Nenhuma academia rende acima do nível do seu próprio gerente. Aprenda a liderar sua equipe com previsibilidade e lucro.</p>
+        </div>
+      </div>
+      <div class="cta-center">
+        <a href="#" class="cta" data-lead-btn>
+          Entrar no grupo agora
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="prova">
+    <div class="wrap">
+      <h2>O mesmo ecossistema usado pelos gigantes do mercado:</h2>
+      <p>
+        Durante a aula, você vai entender como a rede <strong>Selfit</strong> aplicou essa
+        exata estratégia para diminuir a evasão de alunos e escalar sua rentabilidade,
+        saltando de <strong>40</strong> para <strong>200</strong> unidades com total
+        previsibilidade. Retenção é o motor da expansão.
+      </p>
+      <img src="img/9.webp" alt="Rogério Aranda apresentando os resultados de NPS no palco" loading="lazy" />
+    </div>
+  </section>
+
+  <section class="mentor">
+    <div class="wrap mentor__grid">
+      <div>
+        <h2>Quem vai ser o <em>seu mentor?</em></h2>
+        <p>
+          Com mais de 17 anos vivendo a realidade e a gestão de experiência do cliente no
+          mercado fitness, construiu o ecossistema definitivo para estancar o cancelamento
+          de clientes. Hoje, guia centenas de academias e estúdios da América Latina a
+          transformarem dados em lucro e previsibilidade.
+        </p>
+        <p class="nome">Rogério Aranda.</p>
+        <p class="cargo">CEO da WeHelp.</p>
+        <a href="#" class="cta" data-lead-btn>
+          Entrar no grupo agora
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+      <img src="img/12.png" alt="Rogério Aranda, CEO da WeHelp" loading="lazy" />
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap"><img src="img/3.svg" alt="WeHelp" /></div>
+  </footer>
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1"/>
+  </noscript>
+
+  <script>
+    // [PENDENTE] Link do SEGUNDO grupo de WhatsApp — o que torna o teste
+    // mensurável. Enquanto for igual ao da variante A, as duas contam entrada
+    // no mesmo grupo e não há como separar quem veio de qual página.
+    const WHATSAPP_GROUP = 'https://chat.whatsapp.com/Ixy6NHdBB298Xzf0QHA8vo';
+    const params = new URLSearchParams(location.search);
+    const testEventCode = params.get('fbtest') || null;
+    const VARIANTE = params.get('v') || 'B';
+
+    function wbEvento(evento) {
+      const corpo = JSON.stringify({
+        variante:     VARIANTE,
+        evento:       evento,
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_adset:    params.get('utm_adset')    || '',
+        utm_content:  params.get('utm_content')  || '',
+        utm_source:   params.get('utm_source')   || '',
+        utm_medium:   params.get('utm_medium')   || '',
+        referral:     document.referrer          || ''
+      });
+      // sendBeacon: o clique navega pro WhatsApp no mesmo instante e um fetch
+      // solto morre quando a página é descarregada.
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/wb-event',
+            new Blob([corpo], { type: 'text/plain;charset=UTF-8' }))) return;
+      fetch('/api/wb-event', {
+        method: 'POST', keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: corpo
+      }).catch(() => {});
+    }
+
+    wbEvento('pageview');
+
+    document.querySelectorAll('a[data-lead-btn]').forEach(btn => {
+      btn.href = WHATSAPP_GROUP;
+      btn.target = '_blank';
+      btn.rel = 'noopener';
+      btn.addEventListener('click', () => {
+        if (typeof fbq === 'function') {
+          const extras = {};
+          if (testEventCode) extras.test_event_code = testEventCode;
+          fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
+        }
+        wbEvento('clique');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -13,15 +13,16 @@
 // ninguém quando alguém entra, então a contagem por grupo é a única atribuição
 // confiável que existe.
 
+// As duas páginas que já provaram converter, ambas direto pro grupo, sem
+// formulário. A hipótese em teste é só uma: curta e minimalista (WB03) contra
+// longa com prova social e rosto do fundador (WB02).
 const CATALOGO = {
-  A: { path: '/visibilidade-operativa', label: 'Visibilidade Operativa' },
-  // Para adicionar a variante B: crie a página, registre aqui, e dê a ela o
-  // link do SEGUNDO grupo de WhatsApp. Sem grupo próprio o teste não mede nada.
-  // B: { path: '/wb-b', label: 'Variante B' },
+  A: { path: '/wb-a', label: 'Curta — réplica do WB03 (18/06)' },
+  B: { path: '/wb-b', label: 'Longa — réplica do WB02 (11/08)' },
 };
 
 // Usado quando a planilha não responde. Nunca deixa o anúncio na mão.
-const PESOS_FALLBACK = [{ variante: 'A', peso: 100 }];
+const PESOS_FALLBACK = [{ variante: 'A', peso: 50 }, { variante: 'B', peso: 50 }];
 
 const COOKIE = 'wb_v';
 const COOKIE_DIAS = 30;
