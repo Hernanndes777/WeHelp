@@ -83,8 +83,13 @@
       background: var(--navy) url('/wb-b/img/10.webp') center/cover no-repeat;
       color: #fff;
       padding: 46px 0 64px;
+      /* Altura mínima pra foto do Rogério caber inteira em pé; sem isso o
+         hero encolhia até a altura do texto e ele saía cortado e pequeno. */
+      min-height: 660px;
+      display: flex; align-items: center;
       overflow: hidden;
     }
+    @media (max-width: 720px) { .hero { min-height: 0; display: block; } }
     .hero::after {
       content: ''; position: absolute; inset: 0;
       background: linear-gradient(100deg, rgba(7,13,36,.94) 0%, rgba(7,13,36,.84) 46%, rgba(7,13,36,.25) 100%);
@@ -92,17 +97,19 @@
     @media (max-width: 860px) {
       .hero::after { background: linear-gradient(180deg, rgba(7,13,36,.86) 0%, rgba(7,13,36,.95) 60%); }
     }
-    .hero .wrap { position: relative; z-index: 2; }
+    .hero .wrap { position: relative; z-index: 2; width: 100%; }
     .hero__logo { width: 150px; margin-bottom: 44px; }
     .hero__body { max-width: 560px; }
-    /* Rogério ancorado na borda inferior do hero, como no original: ele fecha
-       o bloco escuro em vez de flutuar no meio dele. */
+    /* Rogério ancorado na base do hero. O `right` acompanha a coluna de
+       conteúdo (1080px) em vez da borda da tela: em monitor largo ele fica
+       dentro do bloco, centralizado com o texto, e não espremido no canto. */
     .hero__foto {
-      position: absolute; right: 0; bottom: 0; z-index: 1;
-      width: min(46%, 520px);
+      position: absolute; bottom: 0; z-index: 1;
+      right: max(0px, calc((100% - 1080px) / 2));
+      width: min(52%, 580px);
       pointer-events: none;
     }
-    @media (max-width: 980px) { .hero__foto { width: 42%; opacity: .45; } }
+    @media (max-width: 980px) { .hero__foto { width: 46%; opacity: .5; } }
     /* No celular o texto ocupa a largura toda e a foto viraria ruído atrás
        das letras, então sai de cena. */
     @media (max-width: 720px) { .hero__foto { display: none; } }
@@ -206,6 +213,9 @@
     .mentor p { font-size: 15px; line-height: 1.75; color: var(--body); margin-bottom: 18px; }
     .mentor .nome { font-weight: 700; color: var(--blue); font-size: 16px; }
     .mentor .cargo { color: var(--body); font-size: 14.5px; margin-bottom: 22px; }
+    /* Foto vertical (3:4) do palco: recorta mantendo o Rogério, que fica na
+       metade esquerda do enquadramento, em vez de esticar a coluna inteira. */
+    .mentor img { max-height: 430px; object-fit: cover; object-position: 28% 22%; width: 100%; border-radius: 12px; }
 
     footer { background: #fff; padding: 30px 0; text-align: center; border-top: 1px solid var(--border); }
     footer img { width: 128px; margin: 0 auto; }
@@ -351,7 +361,7 @@
           <i class="ti ti-arrow-right" aria-hidden="true"></i>
         </a>
       </div>
-      <img src="/wb-b/img/9.webp" alt="Rogério Aranda, CEO da WeHelp" loading="lazy" />
+      <img src="/wb-b/img/mentor.webp" alt="Rogério Aranda palestrando na Fitness Brasil" loading="lazy" />
     </div>
   </section>
 
