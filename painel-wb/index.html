@@ -9,8 +9,8 @@
   <!--
     Painel do teste A/B das páginas do webinário, mobile-first.
     Le via /api/painel-wb (proxy do doGet do Apps Script da planilha "Split WB").
-    A métrica que decide o teste é TAXA DE ENTRADA: de quem clicou no botão,
-    quantos realmente entraram no grupo. As entradas vêm da aba "Grupos", que é
+    A métrica que decide o teste é CONVERSÃO TOTAL: de quem viu a página,
+    quantos terminaram dentro do grupo. As entradas vêm da aba "Grupos", que é
     preenchida à mão a partir da lista de participantes de cada grupo — o
     WhatsApp não avisa ninguém quando alguém entra, então não há como automatizar.
   -->
@@ -61,6 +61,29 @@
       font-family: 'Figtree', sans-serif; font-weight: 900;
       font-size: clamp(30px, 9vw, 42px); line-height: 1.1; font-variant-numeric: tabular-nums;
     }
+
+    /* ── Comparativo lado a lado ── */
+    .comparativo {
+      background: rgba(255,255,255,.05); border: 1px solid var(--line);
+      border-radius: 18px; padding: 22px 20px; margin-bottom: 16px;
+    }
+    .comparativo h2 { font-family: 'Figtree', sans-serif; font-size: 16px; font-weight: 800; margin-bottom: 16px; }
+    .comparativo h2 span { color: var(--muted); font-weight: 400; margin: 0 4px; }
+    #tabComp { width: 100%; border-collapse: collapse; font-size: 14px; }
+    #tabComp th, #tabComp td { padding: 10px 6px; border-top: 1px solid var(--line); text-align: right; }
+    #tabComp th:first-child, #tabComp td:first-child { text-align: left; color: var(--muted); font-weight: 400; }
+    #tabComp thead th { border-top: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; }
+    #tabComp td { font-variant-numeric: tabular-nums; font-weight: 700; }
+    #tabComp tr.destaque td { font-size: 16px; }
+    #tabComp tr.destaque td:first-child { font-weight: 700; color: #fff; }
+    #tabComp .ganha { color: var(--green); }
+    #tabComp .perde { color: var(--muted); }
+    #tabComp .delta { font-weight: 700; }
+    .veredito {
+      margin-top: 14px; font-size: 13.5px; line-height: 1.6; color: var(--muted);
+      background: rgba(255,255,255,.04); border-radius: 10px; padding: 12px 14px;
+    }
+    .veredito strong { color: #fff; }
 
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
@@ -132,6 +155,12 @@
       <div class="tot"><div class="lbl">Entraram no grupo</div><div class="num" id="tEntradas">—</div></div>
     </div>
 
+    <div class="comparativo" id="comparativo" style="display:none;">
+      <h2>A curta <span>×</span> A longa</h2>
+      <table id="tabComp"></table>
+      <p class="veredito" id="veredito"></p>
+    </div>
+
     <div class="grid" id="cards"></div>
 
     <div class="pesos">
@@ -193,6 +222,64 @@
       el('blocoPesos').style.display = pesosAtuais.length ? 'block' : 'none';
     }
 
+    const ROTULO = { A: 'A — curta', B: 'B — longa' };
+
+    // Volume mínimo pra parar de tratar diferença como notícia. Abaixo disso,
+    // dois ou três cliques a mais viram "vitória" que some no dia seguinte.
+    const MIN_AMOSTRA = 100;
+
+    function renderComparativo(variantes) {
+      const a = variantes.find(v => v.variante === 'A');
+      const b = variantes.find(v => v.variante === 'B');
+      if (!a || !b) { el('comparativo').style.display = 'none'; return; }
+      el('comparativo').style.display = 'block';
+
+      const linha = (rot, ka, kb, sufixo, destaque) => {
+        const va = a[ka] ?? 0, vb = b[kb] ?? 0;
+        const ca = va > vb ? 'ganha' : (va < vb ? 'perde' : '');
+        const cb = vb > va ? 'ganha' : (vb < va ? 'perde' : '');
+        const d = +(va - vb).toFixed(1);
+        const dTxt = d === 0 ? '—' : (d > 0 ? '+' : '') + d + sufixo;
+        return `<tr class="${destaque ? 'destaque' : ''}">
+          <td>${rot}</td>
+          <td class="${ca}">${va}${sufixo}</td>
+          <td class="${cb}">${vb}${sufixo}</td>
+          <td class="delta ${d > 0 ? 'ganha' : (d < 0 ? '' : '')}">${dTxt}</td>
+        </tr>`;
+      };
+
+      el('tabComp').innerHTML = `
+        <thead><tr><th></th><th>${ROTULO.A}</th><th>${ROTULO.B}</th><th>Dif.</th></tr></thead>
+        <tbody>
+          ${linha('Visitantes', 'visitantes', 'visitantes', '', false)}
+          ${linha('Cliques no botão', 'cliques', 'cliques', '', false)}
+          ${linha('Taxa de clique', 'taxa_clique', 'taxa_clique', '%', false)}
+          ${linha('Entraram no grupo', 'entradas', 'entradas', '', false)}
+          ${linha('Taxa de entrada', 'taxa_entrada', 'taxa_entrada', '%', false)}
+          ${linha('Conversão total', 'taxa_conversao', 'taxa_conversao', '%', true)}
+        </tbody>`;
+
+      // Veredito: só chama vencedor com volume; senão explica o que falta.
+      const amostra = Math.min(a.visitantes, b.visitantes);
+      const semEntradas = (a.entradas + b.entradas) === 0;
+      let txt;
+      if (semEntradas) {
+        txt = `Ainda sem entradas lançadas. A <strong>conversão total</strong> é a métrica que decide o teste — ela só aparece depois que você lançar quantos entraram em cada grupo, ali embaixo.`;
+      } else if (amostra < MIN_AMOSTRA) {
+        txt = `Volume ainda baixo: ${amostra} visitantes na menor das duas. Abaixo de ${MIN_AMOSTRA} por variante, qualquer diferença pode ser sorte — não decida nada ainda.`;
+      } else {
+        const venc = a.taxa_conversao === b.taxa_conversao ? null : (a.taxa_conversao > b.taxa_conversao ? a : b);
+        if (!venc) {
+          txt = `Empate técnico na conversão total. Se persistir, a escolha pode ser pela mais barata de manter.`;
+        } else {
+          const perd = venc === a ? b : a;
+          const rel = perd.taxa_conversao ? Math.round((venc.taxa_conversao / perd.taxa_conversao - 1) * 100) : 100;
+          txt = `<strong>${ROTULO[venc.variante]}</strong> está convertendo ${venc.taxa_conversao}% contra ${perd.taxa_conversao}% — ${rel}% melhor. Com ${amostra}+ visitantes por variante, já dá pra levar a sério.`;
+        }
+      }
+      el('veredito').innerHTML = txt;
+    }
+
     function renderCards(variantes) {
       if (!variantes.length) {
         el('cards').innerHTML = `<div class="vazio">
@@ -204,23 +291,24 @@
 
       // A vencedora é a de maior taxa de entrada — mas só destaca com volume
       // suficiente pra não eleger campeã em cima de 3 cliques.
-      const elegiveis = variantes.filter(v => v.cliques >= 30);
+      const elegiveis = variantes.filter(v => v.visitantes >= MIN_AMOSTRA && v.entradas > 0);
       const melhor = elegiveis.length > 1
-        ? elegiveis.reduce((a, b) => (b.taxa_entrada > a.taxa_entrada ? b : a))
+        ? elegiveis.reduce((a, b) => (b.taxa_conversao > a.taxa_conversao ? b : a))
         : null;
 
       el('cards').innerHTML = variantes.map(v => `
         <div class="card ${melhor && melhor.variante === v.variante ? 'vencedora' : ''}">
           <div class="nome">
-            ${v.variante}
+            ${ROTULO[v.variante] || v.variante}
             ${melhor && melhor.variante === v.variante ? '<span class="tag">na frente</span>' : ''}
           </div>
-          <div class="destaque">${v.taxa_entrada}<small>%</small></div>
-          <div class="destaque-lbl">entram no grupo depois de clicar</div>
+          <div class="destaque">${v.taxa_conversao ?? 0}<small>%</small></div>
+          <div class="destaque-lbl">conversão total — viu a página e entrou no grupo</div>
           <div class="linha"><span>Visitantes</span><span>${v.visitantes}</span></div>
           <div class="linha"><span>Cliques no botão</span><span>${v.cliques}</span></div>
           <div class="linha"><span>Taxa de clique</span><span>${v.taxa_clique}%</span></div>
           <div class="linha"><span>Entraram no grupo</span><span>${v.entradas}</span></div>
+          <div class="linha"><span>Taxa de entrada</span><span>${v.taxa_entrada}%</span></div>
         </div>`).join('');
     }
 
@@ -235,6 +323,7 @@
         el('tCliques').textContent = data.totais.cliques;
         el('tEntradas').textContent = data.totais.entradas;
 
+        renderComparativo(data.variantes || []);
         renderCards(data.variantes || []);
         renderHistorico(data.grupos || []);
         pesosAtuais = (data.pesos || []).map(p => ({ variante: p.variante, peso: p.peso, ativa: p.ativa }));

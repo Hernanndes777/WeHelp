@@ -190,8 +190,15 @@ function _salvarGrupos(d) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dia)) {
     return _json({ status: 'erro', message: 'data deve ser AAAA-MM-DD' });
   }
+  // Formato certo não garante data que existe: "2026-13-99" passava no regex,
+  // virava Invalid Date e gravava uma linha em 1969. Só aceita se voltar igual.
+  const quando = new Date(dia + 'T12:00:00-03:00');
+  if (isNaN(quando.getTime()) || Utilities.formatDate(quando, TZ, 'yyyy-MM-dd') !== dia) {
+    return _json({ status: 'erro', message: 'data inexistente: ' + dia });
+  }
+
   const sh = _aba(ABA_GRUPOS);
-  const linha = [new Date(dia + 'T12:00:00-03:00'), Number(d.A) || 0, Number(d.B) || 0];
+  const linha = [quando, Number(d.A) || 0, Number(d.B) || 0];
 
   if (sh.getLastRow() >= 2) {
     const datas = sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues();
@@ -245,10 +252,14 @@ function doGet(e) {
 
   const linhas = Object.keys(porVariante).map(function (v) {
     const s = porVariante[v];
-    // Taxa de entrada é a métrica que decide o teste: de quem clicou no botão,
-    // quantos realmente entraram no grupo. É o número que o funil nunca teve.
-    s.taxa_clique  = s.visitantes ? +(s.cliques / s.visitantes * 100).toFixed(1) : 0;
-    s.taxa_entrada = s.cliques ? +(s.entradas / s.cliques * 100).toFixed(1) : 0;
+    // Três taxas, cada uma respondendo uma pergunta diferente:
+    //  clique    — a página convenceu a pessoa a agir?
+    //  entrada   — quem agiu conseguiu de fato entrar no grupo?
+    //  conversao — do total que viu a página, quantos viraram participante?
+    //              É esta que decide o teste; as outras dizem ONDE vaza.
+    s.taxa_clique    = s.visitantes ? +(s.cliques / s.visitantes * 100).toFixed(1) : 0;
+    s.taxa_entrada   = s.cliques ? +(s.entradas / s.cliques * 100).toFixed(1) : 0;
+    s.taxa_conversao = s.visitantes ? +(s.entradas / s.visitantes * 100).toFixed(1) : 0;
     return s;
   }).sort(function (a, b) { return b.visitantes - a.visitantes; });
 
