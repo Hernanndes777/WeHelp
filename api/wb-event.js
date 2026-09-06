@@ -26,6 +26,15 @@ export default async function handler(req, res) {
   }
   if (!d || !d.variante) return res.status(204).end();
 
+  // Robô fora da conta. Ao publicar a campanha, o revisor de anúncios do Meta
+  // busca a URL final de CADA anúncio pra checar política — ele roda JS e ainda
+  // toca nos botões. Em 2026-09-06 isso gerou 41 pageviews e 13 cliques em 21
+  // segundos, com taxa de clique de 45%, antes de a campanha começar a entregar.
+  // Sem este filtro, o primeiro dia de qualquer ciclo nasce contaminado.
+  const ua = String(req.headers['user-agent'] || '');
+  const ehRobo = !ua || /facebookexternalhit|facebookcatalog|facebookbot|meta-externalagent|headlesschrome|phantomjs|puppeteer|playwright|\bbot\b|crawler|spider|slurp|lighthouse|pagespeed|gtmetrix|ahrefs|semrush|curl\/|wget\/|python-requests|axios\//i.test(ua);
+  if (ehRobo) return res.status(204).end();
+
   try {
     await fetch(SHEETS_URL, {
       method: 'POST',
