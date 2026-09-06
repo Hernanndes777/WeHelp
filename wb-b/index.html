@@ -95,6 +95,17 @@
     .hero .wrap { position: relative; z-index: 2; }
     .hero__logo { width: 150px; margin-bottom: 44px; }
     .hero__body { max-width: 560px; }
+    /* Rogério ancorado na borda inferior do hero, como no original: ele fecha
+       o bloco escuro em vez de flutuar no meio dele. */
+    .hero__foto {
+      position: absolute; right: 0; bottom: 0; z-index: 1;
+      width: min(46%, 520px);
+      pointer-events: none;
+    }
+    @media (max-width: 980px) { .hero__foto { width: 42%; opacity: .45; } }
+    /* No celular o texto ocupa a largura toda e a foto viraria ruído atrás
+       das letras, então sai de cena. */
+    @media (max-width: 720px) { .hero__foto { display: none; } }
     .hero__eyebrow {
       font-family: 'Figtree', sans-serif; font-weight: 800;
       font-size: clamp(17px, 3.6vw, 22px); line-height: 1.25;
@@ -229,6 +240,7 @@
         </a>
       </div>
     </div>
+    <img src="/wb-b/img/5.webp" alt="Rogério Aranda, CEO da WeHelp" class="hero__foto" />
   </section>
 
   <section class="dor">
@@ -242,7 +254,7 @@
           processo contínuo de gestão para enxergar a insatisfação a tempo.
         </p>
       </div>
-      <img src="/wb-b/img/5.webp" alt="Gestor preocupado analisando os números da academia" loading="lazy" />
+      <img src="/wb-b/img/12.png" alt="Gestor de academia preocupado analisando os números" loading="lazy" />
     </div>
   </section>
 
@@ -316,7 +328,9 @@
         saltando de <strong>40</strong> para <strong>200</strong> unidades com total
         previsibilidade. Retenção é o motor da expansão.
       </p>
-      <img src="/wb-b/img/9.webp" alt="Rogério Aranda apresentando os resultados de NPS no palco" loading="lazy" />
+      <!-- A foto do palco que existia aqui no original não está mais entre os
+           assets publicados da página do GreatPages. Seção sem imagem em vez de
+           reaproveitar a do mentor, que só duplicaria o rosto duas vezes seguidas. -->
     </div>
   </section>
 
@@ -337,7 +351,7 @@
           <i class="ti ti-arrow-right" aria-hidden="true"></i>
         </a>
       </div>
-      <img src="/wb-b/img/12.png" alt="Rogério Aranda, CEO da WeHelp" loading="lazy" />
+      <img src="/wb-b/img/9.webp" alt="Rogério Aranda, CEO da WeHelp" loading="lazy" />
     </div>
   </section>
 
