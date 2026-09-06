@@ -920,6 +920,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzF_WmuggUzogri61ynSzBIqfRXj3I4xRbS7YS7JRaaYfpqpOKuzcubc0y8iMCVuhT8/exec';
 
+    // ── Teste A/B das páginas (/wb) ──
+    // Esta página é a variante A. O roteador manda ?v=A; acesso direto também
+    // conta como A, senão visita orgânica sumiria da base.
+    const VARIANTE = params.get('v') || 'A';
+
+    function wbEvento(evento) {
+      const corpo = JSON.stringify({
+        variante:     VARIANTE,
+        evento:       evento,
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_adset:    params.get('utm_adset')    || '',
+        utm_content:  params.get('utm_content')  || '',
+        utm_source:   params.get('utm_source')   || '',
+        utm_medium:   params.get('utm_medium')   || '',
+        referral:     document.referrer          || ''
+      });
+      // Same-origin e sendBeacon: o clique navega pro WhatsApp no mesmo
+      // instante e o navegador entrega o beacon mesmo depois da saída.
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/wb-event',
+            new Blob([corpo], { type: 'text/plain;charset=UTF-8' }))) return;
+      fetch('/api/wb-event', {
+        method: 'POST', keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: corpo
+      }).catch(() => {});
+    }
+
+    wbEvento('pageview');
+
     document.querySelectorAll('a[data-lead-btn]').forEach(btn => {
       btn.href = WHATSAPP_GROUP;
       btn.addEventListener('click', () => {
@@ -929,6 +958,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           if (testEventCode) extras.test_event_code = testEventCode;
           fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
         }
+        wbEvento('clique');
         // Google Sheets — rastreamento por conjunto/criativo.
         // sendBeacon em vez de fetch solto: o clique navega pro WhatsApp no
         // mesmo instante, e um fetch normal morre quando a página é descarregada.

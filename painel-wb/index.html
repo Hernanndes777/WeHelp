@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0a1128" />
+  <title>Painel — Split das páginas do webinário · WeHelp</title>
+  <!--
+    Painel do teste A/B das páginas do webinário, mobile-first.
+    Le via /api/painel-wb (proxy do doGet do Apps Script da planilha "Split WB").
+    A métrica que decide o teste é TAXA DE ENTRADA: de quem clicou no botão,
+    quantos realmente entraram no grupo. As entradas vêm da aba "Grupos", que é
+    preenchida à mão a partir da lista de participantes de cada grupo — o
+    WhatsApp não avisa ninguém quando alguém entra, então não há como automatizar.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue: #1B6EF3; --blue-soft: #6ea8ff;
+      --navy: #0a1128; --navy2: #101c42;
+      --green: #6ee7b7; --red: #ff7a93; --amber: #fbbf24;
+      --muted: #9fb4e8; --line: rgba(255,255,255,.14);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: radial-gradient(130% 130% at 50% -10%, var(--navy2) 0%, var(--navy) 62%);
+      color: #fff; padding: 28px 20px 48px;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .wrap { width: 100%; max-width: 760px; }
+
+    header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+    header h1 { font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
+    header h1 span { color: var(--blue-soft); }
+    #status { font-size: 12.5px; color: var(--muted); text-align: right; line-height: 1.4; }
+    #status .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 5px; vertical-align: 1px; }
+    #status.err .dot { background: var(--red); }
+
+    .filtros { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+    .filtros label { font-size: 13px; color: var(--muted); font-weight: 700; }
+    input[type="date"], input[type="number"] {
+      font-family: inherit; font-size: 14px; color: #fff;
+      background: rgba(255,255,255,.06); border: 1px solid var(--line);
+      border-radius: 10px; padding: 9px 12px;
+    }
+    input[type="number"] { width: 82px; text-align: center; font-variant-numeric: tabular-nums; }
+
+    .totais { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+    @media (max-width: 520px) { .totais { grid-template-columns: 1fr; } }
+    .tot {
+      background: rgba(255,255,255,.05); border: 1px solid var(--line);
+      border-radius: 16px; padding: 18px 16px; text-align: center;
+    }
+    .tot .lbl { font-size: 11.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .tot .num {
+      font-family: 'Figtree', sans-serif; font-weight: 900;
+      font-size: clamp(30px, 9vw, 42px); line-height: 1.1; font-variant-numeric: tabular-nums;
+    }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+    .card {
+      background: rgba(255,255,255,.05); border: 1px solid var(--line);
+      border-radius: 18px; padding: 20px;
+    }
+    .card.vencedora { border-color: rgba(110,231,183,.55); background: rgba(110,231,183,.07); }
+    .card .nome { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+    .card .tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--green); }
+    .card .destaque {
+      font-family: 'Figtree', sans-serif; font-weight: 900;
+      font-size: clamp(34px, 10vw, 46px); line-height: 1.1; font-variant-numeric: tabular-nums;
+      margin: 8px 0 2px;
+    }
+    .card .destaque small { font-size: 18px; font-weight: 800; color: var(--muted); }
+    .card .destaque-lbl { font-size: 12px; color: var(--muted); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 14px; }
+    .linha { display: flex; justify-content: space-between; font-size: 14px; padding: 7px 0; border-top: 1px solid var(--line); }
+    .linha span:first-child { color: var(--muted); }
+    .linha span:last-child { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .pesos { margin-top: 22px; background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+    .pesos h2 { font-family: 'Figtree', sans-serif; font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+    .pesos p.ajuda { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+    .peso-linha { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); }
+    .peso-linha .v { font-weight: 700; flex: 1; }
+    .peso-linha .pct { font-size: 13px; color: var(--muted); width: 54px; text-align: right; font-variant-numeric: tabular-nums; }
+    button {
+      font-family: inherit; font-size: 14px; font-weight: 700; color: #fff;
+      background: var(--blue); border: 0; border-radius: 10px;
+      padding: 11px 20px; cursor: pointer; margin-top: 14px;
+    }
+    button:disabled { opacity: .5; cursor: default; }
+    #salvoMsg { font-size: 13px; margin-left: 12px; }
+
+    .vazio { text-align: center; color: var(--muted); font-size: 14.5px; line-height: 1.6; padding: 34px 20px; }
+    code { background: rgba(255,255,255,.09); padding: 2px 6px; border-radius: 5px; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Split <span>/wb</span></h1>
+      <div id="status"><span class="dot"></span>carregando...</div>
+    </header>
+
+    <div class="filtros">
+      <label for="desde">A partir de</label>
+      <input type="date" id="desde" />
+      <button type="button" id="btnFiltrar" style="margin-top:0;padding:9px 16px;">Aplicar</button>
+    </div>
+
+    <div class="totais">
+      <div class="tot"><div class="lbl">Visitantes</div><div class="num" id="tVisitantes">—</div></div>
+      <div class="tot"><div class="lbl">Cliques</div><div class="num" id="tCliques">—</div></div>
+      <div class="tot"><div class="lbl">Entraram no grupo</div><div class="num" id="tEntradas">—</div></div>
+    </div>
+
+    <div class="grid" id="cards"></div>
+
+    <div class="pesos" id="blocoPesos" style="display:none;">
+      <h2>Distribuição do tráfego</h2>
+      <p class="ajuda">
+        Quanto do tráfego de <code>/wb</code> vai pra cada página. Muda na hora,
+        sem deploy. Quem já visitou continua vendo a mesma versão por 30 dias.
+      </p>
+      <div id="listaPesos"></div>
+      <button type="button" id="btnSalvar">Salvar distribuição</button>
+      <span id="salvoMsg"></span>
+    </div>
+  </div>
+
+  <script>
+    const API = '/api/painel-wb';
+    const el = (id) => document.getElementById(id);
+    let pesosAtuais = [];
+
+    function status(txt, erro) {
+      const s = el('status');
+      s.className = erro ? 'err' : '';
+      s.innerHTML = '<span class="dot"></span>' + txt;
+    }
+
+    function renderPesos() {
+      const total = pesosAtuais.reduce((s, p) => s + (Number(p.peso) || 0), 0);
+      el('listaPesos').innerHTML = pesosAtuais.map((p, i) => `
+        <div class="peso-linha">
+          <span class="v">${p.variante}</span>
+          <input type="number" min="0" max="100" value="${p.peso}" data-i="${i}" />
+          <span class="pct">${total ? Math.round(p.peso / total * 100) : 0}%</span>
+        </div>`).join('');
+
+      el('listaPesos').querySelectorAll('input').forEach((inp) => {
+        inp.addEventListener('input', () => {
+          pesosAtuais[Number(inp.dataset.i)].peso = Number(inp.value) || 0;
+          renderPesos();
+        });
+      });
+      el('blocoPesos').style.display = pesosAtuais.length ? 'block' : 'none';
+    }
+
+    function renderCards(variantes) {
+      if (!variantes.length) {
+        el('cards').innerHTML = `<div class="vazio">
+          Nenhum evento registrado ainda.<br>
+          Assim que o tráfego passar por <code>/wb</code> os números aparecem aqui.
+        </div>`;
+        return;
+      }
+
+      // A vencedora é a de maior taxa de entrada — mas só destaca com volume
+      // suficiente pra não eleger campeã em cima de 3 cliques.
+      const elegiveis = variantes.filter(v => v.cliques >= 30);
+      const melhor = elegiveis.length > 1
+        ? elegiveis.reduce((a, b) => (b.taxa_entrada > a.taxa_entrada ? b : a))
+        : null;
+
+      el('cards').innerHTML = variantes.map(v => `
+        <div class="card ${melhor && melhor.variante === v.variante ? 'vencedora' : ''}">
+          <div class="nome">
+            ${v.variante}
+            ${melhor && melhor.variante === v.variante ? '<span class="tag">na frente</span>' : ''}
+          </div>
+          <div class="destaque">${v.taxa_entrada}<small>%</small></div>
+          <div class="destaque-lbl">entram no grupo depois de clicar</div>
+          <div class="linha"><span>Visitantes</span><span>${v.visitantes}</span></div>
+          <div class="linha"><span>Cliques no botão</span><span>${v.cliques}</span></div>
+          <div class="linha"><span>Taxa de clique</span><span>${v.taxa_clique}%</span></div>
+          <div class="linha"><span>Entraram no grupo</span><span>${v.entradas}</span></div>
+        </div>`).join('');
+    }
+
+    async function carregar() {
+      const desde = el('desde').value;
+      try {
+        const r = await fetch(API + (desde ? '?desde=' + encodeURIComponent(desde) : ''));
+        const data = await r.json();
+        if (data.error) { status(data.error, true); return; }
+
+        el('tVisitantes').textContent = data.totais.visitantes;
+        el('tCliques').textContent = data.totais.cliques;
+        el('tEntradas').textContent = data.totais.entradas;
+
+        renderCards(data.variantes || []);
+        pesosAtuais = (data.pesos || []).map(p => ({ variante: p.variante, peso: p.peso, ativa: p.ativa }));
+        renderPesos();
+
+        status('atualizado ' + (data.geradoEm || ''));
+      } catch (e) {
+        status('falha ao carregar', true);
+      }
+    }
+
+    el('btnSalvar').addEventListener('click', async () => {
+      const btn = el('btnSalvar');
+      btn.disabled = true;
+      el('salvoMsg').textContent = 'salvando...';
+      try {
+        const r = await fetch(API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pesos: pesosAtuais }),
+        });
+        const data = await r.json();
+        el('salvoMsg').textContent = data.error ? data.error : 'salvo';
+        el('salvoMsg').style.color = data.error ? 'var(--red)' : 'var(--green)';
+      } catch {
+        el('salvoMsg').textContent = 'falhou';
+        el('salvoMsg').style.color = 'var(--red)';
+      }
+      btn.disabled = false;
+      setTimeout(() => { el('salvoMsg').textContent = ''; }, 4000);
+    });
+
+    el('btnFiltrar').addEventListener('click', carregar);
+    carregar();
+    setInterval(carregar, 60000);
+  </script>
+</body>
+</html>

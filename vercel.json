@@ -40,5 +40,11 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/wb",
+      "destination": "/api/wb"
+    }
   ]
 }
