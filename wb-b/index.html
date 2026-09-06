@@ -364,10 +364,11 @@
   </noscript>
 
   <script>
-    // [PENDENTE] Link do SEGUNDO grupo de WhatsApp — o que torna o teste
-    // mensurável. Enquanto for igual ao da variante A, as duas contam entrada
-    // no mesmo grupo e não há como separar quem veio de qual página.
-    const WHATSAPP_GROUP = 'https://chat.whatsapp.com/Ixy6NHdBB298Xzf0QHA8vo';
+    // Grupo #05, exclusivo desta variante. É o que torna o teste mensurável:
+    // como o WhatsApp não avisa ninguém quando alguém entra, a contagem de
+    // participantes de cada grupo é a única atribuição confiável que existe.
+    // A variante A usa o #04 — nunca aponte as duas pro mesmo grupo.
+    const WHATSAPP_GROUP = 'https://chat.whatsapp.com/KZ9ux6l9LpX4QJXDMQObt3';
     const params = new URLSearchParams(location.search);
     const testEventCode = params.get('fbtest') || null;
     const VARIANTE = params.get('v') || 'B';
