@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0a1128" />
+  <title>Hub de Páginas — WeHelp</title>
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1B6EF3; --blue-hover: #1457c8; --blue-tint: #e8f0ff;
+      --navy: #0a1128; --navy2: #101c42; --body: #4a5568;
+      --line: #e2e8f0; --bg: #f4f6fb; --muted: #8593ab;
+      --disp: 'Figtree', sans-serif;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--navy);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    .hero {
+      padding: 44px 24px 40px; text-align: center;
+      background: radial-gradient(700px 420px at 50% -10%, rgba(27,110,243,.45), transparent 65%), var(--navy);
+    }
+    .hero__brand { display: flex; align-items: center; justify-content: center; gap: 9px; margin-bottom: 22px; }
+    .hero__brand img { height: 26px; }
+    .hero__brand span { font-family: var(--disp); font-size: 17px; font-weight: 800; color: #fff; }
+    .hero h1 {
+      font-family: var(--disp); font-weight: 900; color: #fff;
+      font-size: clamp(24px, 3.4vw, 34px); letter-spacing: -.01em; margin-bottom: 10px;
+    }
+    .hero p { color: #b4c0e0; font-size: 14.5px; max-width: 560px; margin: 0 auto; }
+
+    .search-wrap { max-width: 640px; margin: -22px auto 0; padding: 0 24px; position: relative; z-index: 2; }
+    .search-box {
+      background: #fff; border: 1px solid var(--line); border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(10,17,40,.12);
+      display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+    }
+    .search-box i { color: var(--muted); font-size: 17px; }
+    .search-box input {
+      border: none; outline: none; font-family: 'DM Sans', sans-serif; font-size: 14.5px;
+      width: 100%; color: var(--navy); background: transparent;
+    }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 48px 24px 80px; }
+
+    .group { margin-bottom: 44px; }
+    .group:last-child { margin-bottom: 0; }
+    .group__head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; }
+    .group__head h2 { font-family: var(--disp); font-size: 18px; font-weight: 800; color: var(--navy); }
+    .group__head span { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .card {
+      background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px;
+      display: flex; flex-direction: column; gap: 8px;
+      transition: border-color .15s, transform .15s, box-shadow .15s;
+    }
+    .card:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(20,25,60,.08); }
+    .card__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .card__icon {
+      width: 34px; height: 34px; border-radius: 10px; background: var(--blue-tint); color: var(--blue);
+      display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
+    }
+    .card__go { color: var(--muted); font-size: 15px; transition: transform .15s, color .15s; }
+    .card:hover .card__go { color: var(--blue); transform: translateX(2px); }
+    .card h3 { font-family: var(--disp); font-size: 15px; font-weight: 700; color: var(--navy); line-height: 1.35; }
+    .card p { font-size: 12.5px; color: var(--body); line-height: 1.55; }
+    .card__slug {
+      font-size: 11px; color: var(--blue); font-weight: 700; font-family: monospace;
+      background: var(--blue-tint); padding: 2px 8px; border-radius: 50px; display: inline-block; width: fit-content;
+    }
+
+    .empty-state { text-align: center; color: var(--muted); font-size: 14px; padding: 40px 0; display: none; }
+
+    footer { text-align: center; padding: 0 24px 40px; font-size: 12px; color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .container { padding: 36px 18px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="hero__brand">
+      <img src="../shared/logo-wehelp.png" alt="WeHelp" />
+      <span>WeHelp</span>
+    </div>
+    <h1>Hub de Páginas</h1>
+    <p>Todas as landing pages, ferramentas e painéis do site num lugar só, organizados por grupo.</p>
+  </div>
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input type="text" id="searchInput" placeholder="Buscar por nome, descrição ou endereço..." />
+    </div>
+  </div>
+
+  <div class="container" id="container">
+
+    <div class="group" data-group>
+      <div class="group__head"><h2>Feira Fitness Brasil 2026</h2><span>10 páginas</span></div>
+      <div class="grid">
+
+        <a class="card" data-card href="/fitness-brasil-2026" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-calculator"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Calculadora de Churn (LP / QR)</h3>
+          <p>LP pública do folder e QR Code da feira — calcula quanto a academia perde por ano.</p>
+          <span class="card__slug">/fitness-brasil-2026</span>
+        </a>
+
+        <a class="card" data-card href="/estande" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-device-tablet"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Calculadora — Estande (kiosk)</h3>
+          <p>Modo tela cheia pro tablet do estande, com captura de lead e fila offline.</p>
+          <span class="card__slug">/estande</span>
+        </a>
+
+        <a class="card" data-card href="/calculadora-demo" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-presentation"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Calculadora — Demonstração</h3>
+          <p>Mesma calculadora, sem captura de lead — pro time de CS usar em demonstração.</p>
+          <span class="card__slug">/calculadora-demo</span>
+        </a>
+
+        <a class="card" data-card href="/captacao" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-user-plus"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Captação rápida (abordagem)</h3>
+          <p>Formulário de 20 segundos pro time abordar gente no corredor da feira.</p>
+          <span class="card__slug">/captacao</span>
+        </a>
+
+        <a class="card" data-card href="/painel-feira" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-chart-bar"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Painel — Leads da Feira</h3>
+          <p>Contagem em tempo real dos leads capturados pelo tablet e pelo site.</p>
+          <span class="card__slug">/painel-feira</span>
+        </a>
+
+        <a class="card" data-card href="/agenda-cs" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-calendar-event"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Agenda CS (durante a feira)</h3>
+          <p>Agendamento de conversa com o time de CS durante o evento.</p>
+          <span class="card__slug">/agenda-cs</span>
+        </a>
+
+        <a class="card" data-card href="/agenda-painel" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-layout-dashboard"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Painel — Agenda da Feira</h3>
+          <p>Painel interno dos agendamentos feitos durante o evento.</p>
+          <span class="card__slug">/agenda-painel</span>
+        </a>
+
+        <a class="card" data-card href="/pop-cs-feira" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-clipboard-list"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>POP — Operação CS na Feira</h3>
+          <p>Procedimento interno de como o CS deve operar durante o evento.</p>
+          <span class="card__slug">/pop-cs-feira</span>
+        </a>
+
+        <a class="card" data-card href="/agenda-comercial" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-calendar-plus"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Agenda Comercial (pós-feira)</h3>
+          <p>Agendamento de reunião de follow-up comercial, a partir da segunda após a feira.</p>
+          <span class="card__slug">/agenda-comercial</span>
+        </a>
+
+        <a class="card" data-card href="/agenda-comercial-painel" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-table"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Painel — Agenda Comercial</h3>
+          <p>Painel interno pra gerenciar os agendamentos comerciais pós-feira.</p>
+          <span class="card__slug">/agenda-comercial-painel</span>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="group" data-group>
+      <div class="group__head"><h2>Webinários e aulas ao vivo</h2><span>6 páginas</span></div>
+      <div class="grid">
+
+        <a class="card" data-card href="/webinario" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-video"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Webinário — Inscrição</h3>
+          <p>LP principal de inscrição no webinário de NPS pra academias e estúdios.</p>
+          <span class="card__slug">/webinario</span>
+        </a>
+
+        <a class="card" data-card href="/webinario-whatsapp" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-brand-whatsapp"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Webinário — via WhatsApp</h3>
+          <p>Variante da inscrição do webinário pra tráfego vindo do WhatsApp.</p>
+          <span class="card__slug">/webinario-whatsapp</span>
+        </a>
+
+        <a class="card" data-card href="/webinario-convite" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-mail"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Webinário — Convite</h3>
+          <p>Convite pro webinário com página de obrigado e confirmação de presença.</p>
+          <span class="card__slug">/webinario-convite</span>
+        </a>
+
+        <a class="card" data-card href="/acessar-sala" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-door-enter"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Acessar Sala (ao vivo)</h3>
+          <p>Página de acesso direto à sala do Google Meet no dia da aula.</p>
+          <span class="card__slug">/acessar-sala</span>
+        </a>
+
+        <a class="card" data-card href="/visibilidade-operativa" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-eye"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Aula ao Vivo — Visibilidade Operativa</h3>
+          <p>LP de inscrição pra aula ao vivo sobre visibilidade operacional.</p>
+          <span class="card__slug">/visibilidade-operativa</span>
+        </a>
+
+        <a class="card" data-card href="/enps-evento" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-users"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>eNPS — Evento</h3>
+          <p>LP sobre experiência de colaboradores (eNPS) ligada a um evento específico.</p>
+          <span class="card__slug">/enps-evento</span>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="group" data-group>
+      <div class="group__head"><h2>Captação e diagnóstico</h2><span>4 páginas</span></div>
+      <div class="grid">
+
+        <a class="card" data-card href="/diagnostico" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-stethoscope"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Diagnóstico B2B</h3>
+          <p>LP genérica de captação — gestão de experiência do cliente, foco em retenção.</p>
+          <span class="card__slug">/diagnostico</span>
+        </a>
+
+        <a class="card" data-card href="/academias" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-barbell"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>WeHelp para Academias</h3>
+          <p>LP de captação específica pro segmento fitness — previsão de evasão de alunos.</p>
+          <span class="card__slug">/academias</span>
+        </a>
+
+        <a class="card" data-card href="/sessao-estrategica" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-target-arrow"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Sessão Estratégica</h3>
+          <p>Formulário em etapas + agendamento via Calendly de uma sessão estratégica.</p>
+          <span class="card__slug">/sessao-estrategica</span>
+        </a>
+
+        <a class="card" data-card href="/agendamento-wb" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-calendar-check"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Agendar Sessão Estratégica</h3>
+          <p>Página de confirmação rápida pra agendar a sessão estratégica com a WeHelp.</p>
+          <span class="card__slug">/agendamento-wb</span>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="group" data-group>
+      <div class="group__head"><h2>Produto e ativação</h2><span>2 páginas</span></div>
+      <div class="grid">
+
+        <a class="card" data-card href="/retencao" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-shield-check"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Módulo de Retenção</h3>
+          <p>Página do produto explicando o módulo de retenção da WeHelp.</p>
+          <span class="card__slug">/retencao</span>
+        </a>
+
+        <a class="card" data-card href="/ativacao" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-bolt"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>Ativar Módulo de Retenção</h3>
+          <p>Página de ativação do módulo de retenção pra clientes já na base.</p>
+          <span class="card__slug">/ativacao</span>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="group" data-group>
+      <div class="group__head"><h2>Parcerias</h2><span>1 página</span></div>
+      <div class="grid">
+
+        <a class="card" data-card href="/california" target="_blank" rel="noopener">
+          <div class="card__top"><div class="card__icon"><i class="ti ti-handshake"></i></div><i class="ti ti-arrow-up-right card__go"></i></div>
+          <h3>WeHelp × Califórnia Fitness</h3>
+          <p>LP co-branded oferecendo 15 dias grátis exclusivos pra rede Califórnia Fitness.</p>
+          <span class="card__slug">/california</span>
+        </a>
+
+      </div>
+    </div>
+
+    <p class="empty-state" id="emptyState">Nenhuma página encontrada pra essa busca.</p>
+
+  </div>
+
+  <footer>Hub interno WeHelp — atualiza conforme novas páginas entram no ar.</footer>
+
+  <script>
+    const input = document.getElementById('searchInput');
+    const groups = document.querySelectorAll('[data-group]');
+    const emptyState = document.getElementById('emptyState');
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      let anyVisible = false;
+
+      groups.forEach((group) => {
+        let groupHasMatch = false;
+        group.querySelectorAll('[data-card]').forEach((card) => {
+          const text = card.textContent.toLowerCase();
+          const match = !q || text.includes(q);
+          card.style.display = match ? '' : 'none';
+          if (match) groupHasMatch = true;
+        });
+        group.style.display = groupHasMatch ? '' : 'none';
+        if (groupHasMatch) anyVisible = true;
+      });
+
+      emptyState.style.display = anyVisible ? 'none' : 'block';
+    });
+  </script>
+</body>
+</html>
