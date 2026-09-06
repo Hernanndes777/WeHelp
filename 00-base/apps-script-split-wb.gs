@@ -8,16 +8,15 @@
  *
  * COMO INSTALAR
  * 1. Crie uma planilha nova chamada "Split WB"
- * 2. Crie três abas com estes nomes EXATOS: Eventos, Config, Grupos
- * 3. Linha 1 de cada aba:
- *    Eventos → Data | Variante | Evento | Campaign | Adset | Criativo | Source | Medium | Referral
- *    Config  → Variante | Peso | Ativa
- *    Grupos  → Data | Variante | Entradas
- * 4. Extensões → Apps Script, apague tudo e cole este arquivo inteiro
- * 5. Implantar → Nova implantação → App da Web
+ * 2. Extensões → Apps Script, apague tudo e cole este arquivo inteiro
+ * 3. Implantar → Nova implantação → App da Web
  *    - Executar como: Eu
  *    - Quem pode acessar: Qualquer pessoa
- * 6. Me passe a URL /exec — ela vira a env SHEETS_SPLIT_WB_URL na Vercel
+ * 4. Abra a URL /exec uma vez no navegador — as três abas se criam sozinhas,
+ *    com cabeçalho e com a Config já em "A | 100 | sim"
+ * 5. Me passe a URL /exec — ela vira a env SHEETS_SPLIT_WB_URL na Vercel
+ *
+ * Não existe passo de criar aba na mão: o script cria a que faltar.
  *
  * Este arquivo é COMPLETO de propósito. Em 2026-08-28 o doPost do rastreamento
  * antigo foi perdido porque o arquivo guardado aqui só tinha o doGet e acabou
@@ -41,9 +40,41 @@ const TZ = 'America/Sao_Paulo';
 // Linhas de teste não entram na conta.
 const IGNORAR = ['check', 'teste', 'test-final', 'claude', 'sonda', 'verificacao'];
 
+// Cabeçalhos de cada aba. O script cria a aba que faltar em vez de quebrar —
+// assim não existe "instalação manual" pra dar errado, e se alguém renomear ou
+// apagar uma aba o script se recompõe sozinho em vez de ficar mudo. Foi
+// exatamente esse tipo de falha silenciosa que derrubou o rastreamento antigo.
+const CABECALHOS = {
+  'Eventos': ['Data', 'Variante', 'Evento', 'Campaign', 'Adset', 'Criativo', 'Source', 'Medium', 'Referral'],
+  'Config':  ['Variante', 'Peso', 'Ativa'],
+  'Grupos':  ['Data', 'Variante', 'Entradas'],
+};
+
+// Sorteio padrão enquanto só existe a variante A.
+const CONFIG_INICIAL = [['A', 100, 'sim']];
+
 function _aba(nome) {
-  const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(nome);
-  if (!sh) throw new Error('Aba "' + nome + '" não encontrada');
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(nome);
+  if (sh) return sh;
+
+  const cab = CABECALHOS[nome];
+  if (!cab) throw new Error('Aba desconhecida: ' + nome);
+
+  // Reaproveita a aba padrão vazia ("Página1"/"Sheet1") em vez de deixar lixo.
+  const abas = ss.getSheets();
+  if (abas.length === 1 && abas[0].getLastRow() === 0) {
+    sh = abas[0].setName(nome);
+  } else {
+    sh = ss.insertSheet(nome);
+  }
+
+  sh.getRange(1, 1, 1, cab.length).setValues([cab]).setFontWeight('bold');
+  sh.setFrozenRows(1);
+
+  if (nome === 'Config') {
+    sh.getRange(2, 1, CONFIG_INICIAL.length, 3).setValues(CONFIG_INICIAL);
+  }
   return sh;
 }
 
