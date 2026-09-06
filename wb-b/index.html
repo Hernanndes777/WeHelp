@@ -115,10 +115,13 @@
       letter-spacing: -.5px; margin-bottom: 20px;
     }
     .hero__sub { font-size: 15px; line-height: 1.7; color: #c6d2ee; margin-bottom: 26px; }
+    /* width:fit-content + margin auto em vez de inline-flex: assim a caixa
+       fica na própria linha e centralizada, com o CTA sozinho embaixo. Como
+       inline-flex ela dividia a linha com o botão e tirava o CTA do eixo. */
     .hero__quando {
-      display: inline-flex; align-items: center; gap: 12px;
-      margin-bottom: 30px; font-size: 14.5px; line-height: 1.45;
-      text-align: left;
+      display: flex; align-items: center; gap: 12px;
+      width: fit-content; margin: 0 auto 30px;
+      font-size: 14.5px; line-height: 1.45; text-align: left;
       padding: 12px 22px; border-radius: 10px;
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(201,161,59,.35);
