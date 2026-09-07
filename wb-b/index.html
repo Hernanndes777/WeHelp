@@ -16,6 +16,18 @@
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window, document, "clarity", "script", "xw6zsx67zg");
   </script>
+  <!-- Google tag (GA4) proprio desta pagina.
+       O GTM ja carrega o G-0WMP81BEKN, mas nao expoe gtag() pra pagina chamar,
+       e nos nao temos acesso ao container pra criar a tag de evento la dentro.
+       Entao configuramos aqui com send_page_view:false — o page_view continua
+       vindo do GTM, sem duplicar, e ganhamos um gtag() utilizavel pro evento. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WMP81BEKN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-0WMP81BEKN', { send_page_view: false });
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/shared/logo-wehelp.png" type="image/png" />
@@ -440,9 +452,9 @@
         // container ja carregou na pagina (G-0WMP81BEKN e AW-388747722 estao
         // configurados aqui). O formato e o objeto arguments — e o que o gtag.js
         // le do dataLayer. Vira evento principal no GA4 e dali conversao no Ads.
-        (function () { window.dataLayer.push(arguments); })(
-          'event', 'inscricao_webinario', { send_to: 'G-0WMP81BEKN', wb_variante: VARIANTE }
-        );
+        if (typeof gtag === 'function') {
+          gtag('event', 'inscricao_webinario', { wb_variante: VARIANTE });
+        }
       });
     });
   </script>
