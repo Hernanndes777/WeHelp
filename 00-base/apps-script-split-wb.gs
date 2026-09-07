@@ -54,7 +54,7 @@ const CABECALHOS = {
   'Grupos':  ['Data', 'Grupo 04 (A)', 'Grupo 05 (B)'],
   // Variante C captura contato antes de liberar o grupo. Quem preenche e nao
   // entra no grupo vira lista de recuperacao em vez de dinheiro perdido.
-  'Leads':   ['Data', 'Variante', 'Nome', 'E-mail', 'WhatsApp', 'Alunos', 'Campaign', 'Adset', 'Criativo', 'Source', 'Medium'],
+  'Leads':   ['Data', 'Variante', 'Nome', 'E-mail', 'WhatsApp', 'Formato do negócio', 'Alunos', 'Campaign', 'Adset', 'Criativo', 'Source', 'Medium'],
 };
 
 // Sorteio padrão enquanto só existe a variante A.
@@ -173,6 +173,7 @@ function _salvarLead(d) {
     d.nome         || '',
     d.email        || '',
     d.whatsapp     || '',
+    d.formato      || '',
     d.alunos       || '',
     d.utm_campaign || '',
     d.utm_adset    || '',

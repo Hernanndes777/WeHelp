@@ -435,6 +435,18 @@
         </div>
 
         <div class="campo">
+          <label for="formato">Qual o formato do seu negócio hoje?</label>
+          <select id="formato" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Academia (Apenas 1 unidade)</option>
+            <option>Estúdio / Box / Especializada</option>
+            <option>Pequena Rede (2 a 4 unidades)</option>
+            <option>Grande Rede / Franquia (5 ou mais unidades)</option>
+          </select>
+          <span class="msg" id="msgFormato">Escolhe uma opção</span>
+        </div>
+
+        <div class="campo">
           <label for="alunos">Quantos alunos ativos você tem hoje?</label>
           <select id="alunos" required>
             <option value="" disabled selected>Selecione</option>
@@ -563,12 +575,14 @@
       const email = el('email').value.trim();
       const tel = el('tel').value.trim();
       const ddi = el('ddi').value;
+      const formato = el('formato').value;
       const alunos = el('alunos').value;
 
       const checa = [
         ['nome',   'msgNome',   !!nome],
         ['email',  'msgEmail',  emailOk(email)],
         ['tel',    'msgTel',    telOk(tel, ddi)],
+        ['formato', 'msgFormato', !!formato],
         ['alunos', 'msgAlunos', !!alunos],
       ];
       let ok = true;
@@ -590,7 +604,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             variante: VARIANTE, nome: nome, email: email,
-            whatsapp: ddi + tel.replace(/\D/g, ''), alunos: alunos,
+            whatsapp: ddi + tel.replace(/\D/g, ''),
+            formato: formato, alunos: alunos,
             utm_campaign: params.get('utm_campaign') || '',
             utm_adset:    params.get('utm_adset')    || '',
             utm_content:  params.get('utm_content')  || '',

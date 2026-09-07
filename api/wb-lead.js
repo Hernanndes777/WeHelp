@@ -41,6 +41,7 @@ export default async function handler(req, res) {
         nome:         corta(d.nome, 120),
         email:        corta(d.email, 160),
         whatsapp:     corta(d.whatsapp, 30),
+        formato:      corta(d.formato, 80),
         alunos:       corta(d.alunos, 60),
         utm_campaign: corta(d.utm_campaign, 120),
         utm_adset:    corta(d.utm_adset, 120),
