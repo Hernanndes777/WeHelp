@@ -6,17 +6,24 @@
  *  - Config:   os pesos do sorteio, editáveis pelo /painel-wb sem deploy
  *  - Grupos:   entradas reais no grupo, uma linha por variante/dia (manual)
  *
- * COMO INSTALAR
- * 1. Crie uma planilha nova chamada "Split WB"
- * 2. Extensões → Apps Script, apague tudo e cole este arquivo inteiro
- * 3. Implantar → Nova implantação → App da Web
- *    - Executar como: Eu
- *    - Quem pode acessar: Qualquer pessoa
- * 4. Abra a URL /exec uma vez no navegador — as três abas se criam sozinhas,
- *    com cabeçalho e com a Config já em "A | 100 | sim"
- * 5. Me passe a URL /exec — ela vira a env SHEETS_SPLIT_WB_URL na Vercel
+ * DUAS PLANILHAS USAM ESTE MESMO ARQUIVO. O que muda sao as duas constantes
+ * VARIANTES e GRUPO_UNICO, logo abaixo:
  *
- * Não existe passo de criar aba na mão: o script cria a que faltar.
+ *   Planilha "Split WB"      -> VARIANTES = ['A', 'B']   GRUPO_UNICO = false
+ *   Planilha "Split WB Form" -> VARIANTES = ['D', 'C']   GRUPO_UNICO = true
+ *
+ * No teste com formulario um grupo so basta: a atribuicao por variante vem do
+ * telefone do cadastro (aba Leads), nao da separacao de grupos.
+ *
+ * COMO INSTALAR
+ * 1. Extensoes -> Apps Script, apague tudo e cole este arquivo inteiro
+ * 2. Ajuste VARIANTES e GRUPO_UNICO conforme a planilha
+ * 3. Implantar -> Nova implantacao -> App da Web
+ *    - Executar como: Eu | Quem pode acessar: Qualquer pessoa
+ * 4. Abra a URL /exec uma vez — as abas se criam sozinhas
+ * 5. Passe a URL /exec pro Claude configurar a env na Vercel
+ *
+ * Nao existe passo de criar aba na mao: o script cria a que faltar.
  *
  * Este arquivo é COMPLETO de propósito. Em 2026-08-28 o doPost do rastreamento
  * antigo foi perdido porque o arquivo guardado aqui só tinha o doGet e acabou
@@ -36,6 +43,17 @@ const ABA_CONFIG  = 'Config';
 const ABA_GRUPOS  = 'Grupos';
 const ABA_LEADS   = 'Leads';
 
+// QUAIS VARIANTES ESTA PLANILHA MEDE — mude ao instalar numa planilha nova.
+//   Teste 1 (/wb):  ['A', 'B']  — uma pagina sem form contra outra sem form
+//   Teste 2 (/wb2): ['D', 'C']  — as duas com formulario
+// A ordem importa: a primeira e a coluna B da aba Grupos, a segunda e a C.
+const VARIANTES = ['A', 'B'];
+
+// Com formulario, um grupo so basta: a atribuicao vem do telefone do cadastro,
+// nao da separacao de grupos. Ligue isto no teste 2 e a aba Grupos passa a ter
+// uma coluna unica de total.
+const GRUPO_UNICO = false;
+
 const TZ = 'America/Sao_Paulo';
 
 // Linhas de teste não entram na conta.
@@ -48,10 +66,11 @@ const IGNORAR = ['check', 'teste', 'test-final', 'claude', 'sonda', 'verificacao
 const CABECALHOS = {
   'Eventos': ['Data', 'Variante', 'Evento', 'Campaign', 'Adset', 'Criativo', 'Source', 'Medium', 'Referral'],
   'Config':  ['Variante', 'Peso', 'Ativa'],
-  // Uma linha por DIA, com os dois grupos lado a lado — é assim que a contagem
-  // acontece na prática: você abre os dois grupos no mesmo momento e anota.
-  // Grupo #04 é a variante A, #05 é a B.
-  'Grupos':  ['Data', 'Grupo 04 (A)', 'Grupo 05 (B)'],
+  // Uma linha por DIA. Com dois grupos, uma coluna pra cada variante; com
+  // grupo unico, uma coluna so — a atribuicao por variante vem do cadastro.
+  'Grupos':  GRUPO_UNICO
+    ? ['Data', 'Entradas no grupo']
+    : ['Data', 'Grupo de ' + VARIANTES[0], 'Grupo de ' + VARIANTES[1]],
   // Variante C captura contato antes de liberar o grupo. Quem preenche e nao
   // entra no grupo vira lista de recuperacao em vez de dinheiro perdido.
   'Leads':   ['Data', 'Variante', 'Nome', 'E-mail', 'WhatsApp', 'Formato do negócio', 'Alunos', 'Campaign', 'Adset', 'Criativo', 'Source', 'Medium'],
@@ -208,8 +227,14 @@ function _lerEntradasGrupo(desde) {
   sh.getRange(2, 1, sh.getLastRow() - 1, 3).getValues().forEach(function (l) {
     const quando = l[0] instanceof Date ? l[0] : new Date(l[0]);
     if (desde && !(quando >= desde)) return;
-    out.A = (out.A || 0) + (Number(l[1]) || 0);
-    out.B = (out.B || 0) + (Number(l[2]) || 0);
+    if (GRUPO_UNICO) {
+      // Total do dia, sem quebra por variante — quem veio de onde sai do
+      // cruzamento telefone x aba Leads.
+      out._total = (out._total || 0) + (Number(l[1]) || 0);
+    } else {
+      out[VARIANTES[0]] = (out[VARIANTES[0]] || 0) + (Number(l[1]) || 0);
+      out[VARIANTES[1]] = (out[VARIANTES[1]] || 0) + (Number(l[2]) || 0);
+    }
   });
   return out;
 }
@@ -298,7 +323,10 @@ function doGet(e) {
   }
 
   const entradas = _lerEntradasGrupo(desde);
-  Object.keys(entradas).forEach(function (v) { slot(v).entradas = entradas[v]; });
+  Object.keys(entradas).forEach(function (v) {
+    if (v === '_total') return;
+    slot(v).entradas = entradas[v];
+  });
 
   const linhas = Object.keys(porVariante).map(function (v) {
     const s = porVariante[v];
