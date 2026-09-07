@@ -42,7 +42,10 @@ export default async function handler(req, res) {
       headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
       body: JSON.stringify({
         variante:     String(d.variante).slice(0, 40),
-        evento:       d.evento === 'clique' ? 'clique' : 'pageview',
+        // Lista branca em vez de 'clique ou pageview': quando o evento 'lead'
+        // entrou no funil, esta linha o convertia em pageview em silencio — o
+        // formulario gravava e o painel mostrava zero lead.
+        evento:       ['clique', 'lead'].indexOf(d.evento) !== -1 ? d.evento : 'pageview',
         utm_campaign: String(d.utm_campaign || '').slice(0, 120),
         utm_adset:    String(d.utm_adset || '').slice(0, 120),
         utm_content:  String(d.utm_content || '').slice(0, 120),
