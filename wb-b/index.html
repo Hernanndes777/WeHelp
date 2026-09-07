@@ -431,6 +431,11 @@
           fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
         }
         wbEvento('clique');
+        // Evento nomeado pro GTM. Serve de gatilho pra tag do GA4 (e dali pra
+        // conversao do Google Ads) sem depender de seletor CSS — se alguem
+        // mexer na classe do botao um dia, a conversao nao morre em silencio.
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'wb_grupo_clique', wb_variante: VARIANTE });
       });
     });
   </script>
