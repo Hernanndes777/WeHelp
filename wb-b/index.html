@@ -16,21 +16,6 @@
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window, document, "clarity", "script", "xw6zsx67zg");
   </script>
-  <!-- Google tag (GA4) proprio desta pagina.
-       O GTM ja carrega o G-0WMP81BEKN, mas nao expoe gtag() pra pagina chamar,
-       e nos nao temos acesso ao container pra criar a tag de evento la dentro.
-       Entao configuramos aqui com send_page_view:false — o page_view continua
-       vindo do GTM, sem duplicar, e ganhamos um gtag() utilizavel pro evento. -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WMP81BEKN&l=wbLayer"></script>
-  <script>
-    // dataLayer PROPRIO (wbLayer, via &l=). O GTM toma conta do dataLayer
-    // padrao e engole os comandos do gtag — config e event entravam na fila e
-    // nunca viravam hit. Com fila separada os dois convivem sem se atrapalhar.
-    window.wbLayer = window.wbLayer || [];
-    function gtag(){ window.wbLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-0WMP81BEKN', { send_page_view: false });
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="/shared/logo-wehelp.png" type="image/png" />
@@ -446,18 +431,16 @@
           fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
         }
         wbEvento('clique');
-        // Evento nomeado pro GTM. Serve de gatilho pra tag do GA4 (e dali pra
-        // conversao do Google Ads) sem depender de seletor CSS — se alguem
-        // mexer na classe do botao um dia, a conversao nao morre em silencio.
+        // Gancho pro GTM. Quem tiver acesso ao container cria um acionador de
+        // evento personalizado "wb_grupo_clique" e pendura ali a tag do GA4 e a
+        // do Google Ads. Nao da pra disparar da pagina: o G-0WMP81BEKN ja esta
+        // registrado pelo GTM, e um segundo config do mesmo ID se anula.
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ event: 'wb_grupo_clique', wb_variante: VARIANTE });
         // Sem acesso ao GTM: dispara o evento GA4 direto pelo gtag que o proprio
         // container ja carregou na pagina (G-0WMP81BEKN e AW-388747722 estao
         // configurados aqui). O formato e o objeto arguments — e o que o gtag.js
         // le do dataLayer. Vira evento principal no GA4 e dali conversao no Ads.
-        if (typeof gtag === 'function') {
-          gtag('event', 'inscricao_webinario', { wb_variante: VARIANTE });
-        }
       });
     });
   </script>
