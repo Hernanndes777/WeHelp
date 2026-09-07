@@ -9,6 +9,8 @@
 // Responde 204 na hora e só depois repassa — o beacon dispara no momento em que
 // o navegador está saindo da página pro WhatsApp, então nada aqui pode demorar.
 
+import { urlDaPlanilha } from './_split-testes.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -16,14 +18,13 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const SHEETS_URL = process.env.SHEETS_SPLIT_WB_URL;
+  // O 'teste' vem no corpo, mandado pela propria pagina.
+  let bruto = req.body;
+  if (typeof bruto === 'string') { try { bruto = JSON.parse(bruto); } catch { bruto = null; } }
+  const SHEETS_URL = urlDaPlanilha(bruto && bruto.teste);
   if (!SHEETS_URL) return res.status(204).end();
 
-  // sendBeacon manda text/plain, então o body pode chegar como string.
-  let d = req.body;
-  if (typeof d === 'string') {
-    try { d = JSON.parse(d); } catch { d = null; }
-  }
+  const d = bruto;
   if (!d || !d.variante) return res.status(204).end();
 
   // Robô fora da conta. Ao publicar a campanha, o revisor de anúncios do Meta

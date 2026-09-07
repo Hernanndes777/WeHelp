@@ -394,10 +394,13 @@
     const WHATSAPP_GROUP = 'https://chat.whatsapp.com/KZ9ux6l9LpX4QJXDMQObt3';
     const params = new URLSearchParams(location.search);
     const testEventCode = params.get('fbtest') || null;
+    // Qual dos dois testes esta pagina serve — define a planilha de destino.
+    const TESTE = 'ab';
     const VARIANTE = params.get('v') || 'B';
 
     function wbEvento(evento) {
       const corpo = JSON.stringify({
+        teste:        TESTE,
         variante:     VARIANTE,
         evento:       evento,
         utm_campaign: params.get('utm_campaign') || '',

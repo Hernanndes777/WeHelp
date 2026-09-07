@@ -43,6 +43,11 @@
 
     .filtros { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
     .filtros label { font-size: 13px; color: var(--muted); font-weight: 700; }
+    select {
+      font-family: inherit; font-size: 14px; color: #fff;
+      background: rgba(255,255,255,.06); border: 1px solid var(--line);
+      border-radius: 10px; padding: 9px 12px;
+    }
     input[type="date"], input[type="number"] {
       font-family: inherit; font-size: 14px; color: #fff;
       background: rgba(255,255,255,.06); border: 1px solid var(--line);
@@ -143,11 +148,16 @@
 <body>
   <div class="wrap">
     <header>
-      <h1>Split <span>/wb</span></h1>
+      <h1>Split <span id="rota">/wb</span></h1>
       <div id="status"><span class="dot"></span>carregando...</div>
     </header>
 
     <div class="filtros">
+      <label for="teste">Teste</label>
+      <select id="teste">
+        <option value="ab">Sem formulário — A curta × B longa</option>
+        <option value="form">Com formulário — D curta × C longa</option>
+      </select>
       <label for="desde">A partir de</label>
       <input type="date" id="desde" />
       <button type="button" id="btnFiltrar" style="margin-top:0;padding:9px 16px;">Aplicar</button>
@@ -236,15 +246,25 @@
       el('blocoPesos').style.display = pesosAtuais.length ? 'block' : 'none';
     }
 
-    const ROTULO = { A: 'A — curta', B: 'B — longa' };
+    // Cada teste compara um par diferente. O primeiro do par é o que aparece
+    // na coluna da esquerda da tabela.
+    const TESTES = {
+      ab:   { par: ['A', 'B'], rotulo: { A: 'A — curta', B: 'B — longa' }, titulo: 'A curta <span>×</span> B longa' },
+      form: { par: ['D', 'C'], rotulo: { D: 'D — curta c/ form', C: 'C — longa c/ form' }, titulo: 'D curta <span>×</span> C longa' },
+    };
+    const testeAtual = () => TESTES[el('teste').value] || TESTES.ab;
+    let ROTULO = TESTES.ab.rotulo;
 
     // Volume mínimo pra parar de tratar diferença como notícia. Abaixo disso,
     // dois ou três cliques a mais viram "vitória" que some no dia seguinte.
     const MIN_AMOSTRA = 100;
 
     function renderComparativo(variantes) {
-      const a = variantes.find(v => v.variante === 'A');
-      const b = variantes.find(v => v.variante === 'B');
+      const cfg = testeAtual();
+      ROTULO = cfg.rotulo;
+      document.querySelector('.comparativo h2').innerHTML = cfg.titulo;
+      const a = variantes.find(v => v.variante === cfg.par[0]);
+      const b = variantes.find(v => v.variante === cfg.par[1]);
       if (!a || !b) { el('comparativo').style.display = 'none'; return; }
       el('comparativo').style.display = 'block';
 
@@ -263,10 +283,12 @@
       };
 
       el('tabComp').innerHTML = `
-        <thead><tr><th></th><th>${ROTULO.A}</th><th>${ROTULO.B}</th><th>Dif.</th></tr></thead>
+        <thead><tr><th></th><th>${ROTULO[cfg.par[0]]}</th><th>${ROTULO[cfg.par[1]]}</th><th>Dif.</th></tr></thead>
         <tbody>
           ${linha('Visitantes', 'visitantes', 'visitantes', '', false)}
           ${linha('Cliques no botão', 'cliques', 'cliques', '', false)}
+          ${cfg.par[0] === 'D' ? linha('Preencheram o form', 'leads', 'leads', '', false) : ''}
+          ${cfg.par[0] === 'D' ? linha('Taxa do formulário', 'taxa_lead', 'taxa_lead', '%', false) : ''}
           ${linha('Conversão da página', 'taxa_clique', 'taxa_clique', '%', false)}
           ${linha('Entraram no grupo', 'entradas', 'entradas', '', false)}
           ${linha('Taxa de entrada', 'taxa_entrada', 'taxa_entrada', '%', false)}
@@ -329,7 +351,9 @@
     async function carregar() {
       const desde = el('desde').value;
       try {
-        const r = await fetch(API + (desde ? '?desde=' + encodeURIComponent(desde) : ''));
+        const q = new URLSearchParams({ teste: el('teste').value });
+        if (desde) q.set('desde', desde);
+        const r = await fetch(API + '?' + q.toString());
         const data = await r.json();
         if (data.error) { status(data.error, true); return; }
 
@@ -344,6 +368,7 @@
         pesosAtuais = (data.pesos || []).map(p => ({ variante: p.variante, peso: p.peso, ativa: p.ativa }));
         renderPesos();
 
+        el('rota').textContent = el('teste').value === 'form' ? '/wb2' : '/wb';
         status('atualizado ' + (data.geradoEm || ''));
       } catch (e) {
         status('falha ao carregar', true);
@@ -358,7 +383,7 @@
         const r = await fetch(API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pesos: pesosAtuais }),
+          body: JSON.stringify({ teste: el('teste').value, pesos: pesosAtuais }),
         });
         const data = await r.json();
         el('salvoMsg').textContent = data.error ? data.error : 'salvo';
@@ -400,7 +425,7 @@
         const r = await fetch(API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ grupos: { data, A: Number(el('gA').value) || 0, B: Number(el('gB').value) || 0 } }),
+          body: JSON.stringify({ teste: el('teste').value, grupos: { data, A: Number(el('gA').value) || 0, B: Number(el('gB').value) || 0 } }),
         });
         const d = await r.json();
         el('gMsg').textContent = d.error ? d.error : (d.acao === 'atualizado' ? 'dia corrigido' : 'lançado');
@@ -418,6 +443,7 @@
     // 99% das vezes.
     el('gData').value = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
 
+    el('teste').addEventListener('change', carregar);
     el('btnFiltrar').addEventListener('click', carregar);
     carregar();
     setInterval(carregar, 60000);

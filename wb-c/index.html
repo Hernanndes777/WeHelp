@@ -503,10 +503,13 @@
     const WHATSAPP_GROUP = 'https://chat.whatsapp.com/KZ9ux6l9LpX4QJXDMQObt3';
     const params = new URLSearchParams(location.search);
     const testEventCode = params.get('fbtest') || null;
+    // Qual dos dois testes esta pagina serve — define a planilha de destino.
+    const TESTE = 'form';
     const VARIANTE = params.get('v') || 'C';
 
     function wbEvento(evento) {
       const corpo = JSON.stringify({
+        teste:        TESTE,
         variante:     VARIANTE,
         evento:       evento,
         utm_campaign: params.get('utm_campaign') || '',
@@ -603,7 +606,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            variante: VARIANTE, nome: nome, email: email,
+            teste: TESTE, variante: VARIANTE, nome: nome, email: email,
             whatsapp: ddi + tel.replace(/\D/g, ''),
             formato: formato, alunos: alunos,
             utm_campaign: params.get('utm_campaign') || '',

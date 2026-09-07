@@ -19,7 +19,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
-  <title>WeHelp NPS — Academias & Estúdios</title>
+  <title>Aula ao Vivo para Donos de Academias e Estúdios | WeHelp</title>
+
+  <!--
+    Variante D do segundo teste (/wb2): pagina CURTA com formulario.
+    Copia da /webinario, que rodou o WB05 (105 leads a R$22,48 — o segundo
+    melhor CPL de todos os ciclos). Aqui ela ganhou e-mail e formato do
+    negocio, e passou a gravar na planilha do teste em vez do ActiveCampaign.
+
+    Contra a /wb-c (longa com formulario). Fluxo identico nas duas — a unica
+    variavel e o desenho da pagina.
+
+    A /webinario original ficou intacta: a URL dela pode estar em anuncio ou
+    mensagem antiga, e ela ainda alimenta o ActiveCampaign.
+  -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
@@ -944,7 +957,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <ul class="hero__trust">
           <li>
             <span class="trust-icon"><i class="ti ti-calendar-event" aria-hidden="true"></i></span>
-            10 de Setembro (Quinta-feira), às 12h.
+            Na próxima QUINTA-FEIRA, às 12h.
           </li>
           <li>
             <span class="trust-icon"><i class="ti ti-users" aria-hidden="true"></i></span>
@@ -1037,6 +1050,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <input type="text" name="nome" class="modal__input" placeholder="* Nome completo" required />
         </div>
         <div class="modal__field">
+          <input type="email" name="email" class="modal__input" placeholder="* E-mail" required />
+          <p class="modal__field-error" id="emailError">Digite um e-mail válido</p>
+        </div>
+        <div class="modal__field">
           <div class="modal__phone-row">
             <div class="modal__ddi-wrap">
               <select class="modal__ddi-select" id="ddiSelect" aria-label="Código do país">
@@ -1059,6 +1076,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <input type="tel" name="whatsapp" class="modal__input" placeholder="* WhatsApp" required />
           </div>
           <p class="modal__field-error" id="phoneError">Digite um número válido com DDD</p>
+        </div>
+        <div class="modal__field">
+          <select name="formato" class="modal__select" id="formatoSelect" required>
+            <option value="" disabled selected>* Qual o formato do seu negócio hoje?</option>
+            <option value="Academia (Apenas 1 unidade)">Academia (Apenas 1 unidade)</option>
+            <option value="Estúdio / Box / Especializada">Estúdio / Box / Especializada</option>
+            <option value="Pequena Rede (2 a 4 unidades)">Pequena Rede (2 a 4 unidades)</option>
+            <option value="Grande Rede / Franquia (5 ou mais unidades)">Grande Rede / Franquia (5 ou mais unidades)</option>
+          </select>
         </div>
         <div class="modal__field">
           <select name="clientes" class="modal__select" id="clientesSelect" required>
@@ -1123,6 +1149,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return m ? decodeURIComponent(m[1]) : '';
     }
 
+    // ── Teste 2 (/wb2): esta é a variante D — página curta com formulário ──
+    const TESTE = 'form';
+    const VARIANTE = params.get('v') || 'D';
+
+    function wbEvento(evento) {
+      const corpo = JSON.stringify({
+        teste:        TESTE,
+        variante:     VARIANTE,
+        evento:       evento,
+        utm_campaign: params.get('utm_campaign') || '',
+        utm_adset:    params.get('utm_adset')    || '',
+        utm_content:  params.get('utm_content')  || '',
+        utm_source:   params.get('utm_source')   || '',
+        utm_medium:   params.get('utm_medium')   || '',
+        referral:     document.referrer          || ''
+      });
+      if (navigator.sendBeacon &&
+          navigator.sendBeacon('/api/wb-event',
+            new Blob([corpo], { type: 'text/plain;charset=UTF-8' }))) return;
+      fetch('/api/wb-event', {
+        method: 'POST', keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: corpo
+      }).catch(() => {});
+    }
+
+    wbEvento('pageview');
+
     const modal = document.getElementById('leadModal');
     const form = document.getElementById('leadForm');
     const errorBox = document.getElementById('modalError');
@@ -1163,6 +1216,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (c2) c2.textContent = secs;
         if (secs <= 0) {
           clearInterval(interval);
+          wbEvento('clique');
           window.location.href = WHATSAPP_GROUP;
         }
       }, 1000);
@@ -1170,59 +1224,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       confirmBtn.addEventListener('click', (e) => {
         e.preventDefault();
         clearInterval(interval);
+        wbEvento('clique');
         window.location.href = WHATSAPP_GROUP;
       });
     }
 
-    // ── Teste A/B (/wb) — esta é a variante A ──
-    // Réplica da página que rodou no WB03 (18/06), que foi o melhor ciclo:
-    // 130 leads a R$18,55 e 12 agendamentos. Sem formulário, botão direto pro
-    // grupo — era assim que ela rodava. O modal de captura foi adicionado
-    // depois, em julho, e não faz parte do que deu certo aqui.
-    // Qual dos dois testes esta pagina serve — define a planilha de destino.
-    const TESTE = 'ab';
-    const VARIANTE = params.get('v') || 'A';
-
-    function wbEvento(evento) {
-      const corpo = JSON.stringify({
-        teste:        TESTE,
-        variante:     VARIANTE,
-        evento:       evento,
-        utm_campaign: params.get('utm_campaign') || '',
-        utm_adset:    params.get('utm_adset')    || '',
-        utm_content:  params.get('utm_content')  || '',
-        utm_source:   params.get('utm_source')   || '',
-        utm_medium:   params.get('utm_medium')   || '',
-        referral:     document.referrer          || ''
-      });
-      // sendBeacon: o clique navega pro WhatsApp no mesmo instante e um fetch
-      // solto morre quando a página é descarregada.
-      if (navigator.sendBeacon &&
-          navigator.sendBeacon('/api/wb-event',
-            new Blob([corpo], { type: 'text/plain;charset=UTF-8' }))) return;
-      fetch('/api/wb-event', {
-        method: 'POST', keepalive: true,
-        headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: corpo
-      }).catch(() => {});
-    }
-
-    wbEvento('pageview');
-
+    // [FIX] Dispara SubscribedButtonClick ao abrir o modal
+    // Dá sinal de intenção ao algoritmo da Meta antes do Lead event
     document.querySelectorAll('a[data-lead-btn]').forEach(btn => {
-      btn.href = WHATSAPP_GROUP;
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
         if (typeof fbq === 'function') {
           const extras = {};
           if (testEventCode) extras.test_event_code = testEventCode;
-          fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
+          fbq('trackCustom', 'SubscribedButtonClick', {}, extras);
         }
-        wbEvento('clique');
-        // Gancho pro GTM. Quem tiver acesso ao container cria um acionador de
-        // evento personalizado "wb_grupo_clique" e pendura ali a tag do GA4 e a
-        // do Google Ads. Nao da pra disparar da pagina: o G-0WMP81BEKN ja esta
-        // registrado pelo GTM, e um segundo config do mesmo ID se anula.
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: 'wb_grupo_clique', wb_variante: VARIANTE });
       });
     });
 
@@ -1250,6 +1268,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       const nome = form.nome.value.trim();
       const phoneRaw = form.whatsapp.value.trim();
       const ddi = ddiSelect.value;
+      const email = form.email.value.trim();
+      const formato = form.formato.value;
       const clientes = form.clientes.value;
 
       let hasError = false;
@@ -1270,6 +1290,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         phoneError.classList.remove('show');
       }
 
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      form.email.classList.toggle('invalid', !emailOk);
+      document.getElementById('emailError').classList.toggle('show', !emailOk);
+      if (!emailOk) hasError = true;
+
+      const formatoSelect = document.getElementById('formatoSelect');
+      formatoSelect.classList.toggle('invalid', !formato);
+      if (!formato) hasError = true;
+
       if (!clientes) {
         clientesSelect.classList.add('invalid');
         hasError = true;
@@ -1279,69 +1308,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       if (hasError) return;
 
-      // [FIX] Gera email baseado no telefone — mesmo padrão do backend
-      // Evita email vazio que prejudicava o advanced matching no pixel
       const phoneDigits = (ddi + phoneRaw.replace(/\D/g, '')).replace(/\D/g, '');
-      const generatedEmail = 'wp.' + phoneDigits + '@noemail.invalid';
 
       const eventId = getEventId();
 
-      const data = {
-        nome: nome,
-        email: generatedEmail,         // [FIX] era '' — agora alimenta o backend e o CAPI
-        whatsapp: ddi + phoneRaw.replace(/\D/g, ''),
-        clientes: clientes,
-        utm_source: params.get('utm_source') || '',
-        utm_medium: params.get('utm_medium') || '',
-        utm_campaign: params.get('utm_campaign') || '',
-        utm_content: params.get('utm_content') || '',
-        utm_term: params.get('utm_term') || '',
-        utm_id: params.get('utm_id') || '',       // [DATA] modelo de captura completa
-        fbclid: params.get('fbclid') || '',       // [DATA] clique do anúncio Meta
-        gclid: params.get('gclid') || '',         // [DATA] clique do anúncio Google
-        referral_source: document.referrer || '', // [DATA] de onde a pessoa veio
-        url: location.href,                       // [DATA] URL completa com querystring
-        event_id: eventId,             // [NEW] para deduplicação browser ↔ CAPI
-        fbc: getCookie('_fbc'),        // [NEW] Meta click cookie — melhora matching
-        fbp: getCookie('_fbp'),        // [NEW] Meta browser cookie — melhora matching
-        test_event_code: testEventCode || '', // [NEW] passa para o CAPI no backend
-      };
 
       submitBtn.disabled = true;
       submitText.textContent = 'ENVIANDO...';
       submitSpinner.style.display = 'block';
 
-      // Fecha o modal e mostra o popup de confirmação imediatamente
-      closeModal();
-      showConfirmPopup();
-
-      // [FIX] Reinicia o pixel com dados do usuário antes do Lead event
-      // Isso popula o advanced matching (email + phone) no evento
-      if (typeof fbq === 'function') {
-        fbq('init', PIXEL_ID, {
-          em: generatedEmail,
-          ph: phoneDigits,
+      // Espera a gravacao antes de liberar o grupo. Se soltasse o link primeiro
+      // e a gravacao falhasse, a pessoa entraria no grupo e o contato sumiria —
+      // que e exatamente o que esta variante existe pra evitar.
+      try {
+        const r = await fetch('/api/wb-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            teste: TESTE, variante: VARIANTE,
+            nome: nome, email: email,
+            whatsapp: ddi + phoneRaw.replace(/\D/g, ''),
+            formato: formato, alunos: clientes,
+            utm_campaign: params.get('utm_campaign') || '',
+            utm_adset:    params.get('utm_adset')    || '',
+            utm_content:  params.get('utm_content')  || '',
+            utm_source:   params.get('utm_source')   || '',
+            utm_medium:   params.get('utm_medium')   || '',
+          }),
         });
+        const d = await r.json();
+        if (!r.ok || !d.success) throw new Error(d.error || 'falhou');
+      } catch (err) {
+        errorBox.textContent = 'Nao consegui salvar. Confere sua conexao e tenta de novo.';
+        errorBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitText.textContent = 'GARANTIR MINHA VAGA';
+        submitSpinner.style.display = 'none';
+        return;
+      }
+
+      wbEvento('lead');
+
+      if (typeof fbq === 'function') {
+        fbq('init', PIXEL_ID, { em: email, ph: phoneDigits });
         const pixelExtras = { eventID: eventId };
         if (testEventCode) pixelExtras.test_event_code = testEventCode;
         fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
       }
 
-      // Dispara LinkTracker
-      if (click_id) {
-        fetch('https://linktracker2-f3va.vercel.app/api/event', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ click_id, slug, event_type: 'whatsapp' })
-        }).catch(() => {});
-      }
-
-      // Envia pro ActiveCampaign + Sheets + CAPI (em background, não trava o popup)
-      fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }).catch(() => {});
+      closeModal();
+      showConfirmPopup();
     });
   </script>
 

@@ -16,25 +16,28 @@
 // As duas páginas que já provaram converter, ambas direto pro grupo, sem
 // formulário. A hipótese em teste é só uma: curta e minimalista (WB03) contra
 // longa com prova social e rosto do fundador (WB02).
-const CATALOGO = {
-  A: { path: '/wb-a', label: 'Curta — réplica do WB03 (18/06)' },
-  B: { path: '/wb-b', label: 'Longa — réplica do WB02 (11/08)' },
-};
 
-// Usado quando a planilha não responde. Nunca deixa o anúncio na mão.
-const PESOS_FALLBACK = [{ variante: 'A', peso: 50 }, { variante: 'B', peso: 50 }];
 
-const COOKIE = 'wb_v';
+import { pegarTeste, urlDaPlanilha } from './_split-testes.js';
+
+// Cookie por teste: se os dois usassem o mesmo, quem ja estivesse sorteado no
+// A/B chegaria no segundo teste com uma variante que nao existe la, e o
+// re-sorteio sobrescreveria o cookie — quebrando a estabilidade do primeiro.
+const COOKIE = { ab: 'wb_v', form: 'wb2_v' };
 const COOKIE_DIAS = 30;
 const CACHE_MS = 60_000;
 
 // Instâncias serverless são reaproveitadas, então na prática quase toda
 // requisição pega o cache e não espera a planilha.
-let cache = { em: 0, pesos: null };
+// Cache por teste — senao os pesos de um vazariam pro outro.
+const cache = {};
 
-async function lerPesos(sheetsUrl) {
-  if (!sheetsUrl) return PESOS_FALLBACK;
-  if (cache.pesos && Date.now() - cache.em < CACHE_MS) return cache.pesos;
+async function lerPesos(nomeTeste) {
+  const cfg = pegarTeste(nomeTeste);
+  const sheetsUrl = urlDaPlanilha(nomeTeste);
+  const c = cache[nomeTeste] || {};
+  if (!sheetsUrl) return cfg.fallback;
+  if (c.pesos && Date.now() - c.em < CACHE_MS) return c.pesos;
 
   try {
     const ctrl = new AbortController();
@@ -43,13 +46,13 @@ async function lerPesos(sheetsUrl) {
     clearTimeout(t);
 
     const data = await r.json();
-    const pesos = (data.pesos || []).filter((p) => CATALOGO[p.variante] && p.peso > 0);
-    if (!pesos.length) return PESOS_FALLBACK;
+    const pesos = (data.pesos || []).filter((p) => cfg.catalogo[p.variante] && p.peso > 0);
+    if (!pesos.length) return cfg.fallback;
 
-    cache = { em: Date.now(), pesos };
+    cache[nomeTeste] = { em: Date.now(), pesos };
     return pesos;
   } catch {
-    return cache.pesos || PESOS_FALLBACK;
+    return c.pesos || cfg.fallback;
   }
 }
 
@@ -73,31 +76,36 @@ export default async function handler(req, res) {
   const base = `https://${req.headers.host || 'lp.wehelpsoftware.com'}`;
   const entrada = new URL(req.url, base);
 
+  // Qual teste: vem do rewrite (/wb -> ab, /wb2 -> form).
+  const nomeTeste = entrada.searchParams.get('teste') === 'form' ? 'form' : 'ab';
+  const cfg = pegarTeste(nomeTeste);
+  const cookieNome = COOKIE[nomeTeste];
+
   let variante = null;
 
-  // ?v=A força a variante — serve pra testar as duas páginas sem limpar cookie.
+  // ?v=A força a variante — serve pra testar as páginas sem limpar cookie.
   const forcada = entrada.searchParams.get('v');
-  if (forcada && CATALOGO[forcada]) variante = forcada;
+  if (forcada && cfg.catalogo[forcada]) variante = forcada;
 
   // Quem já foi sorteado antes continua na mesma página, senão o teste vira
   // ruído: a mesma pessoa contaria como visitante das duas variantes.
   if (!variante) {
-    const doCookie = lerCookie(req, COOKIE);
-    if (doCookie && CATALOGO[doCookie]) variante = doCookie;
+    const doCookie = lerCookie(req, cookieNome);
+    if (doCookie && cfg.catalogo[doCookie]) variante = doCookie;
   }
 
   if (!variante) {
-    variante = sortear(await lerPesos(process.env.SHEETS_SPLIT_WB_URL));
+    variante = sortear(await lerPesos(nomeTeste));
   }
 
-  const destino = new URL(CATALOGO[variante].path, base);
+  const destino = new URL(cfg.catalogo[variante].path, base);
   entrada.searchParams.forEach((valor, chave) => {
-    if (chave !== 'v') destino.searchParams.set(chave, valor);
+    if (chave !== 'v' && chave !== 'teste') destino.searchParams.set(chave, valor);
   });
   destino.searchParams.set('v', variante);
 
   res.setHeader('Set-Cookie',
-    `${COOKIE}=${variante}; Path=/; Max-Age=${COOKIE_DIAS * 86400}; SameSite=Lax; Secure`);
+    `${cookieNome}=${variante}; Path=/; Max-Age=${COOKIE_DIAS * 86400}; SameSite=Lax; Secure`);
   // 302 e sem cache: o sorteio precisa acontecer por visitante, não ser
   // congelado no CDN nem no navegador.
   res.setHeader('Cache-Control', 'no-store, max-age=0');

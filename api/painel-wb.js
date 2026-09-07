@@ -5,14 +5,17 @@
 // O painel nunca fala com a planilha direto: a URL do Apps Script fica só aqui,
 // no servidor. Mesmo padrão do api/painel-feira.js.
 
+import { urlDaPlanilha } from './_split-testes.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  const SHEETS_URL = process.env.SHEETS_SPLIT_WB_URL;
-  if (!SHEETS_URL) return res.status(500).json({ error: 'SHEETS_SPLIT_WB_URL ausente' });
+  const teste = (req.query && req.query.teste) || (req.body && req.body.teste);
+  const SHEETS_URL = urlDaPlanilha(teste);
+  if (!SHEETS_URL) return res.status(500).json({ error: 'planilha do teste nao configurada' });
 
   if (req.method === 'GET') {
     const desde = typeof req.query.desde === 'string' ? req.query.desde : '';

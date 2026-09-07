@@ -43,6 +43,10 @@
   ],
   "rewrites": [
     {
+      "source": "/wb2",
+      "destination": "/api/wb?teste=form"
+    },
+    {
       "source": "/wb",
       "destination": "/api/wb"
     }

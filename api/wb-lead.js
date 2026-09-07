@@ -6,6 +6,8 @@
 // silêncio, a pessoa entraria no grupo e o contato se perderia — que é
 // justamente o problema que esta variante existe pra resolver.
 
+import { urlDaPlanilha } from './_split-testes.js';
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -13,13 +15,13 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const SHEETS_URL = process.env.SHEETS_SPLIT_WB_URL;
-  if (!SHEETS_URL) return res.status(500).json({ error: 'SHEETS_SPLIT_WB_URL ausente' });
-
   let d = req.body;
   if (typeof d === 'string') {
     try { d = JSON.parse(d); } catch { d = null; }
   }
+
+  const SHEETS_URL = urlDaPlanilha(d && d.teste);
+  if (!SHEETS_URL) return res.status(500).json({ error: 'planilha do teste nao configurada' });
   if (!d || !d.nome || !d.whatsapp) {
     return res.status(400).json({ error: 'nome e whatsapp obrigatórios' });
   }
