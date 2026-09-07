@@ -191,14 +191,16 @@
       <h2>Entradas nos grupos</h2>
       <p class="ajuda">
         O único número que precisa ser contado à mão — o WhatsApp não avisa
-        ninguém quando alguém entra. Abre os dois grupos, conta os participantes
-        novos e lança aqui. Lançar o mesmo dia de novo <strong>corrige</strong> o
-        número, não duplica.
+        ninguém quando alguém entra. Conta os participantes novos e lança aqui.
+        Lançar o mesmo dia de novo <strong>corrige</strong> o número, não duplica.
+        <br><br>No teste com formulário o grupo é um só: para saber quem veio de
+        qual página, cruze o telefone com a coluna <strong>Variante</strong> da
+        aba Leads.
       </p>
       <div class="grupo-form">
         <label>Dia<input type="date" id="gData" /></label>
-        <label>Grupo 04 <span>(variante A)</span><input type="number" min="0" id="gA" placeholder="0" /></label>
-        <label>Grupo 05 <span>(variante B)</span><input type="number" min="0" id="gB" placeholder="0" /></label>
+        <label id="lblGA">Grupo 04 <span>(variante A)</span><input type="number" min="0" id="gA" placeholder="0" /></label>
+        <label id="lblGB">Grupo 05 <span>(variante B)</span><input type="number" min="0" id="gB" placeholder="0" /></label>
       </div>
       <button type="button" id="btnGrupos">Lançar entradas</button>
       <span id="gMsg"></span>
@@ -248,9 +250,29 @@
 
     // Cada teste compara um par diferente. O primeiro do par é o que aparece
     // na coluna da esquerda da tabela.
+    // A metrica de decisao muda entre os testes, e por um motivo concreto:
+    //  ab   → dois grupos separados, entao entrada no grupo e atribuivel por
+    //         variante e a CONVERSAO TOTAL fecha o funil.
+    //  form → um grupo so. A entrada nao e atribuivel automaticamente (viria de
+    //         cruzar telefone com a aba Leads, na mao). A TAXA DO FORMULARIO e
+    //         capturada com precisao por variante, entao e ela que decide.
     const TESTES = {
-      ab:   { par: ['A', 'B'], rotulo: { A: 'A — curta', B: 'B — longa' }, titulo: 'A curta <span>×</span> B longa' },
-      form: { par: ['D', 'C'], rotulo: { D: 'D — curta c/ form', C: 'C — longa c/ form' }, titulo: 'D curta <span>×</span> C longa' },
+      ab: {
+        par: ['A', 'B'],
+        rotulo: { A: 'A — curta', B: 'B — longa' },
+        titulo: 'A curta <span>×</span> B longa',
+        metrica: 'taxa_conversao',
+        metricaLabel: 'conversão total — viu a página e entrou no grupo',
+        grupoUnico: false,
+      },
+      form: {
+        par: ['D', 'C'],
+        rotulo: { D: 'D — curta c/ form', C: 'C — longa c/ form' },
+        titulo: 'D curta <span>×</span> C longa',
+        metrica: 'taxa_lead',
+        metricaLabel: 'preencheram o formulário',
+        grupoUnico: true,
+      },
     };
     const testeAtual = () => TESTES[el('teste').value] || TESTES.ab;
     let ROTULO = TESTES.ab.rotulo;
@@ -287,36 +309,41 @@
         <tbody>
           ${linha('Visitantes', 'visitantes', 'visitantes', '', false)}
           ${linha('Cliques no botão', 'cliques', 'cliques', '', false)}
-          ${cfg.par[0] === 'D' ? linha('Preencheram o form', 'leads', 'leads', '', false) : ''}
-          ${cfg.par[0] === 'D' ? linha('Taxa do formulário', 'taxa_lead', 'taxa_lead', '%', false) : ''}
+          ${cfg.grupoUnico ? linha('Preencheram o form', 'leads', 'leads', '', false) : ''}
           ${linha('Conversão da página', 'taxa_clique', 'taxa_clique', '%', false)}
-          ${linha('Entraram no grupo', 'entradas', 'entradas', '', false)}
-          ${linha('Taxa de entrada', 'taxa_entrada', 'taxa_entrada', '%', false)}
-          ${linha('Conversão total', 'taxa_conversao', 'taxa_conversao', '%', true)}
+          ${cfg.grupoUnico ? '' : linha('Entraram no grupo', 'entradas', 'entradas', '', false)}
+          ${cfg.grupoUnico ? '' : linha('Taxa de entrada', 'taxa_entrada', 'taxa_entrada', '%', false)}
+          ${cfg.grupoUnico
+              ? linha('Taxa do formulário', 'taxa_lead', 'taxa_lead', '%', true)
+              : linha('Conversão total', 'taxa_conversao', 'taxa_conversao', '%', true)}
         </tbody>`;
 
       // Veredito: só chama vencedor com volume; senão explica o que falta.
       const amostra = Math.min(a.visitantes, b.visitantes);
-      const semEntradas = (a.entradas + b.entradas) === 0;
+      const semEntradas = ((a[cfg.metrica] || 0) + (b[cfg.metrica] || 0)) === 0;
       let txt;
       if (semEntradas) {
-        txt = `Ainda sem entradas lançadas. A <strong>conversão total</strong> é a métrica que decide o teste — ela só aparece depois que você lançar quantos entraram em cada grupo, ali embaixo.`;
+        txt = cfg.grupoUnico
+          ? `Ainda sem ninguém preenchendo o formulário. A <strong>taxa do formulário</strong> é o que decide este teste.`
+          : `Ainda sem entradas lançadas. A <strong>conversão total</strong> é a métrica que decide o teste — ela só aparece depois que você lançar quantos entraram em cada grupo, ali embaixo.`;
       } else if (amostra < MIN_AMOSTRA) {
         txt = `Volume ainda baixo: ${amostra} visitantes na menor das duas. Abaixo de ${MIN_AMOSTRA} por variante, qualquer diferença pode ser sorte — não decida nada ainda.`;
       } else {
-        const venc = a.taxa_conversao === b.taxa_conversao ? null : (a.taxa_conversao > b.taxa_conversao ? a : b);
+        const m = cfg.metrica;
+        const venc = a[m] === b[m] ? null : (a[m] > b[m] ? a : b);
         if (!venc) {
-          txt = `Empate técnico na conversão total. Se persistir, a escolha pode ser pela mais barata de manter.`;
+          txt = `Empate técnico. Se persistir, a escolha pode ser pela mais barata de manter.`;
         } else {
           const perd = venc === a ? b : a;
-          const rel = perd.taxa_conversao ? Math.round((venc.taxa_conversao / perd.taxa_conversao - 1) * 100) : 100;
-          txt = `<strong>${ROTULO[venc.variante]}</strong> está convertendo ${venc.taxa_conversao}% contra ${perd.taxa_conversao}% — ${rel}% melhor. Com ${amostra}+ visitantes por variante, já dá pra levar a sério.`;
+          const rel = perd[m] ? Math.round((venc[m] / perd[m] - 1) * 100) : 100;
+          txt = `<strong>${ROTULO[venc.variante]}</strong> está em ${venc[m]}% contra ${perd[m]}% — ${rel}% melhor. Com ${amostra}+ visitantes por variante, já dá pra levar a sério.`;
         }
       }
       el('veredito').innerHTML = txt;
     }
 
     function renderCards(variantes) {
+      const cfgC = testeAtual();
       if (!variantes.length) {
         el('cards').innerHTML = `<div class="vazio">
           Nenhum evento registrado ainda.<br>
@@ -327,9 +354,9 @@
 
       // A vencedora é a de maior taxa de entrada — mas só destaca com volume
       // suficiente pra não eleger campeã em cima de 3 cliques.
-      const elegiveis = variantes.filter(v => v.visitantes >= MIN_AMOSTRA && v.entradas > 0);
+      const elegiveis = variantes.filter(v => v.visitantes >= MIN_AMOSTRA && (v[cfgC.metrica] || 0) > 0);
       const melhor = elegiveis.length > 1
-        ? elegiveis.reduce((a, b) => (b.taxa_conversao > a.taxa_conversao ? b : a))
+        ? elegiveis.reduce((a, b) => (b[cfgC.metrica] > a[cfgC.metrica] ? b : a))
         : null;
 
       el('cards').innerHTML = variantes.map(v => `
@@ -338,9 +365,10 @@
             ${ROTULO[v.variante] || v.variante}
             ${melhor && melhor.variante === v.variante ? '<span class="tag">na frente</span>' : ''}
           </div>
-          <div class="destaque">${v.taxa_conversao ?? 0}<small>%</small></div>
-          <div class="destaque-lbl">conversão total — viu a página e entrou no grupo</div>
+          <div class="destaque">${v[cfgC.metrica] ?? 0}<small>%</small></div>
+          <div class="destaque-lbl">${cfgC.metricaLabel}</div>
           <div class="linha"><span>Visitantes</span><span>${v.visitantes}</span></div>
+          ${cfgC.grupoUnico ? `<div class="linha"><span>Preencheram o form</span><span>${v.leads ?? 0}</span></div>` : ''}
           <div class="linha"><span>Cliques no botão</span><span>${v.cliques}</span></div>
           <div class="linha"><span>Conversão da página</span><span>${v.taxa_clique}%</span></div>
           <div class="linha"><span>Entraram no grupo</span><span>${v.entradas}</span></div>
@@ -407,11 +435,29 @@
         </div>`).join('');
     }
 
+    function ajustarFormGrupos() {
+      const cfg = testeAtual();
+      // Teste com formulário usa um grupo só: some o segundo campo e o rótulo
+      // do primeiro deixa de citar variante, porque o total não é atribuível.
+      el('lblGB').style.display = cfg.grupoUnico ? 'none' : '';
+      el('lblGA').innerHTML = cfg.grupoUnico
+        ? 'Entradas no grupo <span>(total do dia)</span>'
+        : 'Grupo 04 <span>(variante A)</span>';
+      if (cfg.grupoUnico) el('gB').value = '0';
+    }
+
     function renderHistorico(linhas) {
       if (!linhas.length) { el('gHistorico').innerHTML = ''; return; }
-      el('gHistorico').innerHTML =
-        '<div class="h cab"><span>Dia</span><span>Grupo 04</span><span>Grupo 05</span></div>' +
-        linhas.map(l => `<div class="h"><span>${l.data}</span><span>${l.A}</span><span>${l.B}</span></div>`).join('');
+      const cfg = testeAtual();
+      if (cfg.grupoUnico) {
+        el('gHistorico').innerHTML =
+          '<div class="h cab"><span>Dia</span><span>Entradas</span><span></span></div>' +
+          linhas.map(l => `<div class="h"><span>${l.data}</span><span>${l.A}</span><span></span></div>`).join('');
+      } else {
+        el('gHistorico').innerHTML =
+          '<div class="h cab"><span>Dia</span><span>Grupo 04</span><span>Grupo 05</span></div>' +
+          linhas.map(l => `<div class="h"><span>${l.data}</span><span>${l.A}</span><span>${l.B}</span></div>`).join('');
+      }
     }
 
     el('btnGrupos').addEventListener('click', async () => {
@@ -443,8 +489,9 @@
     // 99% das vezes.
     el('gData').value = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' });
 
-    el('teste').addEventListener('change', carregar);
+    el('teste').addEventListener('change', () => { ajustarFormGrupos(); carregar(); });
     el('btnFiltrar').addEventListener('click', carregar);
+    ajustarFormGrupos();
     carregar();
     setInterval(carregar, 60000);
   </script>
