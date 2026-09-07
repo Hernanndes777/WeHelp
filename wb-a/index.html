@@ -21,10 +21,13 @@
        e nos nao temos acesso ao container pra criar a tag de evento la dentro.
        Entao configuramos aqui com send_page_view:false — o page_view continua
        vindo do GTM, sem duplicar, e ganhamos um gtag() utilizavel pro evento. -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WMP81BEKN"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0WMP81BEKN&l=wbLayer"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ window.dataLayer.push(arguments); }
+    // dataLayer PROPRIO (wbLayer, via &l=). O GTM toma conta do dataLayer
+    // padrao e engole os comandos do gtag — config e event entravam na fila e
+    // nunca viravam hit. Com fila separada os dois convivem sem se atrapalhar.
+    window.wbLayer = window.wbLayer || [];
+    function gtag(){ window.wbLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-0WMP81BEKN', { send_page_view: false });
   </script>
