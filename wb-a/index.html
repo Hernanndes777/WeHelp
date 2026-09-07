@@ -1219,6 +1219,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         // mexer na classe do botao um dia, a conversao nao morre em silencio.
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ event: 'wb_grupo_clique', wb_variante: VARIANTE });
+        // Sem acesso ao GTM: dispara o evento GA4 direto pelo gtag que o proprio
+        // container ja carregou na pagina (G-0WMP81BEKN e AW-388747722 estao
+        // configurados aqui). O formato e o objeto arguments — e o que o gtag.js
+        // le do dataLayer. Vira evento principal no GA4 e dali conversao no Ads.
+        (function () { window.dataLayer.push(arguments); })(
+          'event', 'inscricao_webinario', { send_to: 'G-0WMP81BEKN', wb_variante: VARIANTE }
+        );
       });
     });
 
