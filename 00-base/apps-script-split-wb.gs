@@ -34,6 +34,7 @@
 const ABA_EVENTOS = 'Eventos';
 const ABA_CONFIG  = 'Config';
 const ABA_GRUPOS  = 'Grupos';
+const ABA_LEADS   = 'Leads';
 
 const TZ = 'America/Sao_Paulo';
 
@@ -51,6 +52,9 @@ const CABECALHOS = {
   // acontece na prática: você abre os dois grupos no mesmo momento e anota.
   // Grupo #04 é a variante A, #05 é a B.
   'Grupos':  ['Data', 'Grupo 04 (A)', 'Grupo 05 (B)'],
+  // Variante C captura contato antes de liberar o grupo. Quem preenche e nao
+  // entra no grupo vira lista de recuperacao em vez de dinheiro perdido.
+  'Leads':   ['Data', 'Variante', 'Nome', 'E-mail', 'WhatsApp', 'Alunos', 'Campaign', 'Adset', 'Criativo', 'Source', 'Medium'],
 };
 
 // Sorteio padrão enquanto só existe a variante A.
@@ -121,6 +125,7 @@ function doPost(e) {
 
     if (d.acao === 'pesos')  return _salvarPesos(d.pesos);
     if (d.acao === 'grupos') return _salvarGrupos(d);
+    if (d.acao === 'lead')   return _salvarLead(d);
 
     // Data como Date real, não string formatada: string em dd/MM/yyyy não é
     // parseável em JS e quebrava o filtro por data na versão anterior.
@@ -158,6 +163,24 @@ function _salvarPesos(pesos) {
   sh.getRange(2, 1, linhas.length, 3).setValues(linhas);
 
   return _json({ status: 'ok', salvos: linhas.length });
+}
+
+function _salvarLead(d) {
+  if (!d.nome && !d.whatsapp) return _json({ status: 'erro', message: 'lead vazio' });
+  _aba(ABA_LEADS).appendRow([
+    new Date(),
+    d.variante     || 'C',
+    d.nome         || '',
+    d.email        || '',
+    d.whatsapp     || '',
+    d.alunos       || '',
+    d.utm_campaign || '',
+    d.utm_adset    || '',
+    d.utm_content  || '',
+    d.utm_source   || '',
+    d.utm_medium   || ''
+  ]);
+  return _json({ status: 'ok' });
 }
 
 /* ─────────────────────────── LEITURA ─────────────────────────── */
@@ -236,7 +259,7 @@ function doGet(e) {
 
   const porVariante = {};
   function slot(v) {
-    if (!porVariante[v]) porVariante[v] = { variante: v, visitantes: 0, cliques: 0, entradas: 0 };
+    if (!porVariante[v]) porVariante[v] = { variante: v, visitantes: 0, leads: 0, cliques: 0, entradas: 0 };
     return porVariante[v];
   }
 
@@ -262,7 +285,8 @@ function doGet(e) {
       const evento = String(l[2] || 'pageview').trim().toLowerCase();
       const s = slot(variante);
       const ehClique = evento === 'clique';
-      if (ehClique) s.cliques++; else s.visitantes++;
+      const ehLead   = evento === 'lead';
+      if (ehClique) s.cliques++; else if (ehLead) s.leads++; else s.visitantes++;
 
       const conj = String(l[4] || '').trim() || '(direto / sem conjunto)';
       const crit = String(l[5] || '').trim() || '(direto / sem criativo)';
@@ -282,6 +306,8 @@ function doGet(e) {
     //  entrada   — quem agiu conseguiu de fato entrar no grupo?
     //  conversao — do total que viu a página, quantos viraram participante?
     //              É esta que decide o teste; as outras dizem ONDE vaza.
+    // Só a variante C tem formulário; nas outras fica zero, como deve ser.
+    s.taxa_lead      = s.visitantes ? +(s.leads / s.visitantes * 100).toFixed(1) : 0;
     s.taxa_clique    = s.visitantes ? +(s.cliques / s.visitantes * 100).toFixed(1) : 0;
     s.taxa_entrada   = s.cliques ? +(s.entradas / s.cliques * 100).toFixed(1) : 0;
     s.taxa_conversao = s.visitantes ? +(s.entradas / s.visitantes * 100).toFixed(1) : 0;

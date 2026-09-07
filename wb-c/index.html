@@ -23,15 +23,17 @@
   <meta name="description" content="Como estancar a perda de clientes e aumentar o caixa da sua academia em 30 dias. Quinta-feira, 10 de setembro, às 12h." />
 
   <!--
-    Variante B do teste A/B do webinário (/wb).
-    Reconstrução da página que rodou no WB02 (11/08) — 113 leads a R$23,28,
-    5 agendamentos e 3 conversões, o ciclo que mais VENDEU. Estava no GreatPages,
-    em outro domínio, sem Clarity e com o link do grupo revogado; trazida pra cá
-    pra rodar com a mesma instrumentação da variante A.
+    Variante C — fora do sorteio do /wb, roda com trafego proprio.
+    Mesmo desenho da B (que estava ganhando o A/B), mas com captura de contato
+    ANTES de liberar o grupo: nome, e-mail, WhatsApp e faixa de alunos.
 
-    A hipótese que ela testa contra a A: página longa, escura, com prova social
-    e rosto do fundador converte mais que a página curta e minimalista do WB03.
-    Fluxo idêntico ao da A — botão direto pro grupo, sem formulário.
+    A hipotese: da pra manter a conversao da B e ainda ficar com o contato de
+    quem clica e nao completa a entrada no grupo. Hoje esse pessoal some sem
+    deixar rastro — no WB08 foram 12 cliques e 8 entradas, ou seja 4 pessoas
+    pagas que viraram nada.
+
+    O custo esperado e menos cliques: formulario sempre derruba volume. O teste
+    e saber se o que sobra compensa por ser recuperavel.
   -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -219,6 +221,32 @@
 
     footer { background: #fff; padding: 30px 0; text-align: center; border-top: 1px solid var(--border); }
     footer img { width: 128px; margin: 0 auto; }
+
+    /* ── MODAL DE CAPTURA (exclusivo da variante C) ── */
+    .modal { position: fixed; inset: 0; z-index: 999; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(7,13,36,.82); backdrop-filter: blur(3px); }
+    .modal.ativo { display: flex; }
+    .modal__box { background: #fff; border-radius: 16px; width: 100%; max-width: 460px; max-height: 92vh; overflow-y: auto; padding: 30px 26px; position: relative; }
+    .modal__fechar { position: absolute; top: 12px; right: 14px; background: none; border: 0; font-size: 26px; line-height: 1; color: #94a3b8; cursor: pointer; }
+    .modal h3 { font-family: 'Figtree', sans-serif; font-size: 21px; font-weight: 800; margin-bottom: 6px; }
+    .modal p.sub { font-size: 14px; color: var(--body); line-height: 1.55; margin-bottom: 20px; }
+    .campo { margin-bottom: 13px; }
+    .campo label { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+    .campo input, .campo select { width: 100%; font-family: inherit; font-size: 16px; color: var(--ink); background: #f8fafc; border: 1px solid var(--border); border-radius: 9px; padding: 12px 13px; }
+    .campo input:focus, .campo select:focus { outline: 0; border-color: var(--gold); background: #fff; }
+    .campo input.erro { border-color: #dc2626; background: #fff5f5; }
+    .campo .msg { display: none; font-size: 12px; color: #dc2626; margin-top: 4px; }
+    .campo .msg.ver { display: block; }
+    .tel { display: grid; grid-template-columns: 96px 1fr; gap: 8px; }
+    .modal .cta { width: 100%; justify-content: center; margin-top: 6px; border: 0; cursor: pointer; font-family: inherit; }
+    .modal .cta:disabled { opacity: .55; cursor: default; }
+    .modal .aviso { font-size: 12px; color: #64748b; text-align: center; margin-top: 12px; line-height: 1.5; }
+    .modal__erro { display: none; background: #fff5f5; border: 1px solid #fecaca; color: #b91c1c; font-size: 13px; border-radius: 9px; padding: 10px 12px; margin-bottom: 14px; }
+    .modal__erro.ver { display: block; }
+    /* Passo 2: so aparece depois que o lead foi salvo de verdade. */
+    .pronto { display: none; text-align: center; }
+    .pronto.ver { display: block; }
+    .pronto i { font-size: 44px; color: #0f9d63; }
+    .pronto h3 { margin: 12px 0 6px; }
   </style>
 </head>
 <body>
@@ -368,6 +396,75 @@
     <div class="wrap"><img src="/wb-b/img/3.svg" alt="WeHelp" /></div>
   </footer>
 
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true">
+    <div class="modal__box">
+      <button type="button" class="modal__fechar" id="fechar" aria-label="Fechar">&times;</button>
+
+      <form id="form">
+        <h3>Falta pouco pra garantir sua vaga</h3>
+        <p class="sub">Preenche que eu te libero o acesso ao grupo, onde vou mandar o link da aula.</p>
+
+        <div class="modal__erro" id="erroGeral"></div>
+
+        <div class="campo">
+          <label for="nome">Nome completo</label>
+          <input type="text" id="nome" autocomplete="name" required />
+          <span class="msg" id="msgNome">Escreve seu nome</span>
+        </div>
+
+        <div class="campo">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" autocomplete="email" required />
+          <span class="msg" id="msgEmail">E-mail inválido</span>
+        </div>
+
+        <div class="campo">
+          <label for="tel">WhatsApp</label>
+          <div class="tel">
+            <select id="ddi">
+              <option value="+55" selected>🇧🇷 +55</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+595">🇵🇾 +595</option>
+            </select>
+            <input type="tel" id="tel" inputmode="numeric" autocomplete="tel" placeholder="DDD + número" required />
+          </div>
+          <span class="msg" id="msgTel">Número inválido — precisa do DDD</span>
+        </div>
+
+        <div class="campo">
+          <label for="alunos">Quantos alunos ativos você tem hoje?</label>
+          <select id="alunos" required>
+            <option value="" disabled selected>Selecione</option>
+            <option>Até 150 alunos</option>
+            <option>De 151 a 300 alunos</option>
+            <option>De 301 a 500 alunos</option>
+            <option>De 501 a 1000 alunos</option>
+            <option>Acima de 1000 alunos</option>
+          </select>
+          <span class="msg" id="msgAlunos">Escolhe uma faixa</span>
+        </div>
+
+        <button type="submit" class="cta" id="enviar">
+          <span id="txtEnviar">Garantir minha vaga</span>
+        </button>
+        <p class="aviso">Seus dados ficam só com a gente. Sem spam.</p>
+      </form>
+
+      <div class="pronto" id="pronto">
+        <i class="ti ti-circle-check" aria-hidden="true"></i>
+        <h3>Vaga garantida!</h3>
+        <p class="sub">Agora entra no grupo — é lá que eu mando o link da aula na quinta.</p>
+        <a href="#" class="cta" id="irGrupo" target="_blank" rel="noopener">
+          Entrar no grupo agora
+          <i class="ti ti-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Meta Pixel -->
   <script>
     !function(f,b,e,v,n,t,s)
@@ -394,7 +491,7 @@
     const WHATSAPP_GROUP = 'https://chat.whatsapp.com/KZ9ux6l9LpX4QJXDMQObt3';
     const params = new URLSearchParams(location.search);
     const testEventCode = params.get('fbtest') || null;
-    const VARIANTE = params.get('v') || 'B';
+    const VARIANTE = params.get('v') || 'C';
 
     function wbEvento(evento) {
       const corpo = JSON.stringify({
@@ -420,24 +517,119 @@
 
     wbEvento('pageview');
 
-    document.querySelectorAll('a[data-lead-btn]').forEach(btn => {
-      btn.href = WHATSAPP_GROUP;
-      btn.target = '_blank';
-      btn.rel = 'noopener';
-      btn.addEventListener('click', () => {
-        if (typeof fbq === 'function') {
-          const extras = {};
-          if (testEventCode) extras.test_event_code = testEventCode;
-          fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
-        }
-        wbEvento('clique');
-        // Gancho pro GTM. Quem tiver acesso ao container cria um acionador de
-        // evento personalizado "wb_grupo_clique" e pendura ali a tag do GA4 e a
-        // do Google Ads. Nao da pra disparar da pagina: o G-0WMP81BEKN ja esta
-        // registrado pelo GTM, e um segundo config do mesmo ID se anula.
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ event: 'wb_grupo_clique', wb_variante: VARIANTE });
+    // Variante C: o botao NAO leva pro grupo. Abre o formulario, e o link so
+    // aparece depois que o lead foi gravado de verdade. E o ponto do teste —
+    // ficar com o contato de quem nao completa a entrada no grupo.
+    const modal = document.getElementById('modal');
+    const form  = document.getElementById('form');
+    const el    = (id) => document.getElementById(id);
+
+    function abrirModal() {
+      modal.classList.add('ativo');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => el('nome').focus(), 80);
+    }
+    function fecharModal() {
+      modal.classList.remove('ativo');
+      document.body.style.overflow = '';
+    }
+    el('fechar').addEventListener('click', fecharModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) fecharModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') fecharModal(); });
+
+    document.querySelectorAll('a[data-lead-btn]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        abrirModal();
+        if (typeof fbq === 'function') fbq('trackCustom', 'SubscribedButtonClick');
       });
+    });
+
+    const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    const telOk = (v, ddi) => {
+      const d = v.replace(/\D/g, '');
+      return ddi === '+55' ? (d.length === 10 || d.length === 11) : d.length >= 6;
+    };
+
+    el('tel').addEventListener('input', (e) => {
+      const max = el('ddi').value === '+55' ? 11 : 14;
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, max);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nome = el('nome').value.trim();
+      const email = el('email').value.trim();
+      const tel = el('tel').value.trim();
+      const ddi = el('ddi').value;
+      const alunos = el('alunos').value;
+
+      const checa = [
+        ['nome',   'msgNome',   !!nome],
+        ['email',  'msgEmail',  emailOk(email)],
+        ['tel',    'msgTel',    telOk(tel, ddi)],
+        ['alunos', 'msgAlunos', !!alunos],
+      ];
+      let ok = true;
+      checa.forEach(([campo, msg, valido]) => {
+        el(campo).classList.toggle('erro', !valido);
+        el(msg).classList.toggle('ver', !valido);
+        if (!valido) ok = false;
+      });
+      if (!ok) return;
+
+      const btn = el('enviar');
+      btn.disabled = true;
+      el('txtEnviar').textContent = 'Enviando...';
+      el('erroGeral').classList.remove('ver');
+
+      try {
+        const r = await fetch('/api/wb-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            variante: VARIANTE, nome: nome, email: email,
+            whatsapp: ddi + tel.replace(/\D/g, ''), alunos: alunos,
+            utm_campaign: params.get('utm_campaign') || '',
+            utm_adset:    params.get('utm_adset')    || '',
+            utm_content:  params.get('utm_content')  || '',
+            utm_source:   params.get('utm_source')   || '',
+            utm_medium:   params.get('utm_medium')   || '',
+          }),
+        });
+        const d = await r.json();
+        if (!r.ok || !d.success) throw new Error(d.error || 'falhou');
+      } catch (err) {
+        // Nao libera o grupo sem ter salvo — senao perde o contato, que e o
+        // unico motivo desta variante existir.
+        el('erroGeral').textContent = 'Nao consegui salvar. Confere sua conexao e tenta de novo.';
+        el('erroGeral').classList.add('ver');
+        btn.disabled = false;
+        el('txtEnviar').textContent = 'Garantir minha vaga';
+        return;
+      }
+
+      wbEvento('lead');
+      if (typeof fbq === 'function') {
+        const extras = {};
+        if (testEventCode) extras.test_event_code = testEventCode;
+        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
+      }
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'wb_lead', wb_variante: VARIANTE });
+
+      form.style.display = 'none';
+      el('pronto').classList.add('ver');
+    });
+
+    // O clique no grupo continua sendo o mesmo evento das outras variantes —
+    // e o que mantem a comparacao no painel valendo.
+    el('irGrupo').href = WHATSAPP_GROUP;
+    el('irGrupo').addEventListener('click', () => {
+      wbEvento('clique');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'wb_grupo_clique', wb_variante: VARIANTE });
     });
   </script>
 </body>
