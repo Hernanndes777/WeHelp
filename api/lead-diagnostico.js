@@ -151,7 +151,15 @@ export default async function handler(req, res) {
     }
     const leadId = dcOk ? leadData.id : null;
 
-    // 2. Aplica os campos adicionais (empresa, segmento → Área de atuação, UTMs) via PATCH
+    // 2. Aplica os campos adicionais (empresa, segmento → Área de atuação, UTMs)
+    // [FIX 2026-09-08] A PATCH /api/v1/leads/{id} com additionalFields (usada antes)
+    // retorna 200 mas NÃO persiste nada — bug confirmado pelo suporte DataCrazy,
+    // presente até no builder nativo de automação deles (não é só a nossa chamada).
+    // O suporte indicou o endpoint interno correto (API não documentada oficialmente,
+    // é a mesma que a ferramenta MCP deles usa): POST num domínio diferente
+    // (crm.g1, não api.g1) em /additional-fields/lead/{leadId}/{fieldId}, com
+    // {value} no corpo — um POST por campo, não um PATCH em lote.
+    const DATACRAZY_INTERNAL_URL = 'https://crm.g1.datacrazy.io';
     const additionalFields = [];
     if (Nome_da_Empresa) additionalFields.push({ id: FIELD_EMPRESA, value: Nome_da_Empresa });
     if (Segmento) additionalFields.push({ id: FIELD_AREA_ATUACAO, value: Segmento });
@@ -161,13 +169,15 @@ export default async function handler(req, res) {
     if (utm_content) additionalFields.push({ id: FIELD_UTM_CONTENT, value: utm_content });
     if (utm_term) additionalFields.push({ id: FIELD_UTM_TERM, value: utm_term });
 
-    const fieldsPromise = (leadId && additionalFields.length) ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
-      method: 'PATCH',
-      headers: dcHeaders,
-      body: JSON.stringify({ additionalFields }),
-    }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao aplicar additionalFields no DataCrazy:', await r.text());
-    }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
+    const fieldsPromise = leadId ? Promise.allSettled(additionalFields.map(({ id, value }) =>
+      fetch(`${DATACRAZY_INTERNAL_URL}/api/crm/additional-fields/lead/${leadId}/${id}`, {
+        method: 'POST',
+        headers: dcHeaders,
+        body: JSON.stringify({ value }),
+      }).then(async (r) => {
+        if (!r.ok) console.error(`Erro ao aplicar campo adicional ${id} no DataCrazy:`, await r.text());
+      }).catch((err) => console.error(`Erro ao aplicar campo adicional ${id} no DataCrazy:`, err))
+    )) : Promise.resolve();
 
     // 4. Cria o negócio no pipeline "Leads", etapa "Novos Leads"
     const businessPromise = leadId ? fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
