@@ -530,6 +530,26 @@
       }).catch(() => {});
     }
 
+
+    // ── Qualificacao do lead ──────────────────────────────────────────────
+    // O porte sai do proprio formulario, entao da pra classificar no envio.
+    //
+    //  value  → alimenta a otimizacao por valor do Meta. Todo lead continua
+    //           sendo conversao; o algoritmo so aprende que uns valem mais.
+    //  porte  → parametro que permite criar Conversao Personalizada no Meta
+    //           filtrando por ele, sem mexer em codigo de novo.
+    //
+    // A checagem e por numero, nao por texto exato, porque as faixas ja foram
+    // escritas ora com "alunos" ora com "clientes" nos ciclos anteriores.
+    function classificarPorte(faixa) {
+      const f = String(faixa || '').toLowerCase();
+      if (f.indexOf('acima') !== -1)            return { porte: 'grande',  value: 10, bom: true  };
+      if (f.indexOf('501') !== -1)              return { porte: 'grande',  value: 6,  bom: true  };
+      if (f.indexOf('301') !== -1)              return { porte: 'medio',   value: 3,  bom: false };
+      if (f.indexOf('151') !== -1)              return { porte: 'pequeno', value: 2,  bom: false };
+      return { porte: 'micro', value: 1, bom: false };
+    }
+
     wbEvento('pageview');
 
     // Variante C: o botao NAO leva pro grupo. Abre o formulario, e o link so
@@ -629,10 +649,20 @@
       }
 
       wbEvento('lead');
+
+      const q = classificarPorte(alunos);
       if (typeof fbq === 'function') {
         const extras = {};
         if (testEventCode) extras.test_event_code = testEventCode;
-        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, extras);
+        fbq('track', 'Lead',
+          { value: q.value, currency: 'BRL', porte: q.porte, alunos: alunos, formato: formato },
+          extras);
+        // So os 500+. E este evento que vira a conversao de lead bom no Meta.
+        if (q.bom) {
+          fbq('trackCustom', 'LeadQualificado',
+            { value: q.value, currency: 'BRL', porte: q.porte, alunos: alunos, formato: formato },
+            extras);
+        }
       }
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: 'wb_lead', wb_variante: VARIANTE });

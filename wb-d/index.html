@@ -1089,11 +1089,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="modal__field">
           <select name="clientes" class="modal__select" id="clientesSelect" required>
             <option value="" disabled selected>* Quantos alunos ativos você tem atualmente?</option>
-            <option value="Até 150 clientes">Até 150 clientes</option>
-            <option value="De 151 a 300 clientes">De 151 a 300 clientes</option>
-            <option value="De 301 a 500 clientes">De 301 a 500 clientes</option>
-            <option value="De 501 a 1000 clientes">De 501 a 1000 clientes</option>
-            <option value="Acima de 1000 clientes">Acima de 1000 clientes</option>
+            <option value="Até 150 alunos">Até 150 alunos</option>
+            <option value="De 151 a 300 alunos">De 151 a 300 alunos</option>
+            <option value="De 301 a 500 alunos">De 301 a 500 alunos</option>
+            <option value="De 501 a 1000 alunos">De 501 a 1000 alunos</option>
+            <option value="Acima de 1000 alunos">Acima de 1000 alunos</option>
           </select>
         </div>
 
@@ -1172,6 +1172,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         method: 'POST', keepalive: true,
         headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: corpo
       }).catch(() => {});
+    }
+
+
+    // ── Qualificacao do lead ──────────────────────────────────────────────
+    // O porte sai do proprio formulario, entao da pra classificar no envio.
+    //
+    //  value  → alimenta a otimizacao por valor do Meta. Todo lead continua
+    //           sendo conversao; o algoritmo so aprende que uns valem mais.
+    //  porte  → parametro que permite criar Conversao Personalizada no Meta
+    //           filtrando por ele, sem mexer em codigo de novo.
+    //
+    // A checagem e por numero, nao por texto exato, porque as faixas ja foram
+    // escritas ora com "alunos" ora com "clientes" nos ciclos anteriores.
+    function classificarPorte(faixa) {
+      const f = String(faixa || '').toLowerCase();
+      if (f.indexOf('acima') !== -1)            return { porte: 'grande',  value: 10, bom: true  };
+      if (f.indexOf('501') !== -1)              return { porte: 'grande',  value: 6,  bom: true  };
+      if (f.indexOf('301') !== -1)              return { porte: 'medio',   value: 3,  bom: false };
+      if (f.indexOf('151') !== -1)              return { porte: 'pequeno', value: 2,  bom: false };
+      return { porte: 'micro', value: 1, bom: false };
     }
 
     wbEvento('pageview');
@@ -1349,11 +1369,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       wbEvento('lead');
 
+      const q = classificarPorte(clientes);
       if (typeof fbq === 'function') {
         fbq('init', PIXEL_ID, { em: email, ph: phoneDigits });
         const pixelExtras = { eventID: eventId };
         if (testEventCode) pixelExtras.test_event_code = testEventCode;
-        fbq('track', 'Lead', { value: 1, currency: 'BRL' }, pixelExtras);
+        fbq('track', 'Lead',
+          { value: q.value, currency: 'BRL', porte: q.porte, alunos: clientes, formato: formato },
+          pixelExtras);
+        // So os 500+. E este evento que vira a conversao de lead bom no Meta.
+        if (q.bom) {
+          fbq('trackCustom', 'LeadQualificado',
+            { value: q.value, currency: 'BRL', porte: q.porte, alunos: clientes, formato: formato },
+            { eventID: eventId + '_q' });
+        }
       }
 
       closeModal();
