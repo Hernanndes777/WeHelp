@@ -30,6 +30,7 @@ export default async function handler(req, res) {
   const FIELD_UTM_MEDIUM = '3b60437b-315a-40c5-b192-77fee043c59c';
   const FIELD_UTM_CONTENT = 'd07ef2d1-a9fb-45a8-b8d1-2e5a4641531c';
   const FIELD_UTM_TERM = '8f5317cb-daad-487a-bfcb-53844c314227';
+  const FIELD_QUANTIDADE_CLIENTES = '0ee1d145-aa2d-4162-84de-4764333c57d6'; // "Quantos clientes possui" (campo tipo opções — valor tem que bater com um dos labels cadastrados)
 
   const SHEETS_URL = process.env.SHEETS_DIAGNOSTICO_URL;
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
@@ -106,26 +107,6 @@ export default async function handler(req, res) {
       }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
 
     // 1. Cria o lead no DataCrazy (nome/email/telefone/empresa/tag)
-    // [BUG DataCrazy confirmado em 2026-08-11] Nem POST /leads/additional-fields
-    // (retorna 500, Prisma error) nem PATCH /leads/{id} com additionalFields
-    // (retorna 200 mas não persiste nada — confirmado lendo o lead de volta
-    // depois) funcionam pela API pública. Só a ferramenta MCP consegue setar
-    // esses valores, provavelmente via endpoint interno não documentado.
-    // Contorno: manda tudo (Empresa/Segmento/UTMs) formatado dentro de "notes"
-    // (campo nativo, texto livre, confirmado funcionando) — não fica em campo
-    // estruturado/filtrável, mas garante que o dado não se perde. Ver
-    // lp-taxonomy.json pra decisão definitiva (reportar bug pro suporte do
-    // DataCrazy, ou migrar pro fluxo de automação+webhook deles).
-    const notesLines = [];
-    if (Nome_da_Empresa) notesLines.push(`Empresa: ${Nome_da_Empresa}`);
-    if (Segmento) notesLines.push(`Segmento: ${Segmento}`);
-    if (Quantidade_de_Clientes) notesLines.push(`Quantidade de clientes: ${Quantidade_de_Clientes}`);
-    if (utm_source) notesLines.push(`UTM Source: ${utm_source}`);
-    if (utm_campaign) notesLines.push(`UTM Campaign: ${utm_campaign}`);
-    if (utm_medium) notesLines.push(`UTM Medium: ${utm_medium}`);
-    if (utm_content) notesLines.push(`UTM Content: ${utm_content}`);
-    if (utm_term) notesLines.push(`UTM Term: ${utm_term}`);
-
     const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
       method: 'POST',
       headers: dcHeaders,
@@ -135,7 +116,6 @@ export default async function handler(req, res) {
         phone: WhatsApp,
         company: Nome_da_Empresa || '',
         source: 'Diagnóstico B2B (Site)',
-        notes: notesLines.join('\n'),
         tags: [{ id: TAG_SITE }],
         attendant: { id: ATTENDANT_ID },
       }),
@@ -151,11 +131,12 @@ export default async function handler(req, res) {
     }
     const leadId = dcOk ? leadData.id : null;
 
-    // 2. Aplica os campos adicionais (empresa, segmento → Área de atuação, UTMs)
+    // 2. Aplica os campos adicionais (empresa, segmento → Área de atuação,
+    // quantidade de clientes, UTMs)
     // [FIX 2026-09-08] A PATCH /api/v1/leads/{id} com additionalFields (usada antes)
-    // retorna 200 mas NÃO persiste nada — bug confirmado pelo suporte DataCrazy,
-    // presente até no builder nativo de automação deles (não é só a nossa chamada).
-    // O suporte indicou o endpoint interno correto (API não documentada oficialmente,
+    // retornava 200 mas NÃO persistia nada — confirmado com o suporte DataCrazy.
+    // Testado e confirmado funcionando com lead real em 08/09. O suporte indicou
+    // o endpoint interno correto (API não documentada oficialmente,
     // é a mesma que a ferramenta MCP deles usa): POST num domínio diferente
     // (crm.g1, não api.g1) em /additional-fields/lead/{leadId}/{fieldId}, com
     // {value} no corpo — um POST por campo, não um PATCH em lote.
@@ -163,6 +144,7 @@ export default async function handler(req, res) {
     const additionalFields = [];
     if (Nome_da_Empresa) additionalFields.push({ id: FIELD_EMPRESA, value: Nome_da_Empresa });
     if (Segmento) additionalFields.push({ id: FIELD_AREA_ATUACAO, value: Segmento });
+    if (Quantidade_de_Clientes) additionalFields.push({ id: FIELD_QUANTIDADE_CLIENTES, value: Quantidade_de_Clientes });
     if (utm_source) additionalFields.push({ id: FIELD_UTM_SOURCE, value: utm_source });
     if (utm_campaign) additionalFields.push({ id: FIELD_UTM_CAMPAIGN, value: utm_campaign });
     if (utm_medium) additionalFields.push({ id: FIELD_UTM_MEDIUM, value: utm_medium });
