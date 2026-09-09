@@ -1,8 +1,14 @@
 // api/lead-diagnostico.js — Função serverless (Vercel) da LP /diagnostico
-// Leads caem no DataCrazy (substituiu o ActiveCampaign nessa LP, decisão do
-// usuário em 2026-08-11): cria o lead no pipeline "Leads", etapa "Novos Leads",
-// com a tag "Site" + campos de UTM já existentes no DataCrazy. Mantém o evento
-// Lead no Meta CAPI (independente de qual CRM guarda o registro).
+// Leads caem no DataCrazy via webhook da automação "Leads - Diagnóstico
+// (isolado)" (clone de "Leads - Site", que já funciona pro site principal).
+// [2026-09-08] Trocado da API direta (api.g1.datacrazy.io) pro webhook: a API
+// pública de additionalFields nunca persistia valores estruturados (bug
+// confirmado com o suporte DataCrazy), enquanto o webhook nativo funciona —
+// testado com lead real e todos os campos batendo. A automação já cuida de
+// criar o lead, aplicar os campos estruturados, criar o negócio na etapa
+// certa e atribuir a Caroline Bonini como atendente — não precisa mais de
+// token, IDs de campo nem lógica de pipeline aqui.
+// Mantém o evento Lead no Meta CAPI (independente de qual CRM guarda o registro).
 // Segue o padrão de 00-base/padrao-captura-lead.md.
 
 import { createHash } from 'crypto';
@@ -16,29 +22,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
-  const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
-
-  // IDs confirmados direto na conta DataCrazy em 2026-08-11
-  const PIPELINE_STAGE_ID = 'e9ae521e-13c6-4a68-a0f8-ef7447c8d7dc'; // Pipeline "Leads" > etapa "Novos Leads"
-  const TAG_SITE = '91ed2d79-6bf8-4744-8a9a-127850f7f00f';         // Tag "Site"
-  const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';     // Caroline Bonini — atendente padrão dos leads do /diagnostico
-  const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa"
-  const FIELD_AREA_ATUACAO = '91af21ad-faeb-44a5-bc2f-af9a3100bbcd'; // "Área de atuação" — usado pro Segmento do form
-  const FIELD_UTM_SOURCE = '897593b4-a00c-475d-b3a2-b8457498c7ba';
-  const FIELD_UTM_CAMPAIGN = 'ba9b9dd4-c977-4b03-b72d-7bdf432a8994';
-  const FIELD_UTM_MEDIUM = '3b60437b-315a-40c5-b192-77fee043c59c';
-  const FIELD_UTM_CONTENT = 'd07ef2d1-a9fb-45a8-b8d1-2e5a4641531c';
-  const FIELD_UTM_TERM = '8f5317cb-daad-487a-bfcb-53844c314227';
-  const FIELD_QUANTIDADE_CLIENTES = '0ee1d145-aa2d-4162-84de-4764333c57d6'; // "Quantos clientes possui" (campo tipo opções — valor tem que bater com um dos labels cadastrados)
+  const DATACRAZY_WEBHOOK_URL = 'https://api.datacrazy.io/v1/crm/api/crm/flows/webhooks/62c3af3c-8e3e-4332-b002-ebcc5fa31fbd/a6145cad-a31d-489c-aa29-3e1b725e2d0c';
 
   const SHEETS_URL = process.env.SHEETS_DIAGNOSTICO_URL;
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
-
-  if (!DATACRAZY_API_KEY) {
-    return res.status(500).json({ error: 'Configuração ausente no servidor (DATACRAZY_API_KEY)' });
-  }
 
   try {
     const {
@@ -65,11 +53,6 @@ export default async function handler(req, res) {
     const receivedAt = new Date().toISOString();
     const phoneDigits = WhatsApp.replace(/\D/g, '');
     const contactEmail = E_mail_Corporativo || `wp.${phoneDigits}@noemail.invalid`;
-
-    const dcHeaders = {
-      'Authorization': `Bearer ${DATACRAZY_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
 
     // 0. Sheets dispara em paralelo, sem depender do DataCrazy — antes
     // (2026-09-05) a planilha só recebia o lead DEPOIS do DataCrazy confirmar
@@ -106,74 +89,35 @@ export default async function handler(req, res) {
         }),
       }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
 
-    // 1. Cria o lead no DataCrazy (nome/email/telefone/empresa/tag)
-    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
+    // 1. Cria o lead na DataCrazy via webhook da automação (nome/email/telefone/
+    // empresa/segmento/quantidade de clientes/UTMs) — a automação já cuida de
+    // campos estruturados, negócio e atendente, então é só um POST.
+    let dcOk = false;
+    const dcPromise = fetch(DATACRAZY_WEBHOOK_URL, {
       method: 'POST',
-      headers: dcHeaders,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: Nome_Completo || 'Lead sem nome',
         email: contactEmail,
         phone: WhatsApp,
         company: Nome_da_Empresa || '',
-        source: 'Diagnóstico B2B (Site)',
-        tags: [{ id: TAG_SITE }],
-        attendant: { id: ATTENDANT_ID },
-      }),
-    });
-
-    const leadData = await leadRes.json();
-    const dcOk = leadRes.ok && !!leadData.id;
-    if (!dcOk) {
-      // Best-effort: log e segue sem o CRM (ex: "lead with same contacts
-      // already exists" num reenvio/clique duplo) — a planilha acima já
-      // recebeu o lead independente disso, então nada se perde.
-      console.error('Erro ao criar lead no DataCrazy (nao-fatal):', leadData);
-    }
-    const leadId = dcOk ? leadData.id : null;
-
-    // 2. Aplica os campos adicionais (empresa, segmento → Área de atuação,
-    // quantidade de clientes, UTMs)
-    // [FIX 2026-09-08] A PATCH /api/v1/leads/{id} com additionalFields (usada antes)
-    // retornava 200 mas NÃO persistia nada — confirmado com o suporte DataCrazy.
-    // Testado e confirmado funcionando com lead real em 08/09. O suporte indicou
-    // o endpoint interno correto (API não documentada oficialmente,
-    // é a mesma que a ferramenta MCP deles usa): POST num domínio diferente
-    // (crm.g1, não api.g1) em /additional-fields/lead/{leadId}/{fieldId}, com
-    // {value} no corpo — um POST por campo, não um PATCH em lote.
-    const DATACRAZY_INTERNAL_URL = 'https://crm.g1.datacrazy.io';
-    const additionalFields = [];
-    if (Nome_da_Empresa) additionalFields.push({ id: FIELD_EMPRESA, value: Nome_da_Empresa });
-    if (Segmento) additionalFields.push({ id: FIELD_AREA_ATUACAO, value: Segmento });
-    if (Quantidade_de_Clientes) additionalFields.push({ id: FIELD_QUANTIDADE_CLIENTES, value: Quantidade_de_Clientes });
-    if (utm_source) additionalFields.push({ id: FIELD_UTM_SOURCE, value: utm_source });
-    if (utm_campaign) additionalFields.push({ id: FIELD_UTM_CAMPAIGN, value: utm_campaign });
-    if (utm_medium) additionalFields.push({ id: FIELD_UTM_MEDIUM, value: utm_medium });
-    if (utm_content) additionalFields.push({ id: FIELD_UTM_CONTENT, value: utm_content });
-    if (utm_term) additionalFields.push({ id: FIELD_UTM_TERM, value: utm_term });
-
-    const fieldsPromise = leadId ? Promise.allSettled(additionalFields.map(({ id, value }) =>
-      fetch(`${DATACRAZY_INTERNAL_URL}/api/crm/additional-fields/lead/${leadId}/${id}`, {
-        method: 'POST',
-        headers: dcHeaders,
-        body: JSON.stringify({ value }),
-      }).then(async (r) => {
-        if (!r.ok) console.error(`Erro ao aplicar campo adicional ${id} no DataCrazy:`, await r.text());
-      }).catch((err) => console.error(`Erro ao aplicar campo adicional ${id} no DataCrazy:`, err))
-    )) : Promise.resolve();
-
-    // 4. Cria o negócio no pipeline "Leads", etapa "Novos Leads"
-    const businessPromise = leadId ? fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
-      method: 'POST',
-      headers: dcHeaders,
-      body: JSON.stringify({
-        leadId,
-        stageId: PIPELINE_STAGE_ID,
+        businessArea: Segmento || '',
+        companySize: Quantidade_de_Clientes || '',
+        utmSource: utm_source || '',
+        utmCampaign: utm_campaign || '',
+        utmMedium: utm_medium || '',
+        utmContent: utm_content || '',
+        utmTerm: utm_term || '',
       }),
     }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
-    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err)) : Promise.resolve();
+      const data = await r.json().catch(() => ({}));
+      dcOk = r.ok && data.ok !== false;
+      if (!dcOk) console.error('Erro ao criar lead no DataCrazy (webhook, nao-fatal):', data);
+    }).catch((err) => {
+      console.error('Erro ao criar lead no DataCrazy (webhook, nao-fatal):', err);
+    });
 
-    // 5. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
+    // 2. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -209,10 +153,10 @@ export default async function handler(req, res) {
     }
 
     // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
-    // response sai, então sem esse await o negócio/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([fieldsPromise, businessPromise, sheetsPromise, capiPromise]);
+    // response sai, então sem esse await o DataCrazy/CAPI corriam risco de nunca completar.
+    await Promise.allSettled([dcPromise, sheetsPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, leadId, crm: dcOk ? 'ok' : 'falhou' });
+    return res.status(200).json({ success: true, crm: dcOk ? 'ok' : 'falhou' });
 
   } catch (err) {
     console.error('Erro geral:', err);
