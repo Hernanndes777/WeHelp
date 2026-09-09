@@ -281,6 +281,26 @@
     // dois ou três cliques a mais viram "vitória" que some no dia seguinte.
     const MIN_AMOSTRA = 100;
 
+
+    // Teste z de duas proporcoes. Sem isto o painel declarava vencedora so por
+    // ter volume — e em 2026-09-09, com 433 visitantes, ele apontou a D como
+    // "36% melhor" numa diferenca com 29% de chance de ser acaso.
+    // Volume nao e evidencia; diferenca grande o suficiente para o volume e.
+    function chanceDeSerAcaso(x1, n1, x2, n2) {
+      if (!n1 || !n2) return 1;
+      const p1 = x1 / n1, p2 = x2 / n2;
+      const pool = (x1 + x2) / (n1 + n2);
+      const se = Math.sqrt(pool * (1 - pool) * (1 / n1 + 1 / n2));
+      if (!se) return 1;
+      const z = Math.abs(p1 - p2) / se;
+      // aproximacao da cauda da normal (Zelen & Severo), boa o suficiente aqui
+      const t = 1 / (1 + 0.2316419 * z);
+      const d = 0.3989423 * Math.exp(-z * z / 2);
+      const cauda = d * t * (1.330274 * Math.pow(t, 5) - 1.821256 * Math.pow(t, 4)
+                   + 1.781478 * Math.pow(t, 3) - 0.356538 * t * t + 0.319381 * t);
+      return Math.min(1, 2 * cauda);   // bicaudal
+    }
+
     function renderComparativo(variantes) {
       const cfg = testeAtual();
       ROTULO = cfg.rotulo;
@@ -318,25 +338,44 @@
               : linha('Conversão total', 'taxa_conversao', 'taxa_conversao', '%', true)}
         </tbody>`;
 
-      // Veredito: só chama vencedor com volume; senão explica o que falta.
+      // Veredito: volume E significancia. Uma sem a outra engana.
+      const m = cfg.metrica;
       const amostra = Math.min(a.visitantes, b.visitantes);
-      const semEntradas = ((a[cfg.metrica] || 0) + (b[cfg.metrica] || 0)) === 0;
+      const semDado = ((a[m] || 0) + (b[m] || 0)) === 0;
+
+      // numerador de cada metrica, pro teste estatistico
+      const numer = (v) => m === 'taxa_lead' ? (v.leads || 0)
+                        : m === 'taxa_conversao' ? (v.entradas || 0)
+                        : (v.cliques || 0);
+
       let txt;
-      if (semEntradas) {
+      if (semDado) {
         txt = cfg.grupoUnico
-          ? `Ainda sem ninguém preenchendo o formulário. A <strong>taxa do formulário</strong> é o que decide este teste.`
-          : `Ainda sem entradas lançadas. A <strong>conversão total</strong> é a métrica que decide o teste — ela só aparece depois que você lançar quantos entraram em cada grupo, ali embaixo.`;
-      } else if (amostra < MIN_AMOSTRA) {
-        txt = `Volume ainda baixo: ${amostra} visitantes na menor das duas. Abaixo de ${MIN_AMOSTRA} por variante, qualquer diferença pode ser sorte — não decida nada ainda.`;
+          ? 'Ainda sem ninguém preenchendo o formulário. A <strong>taxa do formulário</strong> é o que decide este teste.'
+          : 'Ainda sem entradas lançadas. A <strong>conversão total</strong> é a métrica que decide o teste — ela só aparece depois que você lançar quantos entraram em cada grupo, ali embaixo.';
       } else {
-        const m = cfg.metrica;
-        const venc = a[m] === b[m] ? null : (a[m] > b[m] ? a : b);
-        if (!venc) {
-          txt = `Empate técnico. Se persistir, a escolha pode ser pela mais barata de manter.`;
+        const pv = chanceDeSerAcaso(numer(a), a.visitantes, numer(b), b.visitantes);
+        const pct = Math.round(pv * 100);
+        const frente = a[m] === b[m] ? null : (a[m] > b[m] ? a : b);
+        const atras  = frente === a ? b : a;
+
+        if (!frente) {
+          txt = 'Empate exato. Se persistir com volume, a escolha pode ser pela mais barata de manter.';
+        } else if (pv > 0.20) {
+          txt = '<strong>Sem vencedora.</strong> ' + ROTULO[frente.variante] + ' está à frente, mas há <strong>' +
+                pct + '% de chance de ser acaso</strong> — praticamente um cara ou coroa. ' +
+                (amostra < MIN_AMOSTRA
+                  ? 'Falta volume: ' + amostra + ' visitantes na menor das duas.'
+                  : 'Com ' + amostra + ' por variante, se houvesse diferença real ela já teria aparecido. Provavelmente as duas convertem igual.');
+        } else if (pv > 0.05) {
+          txt = '<strong>Tendência, ainda não conclusão.</strong> ' + ROTULO[frente.variante] + ' em ' +
+                frente[m] + '% contra ' + atras[m] + '%, com ' + pct + '% de chance de ser acaso. ' +
+                'O padrão é aceitar abaixo de 5%. Deixa rodar.';
         } else {
-          const perd = venc === a ? b : a;
-          const rel = perd[m] ? Math.round((venc[m] / perd[m] - 1) * 100) : 100;
-          txt = `<strong>${ROTULO[venc.variante]}</strong> está em ${venc[m]}% contra ${perd[m]}% — ${rel}% melhor. Com ${amostra}+ visitantes por variante, já dá pra levar a sério.`;
+          const rel = atras[m] ? Math.round((frente[m] / atras[m] - 1) * 100) : 100;
+          txt = '<strong>' + ROTULO[frente.variante] + ' venceu.</strong> ' + frente[m] + '% contra ' +
+                atras[m] + '% — ' + rel + '% melhor, com apenas ' + pct + '% de chance de ser acaso. ' +
+                'Dá pra decidir.';
         }
       }
       el('veredito').innerHTML = txt;
@@ -354,10 +393,20 @@
 
       // A vencedora é a de maior taxa de entrada — mas só destaca com volume
       // suficiente pra não eleger campeã em cima de 3 cliques.
+      // "na frente" so com diferenca estatisticamente defensavel — o selo
+      // verde num empate faz decidir errado.
       const elegiveis = variantes.filter(v => v.visitantes >= MIN_AMOSTRA && (v[cfgC.metrica] || 0) > 0);
-      const melhor = elegiveis.length > 1
-        ? elegiveis.reduce((a, b) => (b[cfgC.metrica] > a[cfgC.metrica] ? b : a))
-        : null;
+      const numC = (v) => cfgC.metrica === 'taxa_lead' ? (v.leads || 0)
+                        : cfgC.metrica === 'taxa_conversao' ? (v.entradas || 0)
+                        : (v.cliques || 0);
+      let melhor = null;
+      if (elegiveis.length > 1) {
+        const cand = elegiveis.reduce((a, b) => (b[cfgC.metrica] > a[cfgC.metrica] ? b : a));
+        const outro = elegiveis.find(v => v !== cand);
+        if (outro && chanceDeSerAcaso(numC(cand), cand.visitantes, numC(outro), outro.visitantes) <= 0.05) {
+          melhor = cand;
+        }
+      }
 
       el('cards').innerHTML = variantes.map(v => `
         <div class="card ${melhor && melhor.variante === v.variante ? 'vencedora' : ''}">
