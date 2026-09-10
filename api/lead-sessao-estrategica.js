@@ -1,9 +1,20 @@
 // api/lead-sessao-estrategica.js — Função serverless (Vercel) da LP /sessao-estrategica
-// Migrado do ActiveCampaign pro DataCrazy em 2026-08-12 (decisão do usuário: substituir
-// totalmente, mesmo padrão já usado no /diagnostico e /academias). Leads caem no pipeline
-// "Webinário" (grupo VENDAS, já existente no DataCrazy, criado pelo usuário em 2026-08-07)
-// > etapa "AGENDAMENTO". Mesmo contorno do bug confirmado de additionalFields da API
-// pública do DataCrazy — dado garantido via campo nativo "notes".
+//
+// Leads caem no DataCrazy via webhook de automação, mesmo padrão do
+// /diagnostico (ver api/lead-diagnostico.js).
+//
+// [2026-09-09] Trocado da API direta (api.g1.datacrazy.io) pro webhook. A API
+// pública tinha dois problemas que custaram lead de verdade:
+//   1. additionalFields nunca persistia valor estruturado (bug confirmado com
+//      o suporte DataCrazy) — o contorno era enfiar tudo em "notes";
+//   2. quem já existia no CRM — e todo mundo vindo do webinário já existe —
+//      derrubava a criação com "lead-with-same-contact-exists".
+// A automação nativa resolve os dois: cria/atualiza o lead, aplica os campos
+// estruturados, aplica as tags e cria o negócio direto na etapa AGENDAMENTO do
+// pipeline "Webinário". Não precisa mais de token, ID de campo, ID de etapa nem
+// lógica de pipeline aqui.
+//
+// Mantém o evento Lead no Meta CAPI (independe de qual CRM guarda o registro).
 // Segue o padrão de 00-base/padrao-captura-lead.md.
 
 import { createHash } from 'crypto';
@@ -17,26 +28,18 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const DATACRAZY_URL = 'https://api.g1.datacrazy.io';
-  const DATACRAZY_API_KEY = process.env.DATACRAZY_API_KEY;
+  // URL do webhook da automação do DataCrazy que joga o lead na etapa
+  // AGENDAMENTO do pipeline "Webinário".
+  // Fica fixa no código de propósito: a env var da Vercel já ficou apontando
+  // pro deployment de um ciclo antigo e os leads sumiram em silêncio.
+  // Vazia = pula o DataCrazy sem quebrar nada (Sheets e CAPI seguem normais).
+  const DATACRAZY_WEBHOOK_URL = 'https://api.datacrazy.io/v1/crm/api/crm/flows/webhooks/62c3af3c-8e3e-4332-b002-ebcc5fa31fbd/a9cc0ca3-515d-4b59-ac8d-54aadf7a23a0';
 
-  // IDs confirmados via MCP do DataCrazy em 2026-08-12
-  const PIPELINE_STAGE_ID = 'cff64878-e74a-4056-b240-7903901ea05f'; // Pipeline "Webinário" > etapa "AGENDAMENTO"
-  const TAG_WB06 = '8971c60b-3d51-4795-821e-b624111a2411';         // Tag "WB 06" (criada 2026-08-13, específica dessa LP — pedido do usuário)
-  const ATTENDANT_ID = '379b3f67-da07-4cf2-b2fa-d062ee3320eb';     // Caroline Bonini — mesmo padrão das outras LPs
-  const FIELD_EMPRESA = 'dcb41d3d-26af-4ab2-9849-be84abc5bf6e';    // "Empresa" — usado pro Nome da academia
-
-  // URL do Apps Script (/exec) da aba "Agendamentos WB 07". Fixa no código porque
-  // a env var da Vercel ficou apontando pro deployment antigo (WB 06) e os leads
-  // sumiam em silêncio — trocar aqui a cada ciclo de webinário.
+  // Apps Script da planilha "[WBN] Aplicação". Fixa pelo mesmo motivo acima.
   const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzu1GYaIYE-kCj7TEef2nm5W5TegaRFPvFg33OSVMT9YFbDFtIPzHOGOAJfYV2yFszD/exec';
 
   const CAPI_ENDPOINT = process.env.CAPI_ENDPOINT;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
-
-  if (!DATACRAZY_API_KEY) {
-    return res.status(500).json({ error: 'Configuração ausente no servidor (DATACRAZY_API_KEY)' });
-  }
 
   try {
     const {
@@ -69,15 +72,10 @@ export default async function handler(req, res) {
     const phoneDigits = WhatsApp.replace(/\D/g, '');
     const contactEmail = E_mail_Profissional || `wp.${phoneDigits}@noemail.invalid`;
 
-    const dcHeaders = {
-      'Authorization': `Bearer ${DATACRAZY_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
-
-    // O Sheets dispara ANTES do DataCrazy e nunca depende dele. Quando a pessoa
-    // já existia no CRM (todo mundo que veio do webinário já existe), a criação
-    // do lead falhava com "lead-with-same-contact-exists", a function devolvia
-    // 502 e o agendamento sumia sem nunca chegar na planilha.
+    // 1. Sheets dispara ANTES do CRM e nunca depende dele. Quando a criação no
+    // DataCrazy falhava, a function devolvia 502 e o agendamento sumia sem
+    // nunca chegar na planilha. A planilha é o registro de verdade — não pode
+    // depender de terceiro pra existir.
     const sheetsPromise = SHEETS_URL ? fetch(SHEETS_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -112,67 +110,52 @@ export default async function handler(req, res) {
         }),
       }).catch((err) => console.error('Erro ao enviar pro Sheets:', err)) : Promise.resolve();
 
-    // 1. Cria o lead no DataCrazy (nome/email/telefone/academia/tag)
-    // [BUG DataCrazy confirmado em 2026-08-11, ver api/lead-diagnostico.js pro
-    // diagnóstico completo] additionalFields não persiste via API pública —
-    // contorno: manda tudo formatado dentro de "notes" (campo nativo, texto
-    // livre, confirmado funcionando).
-    const notesLines = [];
-    if (Nome_da_sua_academia) notesLines.push(`Academia: ${Nome_da_sua_academia}`);
-    if (Quantos_clientes_ativos_voce_tem_atualmente) notesLines.push(`Clientes ativos: ${Quantos_clientes_ativos_voce_tem_atualmente}`);
-    if (Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje) notesLines.push(`Maior desafio: ${Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje}`);
-    if (Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente) notesLines.push(`Sistema de gestão atual: ${Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente}`);
-    if (UTM_Source) notesLines.push(`UTM Source: ${UTM_Source}`);
-    if (UTM_Campaign) notesLines.push(`UTM Campaign: ${UTM_Campaign}`);
-    if (UTM_Medium) notesLines.push(`UTM Medium: ${UTM_Medium}`);
-
-    const leadRes = await fetch(`${DATACRAZY_URL}/api/v1/leads`, {
+    // 2. DataCrazy via webhook da automação "Aplicação - Webinário".
+    // Os nomes aqui têm que casar com os placeholders do bloco de mapeamento
+    // de campos da automação — é ela que decide onde cada um pousa, aplica as
+    // tags e cria o negócio na etapa AGENDAMENTO.
+    // Campo a mais no payload é ignorado sem erro; o que ABORTA a execução é
+    // placeholder quebrado no mapeamento (sem a parte "|[Api-request-1]…").
+    // Foi isso que derrubou 4 execuções em 2026-09-09 e devolveu {"ok":true}
+    // mesmo sem criar lead nenhum.
+    let dcOk = false;
+    const dcPromise = DATACRAZY_WEBHOOK_URL ? fetch(DATACRAZY_WEBHOOK_URL, {
       method: 'POST',
-      headers: dcHeaders,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: Seu_Nome_Completo || 'Lead sem nome',
         email: contactEmail,
         phone: WhatsApp,
         company: Nome_da_sua_academia || '',
-        source: 'Sessão Estratégica (Site)',
-        notes: notesLines.join('\n'),
-        tags: [{ id: TAG_WB06 }],
-        attendant: { id: ATTENDANT_ID },
-      }),
-    });
-
-    const leadData = await leadRes.json().catch(() => ({}));
-    const leadId = leadRes.ok ? leadData.id : null;
-
-    if (!leadId) {
-      console.error('Erro ao criar lead no DataCrazy:', leadData);
-      await Promise.allSettled([sheetsPromise]);
-      return res.status(200).json({ success: true, leadId: null, crm: 'failed' });
-    }
-
-    // 2. Tenta aplicar o campo adicional "Empresa" (fire-and-forget — hoje não
-    // persiste pela API pública, mantido pro dia que o DataCrazy corrigir o bug)
-    const fieldsPromise = Nome_da_sua_academia ? fetch(`${DATACRAZY_URL}/api/v1/leads/${leadId}`, {
-      method: 'PATCH',
-      headers: dcHeaders,
-      body: JSON.stringify({ additionalFields: [{ id: FIELD_EMPRESA, value: Nome_da_sua_academia }] }),
-    }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao aplicar additionalFields no DataCrazy:', await r.text());
-    }).catch((err) => console.error('Erro ao aplicar additionalFields no DataCrazy:', err)) : Promise.resolve();
-
-    // 3. Cria o negócio no pipeline "Webinário", etapa "AGENDAMENTO"
-    const dealPromise = fetch(`${DATACRAZY_URL}/api/v1/businesses`, {
-      method: 'POST',
-      headers: dcHeaders,
-      body: JSON.stringify({
-        leadId,
-        stageId: PIPELINE_STAGE_ID,
+        // A página não pergunta segmento, mas o fluxo mapeia "Área de atuação"
+        // a partir daqui e todo lead deste funil é do mesmo ramo.
+        businessArea: 'Academia',
+        companySize: Quantos_clientes_ativos_voce_tem_atualmente || '',
+        currentSystem: Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente || '',
+        // Os dois nomes de propósito: o mapeamento de "Maior desafio" na
+        // automação aponta pra "mainChalleng", sem o "e" final. Mandando as
+        // duas grafias o campo chega independente de alguém corrigir o typo
+        // lá dentro depois. Campo que a automação não referencia é ignorado
+        // sem erro, então isto não custa nada.
+        mainChallenge: Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje || '',
+        mainChalleng: Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje || '',
+        // As tags "WB 08" e "Aplicação" são aplicadas dentro da automação
+        // (bloco add-tag-action), não daqui.
+        utmSource: UTM_Source || '',
+        utmCampaign: UTM_Campaign || '',
+        utmMedium: UTM_Medium || '',
+        utmContent: UTM_Content || '',
+        utmTerm: UTM_Term || '',
       }),
     }).then(async (r) => {
-      if (!r.ok) console.error('Erro ao criar negócio no DataCrazy:', await r.text());
-    }).catch((err) => console.error('Erro ao criar negócio no DataCrazy:', err));
+      const data = await r.json().catch(() => ({}));
+      dcOk = r.ok && data.ok !== false;
+      if (!dcOk) console.error('Erro ao criar lead no DataCrazy (webhook, nao-fatal):', data);
+    }).catch((err) => {
+      console.error('Erro ao criar lead no DataCrazy (webhook, nao-fatal):', err);
+    }) : Promise.resolve();
 
-    // 4. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro)
+    // 3. Evento Lead pro Meta CAPI (mesmo pixel do site inteiro, independe do CRM)
     let capiPromise = Promise.resolve();
     if (CAPI_ENDPOINT && META_ACCESS_TOKEN) {
       const capiEventId = event_id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -208,10 +191,13 @@ export default async function handler(req, res) {
     }
 
     // Espera as chamadas em paralelo — a Vercel encerra a function assim que a
-    // response sai, então sem esse await o negócio/Sheets/CAPI corriam risco de nunca completar.
-    await Promise.allSettled([fieldsPromise, dealPromise, sheetsPromise, capiPromise]);
+    // response sai, então sem esse await o Sheets/DataCrazy/CAPI corriam risco
+    // de nunca completar.
+    await Promise.allSettled([sheetsPromise, dcPromise, capiPromise]);
 
-    return res.status(200).json({ success: true, leadId });
+    // success:true sempre que a request foi processada — é o que libera o
+    // Calendly na página. O estado do CRM vai em "crm", só pra log.
+    return res.status(200).json({ success: true, crm: dcOk ? 'ok' : 'falhou' });
 
   } catch (err) {
     console.error('Erro geral:', err);

@@ -70,7 +70,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 40px 16px;
     }
 
@@ -94,7 +94,7 @@
     /* ── WIZARD CARD ── */
     .wizard {
       width: 100%;
-      max-width: 460px;
+      max-width: 560px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 20px;
@@ -102,33 +102,28 @@
       box-shadow: 0 20px 60px rgba(10,17,40,.08);
     }
 
-    .wizard__progress {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 24px;
+    /* ── Blocos de pergunta ──
+       O formulário virou página única em 2026-09-09. Cada pergunta que era uma
+       etapa do wizard agora é um bloco com título próprio — sem o título a
+       pessoa perde a referência do que está respondendo no meio da rolagem. */
+    .group { margin-top: 22px; }
+    .group__title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.45;
+      margin-bottom: 12px;
+      transition: color .15s;
     }
-    .wizard__bar {
-      flex: 1;
-      height: 4px;
-      border-radius: 4px;
-      background: var(--border);
-      overflow: hidden;
-    }
-    .wizard__bar span {
-      display: block;
-      height: 100%;
-      width: 0%;
-      background: var(--blue);
-      transition: width .35s ease;
-    }
-    .wizard__bar.done span { width: 100%; }
-    .wizard__bar.active span { width: 100%; }
+    .group__title .req { color: var(--blue); }
+    .group.invalid .group__title { color: #dc2626; }
+    .group .field-error { padding-left: 2px; margin-top: 8px; }
 
-    .step { display: none; animation: stepIn .35s ease; }
-    .step.active { display: block; }
-    @keyframes stepIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0 2px;
+      border: none;
     }
 
     .step__eyebrow {
@@ -239,6 +234,29 @@
       color: var(--text);
       line-height: 1.4;
     }
+    .option-list--grid {
+      display: grid;
+      /* 200px e nao 150: com 150 cabiam tres colunas no card de 560 e
+         "De 151 a 300 clientes" quebrava em duas linhas em cada cartao. */
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .option-list--grid .option { padding: 12px 14px; }
+    .option-list--grid .option__label { font-size: 13.5px; }
+
+    /* Marca de sistema é escolha factual: ninguém precisa LER as opções pra
+       decidir, só reconhecer a sua. Vira dropdown e economiza três fileiras
+       de cartão. As outras duas perguntas seguem em cartão de propósito. */
+    .select {
+      appearance: none;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 20px center;
+    }
+    .select:focus { border-color: var(--blue); }
+    .select.invalid { border-color: #ef4444; }
+    .select:invalid { color: #a0aec0; }
 
     .wizard__nav {
       display: flex;
@@ -374,89 +392,75 @@
     </div>
 
     <form class="wizard" id="wizard" novalidate>
-      <div class="wizard__progress" id="progress"></div>
+      <p class="step__eyebrow">Sessão estratégica</p>
+      <h1 class="step__title">Vamos entrar em contato em breve!</h1>
+      <p class="step__subtitle">Preencha as informações abaixo pra gente já chegar na conversa sabendo do seu contexto.</p>
 
-      <!-- STEP 1 — Contato -->
-      <div class="step active" data-step="1">
-        <p class="step__eyebrow">Sessão estratégica</p>
-        <h1 class="step__title">Vamos entrar em contato em breve!</h1>
-        <p class="step__subtitle">Antes, pra te dar um atendimento mais direcionado, preencha essas últimas informações.</p>
-
-        <div class="field">
-          <input type="text" class="input" id="nome" placeholder="* Seu nome completo" required />
-          <p class="field-error" id="nomeError">Digite seu nome completo</p>
+      <div class="field">
+        <input type="text" class="input" id="nome" placeholder="* Seu nome completo" required />
+        <p class="field-error" id="nomeError">Digite seu nome completo</p>
+      </div>
+      <div class="field">
+        <input type="email" class="input" id="email" placeholder="* E-mail profissional" required />
+        <p class="field-error" id="emailError">Digite um e-mail válido (ex: voce@empresa.com)</p>
+      </div>
+      <div class="field">
+        <div class="phone-row">
+          <select class="ddi-select" id="ddiSelect" aria-label="Código do país">
+            <option value="+55" selected>🇧🇷 +55</option>
+            <option value="+351">🇵🇹 +351</option>
+            <option value="+1">🇺🇸 +1</option>
+          </select>
+          <input type="tel" class="input" id="whatsapp" placeholder="* WhatsApp" maxlength="15" required />
         </div>
-        <div class="field">
-          <input type="email" class="input" id="email" placeholder="* E-mail profissional" required />
-          <p class="field-error" id="emailError">Digite um e-mail válido (ex: voce@empresa.com)</p>
-        </div>
-        <div class="field">
-          <div class="phone-row">
-            <select class="ddi-select" id="ddiSelect" aria-label="Código do país">
-              <option value="+55" selected>🇧🇷 +55</option>
-              <option value="+351">🇵🇹 +351</option>
-              <option value="+1">🇺🇸 +1</option>
-            </select>
-            <input type="tel" class="input" id="whatsapp" placeholder="* WhatsApp" maxlength="15" required />
-          </div>
-          <p class="field-error" id="phoneError">Digite um número válido com DDD</p>
-        </div>
+        <p class="field-error" id="phoneError">Digite um número válido com DDD</p>
+      </div>
+      <div class="field">
+        <input type="text" class="input" id="academia" placeholder="* Nome da academia" required />
+        <p class="field-error" id="academiaError">Digite o nome da sua academia</p>
       </div>
 
-      <!-- STEP 2 — Academia -->
-      <div class="step" data-step="2">
-        <p class="step__eyebrow">Sessão estratégica</p>
-        <h1 class="step__title">Qual o nome da sua academia?</h1>
-        <p class="step__subtitle">Assim já chegamos na conversa sabendo quem você é.</p>
-        <div class="field">
-          <input type="text" class="input" id="academia" placeholder="* Nome da academia" required />
-        </div>
-      </div>
+      <hr class="divider" />
 
-      <!-- STEP 3 — Clientes ativos -->
-      <div class="step" data-step="3">
-        <p class="step__eyebrow">Sessão estratégica</p>
-        <h1 class="step__title">Quantos clientes ativos você tem atualmente?</h1>
-        <div class="option-list" data-field="clientes" data-required="true">
+      <div class="group" id="grupo-clientes">
+        <p class="group__title">Quantos clientes ativos você tem atualmente? <span class="req">*</span></p>
+        <div class="option-list option-list--grid" data-field="clientes" data-required="true">
           <label class="option"><span class="option__dot"></span><span class="option__label">Até 150 clientes</span></label>
           <label class="option"><span class="option__dot"></span><span class="option__label">De 151 a 300 clientes</span></label>
           <label class="option"><span class="option__dot"></span><span class="option__label">De 301 a 500 clientes</span></label>
           <label class="option"><span class="option__dot"></span><span class="option__label">De 501 a 1000 clientes</span></label>
           <label class="option"><span class="option__dot"></span><span class="option__label">Acima de 1000 clientes</span></label>
         </div>
+        <p class="field-error" id="clientesError">Escolha uma opção</p>
       </div>
 
-      <!-- STEP 4 — Desafio financeiro -->
-      <div class="step" data-step="4">
-        <p class="step__eyebrow">Sessão estratégica</p>
-        <h1 class="step__title">Qual é o seu maior desafio financeiro ou de gestão hoje?</h1>
+      <div class="group" id="grupo-desafio">
+        <p class="group__title">Qual é o seu maior desafio financeiro ou de gestão hoje? <span class="req">*</span></p>
         <div class="option-list" data-field="desafio" data-required="true">
           <label class="option"><span class="option__dot"></span><span class="option__label">Muitos alunos cancelando em silêncio e eu não sei o motivo real.</span></label>
           <label class="option"><span class="option__dot"></span><span class="option__label">Bato a meta de vendas, mas a academia não cresce porque a retenção é baixa.</span></label>
           <label class="option"><span class="option__dot"></span><span class="option__label">Quero medir a satisfação e o NPS, mas não sei como automatizar isso.</span></label>
           <label class="option"><span class="option__dot"></span><span class="option__label">Minha equipe tem opiniões divergentes sobre o que o aluno realmente quer.</span></label>
         </div>
+        <p class="field-error" id="desafioError">Escolha uma opção</p>
       </div>
 
-      <!-- STEP 5 — Sistema de gestão -->
-      <div class="step" data-step="5">
-        <p class="step__eyebrow">Sessão estratégica</p>
-        <h1 class="step__title">Qual sistema de gestão você utiliza na sua academia atualmente?</h1>
-        <div class="option-list" data-field="sistema" data-required="true">
-          <label class="option"><span class="option__dot"></span><span class="option__label">Pacto</span></label>
-          <label class="option"><span class="option__dot"></span><span class="option__label">Evo</span></label>
-          <label class="option"><span class="option__dot"></span><span class="option__label">Tecnofit</span></label>
-          <label class="option"><span class="option__dot"></span><span class="option__label">CloudGym</span></label>
-          <label class="option"><span class="option__dot"></span><span class="option__label">Outro sistema / Nenhum</span></label>
-        </div>
+      <div class="group" id="grupo-sistema">
+        <p class="group__title">Qual sistema de gestão você utiliza hoje? <span class="req">*</span></p>
+        <select class="input select" id="sistema" required>
+          <option value="" disabled selected>* Selecione seu sistema</option>
+          <option value="Pacto">Pacto</option>
+          <option value="Evo">Evo</option>
+          <option value="Tecnofit">Tecnofit</option>
+          <option value="CloudGym">CloudGym</option>
+          <option value="Outro sistema / Nenhum">Outro sistema / Nenhum</option>
+        </select>
+        <p class="field-error" id="sistemaError">Escolha uma opção</p>
       </div>
 
       <div class="wizard__nav" id="nav">
-        <button type="button" class="btn btn--prev" id="btnPrev" aria-label="Voltar" style="display:none;">
-          <i class="ti ti-arrow-left" aria-hidden="true"></i>
-        </button>
         <button type="button" class="btn btn--next" id="btnNext">
-          <span id="btnNextText">Continuar</span>
+          <span id="btnNextText">Enviar e agendar</span>
           <span class="btn__spinner" id="btnSpinner"></span>
         </button>
       </div>
@@ -487,7 +491,6 @@
   <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
   <script>
-    const TOTAL_STEPS = 5;
     const PIXEL_ID = '1106401696374974';
     const params = new URLSearchParams(location.search);
     const testEventCode = params.get('fbtest') || null;
@@ -516,23 +519,6 @@
       return digits.length >= 6;
     }
 
-    // ── Progress bar ──
-    const progressEl = document.getElementById('progress');
-    for (let i = 1; i <= TOTAL_STEPS; i++) {
-      const bar = document.createElement('div');
-      bar.className = 'wizard__bar';
-      bar.dataset.bar = i;
-      bar.innerHTML = '<span></span>';
-      progressEl.appendChild(bar);
-    }
-    function updateProgress(step) {
-      document.querySelectorAll('.wizard__bar').forEach(bar => {
-        const idx = Number(bar.dataset.bar);
-        bar.classList.toggle('done', idx < step);
-        bar.classList.toggle('active', idx === step);
-      });
-    }
-
     // ── Option-card selection ──
     document.querySelectorAll('.option-list').forEach(list => {
       list.addEventListener('click', (e) => {
@@ -541,51 +527,63 @@
         list.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
         opt.classList.add('selected');
         list.dataset.value = opt.querySelector('.option__label').textContent;
-        validateStep(currentStep);
+        limparErroGrupo(list.dataset.field);
       });
     });
 
-    // ── Step navigation ──
-    let currentStep = 1;
-    const btnPrev = document.getElementById('btnPrev');
     const btnNext = document.getElementById('btnNext');
     const btnNextText = document.getElementById('btnNextText');
     const btnSpinner = document.getElementById('btnSpinner');
 
-    function showStep(step) {
-      document.querySelectorAll('.step[data-step]').forEach(s => {
-        s.classList.toggle('active', Number(s.dataset.step) === step);
+    // 'sistema' não entra aqui: virou dropdown e é validado como campo.
+    const GRUPOS = ['clientes', 'desafio'];
+
+    function limparErroGrupo(campo) {
+      const grupo = document.getElementById('grupo-' + campo);
+      if (!grupo) return;
+      grupo.classList.remove('invalid');
+      grupo.querySelector('.field-error').classList.remove('show');
+    }
+
+    // Validação de página única. O botão fica SEMPRE habilitado de propósito:
+    // no wizard dava pra travar o "Continuar" porque só existia um campo por
+    // tela, então era óbvio o que faltava. Numa página com sete respostas, um
+    // botão apagado não diz qual delas está em branco. Aqui valida tudo no
+    // clique, marca cada campo que falhou e rola até o primeiro.
+    function validarTudo() {
+      const ddi = document.getElementById('ddiSelect').value;
+      const checagens = [
+        { id: 'nome',     erro: 'nomeError',     ok: !!document.getElementById('nome').value.trim() },
+        { id: 'email',    erro: 'emailError',    ok: isValidEmail(document.getElementById('email').value.trim()) },
+        { id: 'whatsapp', erro: 'phoneError',    ok: isValidPhone(document.getElementById('whatsapp').value, ddi) },
+        { id: 'academia', erro: 'academiaError', ok: !!document.getElementById('academia').value.trim() },
+        { id: 'sistema',  erro: 'sistemaError',  ok: !!document.getElementById('sistema').value },
+      ];
+
+      let primeiro = null;
+      checagens.forEach(c => {
+        const el = document.getElementById(c.id);
+        el.classList.toggle('invalid', !c.ok);
+        document.getElementById(c.erro).classList.toggle('show', !c.ok);
+        if (!c.ok && !primeiro) primeiro = el;
       });
-      btnPrev.style.display = step === 1 ? 'none' : 'flex';
-      btnNextText.textContent = step === TOTAL_STEPS ? 'Enviar' : 'Continuar';
-      updateProgress(step);
-      validateStep(step);
-    }
 
-    function validateStep(step) {
-      let valid = true;
-      if (step === 1) {
-        const nome = document.getElementById('nome').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const whatsapp = document.getElementById('whatsapp').value.trim();
-        const ddi = document.getElementById('ddiSelect').value;
-        valid = !!nome && isValidEmail(email) && isValidPhone(whatsapp, ddi);
-      } else if (step === 2) {
-        valid = !!document.getElementById('academia').value.trim();
-      } else {
-        const map = { 3: 'clientes', 4: 'desafio', 5: 'sistema' };
-        const list = document.querySelector('.option-list[data-field="' + map[step] + '"]');
-        valid = !!(list && list.dataset.value);
+      GRUPOS.forEach(campo => {
+        const list = document.querySelector('.option-list[data-field="' + campo + '"]');
+        const grupo = document.getElementById('grupo-' + campo);
+        const ok = !!(list && list.dataset.value);
+        grupo.classList.toggle('invalid', !ok);
+        grupo.querySelector('.field-error').classList.toggle('show', !ok);
+        if (!ok && !primeiro) primeiro = grupo;
+      });
+
+      if (!primeiro) return true;
+      primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (primeiro.tagName === 'INPUT' || primeiro.tagName === 'SELECT') {
+        primeiro.focus({ preventScroll: true });
       }
-      btnNext.disabled = !valid;
-      return valid;
+      return false;
     }
-
-    ['nome', 'email', 'whatsapp'].forEach(id => {
-      document.getElementById(id).addEventListener('input', () => validateStep(currentStep));
-    });
-    document.getElementById('academia').addEventListener('input', () => validateStep(currentStep));
-    document.getElementById('ddiSelect').addEventListener('change', () => validateStep(currentStep));
 
     document.getElementById('whatsapp').addEventListener('input', (e) => {
       // Trava em dígitos + limita ao tamanho máximo válido pro DDI selecionado,
@@ -595,7 +593,6 @@
       const ddi = document.getElementById('ddiSelect').value;
       const maxDigits = ddi === '+55' ? 11 : 14;
       e.target.value = e.target.value.replace(/\D/g, '').slice(0, maxDigits);
-      validateStep(currentStep);
       if (isValidPhone(e.target.value, ddi)) {
         e.target.classList.remove('invalid');
         document.getElementById('phoneError').classList.remove('show');
@@ -642,18 +639,27 @@
         document.getElementById('emailError').classList.remove('show');
       }
     });
-
-    btnPrev.addEventListener('click', () => {
-      if (currentStep > 1) { currentStep--; showStep(currentStep); }
+    document.getElementById('academia').addEventListener('blur', () => {
+      const el = document.getElementById('academia');
+      const valid = !!el.value.trim();
+      el.classList.toggle('invalid', !valid);
+      document.getElementById('academiaError').classList.toggle('show', !valid);
+    });
+    document.getElementById('academia').addEventListener('input', () => {
+      if (document.getElementById('academia').value.trim()) {
+        document.getElementById('academia').classList.remove('invalid');
+        document.getElementById('academiaError').classList.remove('show');
+      }
+    });
+    document.getElementById('sistema').addEventListener('change', () => {
+      const el = document.getElementById('sistema');
+      el.classList.remove('invalid');
+      document.getElementById('sistemaError').classList.remove('show');
+      document.getElementById('grupo-sistema').classList.remove('invalid');
     });
 
     btnNext.addEventListener('click', async () => {
-      if (!validateStep(currentStep)) return;
-      if (currentStep < TOTAL_STEPS) {
-        currentStep++;
-        showStep(currentStep);
-        return;
-      }
+      if (!validarTudo()) return;
       await submitLead();
     });
 
@@ -698,7 +704,7 @@
         Nome_da_sua_academia: document.getElementById('academia').value.trim(),
         Quantos_clientes_ativos_voce_tem_atualmente: document.querySelector('.option-list[data-field="clientes"]').dataset.value || '',
         Qual_e_o_seu_maior_desafio_financeiro_ou_de_gestao_hoje: document.querySelector('.option-list[data-field="desafio"]').dataset.value || '',
-        Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente: document.querySelector('.option-list[data-field="sistema"]').dataset.value || '',
+        Qual_sistema_de_gestao_voce_utiliza_na_sua_academia_atualmente: document.getElementById('sistema').value || '',
         UTM_Source: params.get('utm_source') || '',
         UTM_Medium: params.get('utm_medium') || '',
         UTM_Campaign: params.get('utm_campaign') || '',
@@ -717,15 +723,19 @@
 
       lastLeadData = data;
 
-      // Prefill do popup do Calendly. No evento "Sessão Estratégica — WeHelp"
-      // a ordem das perguntas é a1=Nome da academia, a2=WhatsApp — invertida em
-      // relação ao evento "Apresentação" que a página usava antes.
+      // Prefill do popup do Calendly.
+      // Nome e e-mail são campos nativos e sempre funcionam. Academia e WhatsApp
+      // dependem de pergunta personalizada, e o evento novo (criado em
+      // 2026-09-09 na conta do comercial) ainda tem só a pergunta padrão — que é
+      // o a1. Por isso os dois vão juntos numa linha: se fossem em a1 e a2
+      // separados, o a2 não existiria e o WhatsApp sumiria em silêncio.
+      // Quando as duas perguntas separadas forem criadas no evento, volta a ser
+      // a1 = academia e a2 = WhatsApp.
       calendlyPrefill = {
         name: data.Seu_Nome_Completo,
         email: data.E_mail_Profissional,
         customAnswers: {
-          a1: data.Nome_da_sua_academia,
-          a2: data.WhatsApp,
+          a1: 'Academia: ' + data.Nome_da_sua_academia + ' | WhatsApp: ' + data.WhatsApp,
         },
       };
 
@@ -773,16 +783,15 @@
 
     document.getElementById('btnOpenCalendly').addEventListener('click', () => {
       if (typeof Calendly === 'undefined') {
-        window.open('https://calendly.com/sessao_estrategica_wehelp/ativacao-do-modulo-de-retencao', '_blank');
+        window.open('https://calendly.com/daniel-wehelpcx/sessao-estrategica-wehelp', '_blank');
         return;
       }
       Calendly.initPopupWidget({
-        url: 'https://calendly.com/sessao_estrategica_wehelp/ativacao-do-modulo-de-retencao?primary_color=1B6EF3&hide_gdpr_banner=1',
+        url: 'https://calendly.com/daniel-wehelpcx/sessao-estrategica-wehelp?primary_color=1B6EF3&hide_gdpr_banner=1',
         prefill: calendlyPrefill || {},
       });
     });
 
-    showStep(currentStep);
   </script>
 </body>
 </html>
