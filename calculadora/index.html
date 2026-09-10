@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>Calculadora de Churn — WeHelp</title>
+  <meta name="description" content="Descubra quanto a evasão de alunos custa por ano na sua academia — com base no tempo real que eles ficam, não num chute." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    button { font-family: inherit; }
+
+    :root {
+      --blue:       #1B6EF3;
+      --blue-hover: #1457c8;
+      --blue-light: #e8f0ff;
+      --bg:         #f4f6fb;
+      --card:       #ffffff;
+      --border:     #e2e8f0;
+      --text:       #0a1128;
+      --body:       #4a5568;
+      --muted:      #94a3b8;
+      /* mesmo vermelho dos avisos de erro das outras LPs, pra nao inventar tom */
+      --red:        #dc2626;
+      --red-bg:     #fef2f2;
+      --red-border: #fecaca;
+      --green:      #059669;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1100px 600px at 15% -10%, rgba(27,110,243,.14), transparent 60%),
+        radial-gradient(900px 500px at 100% 110%, rgba(27,110,243,.10), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 40px 16px 64px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .brand__logo { height: 32px; width: auto; display: block; }
+    .brand span {
+      font-family: 'Figtree', sans-serif;
+      font-size: 21px; font-weight: 800; color: var(--text);
+    }
+
+    .hero { text-align: center; margin-bottom: 40px; }
+    .hero__eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-family: 'Figtree', sans-serif;
+      font-size: 38px; font-weight: 800; line-height: 1.2;
+      max-width: 720px; margin: 0 auto 14px;
+      letter-spacing: -0.02em;
+    }
+    .hero p {
+      font-size: 16px; color: var(--body); line-height: 1.6;
+      max-width: 560px; margin: 0 auto;
+    }
+
+    /* ── Entradas ── */
+    /* 2x2 fixo em vez de auto-fit: com 4 campos o auto-fit cai em 3+1 e o
+       ultimo fica orfao no meio da tela. */
+    .campos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .campo {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 22px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .campo:focus-within {
+      border-color: var(--blue);
+      box-shadow: 0 8px 28px rgba(27,110,243,.12);
+    }
+    .campo label {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 13.5px; font-weight: 700; color: var(--body);
+      margin-bottom: 10px; line-height: 1.35;
+    }
+    .campo label i { color: var(--blue); font-size: 18px; flex-shrink: 0; }
+    .campo input {
+      width: 100%;
+      border: none; background: transparent; outline: none;
+      font-family: 'Figtree', sans-serif;
+      font-size: 26px; font-weight: 800; color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    /* #94a3b8 e nao um cinza mais claro: em 2026-09-10 o placeholder da
+       /sessao-estrategica estava em 2,1:1 e ninguem lia. Este da 3,1:1 e
+       aqui existe label visivel de verdade, entao o placeholder e so exemplo. */
+    .campo input::placeholder { color: var(--muted); font-weight: 600; }
+    .campo.invalid { border-color: var(--red); }
+    .campo .erro {
+      display: none; font-size: 12px; color: var(--red); margin-top: 8px;
+    }
+    .campo.invalid .erro { display: block; }
+    .campo .sufixo { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+    .acao { text-align: center; margin-bottom: 8px; }
+    .btn {
+      background: var(--blue); color: #fff; border: none;
+      border-radius: 50px; padding: 17px 44px;
+      font-size: 15px; font-weight: 700; letter-spacing: .5px;
+      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 10px;
+      box-shadow: 0 8px 24px rgba(27,110,243,.28);
+      transition: background .2s, transform .2s;
+    }
+    .btn:hover { background: var(--blue-hover); transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+    .btn i { font-size: 19px; }
+
+    /* ── Resultado ── */
+    #resultado { display: none; margin-top: 44px; }
+    #resultado.show { display: block; animation: sobe .5s ease both; }
+    @keyframes sobe {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .cartoes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .cartao {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px 24px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(10,17,40,.06);
+    }
+    .cartao h3 {
+      font-size: 12px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--body); margin-bottom: 12px;
+    }
+    .cartao .valor {
+      font-family: 'Figtree', sans-serif;
+      font-size: 34px; font-weight: 900; color: var(--text);
+      line-height: 1.1; margin-bottom: 8px; letter-spacing: -0.02em;
+    }
+    .cartao .nota { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+    .cartao--destaque {
+      border-color: var(--red-border);
+      background: var(--red-bg);
+    }
+    .cartao--destaque .valor { color: var(--red); font-size: 38px; }
+    .cartao--destaque h3 { color: var(--red); }
+    .cartao--destaque .nota { color: #9b3232; }
+
+    .aviso {
+      background: var(--red-bg);
+      border: 1px solid var(--red-border);
+      border-radius: 16px;
+      padding: 22px 24px;
+      display: flex; gap: 14px; align-items: flex-start;
+      margin-bottom: 28px;
+    }
+    .aviso i { color: var(--red); font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .aviso p { font-size: 15px; color: #9b3232; line-height: 1.6; }
+    .aviso strong { font-weight: 700; color: var(--red); }
+
+    .recupera h2 {
+      font-family: 'Figtree', sans-serif;
+      font-size: 20px; font-weight: 800; margin-bottom: 6px;
+    }
+    .recupera > p { font-size: 14px; color: var(--body); margin-bottom: 16px; }
+    .cenarios {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .cenario {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+    }
+    .cenario--melhor { border-color: var(--blue); background: var(--blue-light); }
+    .cenario .pct {
+      font-size: 12px; font-weight: 700; letter-spacing: .6px;
+      text-transform: uppercase; color: var(--body); margin-bottom: 8px;
+    }
+    .cenario--melhor .pct { color: var(--blue); }
+    .cenario .num {
+      font-family: 'Figtree', sans-serif;
+      font-size: 24px; font-weight: 800; color: var(--green); margin-bottom: 4px;
+    }
+    .cenario--melhor .num { color: var(--blue); }
+    .cenario .leg { font-size: 12px; color: var(--muted); }
+
+    .rodape {
+      text-align: center; margin-top: 40px;
+      font-size: 12.5px; color: var(--muted); line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 27px; }
+      .page { padding: 28px 14px 48px; }
+      .btn { width: 100%; justify-content: center; }
+      .cartao--destaque .valor { font-size: 32px; }
+      .campos { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="page">
+    <div class="brand">
+      <img src="../shared/logo-wehelp.png" alt="WeHelp" class="brand__logo" />
+      <span>WeHelp</span>
+    </div>
+
+    <div class="hero">
+      <p class="hero__eyebrow">Calculadora de churn</p>
+      <h1>Quanto a evasão de alunos custa por ano na sua academia</h1>
+      <p>Quatro números que você já tem na mão. O resultado leva em conta quanto tempo o aluno realmente fica — que é o que muda a conta de verdade.</p>
+    </div>
+
+    <div class="campos">
+      <div class="campo" id="c-alunos">
+        <label for="alunos"><i class="ti ti-users" aria-hidden="true"></i> Alunos ativos hoje</label>
+        <input type="text" id="alunos" inputmode="numeric" placeholder="800" autocomplete="off" />
+        <p class="erro">Informe quantos alunos ativos você tem</p>
+      </div>
+
+      <div class="campo" id="c-ticket">
+        <label for="ticket"><i class="ti ti-cash" aria-hidden="true"></i> Mensalidade média (R$)</label>
+        <input type="text" id="ticket" inputmode="decimal" placeholder="149,90" autocomplete="off" />
+        <p class="erro">Informe a mensalidade média</p>
+      </div>
+
+      <div class="campo" id="c-permanencia">
+        <label for="permanencia"><i class="ti ti-calendar-clock" aria-hidden="true"></i> Permanência média (meses)</label>
+        <input type="text" id="permanencia" inputmode="decimal" placeholder="8" autocomplete="off" />
+        <p class="erro">Informe quantos meses o aluno fica, em média</p>
+        <p class="sufixo">Quanto tempo o aluno costuma ficar antes de sair</p>
+      </div>
+
+      <div class="campo" id="c-cancel">
+        <label for="cancel"><i class="ti ti-user-minus" aria-hidden="true"></i> Cancelamentos por mês</label>
+        <input type="text" id="cancel" inputmode="numeric" placeholder="60" autocomplete="off" />
+        <p class="erro">Informe quantos alunos cancelam por mês</p>
+      </div>
+    </div>
+
+    <div class="acao">
+      <button type="button" class="btn" id="btnCalcular">
+        <i class="ti ti-calculator" aria-hidden="true"></i>
+        Calcular meu prejuízo
+      </button>
+    </div>
+
+    <div id="resultado">
+      <div class="cartoes">
+        <div class="cartao">
+          <h3>Taxa de churn mensal</h3>
+          <div class="valor" id="outChurn">0%</div>
+          <p class="nota">Referência do mercado fitness: manter abaixo de 4%.</p>
+        </div>
+
+        <div class="cartao">
+          <h3>Alunos perdidos por ano</h3>
+          <div class="valor" id="outAlunos">0</div>
+          <p class="nota">No ritmo atual de cancelamentos.</p>
+        </div>
+
+        <div class="cartao cartao--destaque">
+          <h3>Faturamento perdido por ano</h3>
+          <div class="valor" id="outPerda">R$ 0</div>
+          <p class="nota" id="outPerdaMes">Dinheiro que deixa de entrar no caixa.</p>
+        </div>
+      </div>
+
+      <div class="aviso">
+        <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+        <p id="outAviso"></p>
+      </div>
+
+      <div class="recupera">
+        <h2>O que dá pra recuperar</h2>
+        <p>Reter não é tudo ou nada. Cada faixa é quanto volta pro caixa se você segurar essa fatia dos que hoje saem.</p>
+        <div class="cenarios">
+          <div class="cenario">
+            <p class="pct">Recuperando 10%</p>
+            <p class="num" id="r10">R$ 0</p>
+            <p class="leg">cenário conservador</p>
+          </div>
+          <div class="cenario">
+            <p class="pct">Recuperando 25%</p>
+            <p class="num" id="r25">R$ 0</p>
+            <p class="leg">cenário realista</p>
+          </div>
+          <div class="cenario cenario--melhor">
+            <p class="pct">Recuperando 45%</p>
+            <p class="num" id="r45">R$ 0</p>
+            <p class="leg">com a WeHelp</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="rodape" id="outMemoria"></p>
+    </div>
+  </div>
+
+  <script>
+    // Formula oficial do app de churn (client/src/components/ChurnCalculator.tsx).
+    // A perda NAO e mensalidade x cancelamentos: e o LTV do aluno que saiu —
+    // mensalidade x permanencia. Ignorar a permanencia superestima quem tem
+    // aluno de ciclo curto e subestima quem tem aluno fiel, que e justamente
+    // onde a conversa de retencao faz sentido. Por isso "permanencia" e campo
+    // obrigatorio, nao opcional.
+    function calcular(alunos, ticket, permanencia, cancelados) {
+      const ltv = ticket * permanencia;
+      return {
+        churn:        (cancelados / alunos) * 100,
+        alunosAno:    cancelados * 12,
+        perdaAnual:   (cancelados * 12) * ltv,
+        ltv:          ltv,
+      };
+    }
+
+    const brl = (v) => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+    // Com centavos — so pra repetir o que a pessoa digitou. Arredondar aqui
+    // mostrava 'R$ 150' pra quem digitou 149,90 e fazia a conta parecer errada.
+    const brlExato = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const el = (id) => document.getElementById(id);
+
+    // Aceita "1.234,56" e "1234.56" — a pessoa digita do jeito que quiser.
+    function numero(txt) {
+      const limpo = String(txt || '').trim().replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+      const n = parseFloat(limpo);
+      return isNaN(n) ? null : n;
+    }
+
+    const CAMPOS = [
+      { input: 'alunos',      caixa: 'c-alunos' },
+      { input: 'ticket',      caixa: 'c-ticket' },
+      { input: 'permanencia', caixa: 'c-permanencia' },
+      { input: 'cancel',      caixa: 'c-cancel' },
+    ];
+
+    CAMPOS.forEach(function (c) {
+      el(c.input).addEventListener('input', function () {
+        el(c.caixa).classList.remove('invalid');
+      });
+    });
+
+    function validar() {
+      let primeiro = null;
+      const vals = {};
+      CAMPOS.forEach(function (c) {
+        const n = numero(el(c.input).value);
+        const ok = n !== null && n > 0;
+        el(c.caixa).classList.toggle('invalid', !ok);
+        if (!ok && !primeiro) primeiro = el(c.input);
+        vals[c.input] = n;
+      });
+      if (primeiro) {
+        primeiro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        primeiro.focus({ preventScroll: true });
+        return null;
+      }
+      return vals;
+    }
+
+    // Sobe o numero contando. O valor final e escrito ANTES da animacao comecar:
+    // requestAnimationFrame nao roda em aba oculta, e se a pessoa trocar de aba
+    // no meio o contador congelaria em zero pra sempre. Assim o pior caso e a
+    // pessoa nao ver a animacao — nunca ver o numero errado.
+    function contar(elemento, alvo, formata) {
+      elemento.textContent = formata(alvo);
+      if (document.hidden || !window.requestAnimationFrame) return;
+      const dur = 1400;
+      let t0 = null;
+      function frame(ts) {
+        if (!t0) t0 = ts;
+        const p = Math.min((ts - t0) / dur, 1);
+        const suave = 1 - Math.pow(2, -10 * p);
+        elemento.textContent = formata(alvo * suave);
+        if (p < 1) requestAnimationFrame(frame);
+        else elemento.textContent = formata(alvo);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    el('btnCalcular').addEventListener('click', function () {
+      const v = validar();
+      if (!v) return;
+
+      const r = calcular(v.alunos, v.ticket, v.permanencia, v.cancel);
+
+      el('outChurn').textContent = r.churn.toFixed(1).replace('.', ',') + '%';
+      el('outAlunos').textContent = Math.round(r.alunosAno).toLocaleString('pt-BR');
+      el('outPerdaMes').textContent = 'São ' + brl(r.perdaAnual / 12) + ' por mês saindo do caixa.';
+
+      el('r10').textContent = brl(r.perdaAnual * 0.10);
+      el('r25').textContent = brl(r.perdaAnual * 0.25);
+      el('r45').textContent = brl(r.perdaAnual * 0.45);
+
+      el('outMemoria').textContent =
+        'Como chegamos nesse número: cada aluno que sai levava ' + brl(r.ltv) +
+        ' com ele (' + brlExato(v.ticket) + ' × ' + String(v.permanencia).replace('.', ',') +
+        ' meses de permanência). Multiplicado por ' + Math.round(r.alunosAno) +
+        ' saídas no ano.';
+
+      const acima = r.churn > 4;
+      el('outAviso').innerHTML = acima
+        ? '<strong>Seu churn está acima da faixa saudável.</strong> ' + r.churn.toFixed(1).replace('.', ',') +
+          '% ao mês contra os 4% de referência do mercado fitness. No ritmo de hoje são <strong>' +
+          brl(r.perdaAnual) + '</strong> por ano — e o custo de trazer um aluno novo é várias vezes o de segurar um que já está com você.'
+        : '<strong>Seu churn está dentro da faixa saudável</strong> — e mesmo assim são <strong>' +
+          brl(r.perdaAnual) + '</strong> por ano saindo. Abaixo de 4% o jogo deixa de ser estancar sangramento e passa a ser ganhar margem: cada aluno retido aqui é lucro direto.';
+
+      el('resultado').classList.add('show');
+      el('resultado').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      contar(el('outPerda'), r.perdaAnual, brl);
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'calculadora_churn',
+        churn: +r.churn.toFixed(1),
+        perda_anual: Math.round(r.perdaAnual),
+      });
+    });
+
+    // Enter em qualquer campo calcula
+    CAMPOS.forEach(function (c) {
+      el(c.input).addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') el('btnCalcular').click();
+      });
+    });
+  </script>
+</body>
+</html>
