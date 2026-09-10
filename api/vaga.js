@@ -11,8 +11,8 @@
 // A CADA CICLO: troque as duas datas abaixo. São UTC — Brasília é UTC-3, então
 // 13:00 de Brasília é 16:00Z.
 
-const ABRE  = '2026-09-10T16:00:00Z';   // 13:00 de Brasília
-const FECHA = '2026-09-10T16:30:00Z';   // 13:30 de Brasília
+const ABRE  = '2026-09-10T15:30:00Z';   // ja aberta (12:30 de Brasília)
+const FECHA = '2026-09-10T16:40:00Z';   // 13:40 de Brasília
 
 const DESTINO = '/sessao-estrategica';
 const FECHADA = '/vaga-encerrada';
