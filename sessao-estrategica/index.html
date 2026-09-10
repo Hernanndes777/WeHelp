@@ -723,19 +723,19 @@
 
       lastLeadData = data;
 
-      // Prefill do popup do Calendly.
-      // Nome e e-mail são campos nativos e sempre funcionam. Academia e WhatsApp
-      // dependem de pergunta personalizada, e o evento novo (criado em
-      // 2026-09-09 na conta do comercial) ainda tem só a pergunta padrão — que é
-      // o a1. Por isso os dois vão juntos numa linha: se fossem em a1 e a2
-      // separados, o a2 não existiria e o WhatsApp sumiria em silêncio.
-      // Quando as duas perguntas separadas forem criadas no evento, volta a ser
-      // a1 = academia e a2 = WhatsApp.
+      // Prefill do popup do Calendly. Nome e e-mail são campos nativos; academia
+      // e WhatsApp são perguntas personalizadas, e o Calendly as referencia por
+      // POSIÇÃO, não por nome. No evento "Sessão Estratégica — WeHelp" da conta
+      // do comercial a ordem é a1 = academia, a2 = WhatsApp.
+      // Se alguém acrescentar uma pergunta ANTES dessas duas, tudo desloca em
+      // silêncio — a academia cai na pergunta nova e o telefone na academia.
+      // Mexeu na ordem lá, confere aqui.
       calendlyPrefill = {
         name: data.Seu_Nome_Completo,
         email: data.E_mail_Profissional,
         customAnswers: {
-          a1: 'Academia: ' + data.Nome_da_sua_academia + ' | WhatsApp: ' + data.WhatsApp,
+          a1: data.Nome_da_sua_academia,
+          a2: data.WhatsApp,
         },
       };
 
