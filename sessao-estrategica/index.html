@@ -163,7 +163,11 @@
       transition: border-color .2s;
     }
     .input:focus { border-color: var(--blue); }
-    .input::placeholder { color: #a0aec0; }
+    /* #616f85 e nao um cinza mais claro porque aqui o placeholder E o rotulo:
+       nenhum campo tem label visivel. Com o #a0aec0 anterior o contraste era
+       2,1:1 sobre o fundo — menos da metade do minimo de 4,5:1. Agora da 4,7:1
+       e ainda le como dica, nao como texto ja preenchido. */
+    .input::placeholder { color: #616f85; }
     .input.invalid { border-color: #ef4444; }
     .field-error {
       font-size: 12px;
@@ -256,7 +260,7 @@
     }
     .select:focus { border-color: var(--blue); }
     .select.invalid { border-color: #ef4444; }
-    .select:invalid { color: #a0aec0; }
+    .select:invalid { color: #616f85; }
 
     .wizard__nav {
       display: flex;
