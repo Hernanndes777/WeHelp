@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M2RST4PH');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+      (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "xw6zsx67zg");
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- noindex: pagina temporaria, nao pode entrar no Google e ficar aparecendo
+       em busca depois que virar o conteudo de verdade -->
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="../shared/logo-wehelp.png" type="image/png" />
+  <title>Em construção — WeHelp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    :root {
+      --blue:       #1B6EF3;
+      --blue-light: #e8f0ff;
+      --bg:         #f4f6fb;
+      --card:       #ffffff;
+      --border:     #e2e8f0;
+      --text:       #0a1128;
+      --body:       #4a5568;
+      --muted:      #94a3b8;
+      --zap:        #25D366;
+      --zap-hover:  #1da851;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(1100px 600px at 15% -10%, rgba(27,110,243,.14), transparent 60%),
+        radial-gradient(900px 500px at 100% 110%, rgba(27,110,243,.10), transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .brand {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-bottom: 32px;
+    }
+    .brand__logo { height: 34px; width: auto; display: block; }
+    .brand span {
+      font-family: 'Figtree', sans-serif;
+      font-size: 22px; font-weight: 800; color: var(--text);
+    }
+
+    .cartao {
+      width: 100%; max-width: 500px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 44px 34px 34px;
+      box-shadow: 0 20px 60px rgba(10,17,40,.08);
+      text-align: center;
+    }
+
+    .selo {
+      width: 68px; height: 68px; border-radius: 50%;
+      background: var(--blue-light);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .selo i { font-size: 34px; color: var(--blue); }
+
+    h1 {
+      font-family: 'Figtree', sans-serif;
+      font-size: 28px; font-weight: 800; line-height: 1.25;
+      margin-bottom: 14px; letter-spacing: -0.01em;
+    }
+    .sub { font-size: 15.5px; color: var(--body); line-height: 1.65; margin-bottom: 30px; }
+
+    .btn-zap {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%;
+      background: var(--zap); color: #fff;
+      border-radius: 50px; padding: 17px;
+      font-size: 15px; font-weight: 700; letter-spacing: .4px;
+      box-shadow: 0 8px 24px rgba(37,211,102,.32);
+      transition: background .2s, transform .2s;
+    }
+    .btn-zap:hover { background: var(--zap-hover); transform: translateY(-2px); }
+    .btn-zap i { font-size: 21px; }
+
+    .abaixo { font-size: 13px; color: var(--muted); margin-top: 16px; line-height: 1.6; }
+
+    @media (max-width: 480px) {
+      .cartao { padding: 34px 22px 28px; border-radius: 16px; }
+      h1 { font-size: 23px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M2RST4PH"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="page">
+    <div class="brand">
+      <img src="../shared/logo-wehelp.png" alt="WeHelp" class="brand__logo" />
+      <span>WeHelp</span>
+    </div>
+
+    <div class="cartao">
+      <div class="selo"><i class="ti ti-tools" aria-hidden="true"></i></div>
+
+      <h1>Estamos preparando esta página</h1>
+      <p class="sub">
+        O conteúdo do folheto vai ficar aqui. Ainda estamos montando, mas se você
+        já quer falar com a gente sobre retenção de alunos, é só chamar no WhatsApp.
+      </p>
+
+      <a class="btn-zap" id="btnZap" href="#" target="_blank" rel="noopener">
+        <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+        Falar com a WeHelp
+      </a>
+
+      <p class="abaixo">Volte em alguns dias para ver o conteúdo completo.</p>
+    </div>
+  </div>
+
+  <script>
+    // Um QR impresso que leva a beco sem saida queima a leitura: a pessoa
+    // escaneou, nao achou nada e nao volta. O WhatsApp aqui garante que quem
+    // scanear antes do conteudo existir ainda vira conversa.
+    var COMERCIAL = '5521976787182';
+    var MSG = 'Oi! Escaneei o QR code do folheto de vocês e queria saber mais sobre a WeHelp.';
+
+    document.getElementById('btnZap').href =
+      'https://wa.me/' + COMERCIAL + '?text=' + encodeURIComponent(MSG);
+
+    document.getElementById('btnZap').addEventListener('click', function () {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'folheto_whatsapp', origem: 'mf-2026-folheto' });
+    });
+  </script>
+</body>
+</html>
