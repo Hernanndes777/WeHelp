@@ -108,6 +108,9 @@
     .brow .n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-space:nowrap;}
     .brow .n small{color:var(--muted);font-weight:400;}
     .orgtable th,.orgtable td{text-align:left;font-family:"IBM Plex Sans",sans-serif;white-space:normal;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;}
+    @media(max-width:880px){.grid2{grid-template-columns:1fr;}}
+    .leadtable{font-size:12.5px;} .leadtable td{vertical-align:top;padding:10px 12px;} .leadtable .sub{font-size:11px;}
   </style>
 </head>
 <body>
@@ -224,9 +227,11 @@
     </div>
   </section>
 
-  <div class="sectitle" style="margin-top:24px">Leads por segmento</div>
-  <section class="card panel">
-    <p class="desc" style="margin-bottom:18px">Distribuição dos 26 leads da semana por segmento de negócio (Webinário e Meta Forms são academias; Site vem do diagnóstico).</p>
+  <div class="sectitle" style="margin-top:24px">Leads por segmento e por porte</div>
+  <div class="grid2">
+    <section class="card panel">
+    <h2>Por segmento</h2>
+    <p class="desc" style="margin-bottom:18px">Segmento de negócio — Webinário e Meta Forms são academias; Site vem do diagnóstico.</p>
     <div class="pie-wrap">
       <svg viewBox="0 0 200 200" class="donut" role="img" aria-label="Leads por segmento">
         <g transform="rotate(-90 100 100)" fill="none" stroke-width="34">
@@ -247,10 +252,9 @@
       </ul>
     </div>
   </section>
-
-  <div class="sectitle" style="margin-top:24px">Leads por porte · clientes ativos</div>
-  <section class="card panel">
-    <p class="desc" style="margin-bottom:18px">Faixa de clientes/alunos ativos informada no formulário, somando Site, Webinário 08 e Meta Forms (26 leads).</p>
+    <section class="card panel">
+    <h2>Por porte · clientes ativos</h2>
+    <p class="desc" style="margin-bottom:18px">Faixa de clientes/alunos ativos informada no formulário — Site, Webinário 08 e Meta Forms (26 leads).</p>
     <div class="bars">
       <div class="brow"><span class="lbl">Até 150</span><span class="track"><i style="width:100%"></i></span><span class="n">12 <small>· 46%</small></span></div>
       <div class="brow"><span class="lbl">151 a 300</span><span class="track"><i style="width:25%"></i></span><span class="n">3 <small>· 12%</small></span></div>
@@ -259,6 +263,47 @@
       <div class="brow"><span class="lbl">Acima de 1000</span><span class="track"><i style="width:25%"></i></span><span class="n">3 <small>· 12%</small></span></div>
     </div>
     <p class="foot-note">Faixas padronizadas (o "menos de 50" do Meta Forms entra em "Até 150").</p>
+    </section>
+  </div>
+
+  <div class="sectitle" style="margin-top:24px">Todos os leads da semana <small>· 28</small></div>
+  <section class="card panel">
+    <p class="desc" style="margin-bottom:14px">Lista completa pra consulta — 26 de mídia paga + 2 orgânicos.</p>
+    <div class="tablewrap">
+      <table class="orgtable leadtable">
+        <thead><tr><th>Nome</th><th>Empresa</th><th>Fonte</th><th>Segmento</th><th>Porte</th><th>Local</th><th>Contato</th></tr></thead>
+        <tbody>
+          <tr><td>Ariadne Lima</td><td>Mercado Bom Preço</td><td>Site</td><td>Varejo &amp; Franquias</td><td>+1000</td><td>Porto Alegre/RS</td><td>ariadnelima08@hotmail.com<br><span class="sub">+5551986605509</span></td></tr>
+          <tr><td>Roberta Carvalho</td><td>autônoma</td><td>Site</td><td>Saúde &amp; Clínicas</td><td>Até 150</td><td>Barra Mansa/RJ</td><td>nutricaolarvicentino@gmail.com<br><span class="sub">+5524988461806</span></td></tr>
+          <tr><td>Clarice Scramosin</td><td>Clara Malhas</td><td>Site</td><td>Outros</td><td>Até 150</td><td>Blumenau/SC</td><td>claramalhas@gmail.com<br><span class="sub">+5547992311112</span></td></tr>
+          <tr><td>Valdilene Dias</td><td>Val Fashion</td><td>Site</td><td>Outros</td><td>Até 150</td><td>Sta. Maria da Vitória/BA</td><td>valfashion.src@gmail.com<br><span class="sub">+557799645009</span></td></tr>
+          <tr><td>Samela Lage</td><td>Samela Lage Odontologia</td><td>Site</td><td>Saúde &amp; Clínicas</td><td>151–300</td><td>Juiz de Fora/MG</td><td>samela.l.r@hotmail.com<br><span class="sub">+5532984359999</span></td></tr>
+          <tr><td>Geneilton Dantas</td><td>Fogo Simbólico da Pátria 2026</td><td>Site</td><td>Outros</td><td>Até 150</td><td>Touros/RN</td><td>geneiltonescoteiro2011@hotmail.com<br><span class="sub">+5584999072577</span></td></tr>
+          <tr><td>Thiago Dias dos Santos</td><td>Santhiago Receptivo</td><td>Site</td><td>Outros</td><td>Até 150</td><td>Recife/PE</td><td>dos877992@gmail.com<br><span class="sub">+5581987707176</span></td></tr>
+          <tr><td>Maria Jerônima</td><td>Aposentada / cantora gospel</td><td>Site</td><td>Outros</td><td>Até 150</td><td>Caiapônia/GO</td><td>mariajeronima64@gmail.com<br><span class="sub">+5564999296662</span></td></tr>
+          <tr><td>Polyana Dalprá</td><td>PodoHelp</td><td>Site</td><td>Saúde &amp; Clínicas</td><td>301–500</td><td>Joinville/SC</td><td>dalprapolyana@outlook.com<br><span class="sub">+5547997852451</span></td></tr>
+          <tr><td>Fabrício José dos Santos</td><td>Trilhando com Fé Caratinga</td><td>Site</td><td>Outros</td><td>Até 150</td><td>Caratinga/MG</td><td>Fabriciojose1350@gmail.com<br><span class="sub">+5533999020835</span></td></tr>
+          <tr><td>Luiz Junior Duarte</td><td>Loren Clin</td><td>Site</td><td>Saúde &amp; Clínicas</td><td>+1000</td><td>Campos dos Goytacazes/RJ</td><td>prof.caramujo@gmail.com<br><span class="sub">+5522992298900</span></td></tr>
+          <tr><td>Wany Ellen P. de Sousa</td><td>Reda Milenar</td><td>Site</td><td>Outros</td><td>Até 150</td><td>Fortaleza/CE</td><td>wanyellen5815@gmail.com<br><span class="sub">+5585981905400</span></td></tr>
+          <tr><td>Rogério Santos</td><td>Chopeiro Raiz Ltda</td><td>Site</td><td>Outros</td><td>+1000</td><td>São Paulo/SP</td><td>roger_santos11@hotmail.com<br><span class="sub">+5511965074801</span></td></tr>
+          <tr><td>Cheila Baptista</td><td>JCG Fitness (26Fit Cruz Alta)</td><td>WB08</td><td>Academia</td><td>501–1000</td><td>Cruz Alta/RS</td><td>jcgfitness18@gmail.com<br><span class="sub">+5554991546563</span></td></tr>
+          <tr><td>Tânia Borges</td><td>Academia Sérgio Borges</td><td>WB08</td><td>Academia</td><td>501–1000</td><td>Anápolis/GO</td><td>taniamaraborges@gmail.com<br><span class="sub">+5562992411825</span></td></tr>
+          <tr><td>Herbênia Correia L. de Souza</td><td>Almada Fitness</td><td>WB08</td><td>Academia</td><td>Até 150</td><td>Coaraci/BA</td><td>almadafitness10@gmail.com<br><span class="sub">+5573981114530</span></td></tr>
+          <tr><td>Isaias Araújo</td><td>Mormaii Fitness</td><td>WB08</td><td>Academia</td><td>151–300</td><td>Recife/PE</td><td>financeiromormaiirec@gmail.com<br><span class="sub">+5581998759049</span></td></tr>
+          <tr><td>Tatiana Lima da Silva</td><td>Atitude Fit</td><td>WB08</td><td>Academia</td><td>Até 150</td><td>Camaragibe/PE</td><td>tatianalima293@gmail.com<br><span class="sub">+5581995148836</span></td></tr>
+          <tr><td>Wladmir</td><td>Malhart</td><td>WB08</td><td>Academia</td><td>501–1000</td><td>Brasília/DF</td><td>wladguanabarino@gmail.com<br><span class="sub">+5561992688847</span></td></tr>
+          <tr><td>Personal Trainer e Pilates Mogi</td><td>Studio Adão Silva</td><td>Meta Forms</td><td>Academia</td><td>301–500</td><td>—</td><td>adaosilvapersonal@hotmail.com<br><span class="sub">+5511942616141</span></td></tr>
+          <tr><td>Hian Cabral</td><td>—</td><td>Meta Forms</td><td>Academia</td><td>151–300</td><td>—</td><td>hiansilvacabral@gmail.com<br><span class="sub">—</span></td></tr>
+          <tr><td>Winicius H. Otaviano Rodrigues</td><td>—</td><td>Meta Forms</td><td>Academia</td><td>301–500</td><td>—</td><td>winiciushenrique17@gmail.com<br><span class="sub">+5594991060061</span></td></tr>
+          <tr><td>Personal Amanda Bueno</td><td>Personal Amanda Bueno</td><td>Meta Forms</td><td>Academia</td><td>Até 150</td><td>—</td><td>jostamanda7@gmail.com<br><span class="sub">+555599297114</span></td></tr>
+          <tr><td>Krav Maga Joinville</td><td>CKMJ</td><td>Meta Forms</td><td>Academia</td><td>301–500</td><td>—</td><td>cassio@kravmaga.com.br<br><span class="sub">+554791506193</span></td></tr>
+          <tr><td>Alexandre Vaz Veloso</td><td>Fit Town</td><td>Meta Forms</td><td>Academia</td><td>301–500</td><td>—</td><td>alexandrevazveloso@gmail.com<br><span class="sub">+5561991541118</span></td></tr>
+          <tr><td>Maricely Frazão</td><td>Stae Segurança</td><td>Meta Forms</td><td>Academia</td><td>Até 150</td><td>—</td><td>maricelefrazao@hotmail.com<br><span class="sub">+558399884696</span></td></tr>
+          <tr><td>Aloísio Dias</td><td>PlayTennis Tatuapé</td><td>Orgânico</td><td>—</td><td>—</td><td>—</td><td>gerencia@playtennistatuape.com.br<br><span class="sub">+5511982472157</span></td></tr>
+          <tr><td>Natasha</td><td>Unimed</td><td>Orgânico</td><td>—</td><td>—</td><td>—</td><td>natashafdias@gmail.com<br><span class="sub">+5564992620610</span></td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 </div>
 
