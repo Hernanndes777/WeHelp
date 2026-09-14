@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Webinário Gratuito | Por que seus clientes cancelam (e como reter) — WeHelp</title>
+  <meta name="description" content="Webinário ao vivo e gratuito da WeHelp. Descubra onde a sua base de clientes está vazando e o passo a passo para reter mais, sem achismo e sem aquela pesquisa que ninguém responde." />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Descubra por que seus clientes cancelam, antes que eles vão embora" />
+  <meta property="og:description" content="Webinário ao vivo e gratuito da WeHelp. Em 1 hora você vê onde a sua base vaza e como reter mais." />
+  <meta property="og:image" content="/shared/logo-wehelp.png" />
+
+  <link rel="icon" href="/shared/logo-wehelp.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@600;700;800;900&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+
+  <!-- Meta Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1106401696374974');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1106401696374974&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel -->
+
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'DM Sans',sans-serif; background:#fff; color:#1a2036; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; color:inherit; }
+    button { font-family:inherit; cursor:pointer; }
+    ul { list-style:none; }
+    img { max-width:100%; display:block; }
+
+    :root {
+      --blue:#1B6EF3; --blue-hover:#1457c8; --blue-tint:#e8f0ff;
+      --navy:#0a1128; --navy2:#101c42;
+      --body:#4a5568; --line:#e2e8f0; --bg:#f4f6fb;
+      --ok:#16a34a;
+      --disp:'Figtree',sans-serif;
+    }
+
+    .container { max-width:1160px; margin:0 auto; padding:0 28px; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--blue); background:var(--blue-tint); padding:6px 14px; border-radius:50px; }
+    .dot-live { width:7px; height:7px; border-radius:50%; background:#ef4444; box-shadow:0 0 0 0 rgba(239,68,68,.55); animation:pulse-dot 1.8s infinite; }
+    @keyframes pulse-dot { 0%{box-shadow:0 0 0 0 rgba(239,68,68,.55)} 70%{box-shadow:0 0 0 7px rgba(239,68,68,0)} 100%{box-shadow:0 0 0 0 rgba(239,68,68,0)} }
+
+    [data-reveal] { opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
+    [data-reveal].is-visible { opacity:1; transform:translateY(0); }
+
+    /* ══════════ HERO ══════════ */
+    .hero { position:relative; overflow:hidden; padding:40px 0 76px; background:radial-gradient(700px 480px at 50% -10%, rgba(27,110,243,.10), transparent 65%), #fff; border-bottom:1px solid var(--line); }
+    .hero__topline { position:relative; z-index:1; display:flex; align-items:center; justify-content:space-between; padding-bottom:40px; }
+    .hero__brand { display:flex; align-items:center; gap:10px; }
+    .hero__brand .chip { display:grid; place-items:center; }
+    .hero__brand .chip img { height:32px; }
+    .hero__brand span { font-family:var(--disp); font-size:18px; font-weight:800; color:var(--navy); }
+    .hero__livepill { display:inline-flex; align-items:center; gap:8px; background:var(--blue-tint); border:1px solid #cfe0ff; color:var(--blue); font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:7px 13px; border-radius:50px; }
+
+    .hero__grid { position:relative; z-index:1; display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:start; }
+    .hero__headline { font-family:var(--disp); font-weight:900; font-size:clamp(32px,3.6vw,48px); line-height:1.12; letter-spacing:-.02em; color:var(--navy); margin:16px 0 20px; }
+    .hero__headline mark { background:none; color:var(--blue); }
+    .hero__sub { font-size:16.5px; line-height:1.7; color:var(--body); max-width:490px; }
+    .hero__badges { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+    .hero__badges span { display:inline-flex; align-items:center; gap:8px; background:var(--bg); border:1px solid var(--line); color:var(--navy); font-size:13.5px; font-weight:600; padding:9px 14px; border-radius:12px; }
+    .hero__badges i { color:var(--blue); font-size:16px; }
+    .hero__urgency { display:flex; align-items:center; gap:9px; color:var(--body); font-size:14px; margin-top:22px; }
+    .hero__urgency i { color:#ffb020; font-size:18px; }
+
+    /* ══════════ FORM CARD ══════════ */
+    .formcard { background:#fff; border-radius:22px; padding:30px 30px 26px; box-shadow:0 30px 70px rgba(0,0,10,.35); border:1px solid var(--line); }
+    .formcard__kicker { text-align:center; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--body); }
+    .formcard h3 { text-align:center; font-family:var(--disp); font-size:22px; font-weight:800; color:var(--navy); margin:3px 0 16px; }
+    .formcard h3 b { color:var(--blue); }
+    .datebar { background:linear-gradient(135deg,var(--navy),var(--navy2)); color:#fff; border-radius:14px; padding:13px 16px; display:flex; align-items:center; justify-content:center; gap:10px; text-align:center; margin-bottom:18px; }
+    .datebar i { color:#6fa3ff; font-size:19px; }
+    .datebar .dt { font-family:var(--disp); font-weight:800; font-size:15.5px; }
+    .datebar .tz { display:block; font-weight:500; font-size:11.5px; color:#9fb0d6; margin-top:1px; }
+    .formgrid { display:grid; grid-template-columns:repeat(2,1fr); gap:13px 14px; }
+    .field { display:flex; flex-direction:column; }
+    .field--full { grid-column:1 / -1; }
+    .field label { font-size:11.5px; font-weight:700; color:var(--navy); margin-bottom:6px; }
+    .input, select.input { width:100%; background:var(--bg); border:1.5px solid var(--line); border-radius:12px; padding:13px 14px; font-family:'DM Sans',sans-serif; font-size:14.5px; color:var(--navy); outline:none; transition:border-color .2s, box-shadow .2s; appearance:none; }
+    select.input { color:var(--body); background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%235b6178' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:34px; }
+    select.input.filled { color:var(--navy); }
+    .input:focus, select.input:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(27,110,243,.13); }
+    .input.invalid, select.input.invalid { border-color:#ef4444; box-shadow:0 0 0 3px rgba(239,68,68,.12); }
+    .phone-row { display:flex; gap:9px; }
+    .phone-row select { width:88px; flex:none; }
+    .phone-err { color:#ef4444; font-size:12px; margin-top:5px; display:none; }
+    .phone-err.show { display:block; }
+    @keyframes pulse-ring { 0%{box-shadow:0 0 0 0 rgba(27,110,243,.55),0 8px 24px rgba(27,110,243,.35)} 60%{box-shadow:0 0 0 14px rgba(27,110,243,0),0 8px 24px rgba(27,110,243,.35)} 100%{box-shadow:0 0 0 0 rgba(27,110,243,0),0 8px 24px rgba(27,110,243,.35)} }
+    .formcard__btn { width:100%; background:var(--blue); color:#fff; border:none; border-radius:50px; padding:16px; font-family:var(--disp); font-size:15px; font-weight:800; letter-spacing:.02em; margin-top:16px; display:flex; align-items:center; justify-content:center; gap:9px; transition:background .2s, transform .2s; animation:pulse-ring 2.2s ease-out 1s infinite; }
+    .formcard__btn:hover { background:var(--blue-hover); transform:translateY(-1px); }
+    .formcard__btn:disabled { opacity:.6; cursor:not-allowed; transform:none; animation:none; }
+    .spinner { width:17px; height:17px; border:2.5px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:spin .7s linear infinite; display:none; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .formcard__trust { display:flex; align-items:center; justify-content:center; gap:12px; flex-wrap:wrap; font-size:11.5px; color:#94a3b8; margin-top:13px; }
+    .formcard__trust span { display:inline-flex; align-items:center; gap:4px; }
+    .formcard__trust i { color:var(--ok); font-size:13px; }
+    .form-error { display:none; background:#fef2f2; border:1px solid #fecaca; color:#b91c1c; font-size:13px; padding:10px 12px; border-radius:10px; margin-bottom:12px; }
+
+    /* ══════════ LOGOS MARQUEE ══════════ */
+    .logos { padding:56px 0 20px; }
+    .logos p { text-align:center; font-size:12.5px; font-weight:700; color:var(--body); margin-bottom:34px; }
+    .logos__marquee { overflow:hidden; width:100%; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+    .logos__track { display:inline-flex; align-items:center; gap:80px; width:max-content; animation:logos-scroll 26s linear infinite; }
+    .logos__marquee:hover .logos__track { animation-play-state:paused; }
+    .logos__track img { height:110px; width:auto; opacity:.85; flex-shrink:0; }
+    @keyframes logos-scroll { from{transform:translateX(0)} to{transform:translateX(-33.3334%)} }
+
+    /* ══════════ SECTION ══════════ */
+    .section { padding:96px 0; }
+    .section-head { max-width:640px; margin:0 auto 52px; text-align:center; }
+    .section-head h2 { font-family:var(--disp); font-size:clamp(24px,2.9vw,35px); font-weight:800; line-height:1.2; letter-spacing:-.01em; color:var(--navy); margin-top:12px; }
+    .section-head p { font-size:16px; color:var(--body); line-height:1.7; margin-top:12px; }
+
+    /* ══════════ APRENDER ══════════ */
+    .learngrid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+    .learncard { background:var(--bg); border:1px solid var(--line); border-radius:20px; padding:30px 26px; transition:transform .2s, box-shadow .2s, border-color .2s; }
+    .learncard:hover { transform:translateY(-4px); box-shadow:0 20px 44px rgba(20,25,60,.1); border-color:var(--blue); }
+    .learncard__ic { width:48px; height:48px; border-radius:13px; background:#fff; color:var(--blue); display:grid; place-items:center; font-size:23px; margin-bottom:18px; box-shadow:0 4px 12px rgba(20,25,60,.06); }
+    .learncard h3 { font-family:var(--disp); font-size:17px; font-weight:700; color:var(--navy); margin-bottom:10px; line-height:1.35; }
+    .learncard p { font-size:14px; color:var(--body); line-height:1.7; }
+
+    /* ══════════ PARA QUEM ══════════ */
+    .section--audience { background:var(--bg); }
+    .audlist { max-width:820px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:14px; }
+    .auditem { display:flex; gap:15px; align-items:flex-start; background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px 22px; }
+    .auditem .chk { width:28px; height:28px; border-radius:9px; background:var(--blue); flex:none; display:grid; place-items:center; color:#fff; font-size:16px; margin-top:1px; }
+    .auditem p { font-size:15.5px; color:#1a2036; line-height:1.55; }
+    .auditem p b { color:var(--navy); font-weight:700; }
+
+    /* ══════════ APRESENTADOR ══════════ */
+    .presenter__box { max-width:780px; margin:0 auto; background:linear-gradient(160deg,var(--navy),var(--navy2)); color:#fff; border-radius:24px; padding:40px; display:flex; gap:30px; align-items:center; }
+    .presenter__avatar { width:118px; height:118px; border-radius:22px; flex:none; background:linear-gradient(135deg,#6fa3ff,var(--blue)); display:grid; place-items:center; font-family:var(--disp); font-size:38px; font-weight:900; color:#fff; box-shadow:0 12px 30px rgba(0,0,0,.35); }
+    .presenter__box h3 { font-family:var(--disp); font-size:24px; font-weight:800; }
+    .presenter__box .role { color:#6fa3ff; font-weight:700; font-size:14px; margin:4px 0 12px; }
+    .presenter__box p { color:#b4c0e0; font-size:15px; line-height:1.7; }
+
+    /* ══════════ CTA FINAL ══════════ */
+    .section--final { padding-top:0; }
+    .ctafinal { border-radius:28px; padding:64px 48px; text-align:center; position:relative; overflow:hidden; background:linear-gradient(160deg,#1B6EF3 0%,#1550c9 100%); }
+    .ctafinal::before { content:''; position:absolute; inset:0; background:radial-gradient(600px 340px at 15% 0%, rgba(255,255,255,.25), transparent 60%); }
+    .ctafinal__inner { position:relative; z-index:1; max-width:640px; margin:0 auto; }
+    .ctafinal .eyebrow { color:#fff; background:rgba(255,255,255,.16); }
+    .ctafinal h2 { font-family:var(--disp); font-size:clamp(26px,3vw,38px); font-weight:900; color:#fff; margin:14px 0 16px; line-height:1.22; }
+    .ctafinal p { font-size:16px; color:#d9e6ff; margin-bottom:30px; line-height:1.7; }
+    .ctafinal__btn { display:inline-flex; align-items:center; gap:10px; background:#fff; color:var(--blue); border:none; padding:17px 36px; border-radius:50px; font-family:var(--disp); font-size:15px; font-weight:800; transition:transform .2s, box-shadow .2s; }
+    .ctafinal__btn:hover { transform:translateY(-2px); box-shadow:0 14px 30px rgba(0,0,0,.2); }
+    .ctafinal__mini { margin-top:16px; color:#c8dbff; font-size:13px; }
+
+    /* ══════════ FOOTER ══════════ */
+    .footer { padding:34px 0; border-top:1px solid var(--line); }
+    .footer .container { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
+    .footer__brand { display:flex; align-items:center; gap:9px; }
+    .footer__brand img { height:22px; }
+    .footer__brand span { font-family:var(--disp); font-weight:800; color:var(--navy); }
+    .footer nav { display:flex; gap:20px; font-size:13.5px; color:var(--body); }
+    .footer nav a:hover { color:var(--blue); }
+    .footer .copy { width:100%; font-size:12px; color:#94a3b8; padding-top:14px; border-top:1px solid var(--line); }
+
+    /* ══════════ SUCCESS ══════════ */
+    .overlay { position:fixed; inset:0; background:rgba(10,17,40,.7); backdrop-filter:blur(4px); z-index:60; display:none; align-items:center; justify-content:center; padding:22px; }
+    .overlay.active { display:flex; }
+    .success { background:#fff; border-radius:24px; max-width:440px; width:100%; padding:40px 32px; text-align:center; box-shadow:0 30px 70px rgba(0,0,10,.35); }
+    .success .check { width:76px; height:76px; border-radius:50%; background:var(--blue-tint); display:grid; place-items:center; margin:0 auto 18px; color:var(--ok); font-size:40px; }
+    .success h3 { font-family:var(--disp); font-size:24px; font-weight:900; color:var(--navy); margin-bottom:10px; }
+    .success p { color:var(--body); font-size:15px; line-height:1.7; margin-bottom:22px; }
+    .success .wa-btn { display:none; align-items:center; justify-content:center; gap:9px; height:52px; border-radius:50px; background:#25D366; color:#fff; font-family:var(--disp); font-weight:800; font-size:15px; margin-bottom:12px; }
+    .success .wa-btn.show { display:flex; }
+    .success .close-x { color:#94a3b8; font-size:13.5px; cursor:pointer; }
+
+    /* ══════════ STICKY CTA (mobile) ══════════ */
+    .sticky-cta { display:none; }
+    @media (max-width:640px) {
+      .sticky-cta { display:block; position:fixed; left:0; right:0; bottom:0; z-index:50; padding:12px 16px calc(12px + env(safe-area-inset-bottom)); background:#fff; border-top:1px solid var(--line); box-shadow:0 -10px 26px rgba(10,17,40,.14); }
+      .sticky-cta a { display:flex; align-items:center; justify-content:center; gap:8px; background:var(--blue); color:#fff; font-family:var(--disp); font-weight:800; font-size:14.5px; padding:15px; border-radius:50px; }
+    }
+
+    /* ══════════ RESPONSIVE ══════════ */
+    @media (max-width:960px) {
+      .hero__grid { grid-template-columns:1fr; gap:40px; }
+      .hero__sub { max-width:none; }
+      .learngrid { grid-template-columns:1fr 1fr; }
+      .section { padding:68px 0; }
+      .presenter__box { flex-direction:column; text-align:center; padding:32px 26px; }
+      .logos__track img { height:90px; }
+    }
+    @media (max-width:600px) {
+      .container { padding:0 20px; }
+      .hero { padding-top:26px; }
+      .formgrid { grid-template-columns:1fr; }
+      .formcard { padding:26px 22px 22px; }
+      .learngrid { grid-template-columns:1fr; }
+      .ctafinal { padding:44px 24px; }
+      .footer { padding-bottom:92px; }
+      .logos__track img { height:66px; }
+      .presenter__avatar { width:96px; height:96px; font-size:32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- STICKY CTA (mobile) -->
+  <div class="sticky-cta" id="stickyCta">
+    <a href="#inscricao">Garantir minha vaga <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+  </div>
+
+  <!-- ══════════ HERO ══════════ -->
+  <section class="hero" id="topo">
+    <div class="container">
+      <div class="hero__topline">
+        <a class="hero__brand" href="#topo" aria-label="WeHelp">
+          <span class="chip"><img src="/shared/logo-wehelp.png" alt="WeHelp" /></span>
+          <span>WeHelp</span>
+        </a>
+        <span class="hero__livepill"><span class="dot-live"></span> Ao vivo · Gratuito</span>
+      </div>
+
+      <div class="hero__grid">
+        <div class="hero__copy">
+          <span class="eyebrow"><span class="dot-live"></span> Webinário ao vivo e gratuito</span>
+          <h1 class="hero__headline">Descubra por que seus clientes cancelam, <mark>antes que eles vão embora</mark></h1>
+          <p class="hero__sub">Em 1 hora ao vivo, você vai ver onde a sua base de clientes está vazando e o passo a passo pra reter mais. Mesmo que você já tenha mandado pesquisa e ninguém tenha respondido.</p>
+          <div class="hero__badges">
+            <span><i class="ti ti-clock"></i> Cerca de 60 min</span>
+          </div>
+          <div class="hero__urgency">
+            <i class="ti ti-alert-triangle"></i>
+            <span>Turma ao vivo com vagas limitadas. Garanta a sua agora.</span>
+          </div>
+        </div>
+
+        <!-- FORM -->
+        <div class="formcard" id="inscricao">
+          <p class="formcard__kicker">Garanta sua vaga</p>
+          <h3>Inscrição <b>100% gratuita</b></h3>
+
+          <div class="datebar">
+            <i class="ti ti-calendar-event"></i>
+            <span><span class="dt" id="dateText">Data a definir</span><span class="tz">horário de Brasília</span></span>
+          </div>
+
+          <div class="form-error" id="formError"></div>
+
+          <form id="leadForm" novalidate>
+            <div class="formgrid">
+              <div class="field field--full">
+                <label for="nome">Nome completo</label>
+                <input class="input" type="text" id="nome" name="nome" placeholder="Nome e sobrenome" autocomplete="name" />
+              </div>
+              <div class="field field--full">
+                <label for="email">E-mail</label>
+                <input class="input" type="email" id="email" name="email" placeholder="seu@email.com" autocomplete="email" />
+              </div>
+              <div class="field field--full">
+                <label for="whatsapp">WhatsApp</label>
+                <div class="phone-row">
+                  <select class="input" id="ddiSelect" aria-label="DDI">
+                    <option value="+55" selected>+55</option>
+                    <option value="+351">+351</option>
+                    <option value="+1">+1</option>
+                    <option value="+44">+44</option>
+                    <option value="+34">+34</option>
+                    <option value="+54">+54</option>
+                  </select>
+                  <input class="input" type="tel" id="whatsapp" name="whatsapp" placeholder="(11) 90000-0000" autocomplete="tel" />
+                </div>
+                <p class="phone-err" id="phoneError">Digite um número de WhatsApp válido.</p>
+              </div>
+              <div class="field">
+                <label for="segmento">Segmento</label>
+                <select class="input" id="segmento" name="segmento">
+                  <option value="" selected disabled>Selecione</option>
+                  <option>Academias &amp; Fitness</option>
+                  <option>Saúde &amp; Clínicas</option>
+                  <option>SaaS &amp; Tecnologia</option>
+                  <option>Serviços B2B</option>
+                  <option>Varejo &amp; Franquias</option>
+                  <option>Outros</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="base">Quantidade de clientes</label>
+                <select class="input" id="base" name="base">
+                  <option value="" selected disabled>Selecione</option>
+                  <option>Até 150 clientes</option>
+                  <option>De 151 a 300 clientes</option>
+                  <option>De 301 a 500 clientes</option>
+                  <option>De 501 a 1000 clientes</option>
+                  <option>Acima de 1000 clientes</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="formcard__btn" id="submitBtn">
+              <span id="submitText">QUERO MINHA VAGA</span>
+              <span class="spinner" id="submitSpinner"></span>
+            </button>
+
+            <div class="formcard__trust">
+              <span><i class="ti ti-check"></i> Sem spam</span>
+              <span><i class="ti ti-check"></i> Confirmação por e-mail</span>
+              <span><i class="ti ti-check"></i> Dados protegidos</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ LOGOS ══════════ -->
+  <section class="logos">
+    <div class="container">
+      <p>Empresas que já ouvem seus clientes com a WeHelp</p>
+    </div>
+    <div class="logos__marquee">
+      <div class="logos__track">
+        <img src="/shared/diagnostico/logo-selfit.webp" alt="Selfit" />
+        <img src="/shared/diagnostico/logo-bioritmo.webp" alt="Bioritmo" />
+        <img src="/shared/diagnostico/logo-cinesystem.webp" alt="Cinesystem" />
+        <img src="/shared/diagnostico/logo-beto-carreiro.webp" alt="Beto Carrero World" />
+        <img src="/shared/diagnostico/logo-oral-unic.webp" alt="OralUnic" />
+        <img src="/shared/diagnostico/logo-cellep.webp" alt="Cellep" />
+        <img src="/shared/diagnostico/logo-selfit.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-bioritmo.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-cinesystem.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-beto-carreiro.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-oral-unic.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-cellep.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-selfit.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-bioritmo.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-cinesystem.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-beto-carreiro.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-oral-unic.webp" alt="" aria-hidden="true" />
+        <img src="/shared/diagnostico/logo-cellep.webp" alt="" aria-hidden="true" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ O QUE VOCÊ VAI APRENDER ══════════ -->
+  <section class="section" id="conteudo">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Conteúdo ao vivo</span>
+        <h2>O que você vai aprender</h2>
+        <p>Uma hora direto ao ponto, com o que realmente segura cliente na sua base. Sem enrolação, com exemplos reais.</p>
+      </div>
+      <div class="learngrid">
+        <div class="learncard" data-reveal>
+          <div class="learncard__ic"><i class="ti ti-eye-off"></i></div>
+          <h3>Por que os melhores clientes vão embora calados</h3>
+          <p>Como perceber o cliente insatisfeito antes que ele simplesmente pare de voltar, sem reclamar.</p>
+        </div>
+        <div class="learncard" data-reveal>
+          <div class="learncard__ic"><i class="ti ti-alert-triangle"></i></div>
+          <h3>Os 3 sinais de que um cliente vai cancelar</h3>
+          <p>O que observar nos próximos 60 dias para agir a tempo, em vez de descobrir tarde demais.</p>
+        </div>
+        <div class="learncard" data-reveal>
+          <div class="learncard__ic"><i class="ti ti-clipboard-x"></i></div>
+          <h3>Por que a pesquisa tradicional não funciona</h3>
+          <p>O erro do formulário gigante que ninguém responde, e o que colocar no lugar pra taxa de resposta disparar.</p>
+        </div>
+        <div class="learncard" data-reveal>
+          <div class="learncard__ic"><i class="ti ti-heart-handshake"></i></div>
+          <h3>Como transformar insatisfeito em cliente fiel</h3>
+          <p>O caminho pra reverter o cliente em risco no mesmo dia e ainda fortalecer a relação.</p>
+        </div>
+        <div class="learncard" data-reveal>
+          <div class="learncard__ic"><i class="ti ti-chart-line"></i></div>
+          <h3>Como sair do achismo e decidir com dado</h3>
+          <p>Use a voz do cliente pra saber onde investir tempo e dinheiro, e parar as brigas de opinião entre equipes.</p>
+        </div>
+        <div class="learncard" data-reveal>
+          <div class="learncard__ic"><i class="ti ti-broadcast"></i></div>
+          <h3>O sistema de Escuta Ativa Contínua na prática</h3>
+          <p>O passo a passo do método que capta o cliente em risco na hora certa, com exemplos reais de quem aplica.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ PARA QUEM É ══════════ -->
+  <section class="section section--audience">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Indicado para</span>
+        <h2>Para quem é esta aula</h2>
+        <p>Se o seu negócio vive de cliente que volta, essa hora é pra você.</p>
+      </div>
+      <div class="audlist">
+        <div class="auditem" data-reveal><span class="chk"><i class="ti ti-check"></i></span><p>Donos e gestores de <b>academias e estúdios</b> cansados de ver aluno cancelar sem explicação.</p></div>
+        <div class="auditem" data-reveal><span class="chk"><i class="ti ti-check"></i></span><p>Donos de <b>clínicas</b> que querem paciente voltando, não sumindo depois da primeira consulta.</p></div>
+        <div class="auditem" data-reveal><span class="chk"><i class="ti ti-check"></i></span><p>Diretores de <b>hospitais</b> preocupados com reputação e com a experiência do paciente.</p></div>
+        <div class="auditem" data-reveal><span class="chk"><i class="ti ti-check"></i></span><p>Founders e gestores de <b>SaaS</b> que querem reduzir churn e priorizar o que realmente importa.</p></div>
+        <div class="auditem" data-reveal><span class="chk"><i class="ti ti-check"></i></span><p>CEOs e gestores de <b>qualquer negócio com base recorrente</b> cansados de CAC alto e retenção baixa.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ QUEM APRESENTA ══════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Quem apresenta</span>
+        <h2>Seu instrutor</h2>
+      </div>
+      <div class="presenter__box" data-reveal>
+        <!-- TODO: trocar avatar de iniciais pela foto real do Rogério -->
+        <div class="presenter__avatar">RA</div>
+        <div>
+          <h3>Rogério Aranda</h3>
+          <p class="role">Fundador da WeHelp</p>
+          <p>Ajuda empresas a parar de perder cliente no escuro, usando a voz do cliente pra decidir com dado em vez de achismo. É quem vai conduzir o webinário ao vivo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ CTA FINAL ══════════ -->
+  <section class="section section--final">
+    <div class="container">
+      <div class="ctafinal" data-reveal>
+        <div class="ctafinal__inner">
+          <span class="eyebrow">Vaga gratuita</span>
+          <h2>Sua base está vazando agora. Venha ver onde.</h2>
+          <p>1 hora ao vivo, de graça, e você sai sabendo exatamente onde perde cliente e o que fazer nos próximos 30 dias.</p>
+          <a href="#inscricao" class="ctafinal__btn">Garantir minha vaga gratuita <i class="ti ti-arrow-right"></i></a>
+          <p class="ctafinal__mini">Vagas limitadas para a transmissão ao vivo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOOTER ══════════ -->
+  <footer class="footer">
+    <div class="container">
+      <a class="footer__brand" href="#topo">
+        <img src="/shared/logo-wehelp.png" alt="WeHelp" />
+        <span>WeHelp</span>
+      </a>
+      <nav>
+        <a href="https://www.wehelpsoftware.com/pt-BR" target="_blank" rel="noopener">Site</a>
+        <a href="https://www.instagram.com/wehelp.br/" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+      <p class="copy">© 2026 WeHelp. Todos os direitos reservados. Este webinário é gratuito e educativo.</p>
+    </div>
+  </footer>
+
+  <!-- ══════════ SUCCESS ══════════ -->
+  <div class="overlay" id="successOverlay">
+    <div class="success">
+      <div class="check"><i class="ti ti-check"></i></div>
+      <h3>Vaga garantida!</h3>
+      <p>O link da transmissão vai chegar no seu e-mail e no seu WhatsApp. Fique de olho, e chega uns minutos antes pra não perder nada.</p>
+      <a href="#" class="wa-btn" id="waBtn" target="_blank" rel="noopener"><i class="ti ti-brand-whatsapp"></i> Entrar no grupo do WhatsApp</a>
+      <p class="close-x" id="successClose">Fechar</p>
+    </div>
+  </div>
+
+  <script>
+    // ─────────── CONFIG (preencher antes de divulgar) ───────────
+    const PIXEL_ID = '1106401696374974';
+    const WEBINAR_DATE_TEXT = 'Terça, 22 de setembro às 12h00';  // horário de Brasília
+    const WHATSAPP_GROUP = '';     // TODO: link do grupo do WhatsApp (vazio = só confirmação por e-mail)
+
+    const params = new URLSearchParams(location.search);
+    const testEventCode = params.get('fbtest') || null;
+    if (WEBINAR_DATE_TEXT) document.getElementById('dateText').textContent = WEBINAR_DATE_TEXT;
+
+    function getCookie(name){ const m=document.cookie.match(new RegExp('(?:^|;\\s*)'+name+'=([^;]*)')); return m?decodeURIComponent(m[1]):''; }
+    function getEventId(){ let id=sessionStorage.getItem('lead_event_id'); if(!id){ id='lead_'+Date.now()+'_'+Math.random().toString(36).slice(2,10); sessionStorage.setItem('lead_event_id',id);} return id; }
+    function isValidPhone(phone,ddi){ const d=phone.replace(/\D/g,''); if(ddi==='+55') return d.length===10||d.length===11; return d.length>=6; }
+
+    const form=document.getElementById('leadForm');
+    const ddiSelect=document.getElementById('ddiSelect');
+    const segmentoSel=document.getElementById('segmento');
+    const baseSel=document.getElementById('base');
+    const phoneError=document.getElementById('phoneError');
+    const formError=document.getElementById('formError');
+    const submitBtn=document.getElementById('submitBtn');
+    const submitText=document.getElementById('submitText');
+    const submitSpinner=document.getElementById('submitSpinner');
+
+    [segmentoSel,baseSel].forEach(s=>s.addEventListener('change',()=>s.classList.toggle('filled',!!s.value)));
+
+    form.whatsapp.addEventListener('blur',()=>{ const ok=!form.whatsapp.value||isValidPhone(form.whatsapp.value,ddiSelect.value); form.whatsapp.classList.toggle('invalid',!ok); phoneError.classList.toggle('show',!ok); });
+
+    let intentFired=false;
+    form.addEventListener('focusin',()=>{ if(!intentFired&&typeof fbq==='function'){ intentFired=true; const ex={}; if(testEventCode) ex.test_event_code=testEventCode; fbq('trackCustom','SubscribedButtonClick',{},ex);} });
+
+    function showSuccess(){ const ov=document.getElementById('successOverlay'); if(WHATSAPP_GROUP){ const wa=document.getElementById('waBtn'); wa.href=WHATSAPP_GROUP; wa.classList.add('show'); } ov.classList.add('active'); document.body.style.overflow='hidden'; }
+    document.getElementById('successClose').addEventListener('click',()=>{ document.getElementById('successOverlay').classList.remove('active'); document.body.style.overflow=''; });
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      formError.style.display='none';
+      const nome=form.nome.value.trim();
+      const email=form.email.value.trim();
+      const phoneRaw=form.whatsapp.value.trim();
+      const ddi=ddiSelect.value;
+      const segmento=segmentoSel.value;
+      const base=baseSel.value;
+
+      let bad=false; const mark=(el,x)=>el.classList.toggle('invalid',x);
+      mark(form.nome,!nome); if(!nome) bad=true;
+      const emailOk=/.+@.+\..+/.test(email); mark(form.email,!emailOk); if(!emailOk) bad=true;
+      const phoneOk=isValidPhone(phoneRaw,ddi); mark(form.whatsapp,!phoneOk); phoneError.classList.toggle('show',!phoneOk); if(!phoneOk) bad=true;
+      mark(segmentoSel,!segmento); if(!segmento) bad=true;
+      mark(baseSel,!base); if(!base) bad=true;
+      if(bad){ formError.textContent='Preencha todos os campos para garantir sua vaga.'; formError.style.display='block'; return; }
+
+      const phoneDigits=(ddi+phoneRaw.replace(/\D/g,'')).replace(/\D/g,'');
+      const eventId=getEventId();
+      const data={
+        nome, email, whatsapp: ddi+phoneRaw.replace(/\D/g,''), segmento, base,
+        utm_source:params.get('utm_source')||'', utm_medium:params.get('utm_medium')||'', utm_campaign:params.get('utm_campaign')||'',
+        utm_content:params.get('utm_content')||'', utm_term:params.get('utm_term')||'', utm_id:params.get('utm_id')||'',
+        fbclid:params.get('fbclid')||'', gclid:params.get('gclid')||'',
+        referral_source:document.referrer||'', url:location.href,
+        event_id:eventId, fbc:getCookie('_fbc'), fbp:getCookie('_fbp'), test_event_code:testEventCode||'',
+      };
+
+      submitBtn.disabled=true; submitText.textContent='ENVIANDO...'; submitSpinner.style.display='block';
+
+      if(typeof fbq==='function'){
+        fbq('init',PIXEL_ID,{ em:email, ph:phoneDigits });
+        const px={eventID:eventId}; if(testEventCode) px.test_event_code=testEventCode;
+        fbq('track','Lead',{value:1,currency:'BRL'},px);
+      }
+
+      fetch('/api/lead-webinar-retencao',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) }).catch(()=>{});
+
+      showSuccess();
+    });
+
+    // Reveal on scroll
+    const io=new IntersectionObserver((entries)=>{ entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('is-visible'); io.unobserve(en.target);} }); },{threshold:.14});
+    document.querySelectorAll('[data-reveal]').forEach(el=>io.observe(el));
+
+    // Sticky CTA: esconde quando o form principal está visível
+    const sticky=document.getElementById('stickyCta');
+    const formCard=document.getElementById('inscricao');
+    const io2=new IntersectionObserver((entries)=>{ entries.forEach(en=>{ sticky.style.transform=en.isIntersecting?'translateY(110%)':'translateY(0)'; }); },{threshold:.2});
+    if(sticky&&formCard) io2.observe(formCard);
+  </script>
+</body>
+</html>
