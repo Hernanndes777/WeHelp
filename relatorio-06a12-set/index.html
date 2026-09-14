@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0E7C86" />
+  <title>Relatório 06–12 set · WeHelp</title>
+  <!-- Relatório CONGELADO da semana 06–12/09/2026 (snapshot manual, conferido).
+       Números não mudam. Página fixa pra compartilhar com o time. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" />
+  <style>
+    :root{
+      color-scheme: light;
+      --bg:#F5F6F8; --surface:#fff; --surface-2:#F1F3F6; --ink:#1A1F26; --ink-2:#48515C;
+      --muted:#7C8595; --line:#E7EAEF; --line-2:#D7DCE4;
+      --accent:#0E7C86; --accent-deep:#0B5C64;
+      --meta:#1877F2; --meta-soft:#E4EEFD; --google:#E4890F; --google-soft:#FBEEDA;
+      --lead:#128A5B; --lead-soft:#DEF3E9;
+      --shadow:0 1px 2px rgba(20,25,35,.04), 0 6px 20px -14px rgba(20,25,35,.18); --radius:12px;
+    }
+    *{box-sizing:border-box;}
+    html{background:var(--bg);}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+    .mono{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;}
+    .topbar{background:var(--surface);border-bottom:1px solid var(--line);}
+    .topbar-inner{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+    .logo{display:flex;align-items:center;gap:11px;}
+    .logo .mark{width:30px;height:30px;border-radius:8px;flex:none;background:linear-gradient(135deg,var(--accent),#12A0AD);color:#fff;font-weight:700;font-size:15px;display:grid;place-items:center;}
+    .logo .name{font-weight:700;font-size:15px;}
+    .logo .name span{color:var(--muted);font-weight:500;}
+    .period{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;}
+    .period b{color:var(--ink);font-weight:600;}
+    .wrap{max-width:1180px;margin:18px auto 0;padding:0 24px 56px;}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
+    @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:440px){.kpis{grid-template-columns:1fr;}}
+    .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
+    .kpi{padding:16px 17px;}
+    .kpi .cap{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+    .kpi .v{font-family:"IBM Plex Mono",monospace;font-size:27px;font-weight:600;line-height:1.05;letter-spacing:-.01em;}
+    .kpi .foot{font-size:11.5px;color:var(--muted);margin-top:6px;}
+    .kpi .foot b{color:var(--ink-2);font-weight:600;}
+    .kpi.lead{border-top:3px solid var(--lead);}
+    .kpi.spend{border-top:3px solid var(--accent);}
+    .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;}
+    @media(max-width:880px){.grid{grid-template-columns:1fr;}}
+    .panel{padding:18px 20px 20px;}
+    .panel h2{font-size:15px;font-weight:700;margin:0 0 2px;letter-spacing:-.01em;}
+    .panel .desc{font-size:12.5px;color:var(--muted);margin:0 0 16px;}
+    .tablewrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;font-size:13px;min-width:440px;}
+    thead th{text-align:right;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600;padding:0 12px 10px;white-space:nowrap;border-bottom:1px solid var(--line-2);}
+    thead th:first-child{text-align:left;}
+    tbody td{padding:12px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;}
+    tbody td:first-child{text-align:left;font-family:"IBM Plex Sans",sans-serif;}
+    tbody tr.total td{font-weight:700;color:var(--ink);border-bottom:none;background:var(--surface-2);}
+    .src{font-weight:600;color:var(--ink);display:flex;align-items:center;gap:7px;}
+    .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+    .dot.g{background:var(--google);} .dot.m{background:var(--meta);}
+    .sub{font-family:"IBM Plex Sans",sans-serif;font-size:11px;color:var(--muted);font-weight:400;}
+    .plat{font-family:"IBM Plex Sans",sans-serif;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;}
+    .plat.g{background:var(--google-soft);color:#8a5206;} .plat.m{background:var(--meta-soft);color:#12488f;}
+    .report .eyebrow{font-size:11px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+    .report h1{font-size:19px;font-weight:700;margin:0 0 14px;}
+    .bignum{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;}
+    .bignum .v{font-family:"IBM Plex Mono",monospace;font-size:44px;font-weight:600;line-height:1;letter-spacing:-.02em;}
+    .bignum .lbl{font-size:13px;color:var(--ink-2);font-weight:500;}
+    .fitem{margin-top:14px;}
+    .fhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px;}
+    .fhead .nm{font-size:13px;font-weight:500;}
+    .fhead .nm small{color:var(--muted);font-weight:400;}
+    .fhead .fig{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--ink);font-weight:600;}
+    .ftrack{height:7px;background:var(--surface-2);border-radius:999px;overflow:hidden;}
+    .ftrack > i{display:block;height:100%;border-radius:999px;}
+    .divider{margin:18px 0 0;padding-top:16px;border-top:1px solid var(--line);}
+    .kv{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+    .kv .k{color:var(--ink-2);} .kv .val{font-family:"IBM Plex Mono",monospace;font-weight:600;}
+    .kv.big .val{font-size:16px;}
+    .wbfunnel{display:flex;flex-direction:column;gap:9px;margin-top:4px;}
+    .wbstep{display:grid;grid-template-columns:118px 1fr auto;gap:10px;align-items:center;font-size:12.5px;}
+    .wbstep .lbl{color:var(--ink-2);}
+    .wbstep .bar{height:20px;background:var(--surface-2);border-radius:5px;overflow:hidden;}
+    .wbstep .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--meta),#5b9bff);border-radius:5px;}
+    .wbstep .n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-space:nowrap;}
+    .wbstep .n small{color:var(--muted);font-weight:400;}
+    .foot-note{margin-top:20px;font-size:11.5px;color:var(--muted);line-height:1.5;}
+    .foot-note b{color:var(--ink-2);}
+    .section-label{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:22px 0 12px;}
+    .notewarn{font-size:11px;color:#8a5206;background:var(--google-soft);border:1px solid #F0DDB6;border-radius:8px;padding:7px 11px;margin-top:12px;}
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo"><div class="mark">W</div><div class="name">WeHelp <span>· Central de Performance</span></div></div>
+    <div class="period">📅 Relatório da semana · <b>06–12 set 2026</b> · dom–sáb</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="kpis">
+    <div class="card kpi lead">
+      <div class="cap">Leads que entraram</div>
+      <div class="v">26</div>
+      <div class="foot">Site <b>13</b> · WB08 <b>6</b> · Meta Forms <b>7</b></div>
+    </div>
+    <div class="card kpi spend">
+      <div class="cap">Investimento total</div>
+      <div class="v">R$ 4.262,14</div>
+      <div class="foot">Meta <b>R$ 2.998,84</b> · Google <b>R$ 1.263,30</b></div>
+    </div>
+    <div class="card kpi spend">
+      <div class="cap">Custo por lead</div>
+      <div class="v">R$ 163,93</div>
+      <div class="foot">investimento ÷ 26 leads</div>
+    </div>
+    <div class="card kpi lead">
+      <div class="cap">Conseguimos contatar</div>
+      <div class="v">12 <span style="font-size:16px;color:var(--lead)">· 46%</span></div>
+      <div class="foot">Site <b>4</b> · Meta Forms <b>2</b> · WB08 <b>6</b></div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card panel">
+      <h2>Investimento por fonte</h2>
+      <p class="desc">Leads captados, quanto custou e o custo por lead de cada origem na semana.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Fonte</th><th>Leads</th><th>Contatados</th><th>Investimento</th><th>Custo/lead</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="src"><span class="dot g"></span>Site <span class="plat g">Google Ads</span></span></td>
+              <td>13</td><td>4 <span class="sub">31%</span></td><td>R$ 1.263,30</td><td>R$ 97,18</td>
+            </tr>
+            <tr>
+              <td><span class="src"><span class="dot m"></span>Webinário WB08 <span class="plat m">Meta</span></span><span class="sub">6 agendamentos · 62 inscritos</span></td>
+              <td>6</td><td>6 <span class="sub">100%</span></td><td>R$ 2.486,00</td><td>R$ 414,33<span class="sub">R$ 40,10/inscrito</span></td>
+            </tr>
+            <tr>
+              <td><span class="src"><span class="dot m"></span>Meta Forms <span class="plat m">Meta</span></span></td>
+              <td>7</td><td>2 <span class="sub">29%</span></td><td>R$ 512,84</td><td>R$ 73,26</td>
+            </tr>
+            <tr class="total"><td>Total</td><td>26</td><td>12 <span class="sub">46%</span></td><td>R$ 4.262,14</td><td>R$ 163,93</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="section-label">Funil do Webinário 08 · 10/09</p>
+      <div class="wbfunnel">
+        <div class="wbstep"><span class="lbl">Inscritos (tráfego)</span><span class="bar"><i style="width:100%"></i></span><span class="n">62 <small>· R$ 40,10</small></span></div>
+        <div class="wbstep"><span class="lbl">Pico ao vivo</span><span class="bar"><i style="width:72.6%"></i></span><span class="n">45 <small>· 72,6% · R$ 55,24</small></span></div>
+        <div class="wbstep"><span class="lbl">Pessoas no pit</span><span class="bar"><i style="width:54.8%"></i></span><span class="n">34 <small>· 75,6% do pico · R$ 73,12</small></span></div>
+        <div class="wbstep"><span class="lbl">Agendamento ao vivo</span><span class="bar"><i style="width:9.7%"></i></span><span class="n">6 <small>· 17,6% do pit · R$ 414,33</small></span></div>
+      </div>
+      <div class="notewarn">Meta Forms: 7 leads na planilha de captura · 6 contabilizados como lead pelo Meta (R$ 85,47/lead na visão do Meta).</div>
+    </section>
+
+    <aside class="card panel report">
+      <div class="eyebrow">Relatório da semana</div>
+      <h1>Leads captados</h1>
+      <div class="bignum"><span class="v">26</span><span class="lbl">leads<br>entraram</span></div>
+
+      <div class="fitem">
+        <div class="fhead"><span class="nm">Site <small>· Google Ads</small></span><span class="fig">13</span></div>
+        <div class="ftrack"><i style="width:100%;background:var(--google)"></i></div>
+      </div>
+      <div class="fitem">
+        <div class="fhead"><span class="nm">Meta Forms <small>· Meta</small></span><span class="fig">7</span></div>
+        <div class="ftrack"><i style="width:53.8%;background:var(--meta)"></i></div>
+      </div>
+      <div class="fitem">
+        <div class="fhead"><span class="nm">Webinário WB08 <small>· agendamentos</small></span><span class="fig">6</span></div>
+        <div class="ftrack"><i style="width:46.2%;background:var(--accent)"></i></div>
+      </div>
+
+      <div class="divider">
+        <div class="kv big"><span class="k">Conseguimos contatar</span><span class="val" style="color:var(--lead)">12 · 46%</span></div>
+        <div class="kv big"><span class="k">Investimento total</span><span class="val">R$ 4.262,14</span></div>
+        <div class="kv"><span class="k">Meta Ads</span><span class="val">R$ 2.998,84</span></div>
+        <div class="kv"><span class="k">Google Ads</span><span class="val">R$ 1.263,30</span></div>
+        <div class="kv"><span class="k">Custo por lead (média)</span><span class="val">R$ 163,93</span></div>
+      </div>
+
+      <p class="foot-note">
+        <b>Leads</b> = captação da semana (planilhas Site, Webinário 08 e Meta Forms), 06–12/09.
+        <b>Contatados</b> = leads já em contato (fora da automação); os 6 agendamentos do WB08 contam como contato.
+        Snapshot fixo — não se atualiza sozinho.
+      </p>
+    </aside>
+  </div>
+</div>
+
+</body>
+</html>
