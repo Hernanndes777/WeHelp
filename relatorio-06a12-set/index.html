@@ -100,6 +100,13 @@
     .legend .sw{width:12px;height:12px;border-radius:3px;flex:none;}
     .legend b{font-family:"IBM Plex Mono",monospace;margin-left:auto;}
     .legend small{color:var(--muted);font-family:"IBM Plex Mono",monospace;width:42px;text-align:right;}
+    .bars{display:flex;flex-direction:column;gap:10px;}
+    .brow{display:grid;grid-template-columns:120px 1fr auto;gap:12px;align-items:center;font-size:13px;}
+    .brow .lbl{color:var(--ink-2);}
+    .brow .track{height:22px;background:var(--surface-2);border-radius:5px;overflow:hidden;}
+    .brow .track > i{display:block;height:100%;background:var(--accent);border-radius:5px;}
+    .brow .n{font-family:"IBM Plex Mono",monospace;font-weight:600;white-space:nowrap;}
+    .brow .n small{color:var(--muted);font-weight:400;}
   </style>
 </head>
 <body>
@@ -223,6 +230,19 @@
         <li><span class="sw" style="background:#E4890F"></span>Varejo &amp; Franquias <b>1</b><small>4%</small></li>
       </ul>
     </div>
+  </section>
+
+  <div class="sectitle" style="margin-top:24px">Leads por porte · clientes ativos</div>
+  <section class="card panel">
+    <p class="desc" style="margin-bottom:18px">Faixa de clientes/alunos ativos informada no formulário, somando Site, Webinário 08 e Meta Forms (26 leads).</p>
+    <div class="bars">
+      <div class="brow"><span class="lbl">Até 150</span><span class="track"><i style="width:100%"></i></span><span class="n">12 <small>· 46%</small></span></div>
+      <div class="brow"><span class="lbl">151 a 300</span><span class="track"><i style="width:25%"></i></span><span class="n">3 <small>· 12%</small></span></div>
+      <div class="brow"><span class="lbl">301 a 500</span><span class="track"><i style="width:41.7%"></i></span><span class="n">5 <small>· 19%</small></span></div>
+      <div class="brow"><span class="lbl">501 a 1000</span><span class="track"><i style="width:25%"></i></span><span class="n">3 <small>· 12%</small></span></div>
+      <div class="brow"><span class="lbl">Acima de 1000</span><span class="track"><i style="width:25%"></i></span><span class="n">3 <small>· 12%</small></span></div>
+    </div>
+    <p class="foot-note">Faixas padronizadas (o "menos de 50" do Meta Forms entra em "Até 150").</p>
   </section>
 </div>
 
