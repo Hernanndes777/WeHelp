@@ -4,10 +4,17 @@
     {
       "path": "/api/calendly-sync",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/coletor-board",
+      "schedule": "*/15 * * * *"
     }
   ],
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/coletor-board.js": { "maxDuration": 60 }
+  },
   "redirects": [
     {
       "source": "/webinario-convite",

@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0E7C86" />
+  <title>Painel — Performance · WeHelp</title>
+  <!--
+    Board /performance — modelo coletor→snapshot→UI (igual ao painel da Soufit).
+    Lê o snapshot via /api/board (proxy do doGet do Apps Script "Performance WeHelp").
+    Quem grava é /api/coletor-board.js pelo Vercel Cron. Esta página só mostra.
+    Leads = DataCrazy (Webinário, Leads com tag Site, Leads Forms).
+    Meta = Graph insights por conta/campanha. Google = planilha do Ads Script.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#F5F6F8; --surface:#fff; --surface-2:#F1F3F6; --ink:#1A1F26; --ink-2:#48515C;
+      --muted:#7C8595; --line:#E7EAEF; --line-2:#D7DCE4;
+      --accent:#0E7C86; --accent-deep:#0B5C64;
+      --meta:#1877F2; --google:#E4890F; --lead:#128A5B; --lead-soft:#DEF3E9;
+      --good:#16A34A; --warn:#B9720A; --danger:#C0392B;
+      --shadow:0 1px 2px rgba(20,25,35,.04), 0 6px 20px -14px rgba(20,25,35,.18);
+      --radius:12px;
+    }
+    * { box-sizing:border-box; }
+    html { background:var(--bg); }
+    body { margin:0; background:var(--bg); color:var(--ink);
+      font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif; font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+    .mono { font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; }
+
+    .topbar { background:var(--surface); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:20; }
+    .topbar-inner { max-width:1240px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    .logo { display:flex; align-items:center; gap:11px; }
+    .logo .mark { width:30px; height:30px; border-radius:8px; flex:none; background:linear-gradient(135deg,var(--accent),#12A0AD); color:#fff; font-weight:700; font-size:15px; display:grid; place-items:center; }
+    .logo .name { font-weight:700; font-size:15px; }
+    .logo .name span { color:var(--muted); font-weight:500; }
+    .topbar-right { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .seg { display:flex; gap:3px; background:var(--surface-2); padding:3px; border-radius:9px; }
+    .seg button { appearance:none; border:0; background:transparent; cursor:pointer; font-family:inherit; font-size:12.5px; font-weight:600; color:var(--ink-2); padding:6px 12px; border-radius:7px; }
+    .seg button[aria-pressed="true"] { background:var(--surface); color:var(--accent); box-shadow:0 1px 2px rgba(0,0,0,.06); }
+    .seg button:focus-visible { outline:2px solid var(--accent); outline-offset:1px; }
+    .stamp { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .stamp .dot { width:8px; height:8px; border-radius:50%; background:var(--good); }
+    .stamp.err .dot { background:var(--danger); }
+    .refresh { appearance:none; border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2); width:34px; height:34px; border-radius:8px; cursor:pointer; display:grid; place-items:center; }
+    .refresh:hover { color:var(--accent); border-color:var(--accent); }
+
+    .notice { max-width:1240px; margin:16px auto 0; padding:0 24px; }
+    .notice-in { background:var(--warn-soft,#FBF0DC); border:1px solid #F0DDB6; color:#7A4E06; border-radius:10px; padding:10px 14px; font-size:12.5px; }
+    .notice-in[hidden] { display:none; }
+
+    .layout { max-width:1240px; margin:16px auto 0; padding:0 24px 56px; display:grid; grid-template-columns:322px 1fr; gap:20px; align-items:start; }
+    @media (max-width:940px){ .layout{ grid-template-columns:1fr; } }
+    .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+
+    .report { padding:20px; position:sticky; top:76px; }
+    @media (max-width:940px){ .report{ position:static; } }
+    .report .eyebrow { font-size:11px; font-weight:600; letter-spacing:.11em; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+    .report h1 { font-size:19px; font-weight:700; margin:0 0 2px; }
+    .report .sub { font-size:12.5px; color:var(--muted); margin-bottom:18px; }
+    .bignum { display:flex; align-items:baseline; gap:10px; }
+    .bignum .v { font-family:"IBM Plex Mono",monospace; font-size:46px; font-weight:600; line-height:1; letter-spacing:-.02em; }
+    .bignum .lbl { font-size:13px; color:var(--ink-2); font-weight:500; }
+    .contacted-row { display:flex; align-items:center; justify-content:space-between; margin:16px 0 6px; padding-top:16px; border-top:1px solid var(--line); }
+    .contacted-row .k { font-size:13px; color:var(--ink-2); font-weight:500; }
+    .contacted-row .val { display:flex; align-items:baseline; gap:7px; }
+    .contacted-row .val .n { font-family:"IBM Plex Mono",monospace; font-size:22px; font-weight:600; }
+    .pill { font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600; padding:2px 7px; border-radius:999px; background:var(--lead-soft); color:var(--lead); }
+    .progress { height:8px; background:var(--surface-2); border-radius:999px; overflow:hidden; margin-top:4px; }
+    .progress > i { display:block; height:100%; background:var(--lead); border-radius:999px; }
+    .funil-title { font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin:22px 0 12px; }
+    .funil-item { margin-bottom:13px; }
+    .funil-head { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+    .funil-head .nm { font-size:13px; font-weight:500; }
+    .funil-head .nm small { color:var(--muted); font-weight:400; }
+    .funil-head .fig { font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-2); }
+    .funil-head .fig b { color:var(--ink); }
+    .ftrack { height:6px; background:var(--surface-2); border-radius:999px; overflow:hidden; display:flex; }
+    .ftrack > i { display:block; height:100%; background:var(--accent); }
+    .ftrack > i.rest { background:var(--line-2); }
+
+    .main { display:flex; flex-direction:column; gap:20px; min-width:0; }
+    .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    @media (max-width:1150px){ .kpis{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:460px){ .kpis{ grid-template-columns:1fr; } }
+    .kpi { padding:15px 16px; }
+    .kpi .cap { font-size:12px; color:var(--muted); font-weight:500; margin-bottom:7px; display:flex; align-items:center; gap:6px; }
+    .kpi .v { font-family:"IBM Plex Mono",monospace; font-size:25px; font-weight:600; line-height:1.1; }
+    .kpi .foot { font-size:11.5px; color:var(--muted); margin-top:5px; }
+    .kpi .foot b { color:var(--ink-2); font-weight:600; }
+    .swatch { width:9px; height:9px; border-radius:2px; flex:none; }
+    .sw-meta{ background:var(--meta);} .sw-google{ background:var(--google);}
+
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:16px 18px 0; flex-wrap:wrap; }
+    .panel-title { display:flex; align-items:center; gap:9px; }
+    .panel-title .ic { width:24px; height:24px; border-radius:6px; display:grid; place-items:center; flex:none; }
+    .panel-title .ic.meta{ background:#E4EEFD;} .panel-title .ic.google{ background:#FBEEDA;}
+    .panel-title h2 { font-size:15px; font-weight:700; margin:0; }
+    .panel-title .count { font-size:12px; color:var(--muted); font-weight:500; }
+    .tabs { display:flex; gap:4px; background:var(--surface-2); padding:3px; border-radius:9px; }
+    .tab { appearance:none; border:0; background:transparent; cursor:pointer; font-family:inherit; font-size:12.5px; font-weight:600; color:var(--ink-2); padding:6px 13px; border-radius:7px; }
+    .tab[aria-selected="true"] { background:var(--surface); color:var(--accent); box-shadow:0 1px 2px rgba(0,0,0,.06); }
+    .tablewrap { overflow-x:auto; padding:14px 6px 6px; }
+    table { width:100%; border-collapse:collapse; font-size:13px; min-width:600px; }
+    thead th { text-align:right; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:600; padding:0 14px 10px; white-space:nowrap; border-bottom:1px solid var(--line-2); }
+    thead th:first-child { text-align:left; }
+    tbody td { padding:12px 14px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; }
+    tbody td:first-child { text-align:left; font-family:"IBM Plex Sans",sans-serif; white-space:normal; }
+    tbody tr:hover td { background:var(--surface-2); }
+    tbody tr.total td { font-weight:700; color:var(--ink); border-bottom:none; background:var(--surface-2); }
+    .cname { font-weight:500; color:var(--ink); display:block; margin-bottom:3px; line-height:1.3; }
+    .acct-chip { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-family:"IBM Plex Sans",sans-serif; color:var(--ink-2); background:var(--surface-2); border:1px solid var(--line); border-radius:999px; padding:1px 8px; }
+    .acct-chip .dot { width:6px; height:6px; border-radius:50%; background:var(--meta); }
+    .acct-chip.v3 .dot { background:#6E4BE0; }
+    .cpl-good{ color:var(--lead);} .cpl-warn{ color:var(--warn);}
+    .panel-foot { padding:10px 18px 16px; font-size:11.5px; color:var(--muted); }
+
+    .pending { margin:18px; border:1px dashed var(--line-2); border-radius:10px; padding:22px 20px; text-align:center; background:var(--surface-2); }
+    .pending .big { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:5px; }
+    .pending p { font-size:12.5px; color:var(--muted); margin:0 auto; max-width:460px; }
+
+    .state { max-width:1240px; margin:60px auto; padding:0 24px; text-align:center; color:var(--muted); font-size:14px; }
+    [hidden] { display:none !important; }
+    @media (prefers-reduced-motion:reduce){ * { transition:none !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo"><div class="mark">W</div><div class="name">WeHelp <span>· Central de Performance</span></div></div>
+      <div class="topbar-right">
+        <div class="seg" role="group" aria-label="Semana">
+          <button id="segAtual" aria-pressed="true">Semana atual</button>
+          <button id="segPassada" aria-pressed="false">Semana passada</button>
+        </div>
+        <div class="stamp" id="stamp"><span class="dot"></span><span id="stampText">carregando…</span></div>
+        <button class="refresh" id="refresh" title="Recarregar" aria-label="Recarregar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="notice"><div class="notice-in" id="notice" hidden></div></div>
+
+  <div id="loading" class="state">Carregando o snapshot…</div>
+  <div id="error" class="state" hidden></div>
+
+  <div class="layout" id="layout" hidden>
+    <aside class="card report">
+      <div class="eyebrow">Relatório da semana</div>
+      <h1>Leads &amp; contato</h1>
+      <div class="sub" id="periodoSub">—</div>
+      <div class="bignum"><span class="v" id="leadsEntraram">—</span><span class="lbl">leads<br>entraram</span></div>
+      <div class="contacted-row">
+        <span class="k">Conseguimos contatar</span>
+        <span class="val"><span class="n" id="leadsContatados">—</span><span class="pill" id="leadsTaxa">—</span></span>
+      </div>
+      <div class="progress"><i id="leadsBar" style="width:0%"></i></div>
+      <div class="funil-title">Por funil · entraram / contatados</div>
+      <div id="funis"></div>
+      <div class="funil-title" style="margin-top:22px">Investimento na semana</div>
+      <div class="contacted-row" style="margin-top:0; padding-top:0; border:0">
+        <span class="k">Total mídia</span><span class="val"><span class="n mono" id="totalInvest">—</span></span>
+      </div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:2px">
+        Meta <b class="mono" id="miniMeta" style="color:var(--ink-2)">—</b> · Google <b class="mono" id="miniGoogle" style="color:var(--ink-2)">—</b>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="kpis">
+        <div class="card kpi"><div class="cap"><span class="swatch sw-meta"></span>Investimento Meta</div><div class="v" id="kMeta">—</div><div class="foot" id="kMetaFoot">—</div></div>
+        <div class="card kpi"><div class="cap">Resultados Meta</div><div class="v" id="kRes">—</div><div class="foot">leads/conversões atribuídos</div></div>
+        <div class="card kpi"><div class="cap">CPL Meta</div><div class="v" id="kCpl">—</div><div class="foot">investimento ÷ resultados</div></div>
+        <div class="card kpi"><div class="cap"><span class="swatch sw-google"></span>Investimento Google</div><div class="v" id="kGoogle">—</div><div class="foot" id="kGoogleFoot">—</div></div>
+      </section>
+
+      <section class="card">
+        <div class="panel-head">
+          <div class="panel-title"><span class="ic meta">📈</span><h2>Gestão Meta</h2><span class="count" id="metaCount"></span></div>
+          <div class="tabs" role="tablist">
+            <button class="tab" role="tab" aria-selected="false" data-target="meta-contas">Contas</button>
+            <button class="tab" role="tab" aria-selected="true" data-target="meta-campanhas">Campanhas</button>
+          </div>
+        </div>
+        <div id="meta-contas" class="tablewrap" hidden></div>
+        <div id="meta-campanhas" class="tablewrap"></div>
+        <div class="panel-foot">"Resultados" é o evento de otimização de cada campanha (Website leads, Meta leads…), não os leads do CRM à esquerda.</div>
+      </section>
+
+      <section class="card">
+        <div class="panel-head"><div class="panel-title"><span class="ic google">🔍</span><h2>Gestão Google</h2><span class="count" id="googleCount"></span></div></div>
+        <div id="google-body"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+    var brl = new Intl.NumberFormat("pt-BR", { style:"currency", currency:"BRL" });
+    var int = new Intl.NumberFormat("pt-BR");
+    var money = function (v) { return brl.format(Number(v) || 0); };
+    var num = function (v) { return int.format(Number(v) || 0); };
+    var el = function (id) { return document.getElementById(id); };
+
+    var state = { dados:null, semana:"atual" };
+
+    function fmtPeriodo(p) {
+      if (!p || !p.de) return "—";
+      var d = p.de.split("-"), a = p.ate.split("-");
+      return d[2] + "/" + d[1] + " a " + a[2] + "/" + a[1] + "/" + a[0] + " · dom–sáb";
+    }
+    function cplClass(v) { return (v > 0 && v <= 60) ? "cpl-good" : "cpl-warn"; }
+    function chip(conta) {
+      var v3 = /V3/i.test(conta || "");
+      return '<span class="acct-chip' + (v3 ? " v3" : "") + '"><span class="dot"></span>' + (conta || "") + '</span>';
+    }
+
+    function render() {
+      var d = state.dados;
+      if (!d) return;
+      var sem = (d.semanas && d.semanas[state.semana]) || {};
+      var leads = sem.leads, meta = sem.meta, google = sem.google, fontes = sem.fontes || {};
+
+      el("periodoSub").textContent = fmtPeriodo(sem.periodo);
+
+      // ---- leads (esquerda)
+      if (leads) {
+        el("leadsEntraram").textContent = num(leads.total_entraram);
+        el("leadsContatados").textContent = num(leads.total_contatados);
+        var taxa = leads.total_entraram ? (leads.total_contatados / leads.total_entraram * 100) : 0;
+        el("leadsTaxa").textContent = taxa.toFixed(0) + "%";
+        el("leadsBar").style.width = taxa.toFixed(1) + "%";
+        var ordem = ["webinario", "leads_site", "leads_forms"];
+        el("funis").innerHTML = ordem.map(function (k) {
+          var f = (leads.funis || {})[k]; if (!f) return "";
+          var pct = f.entraram ? (f.contatados / f.entraram * 100) : 0;
+          return '<div class="funil-item"><div class="funil-head"><span class="nm">' + f.nome +
+            '</span><span class="fig"><b>' + num(f.entraram) + "</b> / " + num(f.contatados) + '</span></div>' +
+            '<div class="ftrack"><i style="width:' + pct.toFixed(1) + '%"></i><i class="rest" style="width:' + (100 - pct).toFixed(1) + '%"></i></div></div>';
+        }).join("");
+      } else {
+        el("leadsEntraram").textContent = "—"; el("funis").innerHTML = '<p style="font-size:12.5px;color:var(--danger)">DataCrazy: ' + (fontes.datacrazy || "sem dado") + "</p>";
+      }
+
+      // ---- investimento (esquerda + KPIs)
+      var metaTotal = meta ? meta.total : 0;
+      var googleTotal = google ? google.total : 0;
+      el("totalInvest").textContent = money(metaTotal + googleTotal);
+      el("miniMeta").textContent = money(metaTotal);
+      el("miniGoogle").textContent = google ? money(googleTotal) : "manual";
+
+      // ---- KPIs
+      el("kMeta").textContent = meta ? money(meta.total) : "—";
+      el("kMetaFoot").innerHTML = meta ? (meta.contas || []).map(function (c) { return c.nome.replace("WEHELP ", "") + " <b>" + money(c.gasto) + "</b>"; }).join(" · ") : (fontes.meta || "");
+      el("kRes").textContent = meta ? num(meta.resultados) : "—";
+      var cpl = (meta && meta.resultados) ? meta.total / meta.resultados : 0;
+      el("kCpl").textContent = (meta && meta.resultados) ? money(cpl) : "—";
+      el("kGoogle").textContent = google ? money(google.total) : "—";
+      el("kGoogleFoot").textContent = google ? "planilha do Ads Script" : "aguardando conexão";
+
+      // ---- Gestão Meta
+      if (meta) {
+        el("metaCount").textContent = "· " + (meta.campanhas || []).length + " campanhas com veiculação";
+        var contas = (meta.contas || []).slice();
+        el("meta-contas").innerHTML = tabela(
+          ["Conta", "Investimento", "Impressões", "Cliques", "Resultados", "CPL"],
+          contas.map(function (c) {
+            var cp = c.resultados ? c.gasto / c.resultados : 0;
+            return [chip(c.nome), money(c.gasto), num(c.impressoes), num(c.cliques), num(c.resultados),
+              '<span class="' + cplClass(cp) + '">' + (c.resultados ? money(cp) : "—") + "</span>"];
+          }),
+          ["Total", money(meta.total), num(meta.impressoes), num(meta.cliques), num(meta.resultados),
+            (meta.resultados ? money(meta.total / meta.resultados) : "—")]
+        );
+        el("meta-campanhas").innerHTML = tabela(
+          ["Campanha", "Investimento", "Impr.", "Cliques", "Result.", "CPL"],
+          (meta.campanhas || []).map(function (c) {
+            var cp = c.resultados ? c.gasto / c.resultados : 0;
+            return ['<span class="cname">' + c.nome + "</span>" + chip(c.conta), money(c.gasto),
+              num(c.impressoes), num(c.cliques), num(c.resultados),
+              '<span class="' + cplClass(cp) + '">' + (c.resultados ? money(cp) : "—") + "</span>"];
+          }),
+          ["Total", money(meta.total), num(meta.impressoes), num(meta.cliques), num(meta.resultados),
+            (meta.resultados ? money(meta.total / meta.resultados) : "—")]
+        );
+      } else {
+        el("metaCount").textContent = "";
+        var msgMeta = (fontes.meta === "sem META_ADS_TOKEN")
+          ? "Meta aguardando o token (META_ADS_TOKEN) no ambiente da Vercel."
+          : ("Meta indisponível: " + (fontes.meta || "sem dado"));
+        el("meta-campanhas").innerHTML = '<div class="pending"><div class="big">Sem dados do Meta</div><p>' + msgMeta + "</p></div>";
+        el("meta-contas").innerHTML = el("meta-campanhas").innerHTML;
+      }
+
+      // ---- Gestão Google
+      if (google) {
+        el("googleCount").textContent = "· " + (google.campanhas || []).length + " campanhas";
+        el("google-body").className = "tablewrap";
+        el("google-body").innerHTML = tabela(
+          ["Campanha", "Investimento"],
+          (google.campanhas || []).map(function (c) { return [c.nome, money(c.gasto)]; }),
+          ["Total", money(google.total)]
+        );
+      } else {
+        el("googleCount").textContent = "· aguardando conexão";
+        el("google-body").className = "";
+        el("google-body").innerHTML = '<div class="pending"><div class="big">Sem conector do Google Ads</div>' +
+          '<p>Um Google Ads Script exporta o gasto por campanha pra uma planilha e o coletor lê. Enquanto a planilha (GOOGLE_ADS_SHEET_URL) não existir, o Google fica de fora do total.</p></div>';
+      }
+
+      // ---- aviso topo
+      var avisos = [];
+      if (!meta) avisos.push("Meta ainda não ligado");
+      if (!google) avisos.push("Google ainda não ligado");
+      avisos.push("Conta WEHELP V2 fora do MCP");
+      el("notice").innerHTML = "⚠️ " + avisos.join(" · ") + ".";
+      el("notice").hidden = false;
+    }
+
+    function tabela(cols, linhas, total) {
+      var head = "<thead><tr>" + cols.map(function (c) { return "<th>" + c + "</th>"; }).join("") + "</tr></thead>";
+      var body = linhas.map(function (r) {
+        return "<tr>" + r.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>";
+      }).join("");
+      var tot = total ? '<tr class="total">' + total.map(function (c) { return "<td>" + c + "</td>"; }).join("") + "</tr>" : "";
+      if (!linhas.length && !total) body = '<tr><td colspan="' + cols.length + '" style="color:var(--muted);text-align:center">Sem veiculação na semana.</td></tr>';
+      return "<table>" + head + "<tbody>" + body + tot + "</tbody></table>";
+    }
+
+    // tabs Meta
+    Array.prototype.forEach.call(document.querySelectorAll(".tab"), function (t) {
+      t.addEventListener("click", function () {
+        document.querySelectorAll(".tab").forEach(function (o) {
+          var on = o === t;
+          o.setAttribute("aria-selected", on ? "true" : "false");
+          var p = el(o.dataset.target); if (p) p.hidden = !on;
+        });
+      });
+    });
+    // toggle semana
+    function setSemana(s) {
+      state.semana = s;
+      el("segAtual").setAttribute("aria-pressed", s === "atual" ? "true" : "false");
+      el("segPassada").setAttribute("aria-pressed", s === "passada" ? "true" : "false");
+      render();
+    }
+    el("segAtual").addEventListener("click", function () { setSemana("atual"); });
+    el("segPassada").addEventListener("click", function () { setSemana("passada"); });
+
+    async function carregar() {
+      el("loading").hidden = false; el("error").hidden = true;
+      try {
+        var r = await fetch("/api/board", { cache: "no-store" });
+        var j = await r.json();
+        if (!j || !j.dados) throw new Error(j && j.aviso ? j.aviso : "snapshot vazio — o coletor ainda não rodou");
+        state.dados = j.dados;
+        el("stampText").textContent = "atualizado " + (j.geradoEm || "—");
+        el("stamp").classList.remove("err");
+        el("loading").hidden = true; el("layout").hidden = false;
+        render();
+      } catch (e) {
+        el("loading").hidden = true; el("layout").hidden = true;
+        el("error").hidden = false;
+        el("error").textContent = "Não deu pra carregar: " + e.message;
+        el("stamp").classList.add("err"); el("stampText").textContent = "erro";
+      }
+    }
+    el("refresh").addEventListener("click", carregar);
+    carregar();
+  })();
+  </script>
+</body>
+</html>
