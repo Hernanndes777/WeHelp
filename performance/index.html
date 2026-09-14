@@ -161,7 +161,7 @@
         <span class="val"><span class="n" id="leadsContatados">—</span><span class="pill" id="leadsTaxa">—</span></span>
       </div>
       <div class="progress"><i id="leadsBar" style="width:0%"></i></div>
-      <div class="funil-title">Por funil · entraram / contatados</div>
+      <div class="funil-title">Por funil · entraram na semana</div>
       <div id="funis"></div>
       <div class="funil-title" style="margin-top:22px">Investimento na semana</div>
       <div class="contacted-row" style="margin-top:0; padding-top:0; border:0">
@@ -190,7 +190,7 @@
         </div>
         <div id="meta-contas" class="tablewrap" hidden></div>
         <div id="meta-campanhas" class="tablewrap"></div>
-        <div class="panel-foot">"Resultados" é o evento de otimização de cada campanha (Website leads, Meta leads…), não os leads do CRM à esquerda.</div>
+        <div class="panel-foot">"Resultados" é o evento de otimização de cada campanha (Website leads, Meta leads…), não os leads capturados à esquerda.</div>
       </section>
 
       <section class="card">
@@ -233,16 +233,23 @@
       // ---- leads (esquerda)
       if (leads) {
         el("leadsEntraram").textContent = num(leads.total_entraram);
-        el("leadsContatados").textContent = num(leads.total_contatados);
-        var taxa = leads.total_entraram ? (leads.total_contatados / leads.total_entraram * 100) : 0;
-        el("leadsTaxa").textContent = taxa.toFixed(0) + "%";
-        el("leadsBar").style.width = taxa.toFixed(1) + "%";
-        var ordem = ["webinario", "leads_site", "leads_forms"];
+        var temContato = leads.total_contatados != null;
+        el("leadsContatados").textContent = temContato ? num(leads.total_contatados) : "—";
+        var taxa = (temContato && leads.total_entraram) ? (leads.total_contatados / leads.total_entraram * 100) : 0;
+        el("leadsTaxa").textContent = temContato ? (taxa.toFixed(0) + "%") : "no CRM";
+        el("leadsBar").style.width = (temContato ? taxa.toFixed(1) : "0") + "%";
+        var ordem = ["webinario", "site", "metaforms"];
         el("funis").innerHTML = ordem.map(function (k) {
           var f = (leads.funis || {})[k]; if (!f) return "";
+          var ent = (f.entraram == null) ? "—" : num(f.entraram);
+          if (f.contatados == null) {
+            return '<div class="funil-item"><div class="funil-head"><span class="nm">' + f.nome +
+              '</span><span class="fig"><b>' + ent + "</b> entraram</span></div>" +
+              '<div class="ftrack"><i style="width:100%"></i></div></div>';
+          }
           var pct = f.entraram ? (f.contatados / f.entraram * 100) : 0;
           return '<div class="funil-item"><div class="funil-head"><span class="nm">' + f.nome +
-            '</span><span class="fig"><b>' + num(f.entraram) + "</b> / " + num(f.contatados) + '</span></div>' +
+            '</span><span class="fig"><b>' + ent + "</b> / " + num(f.contatados) + '</span></div>' +
             '<div class="ftrack"><i style="width:' + pct.toFixed(1) + '%"></i><i class="rest" style="width:' + (100 - pct).toFixed(1) + '%"></i></div></div>';
         }).join("");
       } else {
