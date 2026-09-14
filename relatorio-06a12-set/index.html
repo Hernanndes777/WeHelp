@@ -91,6 +91,15 @@
     .foot-note b{color:var(--ink-2);}
     .section-label{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:22px 0 12px;}
     .notewarn{font-size:11px;color:#8a5206;background:var(--google-soft);border:1px solid #F0DDB6;border-radius:8px;padding:7px 11px;margin-top:12px;}
+    .pie-wrap{display:flex;align-items:center;gap:30px;flex-wrap:wrap;}
+    .donut{width:190px;height:190px;flex:none;}
+    .pie-num{font-family:"IBM Plex Mono",monospace;font-size:34px;font-weight:600;fill:var(--ink);}
+    .pie-lbl{font-size:12px;fill:var(--muted);}
+    .legend{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;min-width:240px;flex:1;}
+    .legend li{display:flex;align-items:center;gap:10px;font-size:13.5px;}
+    .legend .sw{width:12px;height:12px;border-radius:3px;flex:none;}
+    .legend b{font-family:"IBM Plex Mono",monospace;margin-left:auto;}
+    .legend small{color:var(--muted);font-family:"IBM Plex Mono",monospace;width:42px;text-align:right;}
   </style>
 </head>
 <body>
@@ -191,6 +200,30 @@
       </p>
     </aside>
   </div>
+
+  <div class="sectitle" style="margin-top:24px">Leads por segmento</div>
+  <section class="card panel">
+    <p class="desc" style="margin-bottom:18px">Distribuição dos 26 leads da semana por segmento de negócio (Webinário e Meta Forms são academias; Site vem do diagnóstico).</p>
+    <div class="pie-wrap">
+      <svg viewBox="0 0 200 200" class="donut" role="img" aria-label="Leads por segmento">
+        <g transform="rotate(-90 100 100)" fill="none" stroke-width="34">
+          <circle cx="100" cy="100" r="80" stroke="var(--surface-2)"></circle>
+          <circle cx="100" cy="100" r="80" stroke="#0E7C86" stroke-dasharray="251.33 251.33" stroke-dashoffset="0"></circle>
+          <circle cx="100" cy="100" r="80" stroke="#7C8595" stroke-dasharray="154.66 347.99" stroke-dashoffset="-251.33"></circle>
+          <circle cx="100" cy="100" r="80" stroke="#1877F2" stroke-dasharray="77.33 425.33" stroke-dashoffset="-405.99"></circle>
+          <circle cx="100" cy="100" r="80" stroke="#E4890F" stroke-dasharray="19.33 483.33" stroke-dashoffset="-483.32"></circle>
+        </g>
+        <text x="100" y="96" text-anchor="middle" class="pie-num">26</text>
+        <text x="100" y="116" text-anchor="middle" class="pie-lbl">leads</text>
+      </svg>
+      <ul class="legend">
+        <li><span class="sw" style="background:#0E7C86"></span>Academia <b>13</b><small>50%</small></li>
+        <li><span class="sw" style="background:#7C8595"></span>Outros <b>8</b><small>31%</small></li>
+        <li><span class="sw" style="background:#1877F2"></span>Saúde &amp; Clínicas <b>4</b><small>15%</small></li>
+        <li><span class="sw" style="background:#E4890F"></span>Varejo &amp; Franquias <b>1</b><small>4%</small></li>
+      </ul>
+    </div>
+  </section>
 </div>
 
 </body>
