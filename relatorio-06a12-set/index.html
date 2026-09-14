@@ -36,9 +36,8 @@
     .wrap{max-width:1180px;margin:18px auto 0;padding:0 24px 56px;}
     .sectitle{font-size:15px;font-weight:700;color:var(--ink);margin:0 0 12px;letter-spacing:-.01em;}
     .sectitle small{font-weight:500;color:var(--muted);font-size:12px;margin-left:6px;}
-    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
-    @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr);}}
-    @media(max-width:440px){.kpis{grid-template-columns:1fr;}}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+    @media(max-width:720px){.kpis{grid-template-columns:1fr;}}
     .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
     .kpi{padding:16px 17px;}
     .kpi .cap{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
@@ -117,11 +116,6 @@
       <div class="v">R$ 4.262,14</div>
       <div class="foot">Meta <b>R$ 2.998,84</b> · Google <b>R$ 1.263,30</b></div>
     </div>
-    <div class="card kpi spend">
-      <div class="cap">Custo por lead</div>
-      <div class="v">R$ 163,93</div>
-      <div class="foot">investimento ÷ 26 leads</div>
-    </div>
     <div class="card kpi lead">
       <div class="cap">Conseguimos contatar</div>
       <div class="v">12 <span style="font-size:16px;color:var(--lead)">· 46%</span></div>
@@ -150,7 +144,7 @@
               <td><span class="src"><span class="dot m"></span>Meta Forms <span class="plat m">Meta</span></span></td>
               <td>7</td><td>2 <span class="sub">29%</span></td><td>R$ 512,84</td><td>R$ 73,26</td>
             </tr>
-            <tr class="total"><td>Total</td><td>26</td><td>12 <span class="sub">46%</span></td><td>R$ 4.262,14</td><td>R$ 163,93</td></tr>
+            <tr class="total"><td>Total</td><td>26</td><td>12 <span class="sub">46%</span></td><td>R$ 4.262,14</td><td>—</td></tr>
           </tbody>
         </table>
       </div>
@@ -188,7 +182,6 @@
         <div class="kv big"><span class="k">Investimento total</span><span class="val">R$ 4.262,14</span></div>
         <div class="kv"><span class="k">Meta Ads</span><span class="val">R$ 2.998,84</span></div>
         <div class="kv"><span class="k">Google Ads</span><span class="val">R$ 1.263,30</span></div>
-        <div class="kv"><span class="k">Custo por lead (média)</span><span class="val">R$ 163,93</span></div>
       </div>
 
       <p class="foot-note">
