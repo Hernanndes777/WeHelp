@@ -34,6 +34,8 @@
     .period{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;}
     .period b{color:var(--ink);font-weight:600;}
     .wrap{max-width:1180px;margin:18px auto 0;padding:0 24px 56px;}
+    .sectitle{font-size:15px;font-weight:700;color:var(--ink);margin:0 0 12px;letter-spacing:-.01em;}
+    .sectitle small{font-weight:500;color:var(--muted);font-size:12px;margin-left:6px;}
     .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px;}
     @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr);}}
     @media(max-width:440px){.kpis{grid-template-columns:1fr;}}
@@ -103,6 +105,7 @@
 
 <div class="wrap">
 
+  <div class="sectitle">Dados gerais <small>· visão da semana</small></div>
   <section class="kpis">
     <div class="card kpi lead">
       <div class="cap">Leads que entraram</div>
@@ -126,6 +129,7 @@
     </div>
   </section>
 
+  <div class="sectitle" style="margin-top:24px">Detalhamento por fonte</div>
   <div class="grid">
     <section class="card panel">
       <h2>Investimento por fonte</h2>
