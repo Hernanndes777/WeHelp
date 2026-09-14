@@ -1,0 +1,103 @@
+{
+  "id": "2026-09-06",
+  "label": "06–12 set",
+  "periodo": "06–12 set 2026 · dom–sáb",
+  "status": "fechada",
+  "geral": {
+    "leads": 26,
+    "leads_foot": "Site 13 · WB08 6 · Meta Forms 7 · +2 orgânico",
+    "investimento_total": "R$ 4.262,14",
+    "investimento_foot": "Meta R$ 2.998,84 · Google R$ 1.263,30",
+    "contatados": 12,
+    "contatados_pct": 46,
+    "contatados_foot": "Site 4 · Meta Forms 2 · WB08 6"
+  },
+  "fontes": [
+    { "nome": "Site", "plataforma": "Google Ads", "cor": "g", "leads": 13, "contatados": 4, "contatados_pct": 31, "investimento": "R$ 1.263,30", "custo_lead": "R$ 97,18" },
+    { "nome": "Webinário WB08", "plataforma": "Meta", "cor": "m", "sub": "6 agendamentos · 62 inscritos", "leads": 6, "contatados": 6, "contatados_pct": 100, "investimento": "R$ 2.486,00", "custo_lead": "R$ 40,10 /lead · R$ 414,33 /agend." },
+    { "nome": "Meta Forms", "plataforma": "Meta", "cor": "m", "leads": 7, "contatados": 2, "contatados_pct": 29, "investimento": "R$ 512,84", "custo_lead": "R$ 73,26" }
+  ],
+  "fontes_total": { "leads": 26, "contatados": 12, "contatados_pct": 46, "investimento": "R$ 4.262,14" },
+  "wb_funnel": [
+    { "lbl": "Inscritos (tráfego)", "n": 62, "pct": 100, "extra": "R$ 40,10" },
+    { "lbl": "Pico ao vivo", "n": 45, "pct": 72.6, "extra": "72,6% · R$ 55,24" },
+    { "lbl": "Pessoas no pit", "n": 34, "pct": 54.8, "extra": "75,6% do pico · R$ 73,12" },
+    { "lbl": "Agendamento ao vivo", "n": 6, "pct": 9.7, "extra": "17,6% do pit · R$ 414,33" }
+  ],
+  "organico": {
+    "total_invest": "R$ 0,00",
+    "lista": [
+      { "nome": "Aloísio Dias", "empresa": "PlayTennis Tatuapé", "contato": "+55 11 98247-2157" },
+      { "nome": "Natasha", "empresa": "Unimed", "contato": "+55 64 99262-0610" }
+    ]
+  },
+  "segmento": [
+    { "nome": "Academia", "valor": 13, "cor": "#0E7C86" },
+    { "nome": "Outros", "valor": 8, "cor": "#7C8595" },
+    { "nome": "Saúde & Clínicas", "valor": 4, "cor": "#1877F2" },
+    { "nome": "Varejo & Franquias", "valor": 1, "cor": "#E4890F" }
+  ],
+  "porte": [
+    { "faixa": "Até 150", "valor": 12 },
+    { "faixa": "151 a 300", "valor": 3 },
+    { "faixa": "301 a 500", "valor": 5 },
+    { "faixa": "501 a 1000", "valor": 3 },
+    { "faixa": "Acima de 1000", "valor": 3 }
+  ],
+  "leads": {
+    "tabs": [
+      { "key": "site", "label": "Site", "n": 13 },
+      { "key": "wb08", "label": "WB08", "n": 6 },
+      { "key": "mf", "label": "Meta Forms", "n": 7 },
+      { "key": "org", "label": "Orgânico", "n": 2 }
+    ],
+    "site": {
+      "cols": ["Nome", "Empresa", "Segmento", "Clientes", "Cidade/UF", "E-mail", "WhatsApp", "Origem"],
+      "rows": [
+        ["Ariadne Lima", "Mercado Bom Preço", "Varejo & Franquias", "+1000", "Porto Alegre/RS", "ariadnelima08@hotmail.com", "+5551986605509", "ggads · SEARCH"],
+        ["Roberta Carvalho", "autônoma", "Saúde & Clínicas", "Até 150", "Barra Mansa/RJ", "nutricaolarvicentino@gmail.com", "+5524988461806", "ggads · SEARCH"],
+        ["Clarice Scramosin", "Clara Malhas", "Outros", "Até 150", "Blumenau/SC", "claramalhas@gmail.com", "+5547992311112", "google · search"],
+        ["Valdilene Dias", "Val Fashion", "Outros", "Até 150", "Sta. Maria da Vitória/BA", "valfashion.src@gmail.com", "+557799645009", "ggads · SEARCH"],
+        ["Samela Lage", "Samela Lage Odontologia", "Saúde & Clínicas", "151–300", "Juiz de Fora/MG", "samela.l.r@hotmail.com", "+5532984359999", "ggads · SEARCH"],
+        ["Geneilton Dantas", "Fogo Simbólico da Pátria 2026", "Outros", "Até 150", "Touros/RN", "geneiltonescoteiro2011@hotmail.com", "+5584999072577", "ggads · SEARCH"],
+        ["Thiago Dias dos Santos", "Santhiago Receptivo", "Outros", "Até 150", "Recife/PE", "dos877992@gmail.com", "+5581987707176", "ggads · SEARCH"],
+        ["Maria Jerônima", "Aposentada / cantora gospel", "Outros", "Até 150", "Caiapônia/GO", "mariajeronima64@gmail.com", "+5564999296662", "meta · leads_site"],
+        ["Polyana Dalprá", "PodoHelp", "Saúde & Clínicas", "301–500", "Joinville/SC", "dalprapolyana@outlook.com", "+5547997852451", "ggads · SEARCH"],
+        ["Fabrício José dos Santos", "Trilhando com Fé Caratinga", "Outros", "Até 150", "Caratinga/MG", "Fabriciojose1350@gmail.com", "+5533999020835", "ggads · SEARCH"],
+        ["Luiz Junior Duarte", "Loren Clin", "Saúde & Clínicas", "+1000", "Campos dos Goytacazes/RJ", "prof.caramujo@gmail.com", "+5522992298900", "ggads · SEARCH"],
+        ["Wany Ellen P. de Sousa", "Reda Milenar", "Outros", "Até 150", "Fortaleza/CE", "wanyellen5815@gmail.com", "+5585981905400", "ggads · SEARCH"],
+        ["Rogério Santos", "Chopeiro Raiz Ltda", "Outros", "+1000", "São Paulo/SP", "roger_santos11@hotmail.com", "+5511965074801", "ggads · SEARCH"]
+      ]
+    },
+    "wb08": {
+      "cols": ["Nome", "Academia", "Sistema atual", "Clientes", "Maior desafio", "Cidade/UF", "E-mail", "WhatsApp"],
+      "rows": [
+        ["Cheila Baptista", "JCG Fitness (26Fit Cruz Alta)", "Evo", "501–1000", "Cancelamento silencioso", "Cruz Alta/RS", "jcgfitness18@gmail.com", "+5554991546563"],
+        ["Tânia Borges", "Academia Sérgio Borges", "Pacto", "501–1000", "Medir NPS/satisfação", "Anápolis/GO", "taniamaraborges@gmail.com", "+5562992411825"],
+        ["Herbênia C. L. de Souza", "Almada Fitness", "Outro/Nenhum", "Até 150", "Medir NPS/satisfação", "Coaraci/BA", "almadafitness10@gmail.com", "+5573981114530"],
+        ["Isaias Araújo", "Mormaii Fitness", "Evo", "151–300", "Cancelamento silencioso", "Recife/PE", "financeiromormaiirec@gmail.com", "+5581998759049"],
+        ["Tatiana Lima da Silva", "Atitude Fit", "Outro/Nenhum", "Até 150", "Cancelamento silencioso", "Camaragibe/PE", "tatianalima293@gmail.com", "+5581995148836"],
+        ["Wladmir", "Malhart", "Pacto", "501–1000", "Cancelamento silencioso", "Brasília/DF", "wladguanabarino@gmail.com", "+5561992688847"]
+      ]
+    },
+    "mf": {
+      "cols": ["Nome", "Academia", "Cargo", "Alunos", "Sistema / monitora", "Maior desafio", "E-mail", "Telefone"],
+      "rows": [
+        ["Personal Trainer e Pilates Mogi", "Studio Adão Silva", "sócio", "301–500", "Outro/Nenhum", "Medir NPS/satisfação", "adaosilvapersonal@hotmail.com", "+5511942616141"],
+        ["Hian Cabral", "—", "sócio", "151–300", "CloudGym", "Medir NPS/satisfação", "hiansilvacabral@gmail.com", "— (inválido)"],
+        ["Winicius H. O. Rodrigues", "—", "outros", "301–500", "CloudGym", "Equipe divergente", "winiciushenrique17@gmail.com", "+5594991060061"],
+        ["Personal Amanda Bueno", "Personal Amanda Bueno", "professor", "Até 150", "Outro/Nenhum", "Cancelamento silencioso", "jostamanda7@gmail.com", "+555599297114"],
+        ["Krav Maga Joinville", "CKMJ", "dono", "301–500", "Evo", "Medir NPS/satisfação", "cassio@kravmaga.com.br", "+554791506193"],
+        ["Alexandre Vaz Veloso", "Fit Town", "dono", "301–500", "Pacto", "Cancelamento silencioso", "alexandrevazveloso@gmail.com", "+5561991541118"],
+        ["Maricely Frazão", "Stae Segurança", "dono", "<50", "Não monitora", "—", "maricelefrazao@hotmail.com", "+558399884696"]
+      ]
+    },
+    "org": {
+      "cols": ["Nome", "Empresa", "E-mail", "WhatsApp"],
+      "rows": [
+        ["Aloísio Dias", "PlayTennis Tatuapé", "gerencia@playtennistatuape.com.br", "+5511982472157"],
+        ["Natasha", "Unimed", "natashafdias@gmail.com", "+5564992620610"]
+      ]
+    }
+  }
+}
