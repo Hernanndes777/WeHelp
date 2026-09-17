@@ -135,7 +135,7 @@
       "funil": "fundo",
       "status": "publicada (só o slug — MEET_URL é placeholder, ver notas)",
       "origem": "página nova, criada 2026-08-02",
-      "notas": "Página de redirect puro (sem formulário) pra colar no grupo de WhatsApp do webinário na hora do 'ao vivo' — ver [[project-wehelp-funil-webinario]]. Meta tags og:title/og:description fixas em 'ENTRAR AGORA!' / 'Google Meet Ao Vivo!' pra gerar o card de preview certo no WhatsApp. Redireciona via JS depois de ~600ms (tempo pro Pixel disparar 'WebinarJoinClick'), com botão manual de fallback. MEET_URL já foi atualizada com o link real (meet.google.com/owa-ezed-mry, 2026-08-13) — trocar de novo a cada novo ciclo. O slug é fixo e reaproveitável toda semana, só o valor de MEET_URL muda."
+      "notas": "Página de redirect puro (sem formulário) pra colar no grupo de WhatsApp do webinário na hora do 'ao vivo' — ver [[project-wehelp-funil-webinario]]. Meta tags og:title/og:description fixas em 'ENTRAR AGORA!' / 'Google Meet Ao Vivo!' pra gerar o card de preview certo no WhatsApp. Redireciona via JS depois de ~600ms (tempo pro Pixel disparar 'WebinarJoinClick'), com botão manual de fallback. MEET_URL já foi atualizada com o link real (meet.google.com/rdc-iovy-kfp, 2026-09-17) — trocar de novo a cada novo ciclo. O slug é fixo e reaproveitável toda semana, só o valor de MEET_URL muda."
     },
     {
       "slug": "agendamento-wb",
