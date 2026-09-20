@@ -244,12 +244,12 @@
       try { history.replaceState(null,'', '?semana='+item.id); } catch(e){}
       if(item.status==='pendente'){ view.innerHTML='<div class="state">Sem dados dessa semana ainda.<br>Assim que o fechamento for lançado, aparece aqui.</div>'; return; }
       view.innerHTML='<div class="state">Carregando…</div>';
-      fetch('weeks/'+item.id+'.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      fetch('/performance/weeks/'+item.id+'.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.json(); })
         .then(function(w){ st.textContent = w.periodo || item.periodo || ''; render(w); })
         .catch(function(){ view.innerHTML='<div class="state">Sem dados dessa semana ainda.</div>'; });
     }
 
-    fetch('weeks/manifest.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(m){
+    fetch('/performance/weeks/manifest.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(m){
       var html='';
       m.meses.forEach(function(mes){
         html+='<div class="meslbl">'+esc(mes.nome)+'</div>';
