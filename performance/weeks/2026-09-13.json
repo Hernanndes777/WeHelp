@@ -1,0 +1,111 @@
+{
+  "id": "2026-09-13",
+  "label": "13–19 set",
+  "periodo": "13–19 set 2026 · dom–sáb",
+  "status": "fechada",
+  "geral": {
+    "leads": 32,
+    "leads_foot": "Site 12 · WB09 8 · Meta Forms 12 · +5 orgânico",
+    "investimento_total": "R$ 3.385,88",
+    "investimento_foot": "Meta R$ 2.381,80 · Google R$ 1.004,08",
+    "contatados": 17,
+    "contatados_pct": 53,
+    "contatados_foot": "Site 7 · WB09 8 · Meta Forms 2"
+  },
+  "fontes": [
+    { "nome": "Site", "plataforma": "Google Ads", "cor": "g", "leads": 12, "contatados": 7, "contatados_pct": 58, "investimento": "R$ 1.004,08", "custo_lead": "R$ 83,67" },
+    { "nome": "Webinário WB09", "plataforma": "Meta", "cor": "m", "sub": "5 ao vivo + 3 RMK · 47 inscritos", "leads": 8, "contatados": 8, "contatados_pct": 100, "investimento": "R$ 1.461,33", "custo_lead": "R$ 31,09 /inscrito · R$ 182,67 /agend." },
+    { "nome": "Meta Forms", "plataforma": "Meta", "cor": "m", "leads": 12, "contatados": 2, "contatados_pct": 17, "investimento": "R$ 920,47", "custo_lead": "R$ 76,71" }
+  ],
+  "fontes_total": { "leads": 32, "contatados": 17, "contatados_pct": 53, "investimento": "R$ 3.385,88" },
+  "wb_funnel": [
+    { "lbl": "Inscritos (tráfego)", "n": 47, "pct": 100, "extra": "R$ 31,09" },
+    { "lbl": "Pico ao vivo", "n": 30, "pct": 63.8, "extra": "63,8% · R$ 48,71" },
+    { "lbl": "Pessoas no pit", "n": 22, "pct": 46.8, "extra": "73,3% do pico · R$ 66,42" },
+    { "lbl": "Agendamento ao vivo", "n": 5, "pct": 10.6, "extra": "22,7% do pit · R$ 292,27 · +3 RMK = 8" }
+  ],
+  "organico": {
+    "total_invest": "R$ 0,00",
+    "lista": [
+      { "nome": "Thiago Borges", "empresa": "UltraCare", "contato": "+55 11 98700-0309" },
+      { "nome": "John Pieroni", "empresa": "MoovGym", "contato": "+55 21 98843-1057" },
+      { "nome": "GAD Esparza", "empresa": "SF Premium Fitness (MX)", "contato": "+52 871 886-8966" },
+      { "nome": "Lucas Vezani", "empresa": "Vigor", "contato": "+55 11 99984-2430" },
+      { "nome": "Evaldo F. da Costa Junior", "empresa": "Academia Elysium", "contato": "+55 61 98253-9095" }
+    ]
+  },
+  "segmento": [
+    { "nome": "Academia", "valor": 20, "cor": "#0E7C86" },
+    { "nome": "Outros", "valor": 11, "cor": "#7C8595" },
+    { "nome": "Saúde & Clínicas", "valor": 1, "cor": "#1877F2" }
+  ],
+  "porte": [
+    { "faixa": "Até 150", "valor": 13 },
+    { "faixa": "151 a 300", "valor": 6 },
+    { "faixa": "301 a 500", "valor": 8 },
+    { "faixa": "501 a 1000", "valor": 1 },
+    { "faixa": "Acima de 1000", "valor": 4 }
+  ],
+  "leads": {
+    "tabs": [
+      { "key": "site", "label": "Site", "n": 11 },
+      { "key": "wb09", "label": "WB09", "n": 8 },
+      { "key": "mf", "label": "Meta Forms", "n": 10 },
+      { "key": "org", "label": "Orgânico", "n": 5 }
+    ],
+    "site": {
+      "cols": ["Nome", "Empresa", "Segmento", "Clientes", "Cidade/UF", "E-mail", "WhatsApp", "Origem"],
+      "rows": [
+        ["Leandro", "Hidrau Hose", "Outros", "151–300", "Tanguá/RJ", "leandrohidrauhose@gmail.com.br", "+5521979939200", "ggads · SEARCH"],
+        ["Yasmin Silva do Nascimento", "Fay Net", "Outros", "301–500", "Rio de Janeiro/RJ", "faynetrj@gmail.com", "+5521988254089", "ggads · SEARCH"],
+        ["José Ricardo Fagundes", "Baby Salgados", "Outros", "151–300", "Cruzeiro/SP", "babylanches@yahoo.com.br", "+5512988464277", "ggads · SEARCH"],
+        ["Maria Eduarda Mattos", "Bão Burguer", "Outros", "Até 150", "Santos Dumont/MG", "mattos.0322@gmail.com", "+5532999572873", "ggads · SEARCH"],
+        ["Ailton Souza dos Anjos Silva", "Banco Bradesco", "Outros", "+1000", "Santa Inês/MA", "souzaailtonsouza0@gmail.com", "+5598985314349", "meta · leads_site"],
+        ["João Pinheiro Barcelos", "Banco do Brasil", "Outros", "+1000", "Porto Alegre/RS", "barcelosjoaopinheiro409@gmail.com", "+5555999887320", "ggads · SEARCH"],
+        ["Fagner Santos", "FS Soluções & Serviços", "Outros", "Até 150", "Esteio/RS", "schay.jaeger.1@gmail.com", "+5551982372686", "ggads · SEARCH"],
+        ["Lucas Cadmiel Sales Vieira", "Neuro Sorrir", "Saúde & Clínicas", "301–500", "Imperatriz/MA", "neurosorrir.oficial@gmail.com", "+5599991575918", "ggads · SEARCH"],
+        ["Pablo Guilherme Sousa Ferreira", "Pablo Lanternagem e Estética Automotiva", "Outros", "151–300", "Brasília/DF", "suhjanio@gmail.com", "+5561996040879", "ggads · SEARCH"],
+        ["Adilso Nicolini", "Aurora", "Outros", "501–1000", "Abelardo Luz/SC", "adilson.nicolini86@gmail.com", "+554999379838", "ggads · SEARCH"],
+        ["Luiz Gustavo", "Brabus Burguer", "Outros", "Até 150", "Várzea Grande/MT", "luizolegario37@gmail.com", "+5565993464619", "ggads · SEARCH"]
+      ]
+    },
+    "wb09": {
+      "cols": ["Nome", "Academia", "Sistema atual", "Clientes", "Maior desafio", "Cidade/UF", "E-mail", "WhatsApp"],
+      "rows": [
+        ["Marcelo Garcia Simões", "Master Fitness", "Outro/Nenhum", "301–500", "Retenção baixa", "Ibaiti/PR", "marcelogarciasimoes@gmail.com", "+5543999100779"],
+        ["Mariane Pagani", "Master Fitness Academia", "Outro/Nenhum", "301–500", "Cancelamento silencioso", "Ibaiti/PR", "marianepaganithuler2000@gmail.com", "+5543998420391"],
+        ["Flankia Hallys da Silva Peixoto", "Academia Spaço Fitness", "Outro/Nenhum", "301–500", "Cancelamento silencioso", "—", "flankiahallysdasilvapeixoto@gmail.com", "+5564999843465"],
+        ["Marcos Oliveira", "Studio Cia Fitness", "Tecnofit", "Até 150", "Medir NPS/satisfação", "São Paulo/SP", "medpeformance@gmail.com", "+5598982103762"],
+        ["Alisson Brandão de Oliveira", "Athos Academia", "Pacto", "+1000", "Cancelamento silencioso", "Brasília/DF", "athos.alisson@hotmail.com", "+5562984611337"],
+        ["Daniel Freire", "Escola Violovoz", "Outro/Nenhum", "151–300", "Retenção baixa", "João Pessoa/PB", "violovoz@gmail.com", "+5584994064120"],
+        ["Taiene da Silva Cruz", "Academia Saúde e Vida", "Outro/Nenhum", "Até 150", "Retenção baixa", "Vitória da Conquista/BA", "cruztayene3@gmail.com", "+5577974009804"],
+        ["Antônio de Jesus Barbosa", "Academia Iperfit", "Outro/Nenhum", "Até 150", "Cancelamento silencioso", "Sorocaba/SP", "antoniodejesusbarbosa@htmail.com", "+5515996596290"]
+      ]
+    },
+    "mf": {
+      "cols": ["Nome", "Academia", "Cargo", "Alunos", "Sistema / monitora", "Maior desafio", "E-mail", "Telefone"],
+      "rows": [
+        ["Renata Trindade", "—", "outros", "+1000", "CloudGym", "Medir NPS/satisfação", "renata.correatrin@gmail.com", "+553535535356"],
+        ["Fabíola (Extreme Gym)", "Extreme Gym", "dono", "Até 150", "Outro/Nenhum", "Cancelamento silencioso", "fabiolafarma2017@outlook.com", "+5535997606940"],
+        ["Elaine Caires", "Waap", "outros", "151–300", "Outro/Nenhum", "Retenção baixa", "elaine.caires18@gmail.com", "+5511972801198"],
+        ["Fast Tennis Capim Macio", "Fast Tennis Capim Macio", "dono", "301–500", "Outro/Nenhum", "Medir NPS/satisfação", "comunicacao@fasttennis.com.br", "+5584994014153"],
+        ["Carol PFeltre", "Carol PFeltre", "dono", "Até 150", "Pacto", "Cancelamento silencioso", "carolppff@gmail.com", "+5511943557444"],
+        ["Jhonatan Carneidas", "Academia Impacto", "dono", "301–500", "Outro/Nenhum", "Retenção baixa", "acespacofitness@gmail.com", "+5531999498887"],
+        ["Titã CT", "Titã CT - Centro de Treinamento", "sócio", "Até 150", "Outro/Nenhum", "Equipe divergente", "titasuplementosoriginal@gmail.com", "53999032602"],
+        ["Jaime Guimarães", "Golds Gym", "dono", "<50", "Só descubro quando cancela", "—", "jaimesguimaraes@yahoo.com.br", "+5522992777913"],
+        ["Guilherme Kloster", "Trainer", "gestor", "301–600", "Caixinha / recepção", "—", "guilhermekloster@hotmail.com", "+554491829243"],
+        ["Mércia M. M. da Rocha Dias", "Evolut", "dono", "<50", "Só descubro quando cancela", "—", "merciard@hotmail.com", "+558491765737"]
+      ]
+    },
+    "org": {
+      "cols": ["Nome", "Empresa", "E-mail", "WhatsApp"],
+      "rows": [
+        ["Thiago Borges", "UltraCare", "marketing@ultracare.med.br", "+5511987000309"],
+        ["John Pieroni", "MoovGym", "johnpieroni@hotmail.com", "+5521988431057"],
+        ["GAD Esparza", "SF Premium Fitness (MX)", "gad.esparza@gmail.com", "+528718868966"],
+        ["Lucas Vezani", "Vigor", "lucas.vezani@vigor.com.br", "+5511999842430"],
+        ["Evaldo F. da Costa Junior", "Academia Elysium", "evaldofcjunior@gmail.com", "+5561982539095"]
+      ]
+    }
+  }
+}

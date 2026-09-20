@@ -1,12 +1,12 @@
 {
-  "default": "2026-09-06",
+  "default": "2026-09-13",
   "meses": [
     {
       "nome": "Setembro 2026",
       "semanas": [
         { "id": "2026-09-06", "label": "06–12 set", "status": "fechada" },
-        { "id": "2026-09-13", "label": "13–19 set", "status": "atual" },
-        { "id": "2026-09-20", "label": "20–26 set", "status": "pendente" },
+        { "id": "2026-09-13", "label": "13–19 set", "status": "fechada" },
+        { "id": "2026-09-20", "label": "20–26 set", "status": "atual" },
         { "id": "2026-09-27", "label": "27 set–03 out", "status": "pendente" }
       ]
     }
