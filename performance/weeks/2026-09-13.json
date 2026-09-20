@@ -14,7 +14,7 @@
   },
   "fontes": [
     { "nome": "Site", "plataforma": "Google Ads", "cor": "g", "leads": 12, "contatados": 7, "contatados_pct": 58, "investimento": "R$ 1.004,08", "custo_lead": "R$ 83,67" },
-    { "nome": "Webinário WB09", "plataforma": "Meta", "cor": "m", "sub": "5 ao vivo + 3 RMK · 47 inscritos", "leads": 8, "contatados": 8, "contatados_pct": 100, "investimento": "R$ 1.461,33", "custo_lead": "R$ 31,09 /inscrito · R$ 182,67 /agend." },
+    { "nome": "Webinário WB09", "plataforma": "Meta", "cor": "m", "sub": "5 ao vivo + 3 RMK · 47 inscritos", "leads": 8, "contatados": 8, "contatados_pct": 100, "investimento": "R$ 1.461,33", "custo_lead": "R$ 182,67 /agend." },
     { "nome": "Meta Forms", "plataforma": "Meta", "cor": "m", "leads": 12, "contatados": 2, "contatados_pct": 17, "investimento": "R$ 920,47", "custo_lead": "R$ 76,71" }
   ],
   "fontes_total": { "leads": 32, "contatados": 17, "contatados_pct": 53, "investimento": "R$ 3.385,88" },
