@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrar · Central de Performance WeHelp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F4F6F8; --surface:#FFFFFF; --ink:#0F1B2A; --ink-2:#33465B; --muted:#7C8A9A;
+    --line:#E3E9EF; --accent:#0E7C86; --accent-deep:#0A5A62; --accent-soft:#E1F1F2;
+    --lead:#128A5B; --danger:#C0392B; --danger-soft:#FCECEA;
+    --radius:16px; --shadow:0 10px 30px rgba(16,32,48,.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;background:
+      radial-gradient(1200px 500px at 50% -10%, var(--accent-soft), transparent 60%),
+      var(--bg);
+    color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+    display:flex;align-items:center;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{width:100%;max-width:400px;}
+  .brand{text-align:center;margin-bottom:22px;}
+  .brand .logo{font-size:26px;font-weight:700;letter-spacing:-.02em;color:var(--ink);}
+  .brand .logo b{color:var(--accent);}
+  .brand .sub{font-size:12.5px;color:var(--muted);margin-top:4px;letter-spacing:.02em;text-transform:uppercase;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 26px;}
+  .card h1{font-size:17px;margin:0 0 2px;font-weight:600;}
+  .card .hint{font-size:12.5px;color:var(--muted);margin:0 0 20px;}
+  .err{display:none;background:var(--danger-soft);color:var(--danger);border:1px solid #F3C9C3;border-radius:10px;padding:9px 12px;font-size:12.5px;margin-bottom:16px;}
+  .err.show{display:block;}
+  label{display:block;font-size:12px;font-weight:600;color:var(--ink-2);margin:0 0 6px;}
+  .field{margin-bottom:16px;}
+  .inp{position:relative;}
+  input[type=text],input[type=password]{
+    width:100%;height:44px;padding:0 14px;font-size:14px;font-family:inherit;color:var(--ink);
+    background:#FBFCFD;border:1px solid var(--line);border-radius:10px;outline:none;transition:border-color .15s, box-shadow .15s;
+  }
+  input[type=text]:focus,input[type=password]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .toggle{position:absolute;right:6px;top:6px;height:32px;padding:0 10px;border:0;background:transparent;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;border-radius:8px;}
+  .toggle:hover{color:var(--accent);background:var(--accent-soft);}
+  .remember{display:flex;align-items:center;gap:9px;margin:2px 0 22px;cursor:pointer;user-select:none;font-size:13px;color:var(--ink-2);}
+  .remember input{width:17px;height:17px;accent-color:var(--accent);cursor:pointer;}
+  .btn{width:100%;height:46px;border:0;border-radius:10px;background:var(--accent);color:#fff;font-size:14.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;}
+  .btn:hover{background:var(--accent-deep);}
+  .foot{text-align:center;font-size:11.5px;color:var(--muted);margin-top:18px;line-height:1.5;}
+  .lock{display:inline-block;vertical-align:-1px;margin-right:5px;}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">We<b>Help</b></div>
+      <div class="sub">Central de Performance</div>
+    </div>
+    <div class="card">
+      <h1>Acesso restrito</h1>
+      <p class="hint">Área interna do time. Entre com suas credenciais.</p>
+      <div class="err" id="err">Senha incorreta. Tente novamente.</div>
+      <form method="POST" action="/api/perf-login">
+        <div class="field">
+          <label for="usuario">Usuário</label>
+          <input type="text" id="usuario" name="usuario" autocomplete="username" placeholder="seu nome" value="wehelp">
+        </div>
+        <div class="field">
+          <label for="senha">Senha</label>
+          <div class="inp">
+            <input type="password" id="senha" name="senha" autocomplete="current-password" placeholder="••••••••" autofocus required>
+            <button type="button" class="toggle" id="toggle" aria-label="Mostrar senha">mostrar</button>
+          </div>
+        </div>
+        <label class="remember">
+          <input type="checkbox" name="lembrar" value="on" checked>
+          Lembrar deste dispositivo por 90 dias
+        </label>
+        <input type="hidden" name="next" id="next" value="/performance">
+        <button type="submit" class="btn">Entrar</button>
+      </form>
+      <div class="foot"><span class="lock">🔒</span>Conexão protegida · WeHelp Software</div>
+    </div>
+  </div>
+<script>
+  (function(){
+    var q = new URLSearchParams(location.search);
+    if (q.get('erro')) document.getElementById('err').classList.add('show');
+    var nx = q.get('next');
+    if (nx && nx.indexOf('/performance') === 0 && nx.indexOf('/performance-login') !== 0) {
+      document.getElementById('next').value = nx;
+    }
+    var t = document.getElementById('toggle'), s = document.getElementById('senha');
+    t.addEventListener('click', function(){
+      var show = s.type === 'password';
+      s.type = show ? 'text' : 'password';
+      t.textContent = show ? 'ocultar' : 'mostrar';
+      s.focus();
+    });
+  })();
+</script>
+</body>
+</html>

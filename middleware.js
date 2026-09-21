@@ -1,42 +1,46 @@
-// Protege /performance (pagina + JSONs de dados com PII dos leads) com senha.
-// A senha vem da env var PERF_PASSWORD na Vercel (nunca no codigo, repo e publico).
-// Usuario e opcional (PERF_USER); se nao setado, aceita qualquer usuario e valida so a senha.
-// Fail closed: sem PERF_PASSWORD configurada, ninguem entra.
+// Protege /performance (pagina + JSONs com PII dos leads).
+// Em vez do popup nativo (Basic Auth), checa um COOKIE de sessao assinado (HMAC-SHA256).
+// Quem valida a senha e grava o cookie e /api/perf-login; a pagina de login e /performance-login.
+// Segredo de assinatura = env PERF_PASSWORD (Production). Repo e PUBLICO: nada de senha no codigo.
+// Fail closed. A pagina /performance-login e o /api/perf-login NAO batem no matcher (ficam livres).
 
 export const config = {
   matcher: ['/performance', '/performance/:path*'],
 };
 
-export default function middleware(req) {
-  const PASS = (process.env.PERF_PASSWORD || '').trim();
-  const USER = (process.env.PERF_USER || '').trim();
+const enc = new TextEncoder();
+async function hmacHex(secret, msg) {
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(msg));
+  return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
-  function ask() {
-    return new Response('Acesso restrito ao time WeHelp.', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="WeHelp Performance", charset="UTF-8"',
-        'Content-Type': 'text/plain; charset=utf-8',
-        // Diagnostico (nao vaza a senha): diz se a env chegou no middleware.
-        'X-Perf-Auth': PASS ? 'configured' : 'missing',
-      },
-    });
+export default async function middleware(req) {
+  const SECRET = (process.env.PERF_PASSWORD || '').trim();
+  const url = new URL(req.url);
+
+  function toLogin() {
+    const login = new URL('/performance-login', url);
+    login.searchParams.set('next', url.pathname + url.search);
+    return Response.redirect(login, 307);
   }
 
-  if (!PASS) return ask();
+  if (!SECRET) return toLogin();
 
-  const auth = req.headers.get('authorization') || '';
-  const [scheme, encoded] = auth.split(' ');
-  if (scheme !== 'Basic' || !encoded) return ask();
+  const cookie = req.headers.get('cookie') || '';
+  const m = cookie.match(/(?:^|;\s*)perf_auth=([^;]+)/);
+  if (!m) return toLogin();
 
-  let decoded;
-  try { decoded = atob(encoded); } catch { return ask(); }
-  const i = decoded.indexOf(':');
-  const user = decoded.slice(0, i).trim();
-  const pass = decoded.slice(i + 1).trim();
+  const val = decodeURIComponent(m[1]);
+  const dot = val.lastIndexOf('.');
+  if (dot < 0) return toLogin();
 
-  const userOk = USER ? user === USER : true;
-  if (userOk && pass === PASS) return; // libera o acesso
+  const exp = val.slice(0, dot);
+  const sig = val.slice(dot + 1);
+  if (!/^\d+$/.test(exp) || Number(exp) < Date.now()) return toLogin();
 
-  return ask();
+  const good = await hmacHex(SECRET, 'perf|' + exp);
+  if (sig !== good) return toLogin();
+
+  return; // cookie valido -> libera
 }
