@@ -60,6 +60,7 @@
     .kpi .v{font-family:"IBM Plex Mono",monospace;font-size:27px;font-weight:600;line-height:1.05;letter-spacing:-.01em;}
     .kpi .foot{font-size:11.5px;color:var(--muted);margin-top:6px;}
     .kpi .foot b{color:var(--ink-2);font-weight:600;}
+    .kpi .foot .org{background:var(--lead-soft);color:var(--lead);font-weight:700;padding:1px 8px;border-radius:999px;white-space:nowrap;}
     .kpi.lead{border-top:3px solid var(--lead);} .kpi.spend{border-top:3px solid var(--accent);}
     .grid{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;}
     @media(max-width:880px){.grid{grid-template-columns:1fr;}}
@@ -153,7 +154,7 @@
     function kpis(w){
       var g=w.geral;
       return '<section class="kpis">'
-        + '<div class="card kpi lead"><div class="cap">Leads que entraram</div><div class="v">'+g.leads+'</div><div class="foot">'+esc(g.leads_foot||'')+'</div></div>'
+        + '<div class="card kpi lead"><div class="cap">Leads que entraram</div><div class="v">'+g.leads+'</div><div class="foot">'+esc(g.leads_foot||'').replace(/(\+\s*\d+\s*org[âa]nico)/i,'<span class="org">$1</span>')+'</div></div>'
         + '<div class="card kpi spend"><div class="cap">Investimento total</div><div class="v">'+esc(g.investimento_total)+'</div><div class="foot">'+esc(g.investimento_foot||'')+'</div></div>'
         + '<div class="card kpi lead"><div class="cap">Conseguimos contatar</div><div class="v">'+g.contatados+' <span style="font-size:16px;color:var(--lead)">· '+g.contatados_pct+'%</span></div><div class="foot">'+esc(g.contatados_foot||'')+'</div></div>'
         + '</section>';
