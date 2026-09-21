@@ -8,8 +8,8 @@ export const config = {
 };
 
 export default function middleware(req) {
-  const PASS = process.env.PERF_PASSWORD;
-  const USER = process.env.PERF_USER;
+  const PASS = (process.env.PERF_PASSWORD || '').trim();
+  const USER = (process.env.PERF_USER || '').trim();
 
   function ask() {
     return new Response('Acesso restrito ao time WeHelp.', {
@@ -17,6 +17,8 @@ export default function middleware(req) {
       headers: {
         'WWW-Authenticate': 'Basic realm="WeHelp Performance", charset="UTF-8"',
         'Content-Type': 'text/plain; charset=utf-8',
+        // Diagnostico (nao vaza a senha): diz se a env chegou no middleware.
+        'X-Perf-Auth': PASS ? 'configured' : 'missing',
       },
     });
   }
@@ -30,8 +32,8 @@ export default function middleware(req) {
   let decoded;
   try { decoded = atob(encoded); } catch { return ask(); }
   const i = decoded.indexOf(':');
-  const user = decoded.slice(0, i);
-  const pass = decoded.slice(i + 1);
+  const user = decoded.slice(0, i).trim();
+  const pass = decoded.slice(i + 1).trim();
 
   const userOk = USER ? user === USER : true;
   if (userOk && pass === PASS) return; // libera o acesso
