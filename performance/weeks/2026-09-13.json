@@ -8,16 +8,16 @@
     "leads_foot": "Site 12 · WB09 8 · Meta Forms 12 · +5 orgânico",
     "investimento_total": "R$ 3.385,88",
     "investimento_foot": "Meta R$ 2.381,80 · Google R$ 1.004,08",
-    "contatados": 17,
-    "contatados_pct": 53,
-    "contatados_foot": "Site 7 · WB09 8 · Meta Forms 2"
+    "contatados": 19,
+    "contatados_pct": 59,
+    "contatados_foot": "Site 7 · WB09 8 · Meta Forms 4"
   },
   "fontes": [
     { "nome": "Site", "plataforma": "Google Ads", "cor": "g", "leads": 12, "contatados": 7, "contatados_pct": 58, "investimento": "R$ 1.004,08", "custo_lead": "R$ 83,67" },
     { "nome": "Webinário WB09", "plataforma": "Meta", "cor": "m", "sub": "5 ao vivo + 3 RMK · 47 inscritos", "leads": 8, "contatados": 8, "contatados_pct": 100, "investimento": "R$ 1.461,33", "custo_lead": "R$ 182,67 /agend." },
-    { "nome": "Meta Forms", "plataforma": "Meta", "cor": "m", "leads": 12, "contatados": 2, "contatados_pct": 17, "investimento": "R$ 920,47", "custo_lead": "R$ 76,71" }
+    { "nome": "Meta Forms", "plataforma": "Meta", "cor": "m", "leads": 12, "contatados": 4, "contatados_pct": 33, "investimento": "R$ 920,47", "custo_lead": "R$ 76,71" }
   ],
-  "fontes_total": { "leads": 32, "contatados": 17, "contatados_pct": 53, "investimento": "R$ 3.385,88" },
+  "fontes_total": { "leads": 32, "contatados": 19, "contatados_pct": 59, "investimento": "R$ 3.385,88" },
   "wb_funnel": [
     { "lbl": "Inscritos (tráfego)", "n": 47, "pct": 100, "extra": "R$ 31,09" },
     { "lbl": "Pico ao vivo", "n": 30, "pct": 63.8, "extra": "63,8% · R$ 48,71" },
