@@ -202,9 +202,13 @@
       return '<div class="bars">'+porte.map(function(p){return '<div class="brow"><span class="lbl">'+esc(p.faixa)+'</span><span class="track"><i style="width:'+(p.valor/max*100).toFixed(1)+'%"></i></span><span class="n">'+p.valor+' <small>· '+Math.round(p.valor/total*100)+'%</small></span></div>';}).join('')+'</div>';
     }
     function graficos(w){
-      return sec('Leads por segmento e por porte')
-        + '<div class="grid2"><section class="card panel"><h2>Por segmento</h2><p class="desc" style="margin-bottom:18px">Segmento de negócio das empresas que viraram lead.</p>'+donut(w.segmento)+'</section>'
-        + '<section class="card panel"><h2>Por porte · clientes ativos</h2><p class="desc" style="margin-bottom:18px">Faixa de clientes/alunos ativos informada no formulário.</p>'+barras(w.porte)+'</section></div>';
+      var hasSeg=w.segmento&&w.segmento.length, hasPorte=w.porte&&w.porte.length;
+      if(!hasSeg&&!hasPorte) return '';
+      var cards='';
+      if(hasSeg) cards+='<section class="card panel"><h2>Por segmento</h2><p class="desc" style="margin-bottom:18px">Segmento de negócio das empresas que viraram lead.</p>'+donut(w.segmento)+'</section>';
+      if(hasPorte) cards+='<section class="card panel"><h2>Por porte · clientes ativos</h2><p class="desc" style="margin-bottom:18px">Faixa de clientes/alunos ativos informada no formulário.</p>'+barras(w.porte)+'</section>';
+      var title=(hasSeg&&hasPorte)?'Leads por segmento e por porte':(hasSeg?'Leads por segmento':'Leads por porte');
+      return sec(title)+'<div class="'+((hasSeg&&hasPorte)?'grid2':'')+'">'+cards+'</div>';
     }
 
     function tabela(obj){

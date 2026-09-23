@@ -4,6 +4,7 @@
     {
       "nome": "Setembro 2026",
       "semanas": [
+        { "id": "2026-09-01", "label": "01–05 set", "status": "fechada" },
         { "id": "2026-09-06", "label": "06–12 set", "status": "fechada" },
         { "id": "2026-09-13", "label": "13–19 set", "status": "fechada" },
         { "id": "2026-09-20", "label": "20–26 set", "status": "atual" },

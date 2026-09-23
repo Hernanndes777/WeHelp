@@ -1,0 +1,46 @@
+{
+  "id": "2026-09-01",
+  "label": "01–05 set",
+  "periodo": "01–05 set 2026 · início do mês",
+  "status": "fechada",
+  "geral": {
+    "leads": 10,
+    "leads_foot": "Site 10 · só Google Ads nessa semana",
+    "investimento_total": "R$ 827,02",
+    "investimento_foot": "Google R$ 827,02 · Meta R$ 0",
+    "contatados": 0,
+    "contatados_pct": 0,
+    "contatados_foot": "sem automação · comercial não entrou em contato"
+  },
+  "fontes": [
+    { "nome": "Site", "plataforma": "Google Ads", "cor": "g", "leads": 10, "contatados": 0, "contatados_pct": 0, "investimento": "R$ 827,02", "custo_lead": "R$ 82,70" }
+  ],
+  "fontes_total": { "leads": 10, "contatados": 0, "contatados_pct": 0, "investimento": "R$ 827,02" },
+  "segmento": [
+    { "nome": "Outros", "valor": 5, "cor": "#7C8595" },
+    { "nome": "Saúde & Clínicas", "valor": 2, "cor": "#1877F2" },
+    { "nome": "Serviços B2B", "valor": 1, "cor": "#0E7C86" },
+    { "nome": "SaaS & Tecnologia", "valor": 1, "cor": "#6D5AE6" },
+    { "nome": "Varejo & Franquias", "valor": 1, "cor": "#E4890F" }
+  ],
+  "leads": {
+    "tabs": [
+      { "key": "site", "label": "Site", "n": 10 }
+    ],
+    "site": {
+      "cols": ["Nome", "Empresa", "Segmento", "Clientes", "Cidade/UF", "E-mail", "WhatsApp", "Origem"],
+      "rows": [
+        ["Fernando Albuquerque", "Aracati Office", "Outros", "—", "Imperatriz/MA", "playssonan023@gmail.com", "+5599991652453", "ggads · SEARCH"],
+        ["BCM", "Black Chicc Modas", "Outros", "—", "Manaus/AM", "marablackmodas@gmail.com", "+5592986237361", "ggads · SEARCH"],
+        ["Vanderso Reis dos Santos", "ABNET Telecom", "Serviços B2B", "—", "Maceió/AL", "vandinho.com@hotmail.com", "+5579996107552", "ggads · SEARCH"],
+        ["Rede Longevus", "Rede Longevus", "Saúde & Clínicas", "—", "Salvador/BA", "tecnologiadainformacao@redelongevus.com.br", "+557199829553", "ggads · SEARCH"],
+        ["Lourenço Simão", "Jully Santos", "Outros", "—", "Tianguá/CE", "jullykercia2001@gmail.com", "+5585991156444", "ggads · SEARCH"],
+        ["Jhenifer Mariana", "Restaurante Família", "Outros", "—", "Ji-Paraná/RO", "jhenifermariana63@gmail.com", "+5569993607842", "ggads · SEARCH"],
+        ["Óticas Confiança", "Óticas Confiança", "Saúde & Clínicas", "—", "Custódia/PE", "oticasconfianca@outlook.com", "+5587996610342", "ggads · SEARCH"],
+        ["Paulo Henrique Baptista de Oliveira", "Linux Solutions", "SaaS & Tecnologia", "—", "Vila Velha/ES", "baptista@gmail.com", "+5521985789971", "ggads · SEARCH"],
+        ["Lucas Sousa Caetano", "Shoop", "Varejo & Franquias", "—", "Rio de Janeiro/RJ", "lucasxavier.agro123@gmail.com", "+5588996237353", "ggads · SEARCH"],
+        ["Daniel Jadson Cosme Câmara", "Barbearia Atos", "Outros", "151–300", "Natal/RN", "atosbarbearia21@gmail.com", "+5584998943914", "ggads · SEARCH"]
+      ]
+    }
+  }
+}
